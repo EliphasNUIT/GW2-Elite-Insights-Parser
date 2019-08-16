@@ -30,7 +30,7 @@ namespace GW2EIParser
 
         private static bool HasFormat()
         {
-            return Properties.Settings.Default.SaveOutCSV || Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
+            return Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
         }
 
         /// <summary>
@@ -149,18 +149,12 @@ namespace GW2EIParser
         {
             // Create the compressed file.
             byte[] data = str.ToArray();
-            using (FileStream outFile =
-                        File.Create(file + ".gz"))
-            {
-                using (GZipStream Compress =
-                    new GZipStream(outFile,
-                    CompressionMode.Compress))
-                {
-                    // Copy the source file into 
-                    // the compression stream.
-                    Compress.Write(data, 0, data.Length);
-                }
-            }
+            using FileStream outFile =
+                        File.Create(file + ".gz");
+            using GZipStream Compress = new GZipStream(outFile, CompressionMode.Compress);
+            // Copy the source file into 
+            // the compression stream.
+            Compress.Write(data, 0, data.Length);
         }
 
         private static void GenerateFiles(ParsedLog log, GridRow rowData, string[] uploadresult, FileInfo fInfo)
@@ -199,29 +193,10 @@ namespace GW2EIParser
                 $"{fName}.html"
                 );
                 rowData.LogLocation = outputFile;
-                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                using (var sw = new StreamWriter(fs))
-                {
-                    var builder = new HTMLBuilder(log, uploadresult);
-                    builder.CreateHTML(sw, saveDirectory.FullName);
-                }
-            }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
-            if (Properties.Settings.Default.SaveOutCSV)
-            {
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}.csv"
-                );
-                string splitString = "";
-                if (rowData.LogLocation != null) { splitString = ","; }
-                rowData.LogLocation += splitString + outputFile;
-                using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
-                {
-                    var builder = new CSVBuilder(sw, ",", log, uploadresult);
-                    builder.CreateCSV();
-                }
+                using var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+                using var sw = new StreamWriter(fs);
+                var builder = new HTMLBuilder(log, uploadresult);
+                builder.CreateHTML(sw, saveDirectory.FullName);
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
             if (Properties.Settings.Default.SaveOutJSON)

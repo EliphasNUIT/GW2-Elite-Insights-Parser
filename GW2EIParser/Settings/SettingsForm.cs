@@ -33,7 +33,6 @@ namespace GW2EIParser.Setting
             chkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
-            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
             chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
@@ -114,11 +113,6 @@ namespace GW2EIParser.Setting
         {
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
-        }
-
-        private void OutputCsvCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.SaveOutCSV = chkOutputCsv.Checked;
         }
 
         private void ShowEstimatesCheckedChanged(object sender, EventArgs e)

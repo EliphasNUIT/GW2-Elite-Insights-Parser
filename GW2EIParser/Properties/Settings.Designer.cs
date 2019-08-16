@@ -62,18 +62,6 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveOutCSV {
-            get {
-                return ((bool)(this["SaveOutCSV"]));
-            }
-            set {
-                this["SaveOutCSV"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ShowEstimates {
             get {
                 return ((bool)(this["ShowEstimates"]));

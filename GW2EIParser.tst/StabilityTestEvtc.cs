@@ -22,7 +22,6 @@ namespace LuckParser.tst
                 ParsedLog log = TestHelper.ParseLog(file);
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
-                TestHelper.CsvString(log);
             }
             catch (CancellationException canc)
             {

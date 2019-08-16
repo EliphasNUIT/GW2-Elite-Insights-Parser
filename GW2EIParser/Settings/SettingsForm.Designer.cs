@@ -39,7 +39,6 @@
             this.btnResetSkillList = new System.Windows.Forms.Button();
             this.btnResetSpecList = new System.Windows.Forms.Button();
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
-            this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
             this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
             this.chkOneAtATime = new System.Windows.Forms.CheckBox();
@@ -69,14 +68,13 @@
             this.radioThemeLight = new System.Windows.Forms.RadioButton();
             this.radioThemeDark = new System.Windows.Forms.RadioButton();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelXML = new System.Windows.Forms.Panel();
             this.chkIndentXML = new System.Windows.Forms.CheckBox();
             this.chkOutputXml = new System.Windows.Forms.CheckBox();
             this.panelJson = new System.Windows.Forms.Panel();
             this.chkCompressRaw = new System.Windows.Forms.CheckBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -92,11 +90,10 @@
             this.panelHtml.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.tabPage4.SuspendLayout();
             this.panelXML.SuspendLayout();
             this.panelJson.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblSettingsInfoMsg
@@ -183,17 +180,6 @@
             this.chkOutputHtml.Text = "Output as HTML";
             this.chkOutputHtml.UseVisualStyleBackColor = true;
             this.chkOutputHtml.CheckedChanged += new System.EventHandler(this.OuputCheckedChanged);
-            // 
-            // chkOutputCsv
-            // 
-            this.chkOutputCsv.AutoSize = true;
-            this.chkOutputCsv.Location = new System.Drawing.Point(12, 12);
-            this.chkOutputCsv.Name = "chkOutputCsv";
-            this.chkOutputCsv.Size = new System.Drawing.Size(96, 17);
-            this.chkOutputCsv.TabIndex = 27;
-            this.chkOutputCsv.Text = "Output as CSV";
-            this.chkOutputCsv.UseVisualStyleBackColor = true;
-            this.chkOutputCsv.CheckedChanged += new System.EventHandler(this.OutputCsvCheckedChanged);
             // 
             // chkShowEstimates
             // 
@@ -338,7 +324,6 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.HotTrack = true;
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Multiline = true;
@@ -520,29 +505,19 @@
             this.radioThemeDark.UseVisualStyleBackColor = true;
             this.radioThemeDark.CheckedChanged += new System.EventHandler(this.RadioThemeDark_CheckedChanged);
             // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.chkOutputCsv);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(471, 251);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "CSV";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.panelXML);
-            this.tabPage4.Controls.Add(this.chkOutputXml);
-            this.tabPage4.Controls.Add(this.panelJson);
-            this.tabPage4.Controls.Add(this.chkOutputJson);
-            this.tabPage4.Controls.Add(this.chkCompressRaw);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(471, 251);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Raw formats";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage3.Controls.Add(this.panelXML);
+            this.tabPage3.Controls.Add(this.chkOutputXml);
+            this.tabPage3.Controls.Add(this.panelJson);
+            this.tabPage3.Controls.Add(this.chkOutputJson);
+            this.tabPage3.Controls.Add(this.chkCompressRaw);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage4";
+            this.tabPage3.Size = new System.Drawing.Size(471, 251);
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Text = "Raw formats";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // panelXML
             // 
@@ -595,28 +570,28 @@
             // 
             // tabPage5
             // 
-            this.tabPage5.Controls.Add(this.UploadDPSReports_checkbox);
-            this.tabPage5.Controls.Add(this.UploadDRRH_check);
-            this.tabPage5.Controls.Add(this.UploadRaidar_check);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(471, 251);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Upload";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.tabPage4.Controls.Add(this.UploadDPSReports_checkbox);
+            this.tabPage4.Controls.Add(this.UploadDRRH_check);
+            this.tabPage4.Controls.Add(this.UploadRaidar_check);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage5";
+            this.tabPage4.Size = new System.Drawing.Size(471, 251);
+            this.tabPage4.TabIndex = 4;
+            this.tabPage4.Text = "Upload";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.label2);
-            this.tabPage6.Controls.Add(this.label1);
-            this.tabPage6.Controls.Add(this.btnResetSpecList);
-            this.tabPage6.Controls.Add(this.btnResetSkillList);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(471, 251);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Maintenance";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.tabPage5.Controls.Add(this.label2);
+            this.tabPage5.Controls.Add(this.label1);
+            this.tabPage5.Controls.Add(this.btnResetSpecList);
+            this.tabPage5.Controls.Add(this.btnResetSkillList);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage6";
+            this.tabPage5.Size = new System.Drawing.Size(471, 251);
+            this.tabPage5.TabIndex = 5;
+            this.tabPage5.Text = "Maintenance";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -704,16 +679,14 @@
             this.panel1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
             this.panelXML.ResumeLayout(false);
             this.panelXML.PerformLayout();
             this.panelJson.ResumeLayout(false);
             this.panelJson.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -729,7 +702,6 @@
         private System.Windows.Forms.Button btnResetSkillList;
         private System.Windows.Forms.Button btnResetSpecList;
         private System.Windows.Forms.CheckBox chkOutputHtml;
-        private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;
         private System.Windows.Forms.CheckBox chkPhaseParsing;
         private System.Windows.Forms.CheckBox chkOneAtATime;
@@ -748,7 +720,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
