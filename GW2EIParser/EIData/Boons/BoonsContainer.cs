@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
         private readonly Dictionary<string, Boon> _boonsByName;
         public Dictionary<int, List<Boon>> BoonsByCapacity { get; }
 
-        private BoonSourceFinder _boonSourceFinder;
+        private readonly BoonSourceFinder _boonSourceFinder;
 
         public BoonsContainer(ulong build)
         {

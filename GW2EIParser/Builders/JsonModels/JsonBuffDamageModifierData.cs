@@ -13,20 +13,20 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Hits done under the buff
             /// </summary>
-            public int HitCount;
+            public int HitCount { get; set; }
             /// <summary>
             /// Total hits
             /// </summary>
-            public int TotalHitCount;
+            public int TotalHitCount { get; set; }
             /// <summary>
             /// Gained damage \n
             /// If the corresponding <see cref="JsonLog.DamageModDesc.NonMultiplier"/> is true then this value correspond to the damage done while under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
-            public double DamageGain;
+            public double DamageGain { get; set; }
             /// <summary>
             /// Total damage done
             /// </summary>
-            public int TotalDamage;
+            public int TotalDamage { get; set; }
 
             public JsonBuffDamageModifierItem(Statistics.DamageModifierData extraData)
             {
@@ -37,7 +37,7 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public int Id;
-        public List<JsonBuffDamageModifierItem> DamageModifiers;
+        public int Id { get; set; }
+        public List<JsonBuffDamageModifierItem> DamageModifiers { get; set; }
     }
 }

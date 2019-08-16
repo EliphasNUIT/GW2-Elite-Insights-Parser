@@ -14,11 +14,6 @@ namespace GW2EIParser.EIData
             return (1.0f - c) * a + c * b;
         }
 
-        private static long Mix(long a, long b, float c)
-        {
-            return (long)((1.0f - c) * a + c * b);
-        }
-
         public float DistanceToPoint(Point3D endPoint)
         {
             float distance = (float)Math.Sqrt((endPoint.X - this.X)*(endPoint.X-this.X) + (endPoint.Y - this.Y) * (endPoint.Y - this.Y) + (endPoint.Z - this.Z) * (endPoint.Z - this.Z));
