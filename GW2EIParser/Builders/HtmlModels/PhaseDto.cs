@@ -185,12 +185,8 @@ namespace GW2EIParser.Builders.HtmlModels
                 {
                     support.CondiCleanse,
                     support.CondiCleanseTime,
-                    support.CondiCleanseSelf,
-                    support.CondiCleanseTimeSelf,
                     support.BoonStrips,
                     support.BoonStripsTime,
-                    support.Resurrects,
-                    support.ResurrectTime
                 };
             return data;
         }
@@ -205,32 +201,7 @@ namespace GW2EIParser.Builders.HtmlModels
                     defenses.InvulnedCount,
                     defenses.InterruptedCount,
                     defenses.EvadedCount,
-                    defenses.DodgeCount
                 };
-
-            if (defenses.DownDuration > 0)
-            {
-                TimeSpan downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
-                data.Add(defenses.DownCount);
-                data.Add(downDuration.TotalSeconds + " seconds downed, " + Math.Round((downDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1) + "% Downed");
-            }
-            else
-            {
-                data.Add(0);
-                data.Add("0% downed");
-            }
-
-            if (defenses.DeadDuration > 0)
-            {
-                TimeSpan deathDuration = TimeSpan.FromMilliseconds(defenses.DeadDuration);
-                data.Add(defenses.DeadCount);
-                data.Add(deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive");
-            }
-            else
-            {
-                data.Add(0);
-                data.Add("100% Alive");
-            }
             return data;
         }
     }

@@ -182,7 +182,7 @@ namespace GW2EIParser.Builders
                     Concentration = target.Concentration,
                     Condition = target.Condition,
                     TotalHealth = target.GetHealth(_log.CombatData),
-                    DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
+                    DpsAll = target.GetDPS(_log).Select(x => new JsonDPS(x)).ToArray(),
                     Buffs = BuildTargetBuffs(target.GetBuffs(_log), target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
@@ -234,11 +234,11 @@ namespace GW2EIParser.Builders
                     Weapons = player.GetWeaponsArray(_log).Select(w => w ?? "Unknown").ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
-                    DpsAll = player.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
+                    DpsAll = player.GetDPS(_log).Select(x => new JsonDPS(x)).ToArray(),
                     DpsTargets = BuildDPSTarget(player),
                     StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
                     StatsTargets = BuildStatsTarget(player),
-                    Defenses = player.GetDefensesAll(_log).Select(x => new JsonDefenses(x)).ToArray(),
+                    Defenses = player.GetDefenses(_log).Select(x => new JsonDefenses(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = player.GetSupport(_log).Select(x => new JsonSupport(x)).ToArray(),
                     BuffUptimes = BuildPlayerBuffUptimes(player.GetBuffs(_log, Statistics.BuffEnum.Self), player),
@@ -272,7 +272,7 @@ namespace GW2EIParser.Builders
             int i = 0;
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = p.GetDPSTarget(_log, tar).Select(x => new JsonDPS(x)).ToArray();
+                res[i++] = p.GetDPS(_log, tar).Select(x => new JsonDPS(x)).ToArray();
             }
             return res;
         }

@@ -118,15 +118,18 @@ namespace GW2EIParser.Models
 
         public class FinalDefenses
         {
-            //public long allHealReceived;
             public long DamageTaken;
             public int BlockedCount;
             public int EvadedCount;
-            public int DodgeCount;
             public int InvulnedCount;
             public int DamageInvulned;
             public int DamageBarrier;
             public int InterruptedCount;
+        }
+
+        public class FinalDefensesAll : FinalDefenses
+        {
+            public int DodgeCount;
             public int DownCount;
             public int DownDuration;
             public int DeadCount;
@@ -137,15 +140,16 @@ namespace GW2EIParser.Models
 
         public class FinalSupport
         {
-            //public long allHeal;
-            public long Resurrects;
-            public double ResurrectTime;
             public long CondiCleanse;
             public double CondiCleanseTime;
-            public long CondiCleanseSelf;
-            public double CondiCleanseTimeSelf;
             public long BoonStrips;
             public double BoonStripsTime;
+        }
+
+        public class FinalSupportAll: FinalSupport
+        {
+            public long Resurrects;
+            public double ResurrectTime;
         }
 
         public class FinalBuffs

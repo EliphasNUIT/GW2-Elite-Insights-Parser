@@ -5,7 +5,7 @@ namespace GW2EIParser.Builders.JsonModels
     public class JsonStatistics
     {
         /// <summary>
-        /// Defensive stats
+        /// Defensive stats 
         /// </summary>
         public class JsonDefenses
         {
@@ -22,10 +22,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int EvadedCount { get; set; }
             /// <summary>
-            /// Number of dodges
-            /// </summary>
-            public int DodgeCount { get; set; }
-            /// <summary>
             /// Number of time an incoming attack was negated by invul
             /// </summary>
             public int InvulnedCount { get; set; }
@@ -41,6 +37,31 @@ namespace GW2EIParser.Builders.JsonModels
             /// Number of time interrupted
             /// </summary>
             public int InterruptedCount { get; set; }
+
+            public JsonDefenses(Statistics.FinalDefenses defenses)
+            {
+                DamageTaken = defenses.DamageTaken;
+                BlockedCount = defenses.BlockedCount;
+                EvadedCount = defenses.EvadedCount;
+                InvulnedCount = defenses.InvulnedCount;
+                DamageInvulned = defenses.DamageInvulned;
+                DamageBarrier = defenses.DamageBarrier;
+                InterruptedCount = defenses.InterruptedCount;
+            }
+        }
+
+        /// <summary>
+        /// Defensive stats
+        /// </summary>
+        public class JsonDefensesAll: JsonDefenses
+        {
+            /// <summary>
+            /// Number of dodges
+            /// </summary>
+            public int DodgeCount { get; set; }
+            /// <summary>
+            /// Number of time an incoming attack was negated by invul
+            /// </summary>
             /// <summary>
             /// Number of time downed
             /// </summary>
@@ -66,16 +87,9 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int DcDuration { get; set; }
 
-            public JsonDefenses(Statistics.FinalDefenses defenses)
+            public JsonDefensesAll(Statistics.FinalDefensesAll defenses) : base(defenses)
             {
-                DamageTaken = defenses.DamageTaken;
-                BlockedCount = defenses.BlockedCount;
                 DodgeCount = defenses.DodgeCount;
-                EvadedCount = defenses.EvadedCount;
-                InvulnedCount = defenses.InvulnedCount;
-                DamageInvulned = defenses.DamageInvulned;
-                DamageBarrier = defenses.DamageBarrier;
-                InterruptedCount = defenses.InterruptedCount;
                 DownCount = defenses.DownCount;
                 DownDuration = defenses.DownDuration;
                 DeadCount = defenses.DeadCount;
@@ -84,7 +98,6 @@ namespace GW2EIParser.Builders.JsonModels
                 DcDuration = defenses.DcDuration;
             }
         }
-
         /// <summary>
         /// DPS stats
         /// </summary>
@@ -291,29 +304,13 @@ namespace GW2EIParser.Builders.JsonModels
         public class JsonSupport
         {
             /// <summary>
-            /// Number of time ressurected someone
-            /// </summary>
-            public long Resurrects { get; set; }
-            /// <summary>
-            /// Time passed on ressurecting
-            /// </summary>
-            public double ResurrectTime { get; set; }
-            /// <summary>
-            /// Number of time a condition was removed, self excluded
+            /// Number of time a condition was removed
             /// </summary>
             public long CondiCleanse { get; set; }
             /// <summary>
-            /// Total time of condition removed, self excluded
+            /// Total time of condition removed
             /// </summary>
             public double CondiCleanseTime { get; set; }
-            /// <summary>
-            /// Number of time a condition was removed from self
-            /// </summary>
-            public long CondiCleanseSelf { get; set; }
-            /// <summary>
-            /// Total time of condition removed from self
-            /// </summary>
-            public double CondiCleanseTimeSelf { get; set; }
             /// <summary>
             /// Number of time a boon was removed
             /// </summary>
@@ -325,14 +322,31 @@ namespace GW2EIParser.Builders.JsonModels
 
             public JsonSupport(Statistics.FinalSupport stats)
             {
-                Resurrects = stats.Resurrects;
-                ResurrectTime = stats.ResurrectTime;
                 CondiCleanse = stats.CondiCleanse;
                 CondiCleanseTime = stats.CondiCleanseTime;
-                CondiCleanseSelf = stats.CondiCleanseSelf;
-                CondiCleanseTimeSelf = stats.CondiCleanseTimeSelf;
                 BoonStrips = stats.BoonStrips;
                 BoonStripsTime = stats.BoonStripsTime;
+            }
+        }
+
+        /// <summary>
+        /// Support stats
+        /// </summary>
+        public class JsonSupportAll : JsonSupport
+        {
+            /// <summary>
+            /// Number of time ressurected someone
+            /// </summary>
+            public long Resurrects { get; set; }
+            /// <summary>
+            /// Time passed on ressurecting
+            /// </summary>
+            public double ResurrectTime { get; set; }
+
+            public JsonSupportAll(Statistics.FinalSupportAll stats) : base(stats)
+            {
+                Resurrects = stats.Resurrects;
+                ResurrectTime = stats.ResurrectTime;
             }
         }
     }

@@ -94,7 +94,7 @@ namespace GW2EIParser.EIData
 
         public int GetTotalDamage(Player p, ParsedLog log, Target t, int phaseIndex)
         {
-            FinalDPS damageData = p.GetDPSTarget(log, phaseIndex, t);
+            FinalDPS damageData = p.GetDPS(log, phaseIndex, t);
             switch (_compareType)
             {
                 case DamageType.All:
