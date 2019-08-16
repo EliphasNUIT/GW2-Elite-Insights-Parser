@@ -9,7 +9,7 @@ using System.Linq;
 using static GW2EIParser.Models.Statistics;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.Boon;
+using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
 {
@@ -106,20 +106,20 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                Dictionary<Player, BuffDistribution> boonDistributions = new Dictionary<Player, BuffDistribution>();
                 foreach (Player p in playerList)
                 {
-                    boonDistributions[p] = p.GetBoonDistribution(log, phaseIndex);
+                    boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
                 }
 
-                HashSet<Boon> boonsToTrack = new HashSet<Boon>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Boons.BoonsByIds[x.Key]));
+                HashSet<Buff> boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
 
                 Dictionary<long, FinalBuffs> final =
                     new Dictionary<long, FinalBuffs>();
                 Dictionary<long, FinalBuffs> finalActive =
                     new Dictionary<long, FinalBuffs>();
 
-                foreach (Boon boon in boonsToTrack)
+                foreach (Buff boon in boonsToTrack)
                 {
                     double totalGeneration = 0;
                     double totalOverstack = 0;
@@ -138,7 +138,7 @@ namespace GW2EIParser.EIData
                     int activePlayerCount = 0;
                     foreach (var pair in boonDistributions)
                     {
-                        BoonDistribution boons = pair.Value;
+                        BuffDistribution boons = pair.Value;
                         long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
                         if (boons.ContainsKey(boon.ID))
                         {
@@ -181,7 +181,7 @@ namespace GW2EIParser.EIData
                         FinalBuffs uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
-                        if (boon.Type == Boon.BoonType.Duration)
+                        if (boon.Type == Buff.BoonType.Duration)
                         {
                             uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -200,7 +200,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Boon.BoonType.Intensity)
+                        else if (boon.Type == Buff.BoonType.Intensity)
                         {
                             uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -242,12 +242,12 @@ namespace GW2EIParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BoonDistribution selfBoons = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution selfBoons = GetBuffDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
                 long playerActiveDuration = phase.GetActorActiveDuration(this, log);
-                foreach (Boon boon in TrackedBoons)
+                foreach (Buff boon in TrackedBuffs)
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
@@ -280,7 +280,7 @@ namespace GW2EIParser.EIData
                         double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, AgentItem);
                         double extensionValue = selfBoons.GetExtension(boon.ID, AgentItem);
                         double extendedValue = selfBoons.GetExtended(boon.ID, AgentItem);
-                        if (boon.Type == Boon.BoonType.Duration)
+                        if (boon.Type == Buff.BoonType.Duration)
                         {
                             uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -301,7 +301,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Boon.BoonType.Intensity)
+                        else if (boon.Type == Buff.BoonType.Intensity)
                         {
                             uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -584,10 +584,10 @@ namespace GW2EIParser.EIData
         
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = log.Boons.BoonsByNature[BoonNature.Consumable];
+            List<Buff> consumableList = log.Buffs.BoonsByNature[BoonNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
-            foreach (Boon consumable in consumableList)
+            foreach (Buff consumable in consumableList)
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {

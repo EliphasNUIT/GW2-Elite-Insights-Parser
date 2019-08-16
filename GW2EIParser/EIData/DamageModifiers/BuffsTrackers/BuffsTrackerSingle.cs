@@ -11,7 +11,7 @@ namespace GW2EIParser.EIData
             _id = id;
         }
 
-        public override int GetStack(Dictionary<long, BoonsGraphModel> bgms, long time)
+        public override int GetStack(Dictionary<long, BuffsGraphModel> bgms, long time)
         {
             if (bgms.TryGetValue(_id, out var bgm))
             {
@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             return 0;
         }
 
-        public override bool Has(Dictionary<long, BoonsGraphModel> bgms)
+        public override bool Has(Dictionary<long, BuffsGraphModel> bgms)
         {
             return bgms.ContainsKey(_id);
         }

@@ -2,24 +2,24 @@
 using GW2EIParser.Parser.ParsedData;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.EIData.BoonSimulator;
+using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonSimulationItemIntensity : BoonSimulationItem
+    public class BuffSimulationItemIntensity : BuffSimulationItem
     {
-        private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
+        private List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
         private List<AgentItem> _sources;
 
-        public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
+        public BuffSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {
             foreach (BoonStackItem stack in stacks)
             {
-                _stacks.Add(new BoonSimulationItemDuration(stack));
+                _stacks.Add(new BuffSimulationItemDuration(stack));
             }
             Duration = _stacks.Max(x => x.Duration);
             _sources = new List<AgentItem>();
-            foreach (BoonSimulationItemDuration item in _stacks)
+            foreach (BuffSimulationItemDuration item in _stacks)
             {
                 _sources.AddRange(item.GetSources());
             }
@@ -27,7 +27,7 @@ namespace GW2EIParser.EIData
 
         public override void SetEnd(long end)
         {
-            foreach (BoonSimulationItemDuration stack in _stacks)
+            foreach (BuffSimulationItemDuration stack in _stacks)
             {
                 stack.SetEnd(end);
             }
@@ -39,9 +39,9 @@ namespace GW2EIParser.EIData
             return _stacks.Count;
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            foreach (BoonSimulationItemDuration item in _stacks)
+            foreach (BuffSimulationItemDuration item in _stacks)
             {
                 item.SetBoonDistributionItem(distribs, start, end, boonid, log);
             }

@@ -33,7 +33,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             }
         }
 
-        public abstract void UpdateSimulator(BoonSimulator simulator);
+        public abstract void UpdateSimulator(BuffSimulator simulator);
 
         public abstract void TryFindSrc(ParsedLog log);
 

@@ -12,18 +12,18 @@ namespace GW2EIParser.Builders.HtmlModels
         public bool Consumable;
         public bool Enemy;
 
-        public static void AssembleBoons(ICollection<Boon> boons, Dictionary<string, BoonDto> dict)
+        public static void AssembleBoons(ICollection<Buff> boons, Dictionary<string, BoonDto> dict)
         {
-            foreach (Boon boon in boons)
+            foreach (Buff boon in boons)
             {
                 dict["b" + boon.ID] = new BoonDto()
                 {
                     Id = boon.ID,
                     Name = boon.Name,
                     Icon = boon.Link,
-                    Stacking = (boon.Type == Boon.BoonType.Intensity),
-                    Consumable = (boon.Nature == Boon.BoonNature.Consumable),
-                    Enemy = (boon.Source == Boon.BoonSource.Enemy)
+                    Stacking = (boon.Type == Buff.BoonType.Intensity),
+                    Consumable = (boon.Nature == Buff.BoonNature.Consumable),
+                    Enemy = (boon.Source == Buff.BoonSource.Enemy)
                 };
             }
         }

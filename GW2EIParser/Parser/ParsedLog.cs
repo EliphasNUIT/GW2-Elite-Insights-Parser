@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser
         public bool IsBenchmarkMode => FightData.Logic.Mode == FightLogic.ParseMode.Golem;
         public Dictionary<string, List<Player>> PlayerListBySpec { get; }
         public DamageModifiersContainer DamageModifiers { get; }
-        public BoonsContainer Boons { get; }
+        public BuffsContainer Buffs { get; }
         public bool CanCombatReplay => CombatData.HasMovementData;
 
         public readonly MechanicData MechanicData;
@@ -43,10 +43,10 @@ namespace GW2EIParser.Parser
             //
             UpdateFightData();
             //
-            Boons = new BoonsContainer(LogData.GW2Version);
+            Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, PlayerList, Boons);      
+            Statistics = new Statistics(CombatData, PlayerList, Buffs);      
         }
 
         private void UpdateFightData()

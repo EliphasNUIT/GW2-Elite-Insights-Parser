@@ -1,18 +1,18 @@
 ﻿using System;
 using GW2EIParser.Parser;
 using System.Collections.Generic;
-using static GW2EIParser.EIData.BoonSimulator;
+using static GW2EIParser.EIData.BuffSimulator;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonSimulationItemDuration : BoonSimulationItem
+    public class BuffSimulationItemDuration : BuffSimulationItem
     {
         private readonly AgentItem _src;
         private readonly AgentItem _seedSrc;
         private readonly bool _isExtension;
 
-        public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
+        public BuffSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
             _src = other.Src;
             _seedSrc = other.SeedSrc;
@@ -34,20 +34,20 @@ namespace GW2EIParser.EIData
             return new List<AgentItem>() { _src };
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
             AgentItem agent = _src;
             AgentItem seedAgent = _seedSrc;
-            if (distrib.TryGetValue(agent, out BoonDistributionItem toModify))
+            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
                 toModify.Value += cDur;
                 distrib[agent] = toModify;
             }
             else
             {
-                distrib.Add(agent, new BoonDistributionItem(
+                distrib.Add(agent, new BuffDistributionItem(
                     cDur,
                     0, 0, 0, 0, 0));
             }
@@ -60,7 +60,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    distrib.Add(agent, new BoonDistributionItem(
+                    distrib.Add(agent, new BuffDistributionItem(
                         0,
                         0, 0, 0, cDur, 0));
                 }
@@ -74,7 +74,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    distrib.Add(seedAgent, new BoonDistributionItem(
+                    distrib.Add(seedAgent, new BuffDistributionItem(
                         0,
                         0, 0, 0, 0, cDur));
                 }
@@ -88,7 +88,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    distrib.Add(seedAgent, new BoonDistributionItem(
+                    distrib.Add(seedAgent, new BuffDistributionItem(
                         0,
                         0, 0, cDur, 0, 0));
                 }

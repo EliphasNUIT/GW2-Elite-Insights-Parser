@@ -3,29 +3,29 @@ using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonMap : Dictionary<long, List<AbstractBuffEvent>>
+    public class BuffMap : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
-        public BoonMap()
+        public BuffMap()
         {
         }
-        public BoonMap(Boon boon)
+        public BuffMap(Buff boon)
         {
             this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
-        public BoonMap(IEnumerable<Boon> boons)
+        public BuffMap(IEnumerable<Buff> boons)
         {
-            foreach (Boon boon in boons)
+            foreach (Buff boon in boons)
             {
                 this[boon.ID] = new List<AbstractBuffEvent>();
             }
         }
 
 
-        public void Add(IEnumerable<Boon> boons)
+        public void Add(IEnumerable<Buff> boons)
         {
-            foreach (Boon boon in boons)
+            foreach (Buff boon in boons)
             {
                 if (ContainsKey(boon.ID))
                 {
@@ -35,7 +35,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public void Add(Boon boon)
+        public void Add(Buff boon)
         {
             if (ContainsKey(boon.ID))
             {

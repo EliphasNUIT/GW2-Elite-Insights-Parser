@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.Parser;
-using static GW2EIParser.EIData.BoonSimulator;
+using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData
 {

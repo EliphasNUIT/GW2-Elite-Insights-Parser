@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonSimulationItemOverstack : AbstractBoonSimulationItemWasted
+    public class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
     {
 
-        public BoonSimulationItemOverstack(AgentItem src, long overstack, long time) : base(src, overstack, time)
+        public BuffSimulationItemOverstack(AgentItem src, long overstack, long time) : base(src, overstack, time)
         {
         }
 
-        public override void SetBoonDistributionItem(BoonDistribution distribs, long start, long end, long boonid, ParsedLog log)
+        public override void SetBoonDistributionItem(BuffDistribution distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<AgentItem, BoonDistributionItem> distrib = GetDistrib(distribs, boonid);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
             if (distrib.TryGetValue(agent, out var toModify))
             {
@@ -22,7 +22,7 @@ namespace GW2EIParser.EIData
             }
             else
             {
-                distrib.Add(agent, new BoonDistributionItem(
+                distrib.Add(agent, new BuffDistributionItem(
                     0,
                     GetValue(start, end), 0, 0, 0, 0));
             }

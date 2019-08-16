@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonSimulatorDuration : BoonSimulator
+    public class BuffSimulatorDuration : BuffSimulator
     {
         private (AgentItem agent, bool extension) _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
         // Constructor
-        public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
+        public BuffSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
             if (BoonStack.Count > 0 && timePassed > 0)
             {
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
-                   var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
+                   var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
                     var last = GenerationSimulation.Last();

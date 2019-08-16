@@ -9,10 +9,10 @@ namespace GW2EIParser.Builders.HtmlModels
         public double Avg;       
         public List<List<object>> Data = new List<List<object>>();
 
-        public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Boon> listToUse, double avg)
+        public BoonData(Dictionary<long, Statistics.FinalBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
-            foreach (Boon boon in listToUse)
+            foreach (Buff boon in listToUse)
             {
                 List<object> boonVals = new List<object>();
                 Data.Add(boonVals);
@@ -20,7 +20,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
+                    if (boon.Type == Buff.BoonType.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }
@@ -28,10 +28,10 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Boon> listToUse, double avg)
+        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Buff> listToUse, double avg)
         {
             Avg = avg;
-            foreach (Boon boon in listToUse)
+            foreach (Buff boon in listToUse)
             {
                 List<object> boonVals = new List<object>();
                 Data.Add(boonVals);
@@ -39,7 +39,7 @@ namespace GW2EIParser.Builders.HtmlModels
                 if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
+                    if (boon.Type == Buff.BoonType.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }
@@ -47,9 +47,9 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Boon> listToUse, Player player)
+        public BoonData(Dictionary<long, Statistics.FinalTargetBuffs> boons, List<Buff> listToUse, Player player)
         {
-            foreach (Boon boon in listToUse)
+            foreach (Buff boon in listToUse)
             {
                 List<object> boonData = new List<object>();
                 if (boons.TryGetValue(boon.ID, out var toUse))
@@ -65,9 +65,9 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(List<Boon> listToUse, Dictionary<long, Statistics.FinalBuffs> uptimes)
+        public BoonData(List<Buff> listToUse, Dictionary<long, Statistics.FinalBuffs> uptimes)
         {
-            foreach (Boon boon in listToUse)
+            foreach (Buff boon in listToUse)
             {
                 if (uptimes.TryGetValue(boon.ID, out var uptime))
                 {
@@ -96,16 +96,16 @@ namespace GW2EIParser.Builders.HtmlModels
             }
         }
 
-        public BoonData(string prof, Dictionary<string, List<Boon>> boonsBySpec, Dictionary<long, Statistics.FinalBuffs> boons)
+        public BoonData(string prof, Dictionary<string, List<Buff>> boonsBySpec, Dictionary<long, Statistics.FinalBuffs> boons)
         {
-            foreach (Boon boon in boonsBySpec[prof])
+            foreach (Buff boon in boonsBySpec[prof])
             {
                 List<object> boonVals = new List<object>();
                 Data.Add(boonVals);
                 if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     boonVals.Add(uptime.Uptime);
-                    if (boon.Type == Boon.BoonType.Intensity && uptime.Presence > 0)
+                    if (boon.Type == Buff.BoonType.Intensity && uptime.Presence > 0)
                     {
                         boonVals.Add(uptime.Presence);
                     }

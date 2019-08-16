@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace GW2EIParser.EIData
 {
-    public class BoonsGraphModel
+    public class BuffsGraphModel
     {
 
         public class Segment
@@ -49,16 +49,16 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public readonly Boon Boon;
+        public readonly Buff Boon;
         public List<Segment> BoonChart { get; private set; } = new List<Segment>();
         private readonly List<SegmentWithSources> _boonChartWithSource;
 
         // Constructor
-        public BoonsGraphModel(Boon boon)
+        public BuffsGraphModel(Buff boon)
         {
             Boon = boon;
         }
-        public BoonsGraphModel(Boon boon, List<SegmentWithSources> boonChartWithSource)
+        public BuffsGraphModel(Buff boon, List<SegmentWithSources> boonChartWithSource)
         {
             Boon = boon;
             _boonChartWithSource = boonChartWithSource;

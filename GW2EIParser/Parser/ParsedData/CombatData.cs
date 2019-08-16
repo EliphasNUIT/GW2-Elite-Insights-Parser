@@ -29,11 +29,11 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 if (p.Prof == "Weaver")
                 {
-                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBoonDataByDst(p.AgentItem), p.AgentItem, skillData);
+                    toAdd = WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData);
                 }
                 if (p.Prof == "Elementalist" || p.Prof == "Tempest")
                 {
-                    ElementalistHelper.RemoveDualBuffs(GetBoonDataByDst(p.AgentItem), skillData);
+                    ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
                 }
             }
             toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
@@ -409,7 +409,7 @@ namespace GW2EIParser.Parser.ParsedData
             return new List<AbstractBuffEvent>(); ;
         }
 
-        public List<AbstractBuffEvent> GetBoonDataByDst(AgentItem key)
+        public List<AbstractBuffEvent> GetBuffDataByDst(AgentItem key)
         {
             if (_boonDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
             {

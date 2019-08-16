@@ -238,7 +238,7 @@ namespace GW2EIParser.Builders
                     DpsTargets = BuildDPSTarget(player),
                     StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
                     StatsTargets = BuildStatsTarget(player),
-                    Defenses = player.GetDefenses(_log).Select(x => new JsonDefenses(x)).ToArray(),
+                    Defenses = player.GetDefensesAll(_log).Select(x => new JsonDefenses(x)).ToArray(),
                     Rotation = BuildRotation(player.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     Support = player.GetSupport(_log).Select(x => new JsonSupport(x)).ToArray(),
                     BuffUptimes = BuildPlayerBuffUptimes(player.GetBuffs(_log, Statistics.BuffEnum.Self), player),
@@ -353,7 +353,7 @@ namespace GW2EIParser.Builders
             return input.Count > 0 ? res : null;
         }
 
-        private List<int[]> BuildBuffStates(BoonsGraphModel bgm)
+        private List<int[]> BuildBuffStates(BuffsGraphModel bgm)
         {
             if (bgm == null || bgm.BoonChart.Count == 0)
             {
@@ -434,13 +434,13 @@ namespace GW2EIParser.Builders
                 {
                     if (!_buffDesc.ContainsKey("b" + pair.Key))
                     {
-                        if (_log.Boons.BoonsByIds.TryGetValue(pair.Key.ID, out Boon buff))
+                        if (_log.Buffs.BuffsByIds.TryGetValue(pair.Key.ID, out Buff buff))
                         {
                             _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                         }
                         else
                         {
-                            Boon auxBoon = new Boon(skill.Name, pair.Key.ID, skill.Icon);
+                            Buff auxBoon = new Buff(skill.Name, pair.Key.ID, skill.Icon);
                             _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(auxBoon);
                         }
                     }
@@ -593,7 +593,7 @@ namespace GW2EIParser.Builders
             {
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
-                    _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(_log.Boons.BoonsByIds[pair.Key]);
+                    _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(_log.Buffs.BuffsByIds[pair.Key]);
                 }
                 List<JsonTargetBuffsData> data = new List<JsonTargetBuffsData>();
                 for (int i = 0; i < _phases.Count; i++)
@@ -618,7 +618,7 @@ namespace GW2EIParser.Builders
             var uptimes = new List<JsonPlayerBuffsGeneration>();
             foreach (var pair in statUptimes[0])
             {
-                Boon buff = _log.Boons.BoonsByIds[pair.Key];
+                Buff buff = _log.Buffs.BuffsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
@@ -646,14 +646,14 @@ namespace GW2EIParser.Builders
             var uptimes = new List<JsonPlayerBuffsUptime>();
             foreach (var pair in statUptimes[0])
             {
-                Boon buff = _log.Boons.BoonsByIds[pair.Key];
+                Buff buff = _log.Buffs.BuffsByIds[pair.Key];
                 if (!_buffDesc.ContainsKey("b" + pair.Key))
                 {
                     _buffDesc["b" + pair.Key] = new JsonLog.BuffDesc(buff);
                 }
-                if (buff.Nature == Boon.BoonNature.GraphOnlyBuff && buff.Source == Boon.ProfToEnum(player.Prof))
+                if (buff.Nature == Buff.BoonNature.GraphOnlyBuff && buff.Source == Buff.ProfToEnum(player.Prof))
                 {
-                    if (player.GetBoonDistribution(_log, 0).GetUptime(pair.Key) > 0)
+                    if (player.GetBuffDistribution(_log, 0).GetUptime(pair.Key) > 0)
                     {
                         if (_personalBuffs.TryGetValue(player.Prof, out var list) && !list.Contains(pair.Key))
                         {

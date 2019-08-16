@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.EIData.BoonSimulator;
+using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData
 {
@@ -12,7 +12,7 @@ namespace GW2EIParser.EIData
             stacks.Sort((x, y) => x.TotalBoonDuration().CompareTo(y.TotalBoonDuration()));
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItemWasted> wastes)
+        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BuffSimulationItemWasted> wastes)
         {
             if (stacks.Count == 0)
             {
@@ -21,12 +21,12 @@ namespace GW2EIParser.EIData
             BoonStackItem stack = stacks[0];
             if (stack.TotalBoonDuration() < stackItem.TotalBoonDuration())
             {
-                wastes.Add(new BoonSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
+                wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
                 if (stack.Extensions.Count > 0)
                 {
                     foreach ((AgentItem src, long value) in stack.Extensions)
                     {
-                        wastes.Add(new BoonSimulationItemWasted(src, value, stack.Start));
+                        wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
                     }
                 }
                 stacks[0] = stackItem;

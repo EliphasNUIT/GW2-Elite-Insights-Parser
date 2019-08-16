@@ -91,7 +91,7 @@ namespace GW2EIParser.Logic
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
-            List<BoonsGraphModel.Segment> segments = new List<BoonsGraphModel.Segment>();
+            List<BuffsGraphModel.Segment> segments = new List<BuffsGraphModel.Segment>();
             foreach (AbstractBuffEvent c in orbItems)
             {
                 if (c is BuffApplyEvent)
@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
                 }
                 else if (start != 0)
                 {
-                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(c.Time, fightDuration), orbCount));
+                    segments.Add(new BuffsGraphModel.Segment(start, Math.Min(c.Time, fightDuration), orbCount));
                     orbCount = 0;
                     start = 0;
                 }

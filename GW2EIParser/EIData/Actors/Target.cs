@@ -58,7 +58,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = GetBoonDistribution(log, phaseIndex);
+                BuffDistribution boonDistribution = GetBuffDistribution(log, phaseIndex);
                 Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
@@ -66,13 +66,13 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long fightDuration = phase.DurationInMS;
 
-                foreach (Boon boon in TrackedBoons)
+                foreach (Buff boon in TrackedBuffs)
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
                         FinalTargetBuffs buff = new FinalTargetBuffs(log.PlayerList);
                         rates[boon.ID] = buff;
-                        if (boon.Type == Boon.BoonType.Duration)
+                        if (boon.Type == Buff.BoonType.Duration)
                         {
                             buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
@@ -86,7 +86,7 @@ namespace GW2EIParser.EIData
                                 buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Boon.BoonType.Intensity)
+                        else if (boon.Type == Buff.BoonType.Intensity)
                         {
                             buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)

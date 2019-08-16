@@ -2,13 +2,13 @@
 
 namespace GW2EIParser.EIData
 {
-    public abstract class AbstractBoonSimulationItemWasted : AbstractBoonSimulationItem
+    public abstract class AbstractBuffSimulationItemWasted : AbstractBuffSimulationItem
     {
         protected readonly AgentItem Src;
         private readonly long _waste;
         protected readonly long Time;
 
-        protected AbstractBoonSimulationItemWasted(AgentItem src, long waste, long time)
+        protected AbstractBuffSimulationItemWasted(AgentItem src, long waste, long time)
         {
             Src = src;
             _waste = waste;
