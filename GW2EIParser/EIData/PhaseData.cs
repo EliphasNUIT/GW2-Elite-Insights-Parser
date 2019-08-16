@@ -76,12 +76,12 @@ namespace GW2EIParser.EIData
             DurationInS = (End - Start) / 1000;
         }
 
-        public long GetPlayerActiveDuration(Player p, ParsedLog log)
+        public long GetActorActiveDuration(AbstractMasterActor actor, ParsedLog log)
         {
             List<(long start, long end)> dead = new List<(long start, long end)>();
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
-            p.AgentItem.GetAgentStatus(dead, down, dc, log);
+            actor.AgentItem.GetAgentStatus(dead, down, dc, log);
             return DurationInMS - 
                 dead.Sum(x => {
                     if (x.start <= End && x.end >= Start)

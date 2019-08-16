@@ -19,6 +19,12 @@ namespace GW2EIParser.EIData
         private readonly Dictionary<AbstractActor, List<AbstractDamageEvent>> _selfDamageLogsPerTarget = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
         // Minions
         private Dictionary<string, Minions> _minions;
+        // Statistics
+        private Dictionary<AbstractMasterActor, List<FinalDPS>> _dpsTarget;
+        private Dictionary<AbstractMasterActor, List<FinalStats>> _statsTarget;
+        private List<FinalStatsAll> _statsAll;
+        private List<FinalDefenses> _defenses;
+        private List<FinalSupport> _support;
         // Replay
         protected CombatReplay CombatReplay;
         // Statistics
@@ -193,6 +199,401 @@ namespace GW2EIParser.EIData
             final.ActorPowerDamage = damage;
             return final;
         }
+
+
+
+        public FinalDPS GetDPSTarget(ParsedLog log, int phaseIndex, Target target)
+        {
+            if (_dpsTarget == null)
+            {
+                _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
+                foreach (Target tar in log.FightData.Logic.Targets)
+                {
+                    _dpsTarget[tar] = new List<FinalDPS>();
+                    foreach (PhaseData phase in log.FightData.GetPhases(log))
+                    {
+                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
+                    }
+                }
+            }
+            if (target == null)
+            {
+                return GetDPSAll(log, phaseIndex);
+            }
+            return _dpsTarget[target][phaseIndex];
+        }
+
+        public List<FinalDPS> GetDPSTarget(ParsedLog log, Target target)
+        {
+            if (_dpsTarget == null)
+            {
+                _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
+                foreach (Target tar in log.FightData.Logic.Targets)
+                {
+                    _dpsTarget[tar] = new List<FinalDPS>();
+                    foreach (PhaseData phase in log.FightData.GetPhases(log))
+                    {
+                        _dpsTarget[tar].Add(GetFinalDPS(log, phase, tar));
+                    }
+                }
+            }
+            if (target == null)
+            {
+                return GetDPSAll(log);
+            }
+            return _dpsTarget[target];
+        }
+
+        public List<FinalStatsAll> GetStatsAll(ParsedLog log)
+        {
+            if (_statsAll == null)
+            {
+                SetStats(log);
+            }
+            return _statsAll;
+        }
+
+        public List<FinalStats> GetStatsTarget(ParsedLog log, Target target)
+        {
+            if (_statsTarget == null)
+            {
+                SetStats(log);
+            }
+            if (target == null)
+            {
+                return new List<FinalStats>(GetStatsAll(log));
+            }
+            return _statsTarget[target];
+        }
+
+        private void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final, Dictionary<Target, FinalStats> targetsFinal)
+        {
+            HashSet<long> nonCritable = new HashSet<long>
+                    {
+                        9292,
+                        5492,
+                        13014,
+                        30770,
+                        52370
+                    };
+            // (x - 1) / x
+            foreach (AbstractDamageEvent dl in dls)
+            {
+                if (!(dl is NonDirectDamageEvent))
+                {
+                    foreach (var pair in targetsFinal)
+                    {
+                        Target target = pair.Key;
+                        if (dl.To == target.AgentItem)
+                        {
+                            FinalStats targetFinal = pair.Value;
+                            if (dl.HasCrit)
+                            {
+                                targetFinal.CriticalCount++;
+                                targetFinal.CriticalDmg += dl.Damage;
+                            }
+
+                            if (dl.IsFlanking)
+                            {
+                                targetFinal.FlankingCount++;
+                            }
+
+                            if (dl.HasGlanced)
+                            {
+                                targetFinal.GlanceCount++;
+                            }
+
+                            if (dl.IsBlind)
+                            {
+                                targetFinal.Missed++;
+                            }
+                            if (dl.HasInterrupted)
+                            {
+                                targetFinal.Interrupts++;
+                            }
+
+                            if (dl.IsAbsorbed)
+                            {
+                                targetFinal.Invulned++;
+                            }
+                            targetFinal.DirectDamageCount++;
+                            if (!nonCritable.Contains(dl.SkillId))
+                            {
+                                targetFinal.CritableDirectDamageCount++;
+                            }
+                        }
+                    }
+                    if (dl.HasCrit)
+                    {
+                        final.CriticalCount++;
+                        final.CriticalDmg += dl.Damage;
+                    }
+
+                    if (dl.IsFlanking)
+                    {
+                        final.FlankingCount++;
+                    }
+
+                    if (dl.HasGlanced)
+                    {
+                        final.GlanceCount++;
+                    }
+
+                    if (dl.IsBlind)
+                    {
+                        final.Missed++;
+                    }
+                    if (dl.HasInterrupted)
+                    {
+                        final.Interrupts++;
+                    }
+
+                    if (dl.IsAbsorbed)
+                    {
+                        final.Invulned++;
+                    }
+                    final.DirectDamageCount++;
+                    if (!nonCritable.Contains(dl.SkillId))
+                    {
+                        final.CritableDirectDamageCount++;
+                    }
+                }
+            }
+        }
+
+        private void SetStats(ParsedLog log)
+        {
+            int phaseIndex = -1;
+            _statsAll = new List<FinalStatsAll>();
+            _statsTarget = new Dictionary<AbstractMasterActor, List<FinalStats>>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                phaseIndex++;
+                Dictionary<Target, FinalStats> targetDict = new Dictionary<Target, FinalStats>();
+                foreach (Target target in log.FightData.Logic.Targets)
+                {
+                    if (!_statsTarget.ContainsKey(target))
+                    {
+                        _statsTarget[target] = new List<FinalStats>();
+                    }
+                    _statsTarget[target].Add(new FinalStats());
+                    targetDict[target] = _statsTarget[target].Last();
+                }
+                FinalStatsAll final = new FinalStatsAll();
+                FillFinalStats(GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
+                _statsAll.Add(final);
+                // If conjured sword, stop
+                if (IsFakeActor)
+                {
+                    continue;
+                }
+                foreach (AbstractCastEvent cl in GetCastLogs(log, phase.Start, phase.End))
+                {
+                    if (cl.Interrupted)
+                    {
+                        final.Wasted++;
+                        final.TimeWasted += cl.ActualDuration;
+                    }
+                    if (cl.ReducedAnimation)
+                    {
+                        if (cl.ActualDuration < cl.ExpectedDuration)
+                        {
+                            final.Saved++;
+                            final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
+                        }
+                    }
+                    if (cl.SkillId == SkillItem.WeaponSwapId)
+                    {
+                        final.SwapCount++;
+                    }
+                }
+                final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, GeneralHelper.TimeDigit);
+                final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
+
+                double avgBoons = 0;
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Boon).Select(x => x.Value))
+                {
+                    avgBoons += duration;
+                }
+                final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
+                long activeDuration = phase.GetActorActiveDuration(this, log);
+                final.AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
+
+                double avgCondis = 0;
+                foreach (long duration in GetBuffPresence(log, phaseIndex).Where(x => log.Boons.BoonsByIds[x.Key].Nature == Boon.BoonNature.Condition).Select(x => x.Value))
+                {
+                    avgCondis += duration;
+                }
+                final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
+                final.AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BoonDigit) : 0.0;
+
+                if (log.CombatData.HasMovementData && this is Player)
+                {
+                    if (CombatReplay == null)
+                    {
+                        InitCombatReplay(log);
+                    }
+                    List<Point3D> positions = CombatReplay.PolledPositions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                    List<Point3D> stackCenterPositions = log.Statistics.GetStackCenterPositions(log);
+                    int offset = CombatReplay.PolledPositions.Count(x => x.Time < phase.Start);
+                    if (positions.Count > 1)
+                    {
+                        List<float> distances = new List<float>();
+                        for (int time = 0; time < positions.Count; time++)
+                        {
+
+                            float deltaX = positions[time].X - stackCenterPositions[time + offset].X;
+                            float deltaY = positions[time].Y - stackCenterPositions[time + offset].Y;
+                            //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
+
+
+                            distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                        }
+                        final.StackDist = distances.Sum() / distances.Count;
+                    }
+                    else
+                    {
+                        final.StackDist = -1;
+                    }
+                }
+            }
+        }
+
+        public List<FinalDefenses> GetDefenses(ParsedLog log)
+        {
+            if (_defenses == null)
+            {
+                SetDefenses(log);
+            }
+            return _defenses;
+        }
+
+        private void SetDefenses(ParsedLog log)
+        {
+            List<(long start, long end)> dead = new List<(long start, long end)>();
+            List<(long start, long end)> down = new List<(long start, long end)>();
+            List<(long start, long end)> dc = new List<(long start, long end)>();
+            AgentItem.GetAgentStatus(dead, down, dc, log);
+            _defenses = new List<FinalDefenses>();
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
+            {
+                FinalDefenses final = new FinalDefenses();
+                _defenses.Add(final);
+                long start = phase.Start;
+                long end = phase.End;
+                List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, start, end);
+                //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
+
+                final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
+                //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
+                final.BlockedCount = damageLogs.Count(x => x.IsBlocked);
+                final.InvulnedCount = 0;
+                final.DamageInvulned = 0;
+                final.EvadedCount = damageLogs.Count(x => x.IsEvaded);
+                final.DodgeCount = GetCastLogs(log, start, end).Count(x => x.SkillId == SkillItem.DodgeId);
+                final.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
+                final.InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
+                foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
+                {
+                    final.InvulnedCount++;
+                    final.DamageInvulned += dl.Damage;
+                }
+
+                //		
+                final.DownCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DownId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DeadCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DeathId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+                final.DcCount = log.MechanicData.GetMechanicLogs(log, SkillItem.DCId).Count(x => x.Actor == this && x.Time >= start && x.Time <= end);
+
+                final.DownDuration = (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                final.DeadDuration = (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+                final.DcDuration = (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start));
+            }
+        }
+
+        public List<FinalSupport> GetSupport(ParsedLog log)
+        {
+            if (_support == null)
+            {
+                SetSupport(log);
+            }
+            return _support;
+        }
+
+        private long[] GetCleansesNotSelf(ParsedLog log, PhaseData phase)
+        {
+            long[] cleanse = { 0, 0 };
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
+            {
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To != AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                cleanse[0] += bevts.Count;
+                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
+            }
+            return cleanse;
+        }
+        private long[] GetCleansesSelf(ParsedLog log, PhaseData phase)
+        {
+            long[] cleanse = { 0, 0 };
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Condition].Select(x => x.ID))
+            {
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && x.To == AgentItem).Select(x => x as BuffRemoveAllEvent).ToList();
+                cleanse[0] += bevts.Count;
+                cleanse[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
+            }
+            return cleanse;
+        }
+
+        private long[] GetBoonStrips(ParsedLog log, PhaseData phase)
+        {
+            long[] strips = { 0, 0 };
+            foreach (long id in log.Boons.BoonsByNature[Boon.BoonNature.Boon].Select(x => x.ID))
+            {
+                List<BuffRemoveAllEvent> bevts = log.CombatData.GetBoonData(id).Where(x => x is BuffRemoveAllEvent && x.Time >= phase.Start && x.Time <= phase.End && x.By == AgentItem && !log.PlayerAgents.Contains(x.To) && !log.PlayerAgents.Contains(x.To.MasterAgent)).Select(x => x as BuffRemoveAllEvent).ToList();
+                strips[0] += bevts.Count;
+                strips[1] += bevts.Sum(x => Math.Max(x.RemovedDuration, log.FightData.FightDuration));
+            }
+            return strips;
+        }
+
+        private long[] GetReses(ParsedLog log, long start, long end)
+        {
+            List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
+            long[] reses = { 0, 0 };
+            foreach (AbstractCastEvent cl in cls)
+            {
+                if (cl.SkillId == SkillItem.ResurrectId)
+                {
+                    reses[0]++;
+                    reses[1] += cl.ActualDuration;
+                }
+            }
+            return reses;
+        }
+
+        private void SetSupport(ParsedLog log)
+        {
+            _support = new List<FinalSupport>();
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                FinalSupport final = new FinalSupport();
+                _support.Add(final);
+                PhaseData phase = phases[phaseIndex];
+
+                long[] resArray = GetReses(log, phase.Start, phase.End);
+                long[] cleanseArray = GetCleansesNotSelf(log, phase);
+                long[] cleanseSelfArray = GetCleansesSelf(log, phase);
+                long[] boonStrips = GetBoonStrips(log, phase);
+                final.Resurrects = resArray[0];
+                final.ResurrectTime = resArray[1] / 1000.0;
+                final.CondiCleanse = cleanseArray[0];
+                final.CondiCleanseTime = cleanseArray[1] / 1000.0;
+                final.CondiCleanseSelf = cleanseSelfArray[0];
+                final.CondiCleanseTimeSelf = cleanseSelfArray[1] / 1000.0;
+                final.BoonStrips = boonStrips[0];
+                final.BoonStripsTime = boonStrips[1] / 1000.0;
+            }
+        }
+
 
         public List<int> GetCombatReplayTimes(ParsedLog log)
         {

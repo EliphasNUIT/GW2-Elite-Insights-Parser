@@ -14,80 +14,106 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Name of the actor
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
         /// <summary>
         /// Condition damage score
         /// </summary>
-        public uint Condition;
+        public uint Condition { get; set; }
         /// <summary>
         /// Concentration score
         /// </summary>
-        public uint Concentration;
+        public uint Concentration { get; set; }
         /// <summary>
         /// Healing Power score
         /// </summary>
-        public uint Healing;
+        public uint Healing { get; set; }
         /// <summary>
         /// Toughness score
         /// </summary>
-        public uint Toughness;
+        public uint Toughness { get; set; }
         /// <summary>
         /// Height of the hitbox
         /// </summary>
-        public uint HitboxHeight;
+        public uint HitboxHeight { get; set; }
         /// <summary>
         /// Width of the hitbox
         /// </summary>
-        public uint HitboxWidth;
+        public uint HitboxWidth { get; set; }
         /// <summary>
         /// List of minions
         /// </summary>
         /// <seealso cref="JsonMinions"/>
-        public List<JsonMinions> Minions;
-
-        /// <summary>
-        /// Array of Total DPS stats \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonDPS"/>
-        public JsonDPS[] DpsAll;
+        public List<JsonMinions> Minions { get; set; }
         /// <summary>
         /// Total Damage distribution array \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageDist;
+        public List<JsonDamageDist>[] TotalDamageDist { get; set; }
         /// <summary>
         /// Damage taken array
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[] TotalDamageTaken;
+        public List<JsonDamageDist>[] TotalDamageTaken { get; set; }
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation;
-        /// <summary>
-        /// Array of int representing 1S damage points \n
-        /// Length == # of phases
-        /// </summary>
-        /// <remarks>
-        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
-        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
-        /// </remarks>
-        public List<int>[] Damage1S;
+        public List<JsonRotation> Rotation { get; set; }
         /// <summary>
         /// Array of int[2] that represents the number of conditions status \n
         /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates;
+        public List<int[]> ConditionsStates { get; set; }
         /// <summary>
         /// Array of int[2] that represents the number of boons status \n
         /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates;
+        public List<int[]> BoonsStates { get; set; }
+        /// <summary>
+        /// Stats against all  \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonStatsAll"/>
+        public JsonStatsAll[] StatsAll { get; set; }
+        /// <summary>
+        /// Stats against targets  \n
+        /// Length == # of targets and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonStats"/>
+        public JsonStats[][] StatsTargets { get; set; }
+        /// <summary>
+        /// Defensive stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDefenses"/>
+        public JsonDefenses[] Defenses { get; set; }
+        /// <summary>
+        /// Support stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonSupport"/>
+        public JsonSupport[] Support { get; set; }
+        /// <summary>
+        /// Array of Total DPS stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDPS"/>
+        public JsonDPS[] DpsAll { get; set; }
+        /// <summary>
+        /// Array of Total DPS stats \n
+        /// Length == # of targets and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDPS"/>
+        public JsonDPS[][] DpsTargets { get; set; }
+        /// <summary>
+        /// Per Target Damage distribution array \n
+        /// Length == # of targets and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageDist"/>
+        public List<JsonDamageDist>[][] TargetDamageDist { get; set; }
     }
 }

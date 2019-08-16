@@ -92,7 +92,7 @@ namespace GW2EIParser.Builders.HtmlModels
             PlayerActiveTimes = new List<long>();
             foreach (Player p in log.PlayerList)
             {
-                PlayerActiveTimes.Add(phaseData.GetPlayerActiveDuration(p, log));
+                PlayerActiveTimes.Add(phaseData.GetActorActiveDuration(p, log));
             }
             // add phase markup
             MarkupLines = new List<double>();

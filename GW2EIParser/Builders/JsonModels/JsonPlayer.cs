@@ -26,51 +26,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string[] Weapons;
         /// <summary>
-        /// Array of Total DPS stats \n
-        /// Length == # of targets and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonDPS"/>
-        public JsonDPS[][] DpsTargets;
-        /// <summary>
-        /// Array of int representing 1S damage points \n
-        /// Length == # of targets and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <remarks>
-        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
-        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
-        /// </remarks>
-        public List<int>[][] TargetDamage1S;
-        /// <summary>
-        /// Per Target Damage distribution array \n
-        /// Length == # of targets and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonDamageDist"/>
-        public List<JsonDamageDist>[][] TargetDamageDist;
-        /// <summary>
-        /// Stats against all  \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonStatsAll"/>
-        public JsonStatsAll[] StatsAll;
-        /// <summary>
-        /// Stats against targets  \n
-        /// Length == # of targets and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonStats"/>
-        public JsonStats[][] StatsTargets;
-        /// <summary>
-        /// Defensive stats \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonDefenses"/>
-        public JsonDefenses[] Defenses;
-        /// <summary>
-        /// Support stats \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonSupport"/>
-        public JsonSupport[] Support;
-        /// <summary>
         /// Damage modifiers against all
         /// </summary>
         /// <seealso cref="JsonBuffDamageModifierData"/>
@@ -85,62 +40,62 @@ namespace GW2EIParser.Builders.JsonModels
         /// List of buff status on uptimes + states \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimes;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsUptime> BuffUptimes;
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SelfBuffs;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SelfBuffs;
         /// <summary>
         /// List of buff status on group generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> GroupBuffs;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> GroupBuffs;
         /// <summary>
         /// List of buff status on off group generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> OffGroupBuffs;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffs;
         /// <summary>
         /// List of buff status on squad generation \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SquadBuffs;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SquadBuffs;
         /// <summary>
         /// List of buff status on uptimes + states on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsUptime> BuffUptimesActive;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsUptime> BuffUptimesActive;
         /// <summary>
         /// List of buff status on self generation on active time  \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SelfBuffsActive;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SelfBuffsActive;
         /// <summary>
         /// List of buff status on group generation on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> GroupBuffsActive;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> GroupBuffsActive;
         /// <summary>
         /// List of buff status on off group generation on active time \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> OffGroupBuffsActive;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> OffGroupBuffsActive;
         /// <summary>
         /// List of buff status on squad generation on active time\n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
-        public List<JsonBuffsGeneration> SquadBuffsActive;
+        /// <seealso cref="JsonPlayerBuffsUptime"/>
+        public List<JsonPlayerBuffsGeneration> SquadBuffsActive;
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death

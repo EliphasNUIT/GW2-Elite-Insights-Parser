@@ -10,8 +10,8 @@ using GW2EIParser.Builders.JsonModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsUptime;
-using static GW2EIParser.Builders.JsonModels.JsonBuffsGeneration;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsUptime;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
 using static GW2EIParser.Builders.JsonModels.JsonTargetBuffs;
 using static GW2EIParser.Builders.JsonModels.JsonRotation;
 using static GW2EIParser.Builders.JsonModels.JsonBuffDamageModifierData;
@@ -182,13 +182,10 @@ namespace GW2EIParser.Builders
                     Concentration = target.Concentration,
                     Condition = target.Condition,
                     TotalHealth = target.GetHealth(_log.CombatData),
-                    AvgBoons = target.GetAverageBoons(_log),
-                    AvgConditions = target.GetAverageConditions(_log),
                     DpsAll = target.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     Buffs = BuildTargetBuffs(target.GetBuffs(_log), target),
                     HitboxHeight = target.HitboxHeight,
                     HitboxWidth = target.HitboxWidth,
-                    Damage1S = BuildTotal1SDamage(target),
                     Rotation = BuildRotation(target.GetCastLogs(_log, 0, _log.FightData.FightDuration)),
                     FirstAware = (int)(_log.FightData.ToFightSpace(target.FirstAwareLogTime)),
                     LastAware = (int)(_log.FightData.ToFightSpace(target.LastAwareLogTime)),
@@ -237,8 +234,6 @@ namespace GW2EIParser.Builders
                     Weapons = player.GetWeaponsArray(_log).Select(w => w ?? "Unknown").ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
-                    Damage1S = BuildTotal1SDamage(player),
-                    TargetDamage1S = BuildTarget1SDamage(player),
                     DpsAll = player.GetDPSAll(_log).Select(x => new JsonDPS(x)).ToArray(),
                     DpsTargets = BuildDPSTarget(player),
                     StatsAll = player.GetStatsAll(_log).Select(x => new JsonStatsAll(x)).ToArray(),
@@ -266,35 +261,9 @@ namespace GW2EIParser.Builders
                     Consumables = BuildConsumables(player),
                     BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
                     ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
-                    ActiveTimes = _phases.Select(x => x.GetPlayerActiveDuration(player, _log)).ToList(),
+                    ActiveTimes = _phases.Select(x => x.GetActorActiveDuration(player, _log)).ToList(),
                 });
             }
-        }
-
-        private List<int>[] BuildTotal1SDamage(AbstractMasterActor p)
-        {
-            List<int>[] list = new List<int>[_phases.Count];
-            for (int i = 0; i < _phases.Count; i++)
-            {
-                list[i] = p.Get1SDamageList(_log, i, _phases[i], null);
-            }
-            return list;
-        }
-
-        private List<int>[][] BuildTarget1SDamage(Player p)
-        {
-            List<int>[][] tarList = new List<int>[_log.FightData.Logic.Targets.Count][];
-            for (int j = 0; j < _log.FightData.Logic.Targets.Count; j++)
-            {
-                Target target = _log.FightData.Logic.Targets[j];
-                List<int>[] list = new List<int>[_phases.Count];
-                for (int i = 0; i < _phases.Count; i++)
-                {
-                    list[i] = p.Get1SDamageList(_log, i, _phases[i], target);
-                }
-                tarList[j] = list;
-            }
-            return tarList;
         }
 
         private JsonDPS[][] BuildDPSTarget(Player p)
@@ -644,9 +613,9 @@ namespace GW2EIParser.Builders
             return boons;
         }
 
-        private List<JsonBuffsGeneration> BuildPlayerBuffGenerations(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes)
+        private List<JsonPlayerBuffsGeneration> BuildPlayerBuffGenerations(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes)
         {
-            var uptimes = new List<JsonBuffsGeneration>();
+            var uptimes = new List<JsonPlayerBuffsGeneration>();
             foreach (var pair in statUptimes[0])
             {
                 Boon buff = _log.Boons.BoonsByIds[pair.Key];
@@ -659,7 +628,7 @@ namespace GW2EIParser.Builders
                 {
                     data.Add(new JsonBuffsGenerationData(statUptimes[i][pair.Key]));
                 }
-                JsonBuffsGeneration jsonBuffs = new JsonBuffsGeneration()
+                JsonPlayerBuffsGeneration jsonBuffs = new JsonPlayerBuffsGeneration()
                 {
                     BuffData = data,
                     Id = pair.Key
@@ -672,9 +641,9 @@ namespace GW2EIParser.Builders
             return uptimes;
         }
 
-        private List<JsonBuffsUptime> BuildPlayerBuffUptimes(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
+        private List<JsonPlayerBuffsUptime> BuildPlayerBuffUptimes(List<Dictionary<long, Statistics.FinalBuffs>> statUptimes, Player player)
         {
-            var uptimes = new List<JsonBuffsUptime>();
+            var uptimes = new List<JsonPlayerBuffsUptime>();
             foreach (var pair in statUptimes[0])
             {
                 Boon buff = _log.Boons.BoonsByIds[pair.Key];
@@ -704,7 +673,7 @@ namespace GW2EIParser.Builders
                 {
                     data.Add(new JsonBuffsUptimeData(statUptimes[i][pair.Key]));
                 }
-                JsonBuffsUptime jsonBuffs = new JsonBuffsUptime()
+                JsonPlayerBuffsUptime jsonBuffs = new JsonPlayerBuffsUptime()
                 {
                     States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
                     BuffData = data,

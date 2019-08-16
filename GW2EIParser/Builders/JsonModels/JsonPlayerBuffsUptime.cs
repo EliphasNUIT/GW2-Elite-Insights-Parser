@@ -6,7 +6,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class representing buffs on player actors
     /// </summary>
-    public class JsonBuffsUptime
+    public class JsonPlayerBuffsUptime
     {
         /// <summary>
         /// Player buffs item
