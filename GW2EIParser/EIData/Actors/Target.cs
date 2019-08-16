@@ -37,15 +37,6 @@ namespace GW2EIParser.EIData
             _health = health;
         }
 
-        /*public void AddCustomCastLog(long time, long skillID, int expDur, ParseEnum.Activation startActivation, int actDur, ParseEnum.Activation endActivation, ParsedLog log)
-        {
-            if (CastLogs.Count == 0)
-            {
-                GetCastLogs(log, 0, log.FightData.FightEnd);
-            }
-            CastLogs.Add(new CastLog(time, skillID, expDur, startActivation, actDur, endActivation, Agent, InstID));
-        }*/
-
         private void SetAvgBoonsConditions(ParsedLog log)
         {
             _avgBoons = new List<double>();
@@ -299,15 +290,5 @@ namespace GW2EIParser.EIData
             CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
             TrimCombatReplay(log);
         }
-
-        /*protected override void setHealingLogs(ParsedLog log)
-        {
-            // nothing to do
-        }
-
-        protected override void setHealingReceivedLogs(ParsedLog log)
-        {
-            // nothing to do
-        }*/
     }
 }

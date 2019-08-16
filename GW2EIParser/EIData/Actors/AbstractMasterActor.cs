@@ -15,8 +15,8 @@ namespace GW2EIParser.EIData
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // damage list
-        private Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
-        private Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _selfDamageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
+        private readonly Dictionary<int, List<int>> _damageList1S = new Dictionary<int, List<int>>();
+        private readonly Dictionary<AbstractActor, List<AbstractDamageEvent>> _selfDamageLogsPerTarget = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
         // Minions
         private Dictionary<string, Minions> _minions;
         // Replay
@@ -47,7 +47,7 @@ namespace GW2EIParser.EIData
                 return res;
             }
             List<int> dmgList = new List<int>();
-            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase);
+            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
             // fill the graph, full precision
             List<int> dmgListFull = new List<int>();
             for (int i = 0; i <= phase.DurationInMS; i++)
@@ -137,8 +137,10 @@ namespace GW2EIParser.EIData
             int damage;
             double dps = 0.0;
             FinalDPS final = new FinalDPS();
+            List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
+            List<AbstractDamageEvent> damageLogsActor = GetJustPlayerDamageLogs(target, log, phase.Start, phase.End);
             //DPS
-            damage = GetDamageLogs(target, log, phase).Sum(x => x.Damage);
+            damage = damageLogs.Sum(x => x.Damage);
 
             if (phaseDuration > 0)
             {
@@ -147,7 +149,7 @@ namespace GW2EIParser.EIData
             final.Dps = (int)Math.Round(dps);
             final.Damage = damage;
             //Condi DPS
-            damage = GetDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = damageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -164,7 +166,7 @@ namespace GW2EIParser.EIData
             final.PowerDps = (int)Math.Round(dps);
             final.PowerDamage = damage;
             // Actor DPS
-            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.Damage);
+            damage = damageLogsActor.Sum(x => x.Damage);
 
             if (phaseDuration > 0)
             {
@@ -173,7 +175,7 @@ namespace GW2EIParser.EIData
             final.ActorDps = (int)Math.Round(dps);
             final.ActorDamage = damage;
             //Actor Condi DPS
-            damage = GetJustPlayerDamageLogs(target, log, phase).Sum(x => x.IsCondi(log) ? x.Damage : 0);
+            damage = damageLogsActor.Sum(x => x.IsCondi(log) ? x.Damage : 0);
 
             if (phaseDuration > 0)
             {
@@ -259,17 +261,12 @@ namespace GW2EIParser.EIData
             return CombatReplay.Actors;
         }
 
-        public List<AbstractDamageEvent> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
+        public List<AbstractDamageEvent> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
-            if (!_selfDamageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
+            if (!_selfDamageLogsPerTarget.TryGetValue(target??GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
-                targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
-                _selfDamageLogsPerPhasePerTarget[phase] = targetDict;
-            }
-            if (!targetDict.TryGetValue(target??GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
-            {
-                dls = GetDamageLogs(target, log, phase).Where(x => x.From == AgentItem).ToList();
-                targetDict[target ?? GeneralHelper.NullActor] = dls;
+                dls = GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+                _selfDamageLogsPerTarget[target ?? GeneralHelper.NullActor] = dls;
             }
             return dls;
         }
@@ -311,7 +308,6 @@ namespace GW2EIParser.EIData
         protected override void SetBoonStatusGenerationData(ParsedLog log, BoonSimulationItem simul, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            Boon boon = log.Boons.BoonsByIds[boonid];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

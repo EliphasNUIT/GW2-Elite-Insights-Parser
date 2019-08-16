@@ -9,8 +9,6 @@ namespace GW2EIParser.Parser.ParsedData
     {
         public bool HasMovementData { get; }
 
-        //private List<CombatItem> _healingData;
-        //private List<CombatItem> _healingReceivedData;
         private readonly StatusEventsContainer _statusEvents = new StatusEventsContainer();
         private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
         private readonly HashSet<long> _skillIds;
@@ -475,16 +473,6 @@ namespace GW2EIParser.Parser.ParsedData
             }
             return new List<AbstractDamageEvent>();
         }
-
-        /*public List<CombatItem> getHealingData()
-        {
-            return _healingData;
-        }
-
-        public List<CombatItem> getHealingReceivedData()
-        {
-            return _healingReceivedData;
-        }*/
 
 
         public List<AbstractMovementEvent> GetMovementData(AgentItem key)

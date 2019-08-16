@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             double gain = GainComputer.ComputeGain(GainPerStack, 1);
-            if (!p.GetDamageLogs(null, log, phases[0]).Exists(x => DLChecker(x)))
+            if (!p.GetDamageLogs(null, log, phases[0].Start, phases[0].End).Exists(x => DLChecker(x)))
             {
                 return;
             }

@@ -37,16 +37,6 @@ namespace GW2EIParser.EIData
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
-        {
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (Minion minion in this)
-            {
-                res.AddRange(minion.getHealingLogs(log, start, end));
-            }
-            return res;
-        }*/
-
         public List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (_castLogs == null)

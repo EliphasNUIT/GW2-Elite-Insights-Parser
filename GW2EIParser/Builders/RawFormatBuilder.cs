@@ -422,7 +422,7 @@ namespace GW2EIParser.Builders
             for (int i = 0; i < _phases.Count; i++)
             {
                 PhaseData phase = _phases[i];
-                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase));
+                res[i] = BuildDamageDist(p.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End));
             }
             return res;
         }

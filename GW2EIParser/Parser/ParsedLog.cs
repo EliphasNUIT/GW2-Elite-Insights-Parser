@@ -46,7 +46,7 @@ namespace GW2EIParser.Parser
             Boons = new BoonsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, AgentData, FightData, PlayerList, Boons);      
+            Statistics = new Statistics(CombatData, PlayerList, Boons);      
         }
 
         private void UpdateFightData()

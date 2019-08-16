@@ -13,7 +13,7 @@ namespace GW2EIParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(CombatData combatData, AgentData agentData, FightData fightData, List<Player> players, BoonsContainer boons)
+        public Statistics(CombatData combatData, List<Player> players, BoonsContainer boons)
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
@@ -298,9 +298,9 @@ namespace GW2EIParser.Models
                         }
 
                     }
-                    x = x / activePlayers;
-                    y = y / activePlayers;
-                    z = z / activePlayers;
+                    x /= activePlayers;
+                    y /= activePlayers;
+                    z /= activePlayers;
                     _stackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
                 }
             }

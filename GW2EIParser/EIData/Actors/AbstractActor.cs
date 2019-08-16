@@ -12,9 +12,6 @@ namespace GW2EIParser.EIData
         // Damage
         protected List<AbstractDamageEvent> DamageLogs;
         protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
-        private readonly Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>> _damageLogsPerPhasePerTarget = new Dictionary<PhaseData, Dictionary<AbstractActor, List<AbstractDamageEvent>>>();
-        //protected List<DamageLog> HealingLogs = new List<DamageLog>();
-        //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private List<AbstractDamageEvent> _damageTakenlogs;
         protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc;
         // Cast
@@ -48,21 +45,6 @@ namespace GW2EIParser.EIData
                 }
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
-        }
-
-        public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, PhaseData phase)
-        {
-            if (!_damageLogsPerPhasePerTarget.TryGetValue(phase, out Dictionary<AbstractActor, List<AbstractDamageEvent>> targetDict))
-            {
-                targetDict = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
-                _damageLogsPerPhasePerTarget[phase] = targetDict;
-            }
-            if (!targetDict.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
-            {
-                dls = GetDamageLogs(target, log, phase.Start, phase.End);
-                targetDict[target ?? GeneralHelper.NullActor] = dls;
-            }
-            return dls;
         }
 
         public List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end)
@@ -122,16 +104,6 @@ namespace GW2EIParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-
-        public List<AbstractCastEvent> GetCastLogsActDur(ParsedLog log, long start, long end)
-        {
-            if (CastLogs == null)
-            {
-                SetCastLogs(log);
-            }
-            return CastLogs.Where(x => x.Time + x.ActualDuration > start && x.Time < end).ToList();
-
-        }
         // privates
         protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
         {
@@ -182,15 +154,6 @@ namespace GW2EIParser.EIData
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
                 }
             }
-            // add buff remove all for each dead events
-            // useless?
-            /*foreach (DeadEvent dd in log.CombatData.GetDeadEvents(AgentItem))
-            {
-                foreach (var pair in boonMap)
-                {
-                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dd.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
-                }
-            }*/
             boonMap.Sort();
             foreach (var pair in boonMap)
             {
@@ -199,34 +162,6 @@ namespace GW2EIParser.EIData
             return boonMap;
         }
 
-
-        /*protected void addHealingLog(long time, CombatItem c)
-        {
-            if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-            {
-                if (c.isBuff() == 1 && c.getBuffDmg() != 0)//boon
-                {
-                    healing_logs.Add(new DamageLogCondition(time, c));
-                }
-                else if (c.isBuff() == 0 && c.getValue() != 0)//skill
-                {
-                    healing_logs.Add(new DamageLogPower(time, c));
-                }
-            }
-
-        }
-        protected void addHealingReceivedLog(long time, CombatItem c)
-        {
-            if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-            {
-                healing_received_logs.Add(new DamageLogCondition(time, c));
-            }
-            else if (c.isBuff() == 0 && c.getValue() >= 0)
-            {
-                healing_received_logs.Add(new DamageLogPower(time, c));
-
-            }
-        }*/
         // Setters
 
         protected virtual void SetDamageTakenLogs(ParsedLog log)
@@ -368,7 +303,5 @@ namespace GW2EIParser.EIData
             BoonPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             BoonPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
-        //protected abstract void setHealingLogs(ParsedLog log);
-        //protected abstract void setHealingReceivedLogs(ParsedLog log);
     }
 }

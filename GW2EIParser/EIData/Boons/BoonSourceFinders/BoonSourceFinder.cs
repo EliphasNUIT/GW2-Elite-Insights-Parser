@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
                 _extensionSkills = new List<AbstractCastEvent>();
                 foreach (Player p in log.PlayerList)
                 {
-                    _extensionSkills.AddRange(p.GetCastLogsActDur(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
+                    _extensionSkills.AddRange(p.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
             return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + 10).ToList();
@@ -76,8 +76,7 @@ namespace GW2EIParser.EIData
                 // unknown or self
                 return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
             }
-            HashSet<long> idsToCheck = new HashSet<long>();
-            if (DurationToIDs.TryGetValue(extension, out idsToCheck))
+            if (DurationToIDs.TryGetValue(extension, out var idsToCheck))
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 if (cls.Count == 1)

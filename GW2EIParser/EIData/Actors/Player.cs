@@ -307,7 +307,7 @@ namespace GW2EIParser.EIData
                     targetDict[target] = _statsTarget[target].Last();
                 }
                 FinalStatsAll final = new FinalStatsAll();
-                FillFinalStats(GetJustPlayerDamageLogs(null, log, phase), final, targetDict);
+                FillFinalStats(GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final, targetDict);
                 _statsAll.Add(final);
                 // If conjured sword, stop
                 if (IsFakeActor)
@@ -1181,38 +1181,5 @@ namespace GW2EIParser.EIData
             AgentItem.GetAgentStatus(dead, down, dc, log);
             CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
-
-
-        /*protected override void setHealingLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getHealingData())
-            {
-                if (agent.InstID == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
-                {
-                    long time = c.getTime() - time_start;
-                    addHealingLog(time, c);
-                }
-            }
-            Dictionary<string, Minions> min_list = getMinions(log);
-            foreach (Minions mins in min_list.Values)
-            {
-                healing_logs.AddRange(mins.getHealingLogs(log, 0, log.getBossData().getAwareDuration()));
-            }
-            healing_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
-        }
-
-        protected override void setHealingReceivedLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getHealingReceivedData())
-            {
-                if (agent.InstID == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
-                {//selecting player as target
-                    long time = c.getTime() - time_start;
-                    addHealingReceivedLog(time, c);
-                }
-            }
-        }*/
     }
 }

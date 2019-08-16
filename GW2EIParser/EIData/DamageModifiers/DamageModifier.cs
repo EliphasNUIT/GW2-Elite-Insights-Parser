@@ -24,9 +24,9 @@ namespace GW2EIParser.EIData
             Engineer, Scrapper, Holosmith
         };
 
-        private DamageType _compareType { get; }
-        private DamageType _srcType { get; }
-        private DamageSource _dmgSrc { get; }
+        private readonly DamageType _compareType;
+        private readonly DamageType _srcType;
+        private readonly DamageSource _dmgSrc;
         protected double GainPerStack { get; }
         protected readonly GainComputer GainComputer;
         public ulong MinBuild { get; } = ulong.MaxValue;
@@ -98,11 +98,13 @@ namespace GW2EIParser.EIData
             switch (_compareType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? damageData.Damage  : damageData.ActorDamage;
+                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
                 case DamageType.Condition:
                     return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
                 case DamageType.Power:
                     return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+                default:
+                    break;
             }
             return 0;
         }
@@ -112,12 +114,12 @@ namespace GW2EIParser.EIData
             switch (_srcType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase);
+                    return _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End);
                 case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => x.IsCondi(log)).ToList();
                 case DamageType.Power:
                 default:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase) : p.GetJustPlayerDamageLogs(t, log, phase)).Where(x => !x.IsCondi(log)).ToList();
+                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustPlayerDamageLogs(t, log, phase.Start, phase.End)).Where(x => !x.IsCondi(log)).ToList();
             }
         }
 
