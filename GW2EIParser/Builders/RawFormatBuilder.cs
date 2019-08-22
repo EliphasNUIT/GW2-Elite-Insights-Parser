@@ -192,8 +192,8 @@ namespace GW2EIParser.Builders
                     Minions = BuildMinions(target),
                     TotalDamageDist = BuildDamageDist(target, null),
                     TotalDamageTaken = BuildDamageTaken(target),
-                    BoonsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(target.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(target.GetBuffGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(target.GetBuffGraphs(_log)[ProfHelper.NumberOfConditionsID]),
                     HealthPercents = _log.CombatData.GetHealthUpdateEvents(target.AgentItem).Select(x => new double[2] { x.Time, x.HPPercent }).ToList()
                 };
                 double hpLeft = 0.0;
@@ -259,8 +259,8 @@ namespace GW2EIParser.Builders
                     TotalDamageTaken = BuildDamageTaken(player),
                     DeathRecap = BuildDeathRecap(player.GetDeathRecaps(_log)),
                     Consumables = BuildConsumables(player),
-                    BoonsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfBoonsID]),
-                    ConditionsStates = BuildBuffStates(player.GetBoonGraphs(_log)[ProfHelper.NumberOfConditionsID]),
+                    BoonsStates = BuildBuffStates(player.GetBuffGraphs(_log)[ProfHelper.NumberOfBoonsID]),
+                    ConditionsStates = BuildBuffStates(player.GetBuffGraphs(_log)[ProfHelper.NumberOfConditionsID]),
                     ActiveTimes = _phases.Select(x => x.GetActorActiveDuration(player, _log)).ToList(),
                 });
             }
@@ -603,7 +603,7 @@ namespace GW2EIParser.Builders
                 }
                 JsonTargetBuffs jsonBuffs = new JsonTargetBuffs()
                 {
-                    States = BuildBuffStates(target.GetBoonGraphs(_log)[pair.Key]),
+                    States = BuildBuffStates(target.GetBuffGraphs(_log)[pair.Key]),
                     BuffData = data,
                     Id = pair.Key
                 };
@@ -675,7 +675,7 @@ namespace GW2EIParser.Builders
                 }
                 JsonPlayerBuffsUptime jsonBuffs = new JsonPlayerBuffsUptime()
                 {
-                    States = BuildBuffStates(player.GetBoonGraphs(_log)[pair.Key]),
+                    States = BuildBuffStates(player.GetBuffGraphs(_log)[pair.Key]),
                     BuffData = data,
                     Id = pair.Key
                 };

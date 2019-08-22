@@ -19,12 +19,30 @@ namespace GW2EIParser.EIData
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         protected Dictionary<long, BuffsGraphModel> BuffPoints;
+        //status
+        private List<(long start, long end)> _deads;
+        private List<(long start, long end)> _downs;
+        private List<(long start, long end)> _dCs;
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {
         }
-        // Getters
+        // Status
 
+        public (List<(long start, long end)>, List<(long start, long end)>, List<(long start, long end)>) GetStatus(ParsedLog log)
+        {
+            if (_deads == null)
+            {
+                _deads = new List<(long start, long end)>();
+                _downs = new List<(long start, long end)>();
+                _dCs = new List<(long start, long end)>();
+                AgentItem.GetAgentStatus(_deads, _downs, _dCs, log);
+            }
+            return (_deads, _downs, _dCs);
+        }
+
+        // Damage logs
+        protected abstract void SetDamageLogs(ParsedLog log);
         public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs == null)
@@ -70,15 +88,16 @@ namespace GW2EIParser.EIData
             }
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
-
-        public Dictionary<long, BuffsGraphModel> GetBoonGraphs(ParsedLog log)
+          protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
         {
-            if (BuffPoints == null)
-            {
-                SetBuffStatus(log);
-            }
-            return BuffPoints;
+            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.IFF.Friend));
         }
+        protected virtual void SetDamageTakenLogs(ParsedLog log)
+        {
+            _damageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
+        }
+
+        // Cast logs
         public List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (CastLogs == null)
@@ -88,22 +107,31 @@ namespace GW2EIParser.EIData
             return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
-        // privates
-        protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
+        protected virtual void SetCastLogs(ParsedLog log)
         {
-            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.IFF.Friend));
+            CastLogs = new List<AbstractCastEvent>(log.CombatData.GetCastData(AgentItem));
+            foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
+            {
+                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
+                {
+                    CastLogs[CastLogs.Count - 1] = wepSwap;
+                }
+                else
+                {
+                    CastLogs.Add(wepSwap);
+                }
+            }
+            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
         }
 
-        protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
+        // Buffs
+        public Dictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedLog log)
         {
-            if (dictionary.TryGetValue(key, out var existing))
+            if (BuffPoints == null)
             {
-                dictionary[key] = existing + value;
+                SetBuffStatus(log);
             }
-            else
-            {
-                dictionary.Add(key, value);
-            }
+            return BuffPoints;
         }
 
         protected BuffMap GetBuffMap(ParsedLog log)
@@ -145,33 +173,6 @@ namespace GW2EIParser.EIData
             }
             return buffMap;
         }
-
-        // Setters
-
-        protected virtual void SetDamageTakenLogs(ParsedLog log)
-        {
-            _damageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
-        }
-
-        protected virtual void SetCastLogs(ParsedLog log)
-        {
-            CastLogs = new List<AbstractCastEvent>(log.CombatData.GetCastData(AgentItem));
-            foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
-            {
-                if (CastLogs.Count > 0 && (wepSwap.Time - CastLogs.Last().Time) < 10 && CastLogs.Last().SkillId == SkillItem.WeaponSwapId)
-                {
-                    CastLogs[CastLogs.Count - 1] = wepSwap;
-                }
-                else
-                {
-                    CastLogs.Add(wepSwap);
-                }
-            }
-            CastLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
-        }
-
-
-        protected abstract void SetDamageLogs(ParsedLog log);
         protected abstract void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence);
         protected abstract void SetBuffStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid);
         protected abstract void InitBuffStatusData(ParsedLog log);
@@ -286,6 +287,18 @@ namespace GW2EIParser.EIData
             }
             BuffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
+        }
+        // Utilities
+        protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
+        {
+            if (dictionary.TryGetValue(key, out var existing))
+            {
+                dictionary[key] = existing + value;
+            }
+            else
+            {
+                dictionary.Add(key, value);
+            }
         }
     }
 }

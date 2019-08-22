@@ -148,7 +148,7 @@ namespace GW2EIParser.Parser.ParsedData
                 throw new InvalidOperationException("Buff id must be simulated");
             }
             AbstractActor actor = log.FindActor(this);
-            Dictionary<long, BuffsGraphModel> bgms = actor.GetBoonGraphs(log);
+            Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out var bgm))
             {
                 return bgm.IsPresent(time, 10);

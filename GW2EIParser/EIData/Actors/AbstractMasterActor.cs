@@ -632,15 +632,6 @@ namespace GW2EIParser.EIData
             return CombatReplay.PolledPositions;
         }
 
-        public List<Point3D> GetCombatReplayActivePositions(ParsedLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            return CombatReplay.GetActivePositions();
-        }
-
         protected abstract void InitCombatReplay(ParsedLog log);
 
         protected void TrimCombatReplay(ParsedLog log)
@@ -689,8 +680,6 @@ namespace GW2EIParser.EIData
             }
             return (InstID + "_" + CombatReplay.TimeOffsets.start + "_" + CombatReplay.TimeOffsets.end).GetHashCode();
         }
-
-        // abstracts
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
 

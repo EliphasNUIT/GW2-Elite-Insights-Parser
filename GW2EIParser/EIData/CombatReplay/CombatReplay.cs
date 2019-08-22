@@ -15,10 +15,6 @@ namespace GW2EIParser.EIData
         private long _start = -1;
         private long _end = -1;
         public (long start, long end) TimeOffsets => (_start, _end);
-        //status
-        public List<(long start, long end)> Deads { get; } = new List<(long start, long end)>();
-        public List<(long start, long end)> Downs { get; } = new List<(long start, long end)>();
-        public List<(long start, long end)> DCs { get; } = new List<(long start, long end)>();
         // icon
         public string Icon { get; set; }
         // actors
@@ -158,20 +154,21 @@ namespace GW2EIParser.EIData
             RotationPolling(GeneralHelper.PollingRate, fightDuration, forceInterpolate);
         }
 
-        public List<Point3D> GetActivePositions()
+        public List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)
         {
             List<Point3D> activePositions = new List<Point3D>(PolledPositions);
+
             for (var i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];
-                foreach ((long start, long end) in Deads)
+                foreach ((long start, long end) in deads)
                 {
                     if (cur.Time >= start && cur.Time <= end)
                     {
                         activePositions[i] = null;
                     }
                 }
-                foreach ((long start, long end) in DCs)
+                foreach ((long start, long end) in dcs)
                 {
                     if (cur.Time >= start && cur.Time <= end)
                     {

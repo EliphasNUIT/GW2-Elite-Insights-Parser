@@ -10,13 +10,11 @@ namespace GW2EIParser.EIData
         {        
         }
 
-        //setters
-
+        // Combat Replay
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
             log.FightData.Logic.ComputeMobCombatReplayActors(this, log, CombatReplay);
         }
-        //
         private class MobSerializable : AbstractMasterActorSerializable
         {
             public long Start { get; set; }

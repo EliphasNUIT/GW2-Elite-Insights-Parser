@@ -11,14 +11,18 @@ namespace GW2EIParser.EIData
     public class Target : AbstractMasterActor
     {
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
+        private int _health = -1;
+        private readonly List<double[]> _healthUpdates = new List<double[]>();
         // Constructors
         public Target(AgentItem agent) : base(agent)
         {
         }
 
-        private int _health = -1;
-        private readonly List<double[]> _healthUpdates = new List<double[]>();
-
+        public void OverrideName(string name)
+        {
+            Character = name;
+        }
+        // Health
         public int GetHealth(CombatData combatData)
         {
             if (_health == -1)
@@ -28,17 +32,13 @@ namespace GW2EIParser.EIData
             }
             return _health;
         }
-
-        public void OverrideName(string name)
-        {
-            Character = name;
-        }
-
         public void SetManualHealth(int health)
         {
             _health = health;
         }
 
+
+        // Buffs
         public Dictionary<long, FinalTargetBuffs> GetBuffs(ParsedLog log, int phaseIndex)
         {
             if (_buffs == null)
@@ -113,7 +113,7 @@ namespace GW2EIParser.EIData
                 }
             }
         }
-
+        // Combat Replay
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
             log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
@@ -122,8 +122,7 @@ namespace GW2EIParser.EIData
                 CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
-        
-        //
+
         private class TargetSerializable : AbstractMasterActorSerializable
         {
             public long Start { get; set; }

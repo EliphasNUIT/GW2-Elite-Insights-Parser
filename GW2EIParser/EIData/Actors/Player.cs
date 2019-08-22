@@ -52,9 +52,13 @@ namespace GW2EIParser.EIData
             Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
             IsFakeActor = Account == "Conjured Sword";
         }
-        
-        // Public methods
 
+        public void Anonymize(int index)
+        {
+            Character = "Player " + index;
+            Account = "Account " + index;
+        }
+        // Buffs
         public List<Dictionary<long, FinalBuffs>> GetBuffs(ParsedLog log, BuffEnum type)
         {
             if (_selfBuffs == null)
@@ -353,13 +357,7 @@ namespace GW2EIParser.EIData
             var otherPlayers = log.PlayerList.Where(p => p.InstID != InstID).ToList();
             (_squadBuffs, _squadActiveBuffs) = GetBoonsForPlayers(otherPlayers, log);
         }
-
-        internal void Anonymize(int index)
-        {
-            Character = "Player " + index;
-            Account = "Account " + index;
-        }
-
+        // Death Recap
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)
         {
             if(_deathRecaps == null)
@@ -371,79 +369,6 @@ namespace GW2EIParser.EIData
                 return null;
             }
             return _deathRecaps;
-        }
-
-        public string[] GetWeaponsArray(ParsedLog log)
-        {
-            if (_weaponsArray == null)
-            {
-                EstimateWeapons( log);
-            }
-            return _weaponsArray;
-        }
-
-        public List<Consumable> GetConsumablesList(ParsedLog log, long start, long end)
-        {
-            if (_consumeList == null)
-            {
-                SetConsumablesList(log);
-            }
-            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
-        }
-
-        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
-        {
-            if (_damageModifiers == null)
-            {
-                SetDamageModifiersData(log);
-            }
-            if (target != null)
-            {
-                if (_damageModifiersTargets.TryGetValue(target, out var res))
-                {
-                    return res;
-                }
-                else
-                {
-                    return new Dictionary<string, List<DamageModifierData>>();
-                }
-            }
-            return _damageModifiers;
-        }
-
-        public HashSet<string> GetPresentDamageModifier(ParsedLog log)
-        {
-            if (_presentDamageModifiers == null)
-            {
-                SetDamageModifiersData(log);
-            }
-            return _presentDamageModifiers;
-        }
-
-        // Private Methods
-
-        private void SetDamageModifiersData(ParsedLog log)
-        {
-            _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
-            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
-            _presentDamageModifiers = new HashSet<string>();
-            // If conjured sword or WvW, stop
-            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
-            {
-                return;
-            }
-            List<DamageModifier> damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
-            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
-            damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
-            foreach (DamageModifier mod in damageMods)
-            {
-                mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
-            }
-            _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
-            foreach (Target tar in _damageModifiersTargets.Keys)
-            {
-                _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
-            }
         }
 
         private void SetDeathRecaps(ParsedLog log)
@@ -532,6 +457,15 @@ namespace GW2EIParser.EIData
                 res.Add(recap);
             }
         }
+        // Weapons
+        public string[] GetWeaponsArray(ParsedLog log)
+        {
+            if (_weaponsArray == null)
+            {
+                EstimateWeapons( log);
+            }
+            return _weaponsArray;
+        }
 
         private void EstimateWeapons(ParsedLog log)
         {
@@ -551,11 +485,12 @@ namespace GW2EIParser.EIData
                 return;
             }
             string[] weapons = new string[8];//first 2 for first set next 2 for second set, second sets of 4 for underwater
-            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
+            List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);
             int swapped = -1;
             long swappedTime = 0;
             List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => {
-                if (x is WeaponSwapEvent wse) {
+                if (x is WeaponSwapEvent wse)
+                {
                     return wse.SwappedTo;
                 }
                 return -1;
@@ -580,8 +515,17 @@ namespace GW2EIParser.EIData
                 }
             }
             _weaponsArray = weapons;
-        }    
-        
+        }
+        // Consumables
+        public List<Consumable> GetConsumablesList(ParsedLog log, long start, long end)
+        {
+            if (_consumeList == null)
+            {
+                SetConsumablesList(log);
+            }
+            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
+        }
+
         private void SetConsumablesList(ParsedLog log)
         {
             List<Buff> consumableList = log.Buffs.BoonsByNature[BoonNature.Consumable];
@@ -591,7 +535,7 @@ namespace GW2EIParser.EIData
             {
                 foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
                 {
-                    if (!(c is BuffApplyEvent ba) ||  AgentItem != ba.To)
+                    if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
                     {
                         continue;
                     }
@@ -606,7 +550,8 @@ namespace GW2EIParser.EIData
                         if (existing != null)
                         {
                             existing.Stack++;
-                        } else
+                        }
+                        else
                         {
                             _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration));
                         }
@@ -616,7 +561,60 @@ namespace GW2EIParser.EIData
             _consumeList.Sort((x, y) => x.Time.CompareTo(y.Time));
 
         }
+        // Damage modifiers
+        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
+        {
+            if (_damageModifiers == null)
+            {
+                SetDamageModifiersData(log);
+            }
+            if (target != null)
+            {
+                if (_damageModifiersTargets.TryGetValue(target, out var res))
+                {
+                    return res;
+                }
+                else
+                {
+                    return new Dictionary<string, List<DamageModifierData>>();
+                }
+            }
+            return _damageModifiers;
+        }
 
+        public HashSet<string> GetPresentDamageModifier(ParsedLog log)
+        {
+            if (_presentDamageModifiers == null)
+            {
+                SetDamageModifiersData(log);
+            }
+            return _presentDamageModifiers;
+        }
+
+        private void SetDamageModifiersData(ParsedLog log)
+        {
+            _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
+            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+            _presentDamageModifiers = new HashSet<string>();
+            // If conjured sword or WvW, stop
+            if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
+            {
+                return;
+            }
+            List<DamageModifier> damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
+            damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
+            foreach (DamageModifier mod in damageMods)
+            {
+                mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
+            }
+            _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
+            foreach (Target tar in _damageModifiersTargets.Keys)
+            {
+                _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
+            }
+        }
+        // Combat Replay
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
             if (IsFakeActor)
@@ -631,7 +629,6 @@ namespace GW2EIParser.EIData
             }
         }
 
-        //
         private class PlayerSerializable : AbstractMasterActorSerializable
         {
             public int Group { get; set; }
@@ -646,6 +643,7 @@ namespace GW2EIParser.EIData
             {
                 InitCombatReplay(log);
             }
+            (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
             PlayerSerializable aux = new PlayerSerializable
             {
                 Group = Group,
@@ -653,9 +651,9 @@ namespace GW2EIParser.EIData
                 Type = "Player",
                 ID = GetCombatReplayID(log),
                 Positions = new double[2 * CombatReplay.PolledPositions.Count],
-                Dead = new long[2 * CombatReplay.Deads.Count],
-                Down = new long[2 * CombatReplay.Downs.Count],
-                Dc = new long[2 * CombatReplay.DCs.Count]
+                Dead = new long[2 * deads.Count],
+                Down = new long[2 * downs.Count],
+                Dc = new long[2 * dcs.Count]
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
@@ -665,19 +663,19 @@ namespace GW2EIParser.EIData
                 aux.Positions[i++] = y;
             }
             i = 0;
-            foreach ((long start, long end) in CombatReplay.Deads)
+            foreach ((long start, long end) in deads)
             {
                 aux.Dead[i++] = start;
                 aux.Dead[i++] = end;
             }
             i = 0;
-            foreach ((long start, long end) in CombatReplay.Downs)
+            foreach ((long start, long end) in downs)
             {
                 aux.Down[i++] = start;
                 aux.Down[i++] = end;
             }
             i = 0;
-            foreach ((long start, long end) in CombatReplay.DCs)
+            foreach ((long start, long end) in dcs)
             {
                 aux.Dc[i++] = start;
                 aux.Dc[i++] = end;
@@ -698,11 +696,6 @@ namespace GW2EIParser.EIData
                 Icon = GeneralHelper.GetProfIcon(Prof)
             };
             SetMovements(log);
-            // Down and deads
-            List<(long, long)> dead = CombatReplay.Deads;
-            List<(long, long)> down = CombatReplay.Downs;
-            List<(long, long)> dc = CombatReplay.DCs;
-            AgentItem.GetAgentStatus(dead, down, dc, log);
             CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }
     }

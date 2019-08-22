@@ -18,7 +18,7 @@ namespace GW2EIParser.EIData
         {
             MinionID = id;
         }
-
+        // Damage logs
         public List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (_damageLogs == null)
@@ -36,7 +36,7 @@ namespace GW2EIParser.EIData
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
-
+        // Cast logs
         public List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end)
         {
             if (_castLogs == null)

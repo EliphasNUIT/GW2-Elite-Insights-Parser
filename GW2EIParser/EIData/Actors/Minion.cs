@@ -9,12 +9,12 @@ namespace GW2EIParser.EIData
         public Minion(AgentItem agent) : base(agent)
         {
         }
-
+        // Damage logs
         protected override void SetDamageLogs(ParsedLog log)
         {
             AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
         }
-
+        // Buffs
         protected override void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
         {
         }
