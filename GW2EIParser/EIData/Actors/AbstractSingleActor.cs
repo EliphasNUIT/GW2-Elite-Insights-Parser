@@ -19,13 +19,13 @@ namespace GW2EIParser.EIData
         private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // Statistics
-        private Dictionary<AbstractMasterActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
+        private readonly Dictionary<AbstractMasterActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
         private List<FinalDPS> _dpsAll;
-        private Dictionary<AbstractMasterActor, List<FinalStats>> _statsTarget = new Dictionary<AbstractMasterActor, List<FinalStats>>();
+        private readonly Dictionary<AbstractMasterActor, List<FinalStats>> _statsTarget = new Dictionary<AbstractMasterActor, List<FinalStats>>();
         private List<FinalStatsAll> _statsAll;
-        private Dictionary<AbstractMasterActor, List<FinalDefenses>> _defensesTarget = new Dictionary<AbstractMasterActor, List<FinalDefenses>>();
+        private readonly Dictionary<AbstractMasterActor, List<FinalDefenses>> _defensesTarget = new Dictionary<AbstractMasterActor, List<FinalDefenses>>();
         private List<FinalDefensesAll> _defensesAll;
-        private Dictionary<AbstractMasterActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractMasterActor, List<FinalSupport>>();
+        private readonly Dictionary<AbstractMasterActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractMasterActor, List<FinalSupport>>();
         private List<FinalSupportAll> _support;
         //status
         private List<(long start, long end)> _deads;

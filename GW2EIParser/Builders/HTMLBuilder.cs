@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Serialization;
 using GW2EIParser.EIData;
+using GW2EIParser.Builders.JsonModels;
 
 namespace GW2EIParser.Builders
 {
@@ -16,9 +17,9 @@ namespace GW2EIParser.Builders
 
         private readonly bool _cr;
 
-        private readonly RawFormatBuilder _jsonBuilder;
+        private readonly JsonLog _jsonLog;
 
-        public HTMLBuilder(ParsedLog log, string[] uploadString)
+        public HTMLBuilder(JsonLog jsonLog, ParsedLog log)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             _scriptVersion = version.Major + "." + version.Minor;
@@ -27,7 +28,7 @@ namespace GW2EIParser.Builders
 #endif
             _scriptVersionRev = version.Revision;
 
-            _jsonBuilder = new RawFormatBuilder(log, uploadString);
+            _jsonLog = jsonLog;
 
             _cr = Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay;
         }
@@ -42,7 +43,7 @@ namespace GW2EIParser.Builders
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
             html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
 
-            html = html.Replace("'${logDataJson}'", ToJson(_jsonBuilder.CreateJsonLog()));
+            html = html.Replace("'${logDataJson}'", ToJson(_jsonLog));
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
