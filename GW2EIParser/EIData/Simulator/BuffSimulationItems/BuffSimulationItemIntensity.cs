@@ -8,8 +8,8 @@ namespace GW2EIParser.EIData
 {
     public class BuffSimulationItemIntensity : BuffSimulationItem
     {
-        private List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
-        private List<AgentItem> _sources;
+        private readonly List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
+        private readonly List<AgentItem> _sources;
 
         public BuffSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {

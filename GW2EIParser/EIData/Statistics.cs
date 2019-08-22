@@ -104,7 +104,6 @@ namespace GW2EIParser.Models
             public double TimeWasted;
             public int Saved;
             public double TimeSaved;
-            public double StackDist;
 
             // boons
             public double AvgBoons;
@@ -255,59 +254,5 @@ namespace GW2EIParser.Models
         public readonly List<Buff> PresentDefbuffs = new List<Buff>();//Used only for Def Buff tables
         public readonly Dictionary<ushort, HashSet<Buff>> PresentPersonalBuffs = new Dictionary<ushort, HashSet<Buff>>();
 
-        //Positions for group
-        private List<Point3D> _stackCenterPositions = null;
-
-        public List<Point3D> GetStackCenterPositions(ParsedLog log)
-        {
-            if (_stackCenterPositions == null)
-            {
-                SetStackCenterPositions(log);
-            }
-            return _stackCenterPositions;
-        }
-
-        private void SetStackCenterPositions(ParsedLog log)
-        {
-            _stackCenterPositions = new List<Point3D>();
-            if (log.CombatData.HasMovementData)
-            {
-                List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
-                foreach (Player player in log.PlayerList)
-                {
-                    if (player.IsFakeActor)
-                    {
-                        continue;
-                    }
-                    GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
-                }
-                for (int time = 0; time < GroupsPosList[0].Count; time++)
-                {
-                    float x = 0;
-                    float y = 0;
-                    float z = 0;
-                    int activePlayers = GroupsPosList.Count;
-                    foreach (List<Point3D> points in GroupsPosList)
-                    {
-                        Point3D point = points[time];
-                        if (point != null)
-                        {
-                            x += point.X;
-                            y += point.Y;
-                            z += point.Z;
-                        }
-                        else
-                        {
-                            activePlayers--;
-                        }
-
-                    }
-                    x /= activePlayers;
-                    y /= activePlayers;
-                    z /= activePlayers;
-                    _stackCenterPositions.Add(new Point3D(x, y, z, GeneralHelper.PollingRate * time));
-                }
-            }
-        }
     }
 }

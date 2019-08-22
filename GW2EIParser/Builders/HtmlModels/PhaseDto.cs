@@ -143,7 +143,6 @@ namespace GW2EIParser.Builders.HtmlModels
                     stats.Saved, // 12
 
                     stats.SwapCount, // 13
-                    Math.Round(stats.StackDist, 2) // 14
                 });
             return data;
         }

@@ -259,10 +259,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double TimeSaved { get; set; }
             /// <summary>
-            /// Distance to the epicenter of the squad
-            /// </summary>
-            public double StackDist { get; set; }
-            /// <summary>
             /// Average amount of boons
             /// </summary>
             public double AvgBoons { get; set; }
@@ -289,7 +285,6 @@ namespace GW2EIParser.Builders.JsonModels
                 TimeWasted = stats.TimeWasted;
                 Saved = stats.Saved;
                 TimeSaved = stats.TimeSaved;
-                StackDist = stats.StackDist;
                 AvgBoons = stats.AvgBoons;
                 AvgActiveBoons = stats.AvgActiveBoons;
                 AvgConditions = stats.AvgConditions;
