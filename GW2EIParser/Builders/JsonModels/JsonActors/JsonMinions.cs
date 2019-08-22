@@ -1,6 +1,8 @@
 ﻿using GW2EIParser.EIData;
 using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -11,29 +13,20 @@ namespace GW2EIParser.Builders.JsonModels
     public class JsonMinions : JsonActor
     {
         /// <summary>
-        /// Total Damage done by minions \n
-        /// Length == # of phases
+        /// Game ID of the minion
         /// </summary>
-        public List<int> TotalDamage { get; set; }
+        public ushort ID{ get; set; }
         /// <summary>
-        /// Damage done by minions against targets \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Total health of the minion
         /// </summary>
-        public List<List<int>> TotalTargetDamage { get; set; }
-        /// <summary>
-        /// Total Shield Damage done by minions \n
-        /// Length == # of phases
-        /// </summary>
-        public List<int> TotalShieldDamage { get; set; }
-        /// <summary>
-        /// Shield Damage done by minions against targets \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
-        /// </summary>
-        public List<List<int>> TotalTargetShieldDamage { get; set; }
-
-
-        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets) : base(log, minions, skillMap, buffMap, targets)
+        public int TotalHealth { get; set; }
+        public List<JsonMinion> Minions { get; set; }
+        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets) : base(minions)
         {
+            MaxHealthUpdateEvent maxHP = log.CombatData.GetMaxHealthUpdateEvents(minions.AgentItem).LastOrDefault();
+            TotalHealth = maxHP != null ? maxHP.MaxHealth : 0;
+            ID = minions.ID;
+            Minions = minions.MinionList.Select(x => new JsonMinion(log, x, skillMap, buffMap, targets)).ToList();
         }
     }
 }

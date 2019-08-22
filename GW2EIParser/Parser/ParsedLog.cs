@@ -26,7 +26,6 @@ namespace GW2EIParser.Parser
         public bool CanCombatReplay => CombatData.HasMovementData;
 
         public readonly MechanicData MechanicData;
-        public readonly Statistics Statistics;
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
                 List<CombatItem> combatItems, List<Player> playerList)
@@ -45,8 +44,7 @@ namespace GW2EIParser.Parser
             //
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
-            MechanicData = FightData.Logic.GetMechanicData();
-            Statistics = new Statistics(CombatData, PlayerList, Buffs);      
+            MechanicData = FightData.Logic.GetMechanicData(); 
         }
 
         private void UpdateFightData()

@@ -12,7 +12,6 @@ namespace GW2EIParser.EIData
     {
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         private int _health = -1;
-        private readonly List<double[]> _healthUpdates = new List<double[]>();
         // Constructors
         public Target(AgentItem agent) : base(agent)
         {

@@ -89,12 +89,12 @@ namespace GW2EIParser.Builders.JsonModels
                     {
                         if (log.Buffs.BuffsByIds.TryGetValue(pair.Key.ID, out Buff buff))
                         {
-                            buffMap["b" + pair.Key] = new BuffDesc(buff);
+                            buffMap["b" + pair.Key.ID] = new BuffDesc(buff);
                         }
                         else
                         {
                             Buff auxBoon = new Buff(skill.Name, pair.Key.ID, skill.Icon);
-                            buffMap["b" + pair.Key] = new BuffDesc(auxBoon);
+                            buffMap["b" + pair.Key.ID] = new BuffDesc(auxBoon);
                         }
                     }
                 }

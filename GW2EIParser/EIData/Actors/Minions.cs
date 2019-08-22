@@ -16,9 +16,8 @@ namespace GW2EIParser.EIData
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenLogsByDst;
         private List<AbstractCastEvent> _castLogs;
 
-        public Minions(int id, Minion firstMinion) : base(firstMinion.AgentItem)
+        public Minions(Minion firstMinion) : base(firstMinion.AgentItem)
         {
-            MinionID = id;
             MinionList = new List<Minion> { firstMinion };
         }
 

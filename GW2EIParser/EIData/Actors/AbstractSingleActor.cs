@@ -104,7 +104,7 @@ namespace GW2EIParser.EIData
         {
             DamageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
         }
-        public List<AbstractDamageEvent> GetJustPlayerDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (!_selfDamageLogsPerTarget.TryGetValue(target ?? GeneralHelper.NullActor, out List<AbstractDamageEvent> dls))
             {
@@ -366,7 +366,7 @@ namespace GW2EIParser.EIData
                 double dps = 0.0;
                 FinalDPS final = new FinalDPS();
                 List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
-                List<AbstractDamageEvent> damageLogsActor = GetJustPlayerDamageLogs(target, log, phase.Start, phase.End);
+                List<AbstractDamageEvent> damageLogsActor = GetJustActorDamageLogs(target, log, phase.Start, phase.End);
                 //DPS
                 damage = damageLogs.Sum(x => x.Damage);
 
@@ -534,6 +534,7 @@ namespace GW2EIParser.EIData
                     {
                         final.Invulned++;
                     }
+                    final.DamageAgainstBarrier += dl.ShieldDamage;
                     final.DirectDamageCount++;
                     if (!nonCritable.Contains(dl.SkillId))
                     {
@@ -553,7 +554,7 @@ namespace GW2EIParser.EIData
 
                 FinalStatsAll final = new FinalStatsAll();
                 res.Add(final);
-                FillFinalStats(GetJustPlayerDamageLogs(null, log, phase.Start, phase.End), final);
+                FillFinalStats(GetJustActorDamageLogs(null, log, phase.Start, phase.End), final);
                 // If conjured sword, stop
                 if (IsFakeActor)
                 {
@@ -611,7 +612,7 @@ namespace GW2EIParser.EIData
 
                 FinalStats final = new FinalStatsAll();
                 res.Add(final);
-                FillFinalStats(GetJustPlayerDamageLogs(target, log, phase.Start, phase.End), final);
+                FillFinalStats(GetJustActorDamageLogs(target, log, phase.Start, phase.End), final);
             }
             return res;
         }
@@ -642,18 +643,27 @@ namespace GW2EIParser.EIData
         {
 
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(target, log, start, end);
-
-            finalDefenses.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
-            finalDefenses.BlockedCount = damageLogs.Count(x => x.IsBlocked);
-            finalDefenses.InvulnedCount = 0;
-            finalDefenses.DamageInvulned = 0;
-            finalDefenses.EvadedCount = damageLogs.Count(x => x.IsEvaded);
-            finalDefenses.DamageBarrier = damageLogs.Sum(x => x.ShieldDamage);
-            finalDefenses.InterruptedCount = damageLogs.Count(x => x.HasInterrupted);
-            foreach (AbstractDamageEvent dl in damageLogs.Where(x => x.IsAbsorbed))
+            foreach(AbstractDamageEvent de in damageLogs)
             {
-                finalDefenses.InvulnedCount++;
-                finalDefenses.DamageInvulned += dl.Damage;
+                finalDefenses.DamageTaken += de.Damage;
+                finalDefenses.DamageBarrier += de.ShieldDamage;
+                if (de.IsBlocked)
+                {
+                    finalDefenses.BlockedCount++;
+                }
+                if (de.IsEvaded)
+                {
+                    finalDefenses.EvadedCount++;
+                }
+                if (de.HasInterrupted)
+                {
+                    finalDefenses.InterruptedCount++;
+                }
+                if (de.IsAbsorbed)
+                {
+                    finalDefenses.InvulnedCount++;
+                    finalDefenses.DamageInvulned += de.Damage;
+                }
             }
         }
 

@@ -13,59 +13,6 @@ namespace GW2EIParser.Models
     /// </summary>
     public class Statistics
     {
-        public Statistics(CombatData combatData, List<Player> players, BuffsContainer boons)
-        {
-            HashSet<long> skillIDs = combatData.GetSkills();
-            // Main boons
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.Boon])
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentBoons.Add(boon);
-                }
-            }
-            // Main Conditions
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.Condition])
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentConditions.Add(boon);
-                }
-            }
-
-            // Important class specific boons
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.OffensiveBuffTable])
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentOffbuffs.Add(boon);
-                }
-            }
-
-            foreach (Buff boon in boons.BuffsByNature[BuffNature.DefensiveBuffTable])
-            {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    PresentDefbuffs.Add(boon);
-                }
-
-            }
-
-            // All class specific boons
-            Dictionary<long, Buff> remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
-            foreach (Player player in players)
-            {
-                PresentPersonalBuffs[player.InstID] = new HashSet<Buff>();
-                foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
-                {
-                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
-                    {
-                        PresentPersonalBuffs[player.InstID].Add(boon);
-                    }
-                }
-            }
-        }
-
         public class FinalDPS
         {
             // Total
@@ -87,6 +34,7 @@ namespace GW2EIParser.Models
         public class FinalStats
         {
             public int DirectDamageCount;
+            public int DamageAgainstBarrier;
             public int CritableDirectDamageCount;
             public int CriticalCount;
             public int CriticalDmg;
@@ -248,13 +196,6 @@ namespace GW2EIParser.Models
             public List<DeathRecapDamageItem> ToDown;
             public List<DeathRecapDamageItem> ToKill;
         }
-
-        // present buff
-        public readonly List<Buff> PresentBoons = new List<Buff>();//Used only for Boon tables
-        public readonly List<Buff> PresentConditions = new List<Buff>();//Used only for Condition tables
-        public readonly List<Buff> PresentOffbuffs = new List<Buff>();//Used only for Off Buff tables
-        public readonly List<Buff> PresentDefbuffs = new List<Buff>();//Used only for Def Buff tables
-        public readonly Dictionary<ushort, HashSet<Buff>> PresentPersonalBuffs = new Dictionary<ushort, HashSet<Buff>>();
 
     }
 }

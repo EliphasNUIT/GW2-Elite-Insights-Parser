@@ -45,7 +45,7 @@ namespace GW2EIParser.EIData
                         values.AddMinion(new Minion(agent));
                     } else
                     {
-                        auxMinions[id] = new Minions(id.GetHashCode(), new Minion(agent));
+                        auxMinions[id] = new Minions(new Minion(agent));
                     }
                 }
                 foreach (KeyValuePair<string, Minions> pair in auxMinions)
