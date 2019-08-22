@@ -23,7 +23,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out Buff b))
             {
-                _isCondi = b.Nature == Buff.BoonNature.Condition ? 1 : 0;
+                _isCondi = b.Nature == Buff.BuffNature.Condition ? 1 : 0;
             }
             return _isCondi == 1;
         }

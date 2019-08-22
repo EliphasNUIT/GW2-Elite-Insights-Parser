@@ -14,9 +14,6 @@ namespace GW2EIParser.EIData
         public long DurationInMS { get; private set; }
         public long DurationInM { get; private set; }
         public string Name { get; set; }
-        public bool DrawStart { get; set; } = true;
-        public bool DrawEnd { get; set; } = true;
-        public bool DrawArea { get; set; } = true;
         public List<Target> Targets { get; } = new List<Target>();
 
         public PhaseData(long start, long end)

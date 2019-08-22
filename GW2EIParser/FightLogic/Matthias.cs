@@ -106,7 +106,6 @@ namespace GW2EIParser.Logic
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = namesMat[i - 1];
-                phases[i].DrawStart = i > 1;
                 phases[i].Targets.Add(mainTarget);
             }
             return phases;

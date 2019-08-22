@@ -112,14 +112,14 @@ namespace GW2EIParser.Builders.HtmlModels
                 SubPhases.Add(j);
                 long start = curPhase.Start - phaseData.Start;
                 long end = curPhase.End - phaseData.Start;
-                if (curPhase.DrawStart) MarkupLines.Add(start / 1000.0);
-                if (curPhase.DrawEnd) MarkupLines.Add(end / 1000.0);
+                MarkupLines.Add(start / 1000.0);
+                MarkupLines.Add(end / 1000.0);
                 AreaLabelDto phaseArea = new AreaLabelDto
                 {
                     Start = start / 1000.0,
                     End = end / 1000.0,
                     Label = curPhase.Name,
-                    Highlight = curPhase.DrawArea
+                    Highlight = true
                 };
                 MarkupAreas.Add(phaseArea);
             }

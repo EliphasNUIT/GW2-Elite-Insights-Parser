@@ -11,13 +11,13 @@ namespace GW2EIParser.EIData
     {
 
         public Dictionary<long, Buff> BuffsByIds { get; }
-        public Dictionary<BoonNature, List<Buff>> BoonsByNature { get; }
-        public Dictionary<BoonSource, List<Buff>> BoonsBySource { get; }
-        public Dictionary<BoonType, List<Buff>> BoonsByType { get; }
-        private readonly Dictionary<string, Buff> _boonsByName;
-        public Dictionary<int, List<Buff>> BoonsByCapacity { get; }
+        public Dictionary<BuffNature, List<Buff>> BuffsByNature { get; }
+        public Dictionary<BuffSource, List<Buff>> BuffsBySource { get; }
+        public Dictionary<BuffType, List<Buff>> BuffsByType { get; }
+        private readonly Dictionary<string, Buff> _buffsByName;
+        public Dictionary<int, List<Buff>> BuffsByCapacity { get; }
 
-        private readonly BuffSourceFinder _boonSourceFinder;
+        private readonly BuffSourceFinder _buffSourceFinder;
 
         public BuffsContainer(ulong build)
         {
@@ -27,17 +27,17 @@ namespace GW2EIParser.EIData
                 currentBoons.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
             }
             BuffsByIds = currentBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
-            BoonsByNature = currentBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
-            BoonsBySource = currentBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
-            BoonsByType = currentBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            _boonsByName = currentBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
-            BoonsByCapacity = currentBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
-            _boonSourceFinder = GetBoonSourceFinder(build, new HashSet<long>(BoonsByNature[BoonNature.Boon].Select(x => x.ID)));
+            BuffsByNature = currentBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsBySource = currentBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+            BuffsByType = currentBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+            _buffsByName = currentBoons.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList().Count > 1 ? throw new InvalidOperationException(x.First().Name) : x.First());
+            BuffsByCapacity = currentBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
+            _buffSourceFinder = GetBoonSourceFinder(build, new HashSet<long>(BuffsByNature[BuffNature.Boon].Select(x => x.ID)));
         }
 
-        public Buff GetBoonByName(string name)
+        public Buff GetBuffByName(string name)
         {
-            if (_boonsByName.TryGetValue(name, out Buff buff))
+            if (_buffsByName.TryGetValue(name, out Buff buff))
             {
                 return buff;
             }
@@ -46,13 +46,13 @@ namespace GW2EIParser.EIData
 
         public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedLog log, long buffID)
         {
-            return _boonSourceFinder.TryFindSrc(dst, time, extension, log, buffID);
+            return _buffSourceFinder.TryFindSrc(dst, time, extension, log, buffID);
         }
 
         // Non shareable buffs
-        private List<Buff> GetRemainingBuffsList(BoonSource source)
+        private List<Buff> GetRemainingBuffsList(BuffSource source)
         {
-            return BoonsBySource[source].Where(x => x.Nature == BoonNature.GraphOnlyBuff).ToList();
+            return BuffsBySource[source].Where(x => x.Nature == BuffNature.GraphOnlyBuff).ToList();
         }
         public List<Buff> GetRemainingBuffsList(string source)
         {

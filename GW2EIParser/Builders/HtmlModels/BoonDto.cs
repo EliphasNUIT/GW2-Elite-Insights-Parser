@@ -21,9 +21,9 @@ namespace GW2EIParser.Builders.HtmlModels
                     Id = boon.ID,
                     Name = boon.Name,
                     Icon = boon.Link,
-                    Stacking = (boon.Type == Buff.BoonType.Intensity),
-                    Consumable = (boon.Nature == Buff.BoonNature.Consumable),
-                    Enemy = (boon.Source == Buff.BoonSource.Enemy)
+                    Stacking = (boon.Type == Buff.BuffType.Intensity),
+                    Consumable = (boon.Nature == Buff.BuffNature.Consumable),
+                    Enemy = (boon.Source == Buff.BuffSource.Enemy)
                 };
             }
         }

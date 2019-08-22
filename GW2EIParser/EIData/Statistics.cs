@@ -17,7 +17,7 @@ namespace GW2EIParser.Models
         {
             HashSet<long> skillIDs = combatData.GetSkills();
             // Main boons
-            foreach (Buff boon in boons.BoonsByNature[BoonNature.Boon])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.Boon])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -25,7 +25,7 @@ namespace GW2EIParser.Models
                 }
             }
             // Main Conditions
-            foreach (Buff boon in boons.BoonsByNature[BoonNature.Condition])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.Condition])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -34,7 +34,7 @@ namespace GW2EIParser.Models
             }
 
             // Important class specific boons
-            foreach (Buff boon in boons.BoonsByNature[BoonNature.OffensiveBuffTable])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.OffensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -42,7 +42,7 @@ namespace GW2EIParser.Models
                 }
             }
 
-            foreach (Buff boon in boons.BoonsByNature[BoonNature.DefensiveBuffTable])
+            foreach (Buff boon in boons.BuffsByNature[BuffNature.DefensiveBuffTable])
             {
                 if (skillIDs.Contains(boon.ID))
                 {
@@ -52,7 +52,7 @@ namespace GW2EIParser.Models
             }
 
             // All class specific boons
-            Dictionary<long, Buff> remainingBuffsByIds = boons.BoonsByNature[BoonNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            Dictionary<long, Buff> remainingBuffsByIds = boons.BuffsByNature[BuffNature.GraphOnlyBuff].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
             foreach (Player player in players)
             {
                 PresentPersonalBuffs[player.InstID] = new HashSet<Buff>();
@@ -221,13 +221,15 @@ namespace GW2EIParser.Models
             public long Time { get; }
             public int Duration { get; }
             public int Stack { get; set; }
+            public bool Initial { get; set; }
 
-            public Consumable(Buff item, long time, int duration)
+            public Consumable(Buff item, long time, int duration, bool initial)
             {
                 Buff = item;
                 Time = time;
                 Duration = duration;
                 Stack = 1;
+                Initial = initial;
             }
         }
 

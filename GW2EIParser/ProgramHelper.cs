@@ -186,6 +186,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             rowData.BgWorker.ThrowIfCanceled(rowData);
+            RawFormatBuilder jsonBuilder = new RawFormatBuilder(log, uploadresult);
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 string outputFile = Path.Combine(
@@ -195,7 +196,7 @@ namespace GW2EIParser
                 rowData.LogLocation = outputFile;
                 using var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                 using var sw = new StreamWriter(fs);
-                var builder = new HTMLBuilder(log, uploadresult);
+                var builder = new HTMLBuilder(jsonBuilder.JsonLog, log);
                 builder.CreateHTML(sw, saveDirectory.FullName);
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
@@ -218,8 +219,7 @@ namespace GW2EIParser
                 }
                 using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
-                    var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateJSON(sw);
+                    jsonBuilder.CreateJSON(sw);
                 }
                 if (str is MemoryStream msr)
                 {
@@ -247,8 +247,7 @@ namespace GW2EIParser
                 }
                 using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
-                    var builder = new RawFormatBuilder(log, uploadresult);
-                    builder.CreateXML(sw);
+                    jsonBuilder.CreateXML(sw);
                 }
                 if (str is MemoryStream msr)
                 {
