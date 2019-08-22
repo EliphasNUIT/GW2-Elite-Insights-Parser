@@ -68,9 +68,9 @@ namespace GW2EIParser.Parser
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractActor FindActor(AgentItem a)
+        public AbstractSingleActor FindActor(AgentItem a)
         {
-            AbstractActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
+            AbstractSingleActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
             if (res == null)
             {
                 foreach (Player p in PlayerList)
@@ -78,7 +78,7 @@ namespace GW2EIParser.Parser
                     Dictionary<string, Minions> minionsDict = p.GetMinions(this);
                     foreach (Minions minions in minionsDict.Values)
                     {
-                        res = minions.FirstOrDefault(x => x.AgentItem == a);
+                        res = minions.MinionList.FirstOrDefault(x => x.AgentItem == a);
                         if (res != null)
                         {
                             return res;

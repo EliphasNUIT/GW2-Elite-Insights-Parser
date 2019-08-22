@@ -77,7 +77,7 @@ namespace GW2EIParser.EIData
                     {
                         FinalTargetBuffs buff = new FinalTargetBuffs(log.PlayerList);
                         rates[boon.ID] = buff;
-                        if (boon.Type == Buff.BoonType.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             buff.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)
@@ -91,7 +91,7 @@ namespace GW2EIParser.EIData
                                 buff.Extended[p] = Math.Round(100.0 * boonDistribution.GetExtended(boon.ID, p.AgentItem) / fightDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Buff.BoonType.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             buff.Uptime = Math.Round((double)boonDistribution.GetUptime(boon.ID) / fightDuration, GeneralHelper.BoonDigit);
                             foreach (Player p in log.PlayerList)

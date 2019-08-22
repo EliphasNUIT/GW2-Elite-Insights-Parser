@@ -55,7 +55,8 @@ namespace LuckParser.tst
         {
             MemoryStream ms = new MemoryStream();
             StreamWriter sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            HTMLBuilder builder = new HTMLBuilder(log, null);
+            RawFormatBuilder builderJson = new RawFormatBuilder(log, null);
+            HTMLBuilder builder = new HTMLBuilder(builderJson.JsonLog, log);
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -66,7 +67,7 @@ namespace LuckParser.tst
         public static JsonLog JsonLog(ParsedLog log)
         {
             RawFormatBuilder builder = new RawFormatBuilder(log, null);
-            return builder.CreateJsonLog();
+            return builder.JsonLog;
         }
 
         ///////////////////////////////////////

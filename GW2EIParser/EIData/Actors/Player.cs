@@ -185,7 +185,7 @@ namespace GW2EIParser.EIData
                         FinalBuffs uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
-                        if (boon.Type == Buff.BoonType.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -204,7 +204,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * (totalActiveExtended) / activePlayerCount, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Buff.BoonType.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             uptime.Generation = Math.Round(totalGeneration / playerList.Count, GeneralHelper.BoonDigit);
                             uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, GeneralHelper.BoonDigit);
@@ -284,7 +284,7 @@ namespace GW2EIParser.EIData
                         double unknownExtensionValue = selfBoons.GetUnknownExtension(boon.ID, AgentItem);
                         double extensionValue = selfBoons.GetExtension(boon.ID, AgentItem);
                         double extendedValue = selfBoons.GetExtended(boon.ID, AgentItem);
-                        if (boon.Type == Buff.BoonType.Duration)
+                        if (boon.Type == Buff.BuffType.Duration)
                         {
                             uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -305,7 +305,7 @@ namespace GW2EIParser.EIData
                                 uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, GeneralHelper.BoonDigit);
                             }
                         }
-                        else if (boon.Type == Buff.BoonType.Intensity)
+                        else if (boon.Type == Buff.BuffType.Intensity)
                         {
                             uptime.Uptime = Math.Round(uptimeValue / phaseDuration, GeneralHelper.BoonDigit);
                             uptime.Generation = Math.Round(generationValue / phaseDuration, GeneralHelper.BoonDigit);
@@ -517,18 +517,18 @@ namespace GW2EIParser.EIData
             _weaponsArray = weapons;
         }
         // Consumables
-        public List<Consumable> GetConsumablesList(ParsedLog log, long start, long end)
+        public List<Consumable> GetConsumablesList(ParsedLog log)
         {
             if (_consumeList == null)
             {
                 SetConsumablesList(log);
             }
-            return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList() ;
+            return _consumeList;
         }
 
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Buff> consumableList = log.Buffs.BoonsByNature[BoonNature.Consumable];
+            List<Buff> consumableList = log.Buffs.BuffsByNature[BuffNature.Consumable];
             _consumeList = new List<Consumable>();
             long fightDuration = log.FightData.FightDuration;
             foreach (Buff consumable in consumableList)
@@ -539,11 +539,7 @@ namespace GW2EIParser.EIData
                     {
                         continue;
                     }
-                    long time = 0;
-                    if (!ba.Initial)
-                    {
-                        time = ba.Time;
-                    }
+                    long time = ba.Time;
                     if (time <= fightDuration)
                     {
                         Consumable existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
@@ -553,7 +549,7 @@ namespace GW2EIParser.EIData
                         }
                         else
                         {
-                            _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration));
+                            _consumeList.Add(new Consumable(consumable, time, ba.AppliedDuration, ba.Initial));
                         }
                     }
                 }
