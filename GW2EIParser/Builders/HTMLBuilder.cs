@@ -296,7 +296,8 @@ namespace GW2EIParser.Builders
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = contractResolver,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
             };
             return JsonConvert.SerializeObject(value, settings);
         }

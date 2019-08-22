@@ -3,6 +3,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
@@ -13,10 +14,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time at which minion became active
         /// </summary>
+        [DefaultValue(null)]
         public int FirstAware { get; set; }
         /// <summary>
         /// Time at which minion became inactive 
         /// </summary>
+        [DefaultValue(null)]
         public int LastAware { get; set; }
 
         public JsonMinion(ParsedLog log, Minion minion, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets) : base(log, minion, skillMap, buffMap, targets)
@@ -24,6 +27,12 @@ namespace GW2EIParser.Builders.JsonModels
             // meta data
             FirstAware = (int)(log.FightData.ToFightSpace(minion.FirstAwareLogTime));
             LastAware = (int)(log.FightData.ToFightSpace(minion.LastAwareLogTime));
+            Condition = 0;
+            Concentration = 0;
+            Toughness = 0;
+            Healing = 0;
+            HitboxHeight = 0;
+            HitboxWidth = 0;
         }
     }
 }

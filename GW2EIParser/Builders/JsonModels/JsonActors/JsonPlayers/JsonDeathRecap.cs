@@ -1,5 +1,6 @@
 ﻿using GW2EIParser.Models;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -35,6 +36,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time value
             /// </summary>
+            [DefaultValue(null)]
             public int Time { get; set; }
 
             public JsonDeathRecapDamageItem(Statistics.DeathRecap.DeathRecapDamageItem item)
@@ -50,6 +52,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time of death
         /// </summary>
+        [DefaultValue(null)]
         public int DeathTime { get; set; }
         /// <summary>
         /// List of damaging events to put into downstate

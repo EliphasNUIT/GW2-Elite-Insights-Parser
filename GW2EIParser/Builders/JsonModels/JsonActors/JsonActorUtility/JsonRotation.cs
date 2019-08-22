@@ -1,6 +1,7 @@
 ﻿using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using System.ComponentModel;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -18,10 +19,12 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time at which the skill was cast
             /// </summary>
+            [DefaultValue(null)]
             public int CastTime { get; set; }
             /// <summary>
             /// Duration of the animation
             /// </summary>
+            [DefaultValue(null)]
             public int Duration { get; set; }
             /// <summary>
             /// Gained time from the animation, could be negative, which means time was lost

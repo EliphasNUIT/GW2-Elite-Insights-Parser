@@ -3,6 +3,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using static GW2EIParser.Builders.JsonModels.JsonMechanics;
@@ -70,11 +71,13 @@ namespace GW2EIParser.Builders.JsonModels
             /// Nature of the buff \n
             /// <seealso cref="Buff.BuffNature"/>
             /// </summary>
+            [DefaultValue(null)]
             public Buff.BuffNature Nature { get; set; }
             /// <summary>
             /// Nature of the buff \n
             /// <seealso cref="Buff.BuffSource"/>
             /// </summary>
+            [DefaultValue(null)]
             public Buff.BuffSource Source { get; set; }
         }
 
@@ -227,7 +230,10 @@ namespace GW2EIParser.Builders.JsonModels
                 Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs, DamageModMap));
             }
             //
-            UploadLinks = uploadLink;
+            if (uploadLink.FirstOrDefault(x => x != "") != null)
+            {
+                UploadLinks = uploadLink;
+            }
         }
     }
 }

@@ -25,6 +25,10 @@ namespace GW2EIParser.Builders.JsonModels
         {
             // Minions
             Minions = actor.GetMinions(log).Select(x => new JsonMinions(log, x.Value, skillMap, buffMap, targets)).ToList();
+            if (Minions.Count == 0)
+            {
+                Minions = null;
+            }
         }
     }
 }

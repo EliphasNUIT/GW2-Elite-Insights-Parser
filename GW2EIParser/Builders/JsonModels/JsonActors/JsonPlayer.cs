@@ -2,6 +2,7 @@
 using GW2EIParser.Models;
 using GW2EIParser.Parser;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
@@ -17,6 +18,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Group of the player
         /// </summary>
+        [DefaultValue(null)]
         public int Group { get; set; }
         /// <summary>
         /// Profession of the player

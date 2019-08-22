@@ -105,9 +105,8 @@ namespace GW2EIParser.Builders.JsonModels
                         skillMap["s" + pair.Key] = new SkillDesc(skill);
                     }
                 }
-                List<AbstractDamageEvent> filteredList = pair.Value.Where(x => !x.HasDowned).ToList();
                 string prefix = indirect ? "b" : "s";
-                damageDist.Add(new JsonDamageDist(filteredList, indirect, pair.Key.ID));
+                damageDist.Add(new JsonDamageDist(pair.Value, indirect, pair.Key.ID));
             }
             return damageDist;
         }

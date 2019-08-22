@@ -2,6 +2,7 @@
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -18,6 +19,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Time a which the event happened
             /// </summary>
+            [DefaultValue(null)]
             public long Time { get; set; }
             /// <summary>
             /// The actor who was hit by the mechanic

@@ -1,5 +1,6 @@
 ﻿using GW2EIParser.Models;
 using System.Collections.Generic;
+using System.ComponentModel;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -20,6 +21,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time of application of the consumable
         /// </summary>
+        [DefaultValue(null)]
         public long Time { get; set; }
         /// <summary>
         /// True if the encounter started with that consumable

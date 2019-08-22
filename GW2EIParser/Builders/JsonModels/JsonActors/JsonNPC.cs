@@ -3,6 +3,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
@@ -29,10 +30,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Time at which target became active
         /// </summary>
+        [DefaultValue(null)]
         public int FirstAware { get; set; }
         /// <summary>
         /// Time at which target became inactive 
         /// </summary>
+        [DefaultValue(null)]
         public int LastAware { get; set; }
         /// <summary>
         /// Array of double[2] that represents the health status of the target \n

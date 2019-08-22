@@ -1,6 +1,7 @@
 ﻿using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -12,10 +13,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Start time of the phase
         /// </summary>
+        [DefaultValue(null)]
         public long Start { get; set; }
         /// <summary>
         /// End time of the phase
         /// </summary>
+        [DefaultValue(null)]
         public long End { get; set; }
         /// <summary>
         /// Name of the phase
