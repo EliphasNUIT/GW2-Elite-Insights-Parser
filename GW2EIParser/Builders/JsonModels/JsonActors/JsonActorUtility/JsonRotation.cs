@@ -1,5 +1,7 @@
-﻿using GW2EIParser.Parser.ParsedData.CombatEvents;
+﻿using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -58,5 +60,41 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonSkill"/>
         public List<JsonSkill> Skills { get; set; }
+
+        public static List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls, Dictionary<string, SkillDesc> skillMap)
+        {
+            Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
+            foreach (AbstractCastEvent cl in cls)
+            {
+                SkillItem skill = cl.Skill;
+                string skillName = skill.Name;
+                if (!skillMap.ContainsKey("s" + cl.SkillId))
+                {
+                    skillMap["s" + cl.SkillId] = new SkillDesc(skill);
+                }
+                JsonSkill jSkill = new JsonSkill(cl);
+                if (dict.TryGetValue(cl.SkillId, out var list))
+                {
+                    list.Add(jSkill);
+                }
+                else
+                {
+                    dict[cl.SkillId] = new List<JsonSkill>()
+                    {
+                        jSkill
+                    };
+                }
+            }
+            List<JsonRotation> res = new List<JsonRotation>();
+            foreach (var pair in dict)
+            {
+                res.Add(new JsonRotation()
+                {
+                    Id = pair.Key,
+                    Skills = pair.Value
+                });
+            }
+            return res;
+        }
     }
 }

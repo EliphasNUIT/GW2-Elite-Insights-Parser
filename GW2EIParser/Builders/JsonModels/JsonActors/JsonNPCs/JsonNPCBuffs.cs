@@ -7,7 +7,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class representing buff on targets
     /// </summary>
-    public class JsonTargetBuffs
+    public class JsonNPCBuffs
     {
         /// <summary>
         /// Target buff item

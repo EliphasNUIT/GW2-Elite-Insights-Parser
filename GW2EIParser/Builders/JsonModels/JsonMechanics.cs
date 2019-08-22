@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
+using System.Collections.Generic;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -30,5 +33,50 @@ namespace GW2EIParser.Builders.JsonModels
         /// Name of the mechanic
         /// </summary>
         public string Name { get; set; }
+
+
+        public static List<JsonMechanics> ComputeMechanics(ParsedLog log)
+        {
+            MechanicData mechanicData = log.MechanicData;
+            var mechanicLogs = new List<MechanicEvent>();
+            foreach (List<MechanicEvent> mLog in mechanicData.GetAllMechanics(log))
+            {
+                mechanicLogs.AddRange(mLog);
+            }
+            if (mechanicLogs.Count == 0)
+            {
+                return null;
+            }
+            List<JsonMechanics> res = new List<JsonMechanics>();
+            Dictionary<string, List<JsonMechanic>> dict = new Dictionary<string, List<JsonMechanic>>();
+            foreach (MechanicEvent ml in mechanicLogs)
+            {
+                JsonMechanic mech = new JsonMechanic
+                {
+                    Time = ml.Time,
+                    Actor = ml.Actor.Character
+                };
+                if (dict.TryGetValue(ml.InGameName, out var list))
+                {
+                    list.Add(mech);
+                }
+                else
+                {
+                    dict[ml.InGameName] = new List<JsonMechanic>()
+                        {
+                            mech
+                        };
+                }
+            }
+            foreach (var pair in dict)
+            {
+                res.Add(new JsonMechanics()
+                {
+                    Name = pair.Key,
+                    MechanicsData = pair.Value
+                });
+            }
+            return res;
+        }
     }
 }

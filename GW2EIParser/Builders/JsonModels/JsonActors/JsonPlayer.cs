@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using GW2EIParser.EIData;
+using GW2EIParser.Models;
+using GW2EIParser.Parser;
+using System.Collections.Generic;
+using System.Linq;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
-    public class JsonPlayer : JsonActor
+    public class JsonPlayer : JsonMasterActor
     {      
         /// <summary>
         /// Account name of the player
@@ -101,7 +106,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == number of death
         /// </summary>
         /// <seealso cref="JsonDeathRecap"/>
-        public List<JsonDeathRecap> DeathRecap { get; set; }
+        public List<JsonDeathRecap> DeathRecaps { get; set; }
         /// <summary>
         /// List of used consumables
         /// </summary>
@@ -112,5 +117,21 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == number of phases
         /// </summary>
         public List<long> ActiveTimes { get; set; }
+
+
+        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, DamageModDesc> damageModMap) : base(log, player, skillMap, buffMap, personalBuffs, damageModMap, log.FightData.GetMainTargets(log))
+        {
+            // meta data
+            Account = player.Account;
+            Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
+            Group = player.Group;
+            Profession = player.Prof;
+            ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(player, log)).ToList();
+            // Death Recap
+            List<Statistics.DeathRecap> deathRecaps = player.GetDeathRecaps(log);
+            DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x)).ToList();
+            // Consumables
+            Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), buffMap);
+        }
     }
 }

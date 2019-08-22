@@ -1,4 +1,5 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 using System.Collections.Generic;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -23,7 +24,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Index of targets tracked during the phase
         /// </summary>
-        /// <seealso cref="JsonLog.Targets"/>
+        /// <seealso cref="JsonLog.Enemies"/>
         public List<int> Targets { get; set; }
         /// <summary>
         /// Index of sub phases
@@ -31,12 +32,31 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonLog.Phases"/>
         public List<int> SubPhases { get; set; }
 
-        public JsonPhase(PhaseData phase)
+        public JsonPhase(ParsedLog log, PhaseData phase)
         {
             Start = phase.Start;
             End = phase.End;
             Name = phase.Name;
             Targets = new List<int>();
+            foreach (Target tar in phase.Targets)
+            {
+                Targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+            }
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            for (int j = 1; j < phases.Count; j++)
+            {
+                PhaseData curPhase = phases[j];
+                if (curPhase.Start < Start || curPhase.End > End ||
+                     (curPhase.Start == Start && curPhase.End == End))
+                {
+                    continue;
+                }
+                if (SubPhases == null)
+                {
+                    SubPhases = new List<int>();
+                }
+                SubPhases.Add(j);
+            }
         }
     }
 }

@@ -1,6 +1,11 @@
 ﻿using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -44,7 +49,9 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Name = item.Name;
                 Icon = item.Link;
-                Stacking = item.Type == Buff.BoonType.Intensity;
+                Stacking = item.Type == Buff.BuffType.Intensity;
+                Nature = item.Nature;
+                Source = item.Source;
             }
 
             /// <summary>
@@ -59,6 +66,16 @@ namespace GW2EIParser.Builders.JsonModels
             /// True if the buff is stacking
             /// </summary>
             public bool Stacking { get; set; }
+            /// <summary>
+            /// Nature of the buff \n
+            /// <seealso cref="Buff.BuffNature"/>
+            /// </summary>
+            public Buff.BuffNature Nature { get; set; }
+            /// <summary>
+            /// Nature of the buff \n
+            /// <seealso cref="Buff.BuffSource"/>
+            /// </summary>
+            public Buff.BuffSource Source { get; set; }
         }
 
         /// <summary>
@@ -136,15 +153,15 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public bool Success { get; set; }
         /// <summary>
-        /// The list of targets
+        /// The list of enemies
         /// </summary>
-        /// <seealso cref="JsonTarget"/>
-        public List<JsonTarget> Targets { get; set; }
+        /// <seealso cref="JsonActor"/>
+        public List<JsonActor> Enemies { get; set; }
         /// <summary>
-        /// The list of players
+        /// The list of friendlies
         /// </summary>
-        /// <seealso cref="JsonPlayer"/>
-        public List<JsonPlayer> Players { get; set; }
+        /// <seealso cref="JsonActor"/>
+        public List<JsonActor> Friendlies { get; set; }
         /// <summary>
         /// The list of phases
         /// </summary>
@@ -163,20 +180,54 @@ namespace GW2EIParser.Builders.JsonModels
         /// Dictionary of skills' description, the key is in "'s' + id" format
         /// </summary>
         /// <seealso cref="SkillDesc"/>
-        public Dictionary<string, SkillDesc> SkillMap { get; set; }
+        public Dictionary<string, SkillDesc> SkillMap { get; set; } = new Dictionary<string, SkillDesc>();
         /// <summary>
         /// Dictionary of buffs' description, the key is in "'b' + id" format
         /// </summary>
         /// <seealso cref="BuffDesc"/>
-        public Dictionary<string, BuffDesc> BuffMap { get; set; }
+        public Dictionary<string, BuffDesc> BuffMap { get; set; } = new Dictionary<string, BuffDesc>();
         /// <summary>
         /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
         /// </summary>
         /// <seealso cref="DamageModDesc"/>
-        public Dictionary<string, DamageModDesc> DamageModMap { get; set; }
+        public Dictionary<string, DamageModDesc> DamageModMap { get; set; } = new Dictionary<string, DamageModDesc>();
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
-        public Dictionary<string, HashSet<long>> PersonalBuffs { get; set; }
+        public Dictionary<string, HashSet<long>> PersonalBuffs { get; set; } = new Dictionary<string, HashSet<long>>();
+
+
+        public JsonLog(ParsedLog log, string[] uploadLink)
+        {
+            // Meta data
+            TriggerID = log.FightData.ID;
+            FightName = log.FightData.Name;
+            FightIcon = log.FightData.Logic.IconUrl;
+            EliteInsightsVersion = Application.ProductVersion;
+            ArcVersion = log.LogData.BuildVersion;
+            RecordedBy = log.LogData.PoVName;
+            TimeStart = log.LogData.LogStart;
+            TimeEnd = log.LogData.LogEnd;
+            Duration = log.FightData.DurationString;
+            Success = log.FightData.Success;
+            // Phases
+            Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(log, x)).ToList();
+            // Mechanics
+            Mechanics = ComputeMechanics(log);
+            // Players
+            Friendlies = new List<JsonActor>();
+            foreach (Player p in log.PlayerList)
+            {
+                Friendlies.Add(new JsonPlayer(log, p, SkillMap, BuffMap, PersonalBuffs, DamageModMap));
+            }
+            // Targets
+            Enemies = new List<JsonActor>();
+            foreach (Target tar in log.FightData.Logic.Targets)
+            {
+                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs, DamageModMap));
+            }
+            //
+            UploadLinks = uploadLink;
+        }
     }
 }
