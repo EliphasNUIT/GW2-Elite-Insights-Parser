@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Serialization;
 using GW2EIParser.EIData;
 using GW2EIParser.Builders.JsonModels;
+using System.IO.Compression;
+using System.Text;
 
 namespace GW2EIParser.Builders
 {
@@ -18,6 +20,18 @@ namespace GW2EIParser.Builders
         private readonly bool _cr;
 
         private readonly JsonLog _jsonLog;
+        // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
+        private static string CompressAndBase64(string s)
+        {
+            var bytes = Encoding.UTF8.GetBytes(s);
+            using var msi = new MemoryStream(bytes);
+            using var mso = new MemoryStream();
+            using (var gs = new GZipStream(mso, CompressionMode.Compress))
+            {
+                msi.CopyTo(gs);
+            }
+            return Convert.ToBase64String(mso.ToArray());
+        }
 
         public HTMLBuilder(JsonLog jsonLog, ParsedLog log)
         {
@@ -43,7 +57,7 @@ namespace GW2EIParser.Builders
             html = html.Replace("<!--${Js}-->", BuildEIJs(path));
             html = html.Replace("<!--${JsCRLink}-->", BuildCRLinkJs(path));
 
-            html = html.Replace("'${logDataJson}'", ToJson(_jsonLog));
+            html = html.Replace("'${logDataJson}'", "'" + CompressAndBase64(ToJson(_jsonLog)) + "'");
 #if DEBUG
             html = html.Replace("<!--${Vue}-->", "<script src=\"https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js\"></script>");
 #else
