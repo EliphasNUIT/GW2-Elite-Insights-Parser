@@ -4,6 +4,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
@@ -118,26 +119,19 @@ namespace GW2EIParser.EIData
             log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Actors.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
 
-        private class TargetSerializable : AbstractMasterActorSerializable
-        {
-            public long Start { get; set; }
-            public long End { get; set; }
-        }
-
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            TargetSerializable aux = new TargetSerializable
+            JsonTargetCombatReplay aux = new JsonTargetCombatReplay
             {
                 Img = CombatReplay.Icon,
-                Type = "Target",
                 ID = GetCombatReplayID(log),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,

@@ -198,6 +198,11 @@ namespace GW2EIParser.Builders.JsonModels
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
         public Dictionary<string, HashSet<long>> PersonalBuffs { get; set; } = new Dictionary<string, HashSet<long>>();
+        /// <summary>
+        /// Combat Replay data
+        /// </summary>
+        /// <seealso cref="JsonCombatReplay"/>
+        public JsonCombatReplay CombatReplayData { get; set; }
 
 
         public JsonLog(ParsedLog log, string[] uploadLink)
@@ -233,6 +238,10 @@ namespace GW2EIParser.Builders.JsonModels
             if (uploadLink.FirstOrDefault(x => x != "") != null)
             {
                 UploadLinks = uploadLink;
+            }
+            if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
+            {
+                CombatReplayData = new JsonCombatReplay(log);
             }
         }
     }

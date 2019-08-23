@@ -10,6 +10,7 @@ using static GW2EIParser.Models.Statistics;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.EIData.Buff;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 
 namespace GW2EIParser.EIData
 {
@@ -621,30 +622,22 @@ namespace GW2EIParser.EIData
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
-                CombatReplay.Actors.Add(new FacingActor(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Actors.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
 
-        private class PlayerSerializable : AbstractMasterActorSerializable
-        {
-            public int Group { get; set; }
-            public long[] Dead { get; set; }
-            public long[] Down { get; set; }
-            public long[] Dc { get; set; }
-        }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
             (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
-            PlayerSerializable aux = new PlayerSerializable
+            JsonPlayerCombatReplay aux = new JsonPlayerCombatReplay
             {
                 Group = Group,
                 Img = CombatReplay.Icon,
-                Type = "Player",
                 ID = GetCombatReplayID(log),
                 Positions = new double[2 * CombatReplay.PolledPositions.Count],
                 Dead = new long[2 * deads.Count],

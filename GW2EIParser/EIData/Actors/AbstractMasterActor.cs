@@ -4,6 +4,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
@@ -107,7 +108,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public List<GenericActor> GetCombatReplayActors(ParsedLog log)
+        public List<GenericDecoration> GetCombatReplayActors(ParsedLog log)
         {
             if (!log.CanCombatReplay || IsFakeActor)
             {
@@ -137,14 +138,6 @@ namespace GW2EIParser.EIData
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
 
-        public abstract class AbstractMasterActorSerializable
-        {
-            public string Img { get; set; }
-            public string Type { get; set; }
-            public int ID { get; set; }
-            public double[] Positions { get; set; }
-        }
-
-        public abstract AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
+        public abstract JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 
 namespace GW2EIParser.EIData
 {
@@ -15,22 +16,16 @@ namespace GW2EIParser.EIData
         {
             log.FightData.Logic.ComputeMobCombatReplayActors(this, log, CombatReplay);
         }
-        private class MobSerializable : AbstractMasterActorSerializable
-        {
-            public long Start { get; set; }
-            public long End { get; set; }
-        }
 
-        public override AbstractMasterActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            MobSerializable aux = new MobSerializable
+            JsonMobCombatReplay aux = new JsonMobCombatReplay
             {
                 Img = CombatReplay.Icon,
-                Type = "Mob",
                 Positions = new double[2 * CombatReplay.PolledPositions.Count],
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,

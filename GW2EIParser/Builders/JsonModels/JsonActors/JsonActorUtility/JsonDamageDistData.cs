@@ -27,13 +27,13 @@ namespace GW2EIParser.Builders.JsonModels
         public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
         /// <summary>
         /// Per Target Damage distribution array \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
         public List<List<List<JsonDamageDist>>> TargetDamageDists { get; set; } = new List<List<List<JsonDamageDist>>>();
         /// <summary>
         /// Per Target Damage Taken distribution array \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
         public List<List<List<JsonDamageDist>>> TargetDamageTakenDists { get; set; } = new List<List<List<JsonDamageDist>>>();

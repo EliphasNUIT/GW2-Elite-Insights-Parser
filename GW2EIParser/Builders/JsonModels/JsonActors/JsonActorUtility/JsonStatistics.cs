@@ -359,7 +359,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         /// <summary>
         /// Stats against targets  \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStats"/>
         public List<List<JsonStats>> StatsTargets { get; set; } = new List<List<JsonStats>>();
@@ -373,7 +373,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         /// <summary>
         /// Defensive stats against targets\n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDefensesAll"/>
         public List<List<JsonDefenses>> DefensesTarget { get; set; } = new List<List<JsonDefenses>>();
@@ -387,7 +387,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         /// <summary>
         /// Support stats against targets\n
-        /// Length == # of allies for <seealso cref="JsonLog.Friendlies"/> or # of targets for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of allies for <see cref="JsonLog.Friendlies"/> or # of targets for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonSupport"/>
         public List<List<JsonSupport>> SupportTarget { get; set; } = new List<List<JsonSupport>>();
@@ -401,7 +401,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         /// <summary>
         /// Array of Total DPS stats \n
-        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDPS"/>
         public List<List<JsonDPS>> DpsTargets { get; set; } = new List<List<JsonDPS>>();
