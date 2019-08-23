@@ -11,8 +11,6 @@ namespace GW2EIParser.EIData
 {
     public abstract class AbstractSingleActor : AbstractActor
     {
-        // Damage
-        private readonly Dictionary<AbstractActor, List<AbstractDamageEvent>> _selfDamageLogsPerTarget = new Dictionary<AbstractActor, List<AbstractDamageEvent>>();
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
         protected Dictionary<long, BuffsGraphModel> BuffPoints;
