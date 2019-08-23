@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             Target target = Targets.Find(x => x.ID == TriggerID);
             if (target == null)
@@ -266,7 +266,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBoonData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(762).Find(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
             if (invulDei != null)
             {
                 end = invulDei.Time;

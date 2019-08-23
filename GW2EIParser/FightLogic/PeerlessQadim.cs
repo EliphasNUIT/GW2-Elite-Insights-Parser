@@ -48,7 +48,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out var list))
@@ -87,7 +87,7 @@ namespace GW2EIParser.Logic
             List<long> phaseStarts = new List<long>();
             List<long> phaseEnds = new List<long>();
             //
-            List<AbstractBuffEvent> magmaDrops = log.CombatData.GetBoonData(56475).Where(x => x is BuffApplyEvent).ToList();
+            List<AbstractBuffEvent> magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)

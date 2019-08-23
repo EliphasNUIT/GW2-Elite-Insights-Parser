@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Xera);
             if (mainTarget == null)
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             long end = 0;
-            AbstractBuffEvent invulXera = log.CombatData.GetBoonData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBoonData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent invulXera = log.CombatData.GetBuffData(762).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent) ?? log.CombatData.GetBuffData(34113).Find(x => x.To == mainTarget.AgentItem && x is BuffApplyEvent);
             if (invulXera != null)
             {
                 end = invulXera.Time;

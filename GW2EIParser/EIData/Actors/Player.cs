@@ -533,7 +533,7 @@ namespace GW2EIParser.EIData
             long fightDuration = log.FightData.FightDuration;
             foreach (Buff consumable in consumableList)
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBoonData(consumable.ID))
+                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
                 {
                     if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
                     {

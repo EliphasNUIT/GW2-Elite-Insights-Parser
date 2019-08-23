@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // timed bombs
-            List<AbstractBuffEvent> timedBombs = log.CombatData.GetBoonData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            List<AbstractBuffEvent> timedBombs = log.CombatData.GetBuffData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in timedBombs)
             {
                 int start = (int)c.Time;

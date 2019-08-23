@@ -69,7 +69,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             // Special buff cast check
-            AbstractBuffEvent heatWave = log.CombatData.GetBoonData(34526).FirstOrDefault();
+            AbstractBuffEvent heatWave = log.CombatData.GetBuffData(34526).FirstOrDefault();
             if (heatWave != null)
             {
                 phases.Add(new PhaseData(0, heatWave.Time - 1));
@@ -154,7 +154,7 @@ namespace GW2EIParser.Logic
             {
                 case (ushort)ParseEnum.TargetIDS.Matthias:
                     List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    List<int> humanShieldRemoval = log.CombatData.GetBoonData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    List<int> humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
                     {
                         var shield = humanShield[i];
@@ -169,7 +169,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    List<int> aboShieldRemoval = log.CombatData.GetBoonData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    List<int> aboShieldRemoval = log.CombatData.GetBuffData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < aboShield.Count; i++)
                     {
                         var shield = aboShield[i];
@@ -277,7 +277,7 @@ namespace GW2EIParser.Logic
                 }
             }
             // Bombs
-            List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBoonData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time ;

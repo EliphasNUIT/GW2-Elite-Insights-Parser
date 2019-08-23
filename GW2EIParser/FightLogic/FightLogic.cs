@@ -207,7 +207,7 @@ namespace GW2EIParser.Logic
             phase.OverrideTimes(log);
         }
 
-        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public virtual List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             return new List<AbstractBuffEvent>();
         }
@@ -364,7 +364,7 @@ namespace GW2EIParser.Logic
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractMasterActor target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<AbstractBuffEvent> main = combatData.GetBoonData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            List<AbstractBuffEvent> main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {

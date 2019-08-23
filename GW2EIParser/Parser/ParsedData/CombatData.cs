@@ -14,6 +14,7 @@ namespace GW2EIParser.Parser.ParsedData
         private readonly HashSet<long> _skillIds;
         private readonly Dictionary<long, List<AbstractBuffEvent>> _boonData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _boonDataByDst;
+        private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _boonDataBySrc;
         private readonly Dictionary<AgentItem, List<AbstractDamageEvent>> _damageData;
         private readonly Dictionary<long, List<AbstractDamageEvent>> _damageDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _castData;
@@ -36,9 +37,10 @@ namespace GW2EIParser.Parser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst,_boonDataBySrc, _boonData, fightData.FightStartLogTime, skillData));
             HashSet<long> buffIDsToSort = new HashSet<long>();
-            HashSet<AgentItem> buffAgentsToSort = new HashSet<AgentItem>();
+            HashSet<AgentItem> dstAgentsToSort = new HashSet<AgentItem>();
+            HashSet<AgentItem> srcAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
             {
                 if (_boonDataByDst.TryGetValue(bf.To, out var list1))
@@ -52,7 +54,19 @@ namespace GW2EIParser.Parser.ParsedData
                         bf
                     };
                 }
-                buffAgentsToSort.Add(bf.To);
+                dstAgentsToSort.Add(bf.To); 
+                if (_boonDataBySrc.TryGetValue(bf.By, out var list3))
+                {
+                    list3.Add(bf);
+                }
+                else
+                {
+                    _boonDataByDst[bf.By] = new List<AbstractBuffEvent>()
+                    {
+                        bf
+                    };
+                }
+                srcAgentsToSort.Add(bf.By);
                 if (_boonData.TryGetValue(bf.BuffID, out var list2))
                 {
                     list2.Add(bf);
@@ -70,9 +84,13 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 _boonData[buffID].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
-            foreach (AgentItem a in buffAgentsToSort)
+            foreach (AgentItem a in dstAgentsToSort)
             {
                 _boonDataByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
+            }
+            foreach (AgentItem a in srcAgentsToSort)
+            {
+                _boonDataBySrc[a].Sort((x, y) => x.Time.CompareTo(y.Time));
             }
         }
 
@@ -142,7 +160,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 if (p.Prof == "Mirage")
                 {
-                    toAdd = MirageHelper.TranslateMirageCloak(GetBoonData(40408), skillData);
+                    toAdd = MirageHelper.TranslateMirageCloak(GetBuffData(40408), skillData);
                     break;
                 }
             }
@@ -218,7 +236,8 @@ namespace GW2EIParser.Parser.ParsedData
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
-            _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList()); 
+            _boonDataBySrc = buffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             List<AbstractDamageEvent> damageData = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);
@@ -400,7 +419,7 @@ namespace GW2EIParser.Parser.ParsedData
             return _metaDataEvents.ShardEvents;
         }
 
-        public List<AbstractBuffEvent> GetBoonData(long key)
+        public List<AbstractBuffEvent> GetBuffData(long key)
         {
             if (_boonData.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
@@ -412,6 +431,15 @@ namespace GW2EIParser.Parser.ParsedData
         public List<AbstractBuffEvent> GetBuffDataByDst(AgentItem key)
         {
             if (_boonDataByDst.TryGetValue(key, out List<AbstractBuffEvent> res))
+            {
+                return res;
+            }
+            return new List<AbstractBuffEvent>(); ;
+        }
+
+        public List<AbstractBuffEvent> GetBuffDataBySrc(AgentItem key)
+        {
+            if (_boonDataBySrc.TryGetValue(key, out List<AbstractBuffEvent> res))
             {
                 return res;
             }
