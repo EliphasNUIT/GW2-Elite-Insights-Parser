@@ -237,7 +237,7 @@ namespace GW2EIParser.Parser.ParsedData
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
             _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList()); 
-            _boonDataBySrc = buffEvents.GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
+            _boonDataBySrc = buffEvents.Where(x => x.By != null).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events
             List<AbstractDamageEvent> damageData = CombatEventFactory.CreateDamageEvents(noStateActiBuffRem.Where(x => (x.IsBuff != 0 && x.Value == 0) || (x.IsBuff == 0)).ToList(), agentData, skillData, fightData.FightStartLogTime);

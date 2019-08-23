@@ -71,7 +71,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
-        public static List<JsonDamageDist> ComputeJsonDamageDists(List<AbstractDamageEvent> damageEvents, ParsedLog log, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap)
+        public static List<JsonDamageDist> BuildJsonDamageDists(List<AbstractDamageEvent> damageEvents, ParsedLog log, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap)
         {
             List<JsonDamageDist> damageDist = new List<JsonDamageDist>();
             Dictionary<SkillItem, List<AbstractDamageEvent>> dict = damageEvents.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());

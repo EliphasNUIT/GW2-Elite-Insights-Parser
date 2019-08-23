@@ -1,4 +1,8 @@
-﻿using GW2EIParser.Models;
+﻿using GW2EIParser.EIData;
+using GW2EIParser.Models;
+using GW2EIParser.Parser;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -128,27 +132,27 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int PowerDamage { get; set; }
             /// <summary>
-            /// Total actor only dps
+            /// Total actor only dps, missing if same as Dps
             /// </summary>
             public int ActorDps { get; set; }
             /// <summary>
-            /// Total actor only damage
+            /// Total actor only damage, missing if same as Damage
             /// </summary>
             public int ActorDamage { get; set; }
             /// <summary>
-            /// Total actor only condi dps
+            /// Total actor only condi dps, missing if same as CondiDps
             /// </summary>
             public int ActorCondiDps { get; set; }
             /// <summary>
-            /// Total actor only condi damage
+            /// Total actor only condi damage, missing if same as CondiDamage
             /// </summary>
             public int ActorCondiDamage { get; set; }
             /// <summary>
-            /// Total actor only power dps
+            /// Total actor only power dps, missing if same as PowerDps
             /// </summary>
             public int ActorPowerDps { get; set; }
             /// <summary>
-            /// Total actor only power damage
+            /// Total actor only power damage, missing if same as PowerDamage
             /// </summary>
             public int ActorPowerDamage { get; set; }
 
@@ -161,12 +165,12 @@ namespace GW2EIParser.Builders.JsonModels
                 PowerDps = stats.PowerDps;
                 PowerDamage = stats.PowerDamage;
 
-                ActorDps = stats.ActorDps;
-                ActorDamage = stats.ActorDamage;
-                ActorCondiDps = stats.ActorCondiDps;
-                ActorCondiDamage = stats.ActorCondiDamage;
-                ActorPowerDps = stats.ActorPowerDps;
-                ActorPowerDamage = stats.ActorPowerDamage;
+                ActorDps = stats.ActorDps != stats.Dps ? stats.ActorDps : 0;
+                ActorDamage = stats.ActorDamage != stats.Damage ? stats.ActorDamage : 0;
+                ActorCondiDps = stats.ActorCondiDps != stats.CondiDps ? stats.ActorCondiDps : 0;
+                ActorCondiDamage = stats.ActorCondiDamage != stats.CondiDamage ? stats.ActorCondiDamage : 0;
+                ActorPowerDps = stats.ActorPowerDps != stats.PowerDps ? stats.ActorPowerDps : 0;
+                ActorPowerDamage = stats.ActorPowerDamage != stats.PowerDamage ? stats.ActorPowerDamage : 0;
             }
 
         }
@@ -342,6 +346,91 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Resurrects = stats.Resurrects;
                 ResurrectTime = stats.ResurrectTime;
+            }
+        }
+
+
+        /// <summary>
+        /// Stats against all  \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonStatsAll"/>
+        public List<JsonStatsAll> StatsAll { get; set; }
+
+        /// <summary>
+        /// Stats against targets  \n
+        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonStats"/>
+        public List<List<JsonStats>> StatsTargets { get; set; } = new List<List<JsonStats>>();
+
+        /// <summary>
+        /// Defensive stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDefensesAll"/>
+        public List<JsonDefensesAll> DefensesAll { get; set; }
+
+        /// <summary>
+        /// Defensive stats against targets\n
+        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDefensesAll"/>
+        public List<List<JsonDefenses>> DefensesTarget { get; set; } = new List<List<JsonDefenses>>();
+
+        /// <summary>
+        /// Support stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonSupport"/>
+        public List<JsonSupportAll> SupportAll { get; set; }
+
+        /// <summary>
+        /// Support stats against targets\n
+        /// Length == # of allies for <seealso cref="JsonLog.Friendlies"/> or # of targets for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonSupport"/>
+        public List<List<JsonSupport>> SupportTarget { get; set; } = new List<List<JsonSupport>>();
+
+        /// <summary>
+        /// Array of Total DPS stats \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDPS"/>
+        public List<JsonDPS> DpsAll { get; set; }
+
+        /// <summary>
+        /// Array of Total DPS stats \n
+        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDPS"/>
+        public List<List<JsonDPS>> DpsTargets { get; set; } = new List<List<JsonDPS>>();
+
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractMasterActor> targets, IEnumerable<AbstractMasterActor> allies)
+        {
+            DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
+            StatsAll = actor.GetStats(log).Select(x => new JsonStatsAll(x)).ToList();
+            DefensesAll = actor.GetDefenses(log).Select(x => new JsonDefensesAll(x)).ToList();
+            SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
+            foreach (AbstractMasterActor target in targets)
+            {
+                DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());
+                StatsTargets.Add(actor.GetStats(log, target).Select(x => new JsonStats(x)).ToList());
+                DefensesTarget.Add(actor.GetDefenses(log, target).Select(x => new JsonDefenses(x)).ToList());
+            }
+            foreach (AbstractMasterActor target in allies)
+            {
+                SupportTarget.Add(actor.GetSupport(log, target).Select(x => new JsonSupport(x)).ToList());
+            }
+            if (targets.Count() == 0)
+            {
+                DpsTargets = null;
+                StatsTargets = null;
+                DefensesTarget = null;
+            }
+            if (allies.Count() == 0)
+            {
+                SupportTarget = null;
             }
         }
     }

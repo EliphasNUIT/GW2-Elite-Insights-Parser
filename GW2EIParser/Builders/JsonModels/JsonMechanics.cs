@@ -37,7 +37,7 @@ namespace GW2EIParser.Builders.JsonModels
         public string Name { get; set; }
 
 
-        public static List<JsonMechanics> ComputeMechanics(ParsedLog log)
+        public static List<JsonMechanics> BuildMechanics(ParsedLog log)
         {
             MechanicData mechanicData = log.MechanicData;
             var mechanicLogs = new List<MechanicEvent>();

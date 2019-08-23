@@ -24,8 +24,8 @@ namespace GW2EIParser.Builders
 {
     public class RawFormatBuilder
     {
-        private ParsedLog _log;
-        private List<PhaseData> _phases;
+        private readonly ParsedLog _log;
+        private readonly List<PhaseData> _phases;
         public JsonLog JsonLog { get; }
         //
         private readonly Dictionary<string, JsonLog.SkillDesc> _skillDesc = new Dictionary<string, JsonLog.SkillDesc>();
@@ -48,6 +48,7 @@ namespace GW2EIParser.Builders
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
             JsonTextWriter writer = new JsonTextWriter(sw)
@@ -67,6 +68,7 @@ namespace GW2EIParser.Builders
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
             Dictionary<string, JsonLog> root = new Dictionary<string, JsonLog>()
@@ -102,7 +104,7 @@ namespace GW2EIParser.Builders
             int i = 0;
             foreach (Target tar in _log.FightData.Logic.Targets)
             {
-                res[i++] = p.GetStatsTarget(_log, tar).Select(x => new JsonStats(x)).ToArray();
+                res[i++] = p.GetStats(_log, tar).Select(x => new JsonStats(x)).ToArray();
             }
             return res;
         }

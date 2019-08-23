@@ -22,12 +22,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public int TotalHealth { get; set; }
         public List<JsonMinion> MinionList { get; set; }
-        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets) : base(minions)
+        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets, IEnumerable<AbstractMasterActor> allies) : base(minions)
         {
             MaxHealthUpdateEvent maxHP = log.CombatData.GetMaxHealthUpdateEvents(minions.AgentItem).LastOrDefault();
             TotalHealth = maxHP != null ? maxHP.MaxHealth : 0;
             ID = minions.ID;
-            MinionList = minions.MinionList.Select(x => new JsonMinion(log, x, skillMap, buffMap, targets)).ToList();
+            MinionList = minions.MinionList.Select(x => new JsonMinion(log, x, skillMap, buffMap, targets, allies)).ToList();
             if (MinionList.Count == 0)
             {
                 MinionList = null;

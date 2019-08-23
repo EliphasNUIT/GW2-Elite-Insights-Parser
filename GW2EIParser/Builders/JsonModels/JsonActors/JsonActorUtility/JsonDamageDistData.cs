@@ -1,0 +1,73 @@
+﻿using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
+using System.Collections.Generic;
+using System.Linq;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
+
+namespace GW2EIParser.Builders.JsonModels
+{
+    /// <summary>
+    /// Class corresponding a damage distribution
+    /// </summary>
+    public class JsonDamageDistData
+    {
+        /// <summary>
+        /// Total Damage distribution array \n
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageDist"/>
+        public List<List<JsonDamageDist>> TotalDamageDists { get; set; }
+        /// <summary>
+        /// Damage taken array
+        /// Length == # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageDist"/>
+        public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
+        /// <summary>
+        /// Per Target Damage distribution array \n
+        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageDist"/>
+        public List<List<List<JsonDamageDist>>> TargetDamageDists { get; set; } = new List<List<List<JsonDamageDist>>>();
+        /// <summary>
+        /// Per Target Damage Taken distribution array \n
+        /// Length == # of targets for <seealso cref="JsonLog.Friendlies"/> or # of players for <seealso cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
+        /// </summary>
+        /// <seealso cref="JsonDamageDist"/>
+        public List<List<List<JsonDamageDist>>> TargetDamageTakenDists { get; set; } = new List<List<List<JsonDamageDist>>>();
+
+        public JsonDamageDistData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets)
+        {
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            TotalDamageDists = new List<List<JsonDamageDist>>();
+            TotalDamageTakenDists = new List<List<JsonDamageDist>>();
+            foreach (PhaseData phase in phases)
+            {
+                TotalDamageDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(null, log, phase.Start, phase.End), log, skillMap, buffMap));
+                TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, skillMap, buffMap));
+            }
+            foreach (AbstractMasterActor target in targets)
+            {
+                List<List<JsonDamageDist>> TargetDamageDist = new List<List<JsonDamageDist>>();
+                List<List<JsonDamageDist>> TargetDamageTakenDist = new List<List<JsonDamageDist>>();
+                foreach (PhaseData phase in phases)
+                {
+                    TargetDamageDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(target, log, phase.Start, phase.End), log, skillMap, buffMap));
+                    TargetDamageTakenDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(target, log, phase.Start, phase.End), log, skillMap, buffMap));
+                }
+                TargetDamageDists.Add(TargetDamageDist);
+                TargetDamageTakenDists.Add(TargetDamageTakenDist);
+            }
+            if (TargetDamageDists.Count == 0)
+            {
+                TargetDamageDists = null;
+            }
+            if (TargetDamageTakenDists.Count == 0)
+            {
+                TargetDamageTakenDists = null;
+            }
+        }
+    }
+}

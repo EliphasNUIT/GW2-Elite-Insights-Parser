@@ -216,7 +216,7 @@ namespace GW2EIParser.Builders.JsonModels
             // Phases
             Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(log, x)).ToList();
             // Mechanics
-            Mechanics = ComputeMechanics(log);
+            Mechanics = BuildMechanics(log);
             // Players
             Friendlies = new List<JsonActor>();
             foreach (Player p in log.PlayerList)
@@ -227,7 +227,7 @@ namespace GW2EIParser.Builders.JsonModels
             Enemies = new List<JsonActor>();
             foreach (Target tar in log.FightData.Logic.Targets)
             {
-                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs, DamageModMap));
+                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs));
             }
             //
             if (uploadLink.FirstOrDefault(x => x != "") != null)

@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
         [DefaultValue(null)]
         public int LastAware { get; set; }
 
-        public JsonMinion(ParsedLog log, Minion minion, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets) : base(log, minion, skillMap, buffMap, targets)
+        public JsonMinion(ParsedLog log, Minion minion, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets, IEnumerable<AbstractMasterActor> allies) : base(log, minion, skillMap, buffMap, targets, allies)
         {
             // meta data
             FirstAware = (int)(log.FightData.ToFightSpace(minion.FirstAwareLogTime));
