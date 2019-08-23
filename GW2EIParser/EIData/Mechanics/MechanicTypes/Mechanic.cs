@@ -59,7 +59,7 @@ namespace GW2EIParser.EIData
         /// </summary>
         /// <param name="skillId">id of the mechanic</param>
         /// <param name="inGameName">official name of the mechanic</param>
-        /// <param name="plotlySetting">html plot settings <seealso cref="MechanicPlotlySetting"/></param>
+        /// <param name="plotlySetting">html plot settings <see cref="MechanicPlotlySetting"/></param>
         /// <param name="shortName">name of the mechanic</param>
         /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
         protected Mechanic(long skillId, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, int internalCoolDown) : this(skillId, inGameName, plotlySetting, shortName, shortName, shortName, internalCoolDown)

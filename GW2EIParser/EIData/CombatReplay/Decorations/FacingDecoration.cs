@@ -1,13 +1,14 @@
 ﻿using GW2EIParser.Parser;
 using System.Collections.Generic;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 
 namespace GW2EIParser.EIData
 {
-    public class FacingActor : GenericActor
+    public class FacingDecoration : GenericDecoration
     {
         protected List<int> Data = new List<int>();
 
-        public FacingActor((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
+        public FacingDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
             foreach(Point3D facing in facings)
             {
@@ -16,14 +17,10 @@ namespace GW2EIParser.EIData
         }
 
         //
-        protected class FacingSerializable : GenericActorSerializable
-        {
-            public int[] FacingData;
-        }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            FacingSerializable aux = new FacingSerializable
+            JsonCombatReplayFacingDecoration aux = new JsonCombatReplayFacingDecoration
             {
                 Type = "Facing",
                 Start = Lifespan.start,

@@ -1,13 +1,14 @@
 ﻿using GW2EIParser.Parser;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 
 namespace GW2EIParser.EIData
 {
-    public class RectangleActor : FormActor
+    public class RectangleDecoration : FormDecoration
     {
         public int Height { get; }
         public int Width { get; }
 
-        public RectangleActor(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public RectangleDecoration(bool fill, int growing, int width, int height, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             Height = height;
             Width = width;
@@ -15,15 +16,9 @@ namespace GW2EIParser.EIData
         //
 
 
-        protected class RectangleSerializable : FormSerializable
+        public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            public int Height { get; set; }
-            public int Width { get; set; }
-        }
-
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
-        {
-            RectangleSerializable aux = new RectangleSerializable
+            JsonCombatReplayRectangleDecoration aux = new JsonCombatReplayRectangleDecoration
             {
                 Type = "Rectangle",
                 Width = Width,

@@ -1,28 +1,23 @@
 ﻿using GW2EIParser.Parser;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 
 namespace GW2EIParser.EIData
 {
-    public class DoughnutActor : FormActor
+    public class DoughnutDecoration : FormDecoration
     {
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
+        public DoughnutDecoration(bool fill, int growing, int innerRadius, int outerRadius, (int start, int end) lifespan, string color, Connector connector) : base(fill, growing, lifespan, color, connector)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
         //
 
-        private class DoughnutSerializable : FormSerializable
+        public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            public int InnerRadius { get; set; }
-            public int OuterRadius { get; set; }
-        }
-
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
-        {
-            DoughnutSerializable aux = new DoughnutSerializable
+            JsonCombatReplayDoughnutDecoration aux = new JsonCombatReplayDoughnutDecoration
             {
                 Type = "Doughnut",
                 OuterRadius = OuterRadius,

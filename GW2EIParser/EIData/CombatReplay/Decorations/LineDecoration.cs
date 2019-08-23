@@ -1,25 +1,22 @@
 ﻿using GW2EIParser.Parser;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 
 namespace GW2EIParser.EIData
 {
-    public class LineActor : FormActor
+    public class LineDecoration : FormDecoration
     {
         public Connector ConnectedFrom { get; }
         public int Width { get; }
 
-        public LineActor(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
+        public LineDecoration(int growing, (int start, int end) lifespan, string color, Connector connector, Connector targetConnector) : base(false, growing, lifespan, color, connector)
         {
             ConnectedFrom = targetConnector;
         }
 
-        private class LineSerializable : FormSerializable
-        {
-            public object ConnectedFrom { get; set; }
-        }
 
-        public override GenericActorSerializable GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            LineSerializable aux = new LineSerializable
+            JsonCombatReplayLineDecoration aux = new JsonCombatReplayLineDecoration
             {
                 Type = "Line",
                 Fill = Filled,
