@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -13,3 +14,4 @@ using System.Runtime.InteropServices;
 #else
 [assembly: AssemblyVersion("3.0.*")]
 #endif
+[assembly: NeutralResourcesLanguage("en")]
