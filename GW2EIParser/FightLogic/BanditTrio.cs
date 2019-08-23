@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -45,7 +45,7 @@ namespace GW2EIParser.Logic
 
         protected override CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png", 
+            return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png",
                             (2494, 2277),
                             (-2900, -12251, 2561, -7265),
                             (-12288, -27648, 12288, 27648),
@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
             {
                 List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
                 List<DeadEvent> prisonerDeaths = new List<DeadEvent>();
-                foreach(AgentItem prisoner in prisoners)
+                foreach (AgentItem prisoner in prisoners)
                 {
                     prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
                 }

@@ -1,9 +1,8 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -16,7 +15,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Game ID of the minion
         /// </summary>
-        public ushort ID{ get; set; }
+        public ushort ID { get; set; }
         /// <summary>
         /// Total health of the minion
         /// </summary>

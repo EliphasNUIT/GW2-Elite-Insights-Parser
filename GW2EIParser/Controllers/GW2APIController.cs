@@ -1,11 +1,11 @@
-﻿using GW2EIParser.Controllers.GW2API;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using GW2EIParser.Controllers.GW2API;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Controllers
 {
@@ -78,7 +78,7 @@ namespace GW2EIParser.Controllers
                 }
                 page++;
             }
-           
+
             return skill_L;
         }
         private static SkillList GetSkillList()
@@ -196,7 +196,7 @@ namespace GW2EIParser.Controllers
         {
             if (_listofSpecs.Items.Count == 0)
             {
-                SetSpecList(); 
+                SetSpecList();
             }
             return _listofSpecs;
         }
@@ -256,7 +256,7 @@ namespace GW2EIParser.Controllers
             }
             return failedList;
         }
-        
+
         private static void SetSpecList()
         {
 
@@ -378,13 +378,13 @@ namespace GW2EIParser.Controllers
 
             public List<GW2APISpec> Items { get; set; }
         }
-     
+
         private static SpecList _listofSpecs = new SpecList();
 
         public static GW2APISpec GetSpec(int id)
         {
             GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
-            
+
             return spec;
         }
     }

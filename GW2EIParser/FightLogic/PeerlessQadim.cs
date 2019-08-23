@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
                         if (ba != null)
                         {
                             res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 1, int.MaxValue));
-                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time -1, int.MaxValue, ba.BuffSkill));
+                            res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
                         }
                     }
                 }
@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
                     {
                         replay.Actors.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.15)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                         replay.Actors.Add(new CircleDecoration(true, magmaDropEnd + magmaOffset, magmaRadius, (magmaDropEnd, magmaDropEnd + magmaOffset), "rgba(255, 220, 50, 0.25)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd+magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, magmaRadius, (magmaDropEnd + magmaOffset, (int)log.FightData.FightDuration), "rgba(255, 220, 50, 0.5)", new InterpolatedPositionConnector(magmaPrevPos, magmaNextPos, magmaDropEnd)));
                     }
                 }
 

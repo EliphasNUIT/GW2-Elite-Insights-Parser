@@ -1,5 +1,5 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
+using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 
 namespace GW2EIParser.EIData

@@ -1,10 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.Models
 {
@@ -93,7 +88,7 @@ namespace GW2EIParser.Models
             public double BoonStripsTime { get; set; }
         }
 
-        public class FinalSupportAll: FinalSupport
+        public class FinalSupportAll : FinalSupport
         {
             public long Resurrects { get; set; }
             public double ResurrectTime { get; set; }
@@ -111,7 +106,7 @@ namespace GW2EIParser.Models
             public double Presence { get; set; }
         }
 
-        public enum BuffEnum { Self, Group, OffGroup, Squad};
+        public enum BuffEnum { Self, Group, OffGroup, Squad };
 
         public class FinalTargetBuffs
         {
@@ -139,11 +134,11 @@ namespace GW2EIParser.Models
             public double Uptime { get; set; }
             public double Presence { get; set; }
             public Dictionary<Player, double> Generated { get; }
-            public Dictionary<Player, double> Overstacked { get;}
+            public Dictionary<Player, double> Overstacked { get; }
             public Dictionary<Player, double> Wasted { get; }
             public Dictionary<Player, double> UnknownExtension { get; }
             public Dictionary<Player, double> Extension { get; }
-            public Dictionary<Player, double> Extended { get;}
+            public Dictionary<Player, double> Extended { get; }
         }
 
         public class DamageModifierData

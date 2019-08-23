@@ -108,7 +108,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
             return GeneralHelper.UnknownAgent;
         }
-        
+
         public void OverrideID(ushort ID, AgentItem agentItem)
         {
             _allAgentsList.RemoveAll(x => x.ID == ID);
@@ -122,9 +122,9 @@ namespace GW2EIParser.Parser.ParsedData
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByName= _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByName = _allAgentsList.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
         }
-        
+
         public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
         {
             if (_allAgentsByType.TryGetValue(type, out var list))

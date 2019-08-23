@@ -1,10 +1,10 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Logic
 {
@@ -45,7 +45,7 @@ namespace GW2EIParser.Logic
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
-            return new CombatReplayMap("", (800,800), (0,0,0,0), (0,0,0,0) , (0,0,0,0));
+            return new CombatReplayMap("", (800, 800), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0));
         }
 
         public CombatReplayMap GetCombatMap(ParsedLog log)
@@ -199,7 +199,7 @@ namespace GW2EIParser.Logic
         {
             foreach (Target target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime),0)))
+                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(log.FightData.ToFightSpace(target.FirstAwareLogTime), 0)))
                 {
                     phase.Targets.Add(target);
                 }

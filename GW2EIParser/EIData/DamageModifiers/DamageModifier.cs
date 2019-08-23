@@ -1,16 +1,17 @@
-﻿using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
     public abstract class DamageModifier
     {
-        public enum DamageType { All, Power, Condition};
+        public enum DamageType { All, Power, Condition };
         public enum DamageSource { All, NoPets };
-        public enum ModifierSource {
+        public enum ModifierSource
+        {
             CommonBuff,
             ItemBuff,
             Necromancer, Reaper, Scourge,

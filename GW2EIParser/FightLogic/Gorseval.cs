@@ -1,9 +1,9 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -216,7 +216,7 @@ namespace GW2EIParser.Logic
                         int start = (int)c.Time;
                         int impactPoint = 1185;
                         int impactTime = start + impactPoint;
-                        int end = (int)Math.Min(start + c.ActualDuration, impactTime);
+                        int end = Math.Min(start + c.ActualDuration, impactTime);
                         int radius = 320;
                         replay.Actors.Add(new CircleDecoration(true, 0, radius, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleDecoration(true, 0, radius, (impactTime - 10, impactTime + 100), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));

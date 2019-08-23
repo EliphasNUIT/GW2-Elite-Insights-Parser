@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
                         int duration = 100;
                         int radius = 1200;
                         replay.Actors.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start + precast -10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
                     }
                     break;
                 default:

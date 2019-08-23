@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Controllers
 {
@@ -18,7 +18,7 @@ namespace GW2EIParser.Controllers
         private static string UploadDPSReportsRH(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
-           
+
         }
         private static string UploadRaidar(FileInfo fi)
         {
@@ -65,7 +65,7 @@ namespace GW2EIParser.Controllers
         {
             public string Permalink { get; set; }
         }
-        private static string UploadToDPSR(FileInfo fi,string URI)
+        private static string UploadToDPSR(FileInfo fi, string URI)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -181,7 +181,7 @@ namespace GW2EIParser.Controllers
             row.BgWorker.ThrowIfCanceled(row);
             return uploadresult;
         }
-          
+
     }
-    
+
 }

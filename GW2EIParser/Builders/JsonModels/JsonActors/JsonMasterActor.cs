@@ -1,10 +1,8 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {

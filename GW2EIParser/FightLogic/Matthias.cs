@@ -1,9 +1,9 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -102,7 +102,7 @@ namespace GW2EIParser.Logic
             {
                 phases.Add(new PhaseData(0, fightDuration));
             }
-            string[] namesMat = new [] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
+            string[] namesMat = new[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = namesMat[i - 1];
@@ -127,7 +127,7 @@ namespace GW2EIParser.Logic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch(mob.ID)
+            switch (mob.ID)
             {
                 case (ushort)Storm:
                     replay.Actors.Add(new CircleDecoration(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
@@ -198,7 +198,7 @@ namespace GW2EIParser.Logic
                         int preCastTime = 1000;
                         int duration = 750;
                         int width = 4000; int height = 130;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
@@ -206,11 +206,11 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
                         }
                     }
-                        break;
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -280,12 +280,12 @@ namespace GW2EIParser.Logic
             List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
-                int zealousStart = (int)c.Time ;
+                int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
                 replay.Actors.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
                 replay.Actors.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
             }
         }
-       
+
     }
 }

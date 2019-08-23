@@ -1,8 +1,8 @@
-﻿using GW2EIParser.Controllers;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using GW2EIParser.Controllers;
 
 namespace GW2EIParser.Setting
 {
@@ -15,7 +15,7 @@ namespace GW2EIParser.Setting
         {
             InitializeComponent();
         }
-        
+
         private void SettingsFormFormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
@@ -91,7 +91,7 @@ namespace GW2EIParser.Setting
         private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
-        }    
+        }
 
         private void ResetSkillListClick(object sender, EventArgs e)
         {

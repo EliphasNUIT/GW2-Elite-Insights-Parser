@@ -615,7 +615,7 @@ namespace GW2EIParser.EIData
         {
 
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(target, log, start, end);
-            foreach(AbstractDamageEvent de in damageLogs)
+            foreach (AbstractDamageEvent de in damageLogs)
             {
                 finalDefenses.DamageTaken += de.Damage;
                 finalDefenses.DamageBarrier += de.ShieldDamage;
@@ -708,7 +708,8 @@ namespace GW2EIParser.EIData
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                if (_buffsPerId.TryGetValue(id, out var list)) {
+                if (_buffsPerId.TryGetValue(id, out var list))
+                {
                     foreach (AbstractBuffEvent bf in list)
                     {
                         if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)

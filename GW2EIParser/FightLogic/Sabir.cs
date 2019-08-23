@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
         {
             return new CombatReplayMap("https://i.imgur.com/zs9yPuG.png",
                             (4365, 3972),
-                            (-14122, 142, - 9199, 4640),
+                            (-14122, 142, -9199, 4640),
                             (-21504, -21504, 24576, 24576),
                             (33530, 34050, 35450, 35970));
         }

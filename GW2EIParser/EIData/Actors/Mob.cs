@@ -1,6 +1,6 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using System.Collections.Generic;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 
 namespace GW2EIParser.EIData
@@ -9,7 +9,7 @@ namespace GW2EIParser.EIData
     {
         // Constructors
         public Mob(AgentItem agent) : base(agent)
-        {        
+        {
         }
 
         // Combat Replay

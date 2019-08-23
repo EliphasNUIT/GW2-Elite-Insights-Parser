@@ -21,7 +21,7 @@ namespace GW2EIParser
 
         private enum StandardHandle
         {
-            Input =-10,
+            Input = -10,
             Output = -11,
             Error = -12
         }

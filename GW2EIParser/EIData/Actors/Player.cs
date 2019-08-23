@@ -1,16 +1,14 @@
-﻿using GW2EIParser.Logic;
-using GW2EIParser.Exceptions;
-using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-
 using System.Globalization;
 using System.Linq;
-using static GW2EIParser.Models.Statistics;
+using GW2EIParser.Logic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.Buff;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
+using static GW2EIParser.EIData.Buff;
+using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
@@ -19,12 +17,12 @@ namespace GW2EIParser.EIData
         // Fields
         public string Account { get; protected set; }
         public int Group { get; }
-       
+
         private List<Consumable> _consumeList;
         private List<DeathRecap> _deathRecaps;
         private Dictionary<string, List<DamageModifierData>> _damageModifiers;
         private HashSet<string> _presentDamageModifiers;
-        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets; 
+        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
         private List<Dictionary<long, FinalBuffs>> _selfBuffs;
         private List<Dictionary<long, FinalBuffs>> _groupBuffs;
@@ -361,7 +359,7 @@ namespace GW2EIParser.EIData
         // Death Recap
         public List<DeathRecap> GetDeathRecaps(ParsedLog log)
         {
-            if(_deathRecaps == null)
+            if (_deathRecaps == null)
             {
                 SetDeathRecaps(log);
             }
@@ -463,7 +461,7 @@ namespace GW2EIParser.EIData
         {
             if (_weaponsArray == null)
             {
-                EstimateWeapons( log);
+                EstimateWeapons(log);
             }
             return _weaponsArray;
         }
@@ -489,7 +487,8 @@ namespace GW2EIParser.EIData
             List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);
             int swapped = -1;
             long swappedTime = 0;
-            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x => {
+            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
+            {
                 if (x is WeaponSwapEvent wse)
                 {
                     return wse.SwappedTo;

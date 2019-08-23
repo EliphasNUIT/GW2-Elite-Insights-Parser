@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
             new PlayerBoonApplyMechanic(52211, "Aquatic Aura Kenut", new MechanicPlotlySetting("square-open","rgb(0,255,255)"), "Ken Aura","Increasing Damage Debuff on Kenut's Last Platform", "Kenut Aura Debuff",0),
             new PlayerBoonApplyMechanic(52929, "Aquatic Aura Nikare", new MechanicPlotlySetting("diamond-open","rgb(0,255,255)"), "Nik Aura","Increasing Damage Debuff on Nikare's Last Platform", "Nikare Aura Debuff",0),
             new HitOnPlayerMechanic(51999, "Cyclone Burst", new MechanicPlotlySetting("y-up-open","rgb(255,150,0)"), "Y Field","Cyclone Burst (triangular rotating fields on Kenut)", "Cyclone Burst",0),
-            }); 
+            });
             Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
             for (int i = 0; i < targetPhases.Count; i++)
             {
                 PhaseData phase = targetPhases[i];
-                phase.Name = names[i];          
+                phase.Name = names[i];
                 phase.Targets.Add(target);
             }
             return targetPhases;
@@ -126,7 +126,7 @@ namespace GW2EIParser.Logic
                         // P1 and P2 merged
                         if (p1.Start == p2.Start)
                         {
-                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage> 0 && x is DirectDamageEvent);
+                            AbstractDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && (pAgents.Contains(x.From) || pAgents.Contains(x.MasterFrom)) && x.Damage > 0 && x is DirectDamageEvent);
                             if (hit != null)
                             {
                                 p2.OverrideStart(hit.Time);
@@ -182,7 +182,7 @@ namespace GW2EIParser.Logic
                 {
                     p1.OverrideStart(hit.Time);
                 }
-            } 
+            }
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
@@ -210,7 +210,7 @@ namespace GW2EIParser.Logic
             {
                 List<PhaseData> kenPhases = GetTargetPhases(log, kenut, new string[] { "Kenut P1", "Kenut P2", "Kenut P3" });
                 FallBackPhases(kenut, kenPhases, log, false);
-                phases.AddRange(kenPhases);           
+                phases.AddRange(kenPhases);
             }
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             return phases;

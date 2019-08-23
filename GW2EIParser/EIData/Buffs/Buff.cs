@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
 
 namespace GW2EIParser.EIData
 {
@@ -136,7 +136,7 @@ namespace GW2EIParser.EIData
         };
 
         private readonly static List<Buff> _conditions = new List<Buff>
-        { 
+        {
                 new Buff("Bleeding", 736, BuffSource.Mixed, BuffType.Intensity, 1500, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Buff("Burning", 737, BuffSource.Mixed, BuffType.Intensity, 1500, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
                 new Buff("Confusion", 861, BuffSource.Mixed, BuffType.Intensity, 1500, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
@@ -760,7 +760,7 @@ namespace GW2EIParser.EIData
         };
 
         public static List<List<Buff>> AllBoons = new List<List<Buff>>()
-            {   
+            {
                 _boons,
                 _conditions,
                 _commons,

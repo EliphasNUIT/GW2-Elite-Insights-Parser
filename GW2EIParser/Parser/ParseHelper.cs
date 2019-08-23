@@ -24,11 +24,11 @@ namespace GW2EIParser.Parser
         {
             var bytes = new byte[length];
             stream.Read(bytes, 0, length);
-            if(nullTerminated)
+            if (nullTerminated)
             {
-                for(int i = 0; i < length; ++i)
+                for (int i = 0; i < length; ++i)
                 {
-                    if(bytes[i] == 0)
+                    if (bytes[i] == 0)
                     {
                         length = i;
                         break;

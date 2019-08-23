@@ -12,11 +12,11 @@ namespace GW2EIParser.EIData
         // Rectangles with fixed rotation and no translation
         public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, 0, 0, lifespan, color, connector) { }
-        
+
 
         // Rectangles with a fixed rotation and translation
 
-        public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector) 
+        public RotatedRectangleDecoration(bool fill, int growing, int width, int height, int rotation, int translation, (int start, int end) lifespan, string color, Connector connector)
             : this(fill, growing, width, height, rotation, translation, 0, lifespan, color, connector) { }
 
         // Rectangles rotating over time

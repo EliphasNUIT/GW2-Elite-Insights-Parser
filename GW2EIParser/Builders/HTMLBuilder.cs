@@ -1,14 +1,13 @@
-﻿using GW2EIParser.Parser;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json.Serialization;
-using GW2EIParser.EIData;
-using GW2EIParser.Builders.JsonModels;
 using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
+using GW2EIParser.Builders.JsonModels;
+using GW2EIParser.Parser;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
@@ -46,7 +45,7 @@ namespace GW2EIParser.Builders
 
             _cr = Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay;
         }
-        
+
         public void CreateHTML(StreamWriter sw, string path)
         {
             string html = Properties.Resources.template_html;
@@ -66,7 +65,7 @@ namespace GW2EIParser.Builders
 
             html = html.Replace("<!--${CombatReplayScript}-->", BuildCombatReplayScript(path));
             sw.Write(html);
-            return;       
+            return;
         }
 
         private string BuildCombatReplayScript(string path)
@@ -89,7 +88,8 @@ namespace GW2EIParser.Builders
                     using var fs = new FileStream(jsPath, FileMode.Create, FileAccess.Write);
                     using var scriptWriter = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
                     scriptWriter.Write(scriptContent);
-                } catch (IOException)
+                }
+                catch (IOException)
                 {
                 }
                 string content = "<script src=\"./" + jsFileName + "?version=" + _scriptVersionRev + "\"></script>\n";
@@ -103,7 +103,7 @@ namespace GW2EIParser.Builders
 
         private static string BuildTemplates(string script)
         {
-            string tmplScript = script; 
+            string tmplScript = script;
             Dictionary<string, string> templates = new Dictionary<string, string>()
             {
                 {"${tmplBuffStats}",Properties.Resources.tmplBuffStats },
@@ -201,7 +201,7 @@ namespace GW2EIParser.Builders
                 catch (IOException)
                 {
                 }
-                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./"+ cssFilename + "?version="+_scriptVersionRev+"\">";
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./" + cssFilename + "?version=" + _scriptVersionRev + "\">";
             }
             else
             {
@@ -238,7 +238,7 @@ namespace GW2EIParser.Builders
 #if DEBUG
                 string scriptFilename = "EliteInsights-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-" + _scriptVersion +".js";
+                string scriptFilename = "EliteInsights-" + _scriptVersion + ".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try
@@ -281,7 +281,7 @@ namespace GW2EIParser.Builders
 #if DEBUG
                 string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".debug.js";
 #else
-                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion +".js";
+                string scriptFilename = "EliteInsights-CRLink-" + _scriptVersion + ".js";
 #endif
                 string scriptPath = Path.Combine(path, scriptFilename);
                 try

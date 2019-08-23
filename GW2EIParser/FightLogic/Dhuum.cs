@@ -1,11 +1,11 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {

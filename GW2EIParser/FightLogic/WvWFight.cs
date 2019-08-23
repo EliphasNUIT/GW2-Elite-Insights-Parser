@@ -1,9 +1,9 @@
-using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Logic
 {
@@ -69,8 +69,8 @@ namespace GW2EIParser.Logic
             Dictionary<ulong, AgentItem> enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             foreach (CombatItem c in combatData)
             {
-                if (c.IsStateChange == ParseEnum.EvtcStateChange.None && 
-                    c.IsActivation == ParseEnum.EvtcActivation.None && 
+                if (c.IsStateChange == ParseEnum.EvtcStateChange.None &&
+                    c.IsActivation == ParseEnum.EvtcActivation.None &&
                     c.IsBuffRemove == ParseEnum.EvtcBuffRemove.None &&
                     ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
                 {

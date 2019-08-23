@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml;
+using GW2EIParser.Builders.JsonModels;
+using GW2EIParser.EIData;
 using GW2EIParser.Models;
 using GW2EIParser.Parser;
-using GW2EIParser.Builders.JsonModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
-using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsUptime;
-using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
-using static GW2EIParser.Builders.JsonModels.JsonNPCBuffs;
-using static GW2EIParser.Builders.JsonModels.JsonRotation;
 using static GW2EIParser.Builders.JsonModels.JsonBuffDamageModifierData;
-using static GW2EIParser.Builders.JsonModels.JsonMechanics;
-using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Builders.JsonModels.JsonNPCBuffs;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
+using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsUptime;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders
 {
@@ -31,7 +25,7 @@ namespace GW2EIParser.Builders
         private readonly Dictionary<string, JsonLog.BuffDesc> _buffDesc = new Dictionary<string, JsonLog.BuffDesc>();
         private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
-       
+
         public RawFormatBuilder(ParsedLog log, string[] uploadString)
         {
             JsonLog = new JsonLog(log, uploadString);

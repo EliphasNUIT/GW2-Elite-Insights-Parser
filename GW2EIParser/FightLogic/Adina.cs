@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
                         end = attackOff[i];
                     }
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.Gadget, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
-                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent &&x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
+                    foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
                     {
                         c.OverrideSrcValues(extra.Agent, extra.InstID);
                     }
@@ -155,7 +155,7 @@ namespace GW2EIParser.Logic
                     });
                 }
             }
-            foreach(PhaseData phase in mainPhases)
+            foreach (PhaseData phase in mainPhases)
             {
                 phase.Targets.Add(mainTarget);
             }

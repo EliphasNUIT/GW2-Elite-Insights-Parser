@@ -1,8 +1,8 @@
-﻿using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -79,8 +79,9 @@ namespace GW2EIParser.EIData
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
             actor.AgentItem.GetAgentStatus(dead, down, dc, log);
-            return DurationInMS - 
-                dead.Sum(x => {
+            return DurationInMS -
+                dead.Sum(x =>
+                {
                     if (x.start <= End && x.end >= Start)
                     {
                         long s = Math.Max(x.start, Start);
@@ -89,7 +90,8 @@ namespace GW2EIParser.EIData
                     }
                     return 0;
                 }) -
-                dc.Sum(x => {
+                dc.Sum(x =>
+                {
                     if (x.start <= End && x.end >= Start)
                     {
                         long s = Math.Max(x.start, Start);

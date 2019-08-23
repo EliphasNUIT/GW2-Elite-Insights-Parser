@@ -28,7 +28,7 @@
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, 
+               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.EvtcIFF iff, byte isBuff,
                byte result, ParseEnum.EvtcActivation isActivation,
                ParseEnum.EvtcBuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,

@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 
 namespace GW2EIParser.Builders.JsonModels
 {

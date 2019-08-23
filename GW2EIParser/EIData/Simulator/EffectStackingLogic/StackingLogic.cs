@@ -1,5 +1,5 @@
-﻿using GW2EIParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData

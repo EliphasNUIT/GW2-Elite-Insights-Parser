@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -14,7 +14,7 @@ namespace GW2EIParser.Logic
         // TODO - add CR icons/indicators (vomit, greens, etc) and some mechanics
         public EaterOfSouls(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange( new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(47303, "Hungering Miasma", new MechanicPlotlySetting("triangle-left-open","rgb(100,255,0)"), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
             new PlayerBoonApplyMechanic(46950, "Fractured Spirit", new MechanicPlotlySetting("circle","rgb(0,255,0)"), "Orb CD","Applied when taking green", "Green port",0),
@@ -63,16 +63,16 @@ namespace GW2EIParser.Logic
                     List<AbstractCastEvent> vomit = cls.Where(x => x.SkillId == 47303).ToList();
                     foreach (AbstractCastEvent c in vomit)
                     {
-                        int start = (int)c.Time+2100;
+                        int start = (int)c.Time + 2100;
                         int cascading = 1500;
-                        int duration = 15000+cascading;
+                        int duration = 15000 + cascading;
                         int end = start + duration;
                         int radius = 900;
                         Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start);
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
-                            replay.Actors.Add(new PieDecoration(true, start+cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
+                            replay.Actors.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
                     List<AbstractCastEvent> pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
@@ -103,7 +103,7 @@ namespace GW2EIParser.Logic
                     List<AbstractCastEvent> green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
-                        int gstart = (int)c.Time+667;
+                        int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
                         replay.Actors.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
                         replay.Actors.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));

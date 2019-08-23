@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Exceptions;
-using GW2EIParser.Models;
-using GW2EIParser.Logic;
 using GW2EIParser.EIData;
+using GW2EIParser.Exceptions;
+using GW2EIParser.Logic;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.Parser
@@ -27,7 +26,7 @@ namespace GW2EIParser.Parser
 
         public MechanicData MechanicData { get; }
 
-        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
+        public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList)
         {
             FightData = fightData;
@@ -44,7 +43,7 @@ namespace GW2EIParser.Parser
             //
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
-            MechanicData = FightData.Logic.GetMechanicData(); 
+            MechanicData = FightData.Logic.GetMechanicData();
         }
 
         private void UpdateFightData()

@@ -1,11 +1,11 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -195,7 +195,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 8; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12,(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12,(start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
                         }
 
                     }
@@ -235,7 +235,7 @@ namespace GW2EIParser.Logic
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            
+
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)

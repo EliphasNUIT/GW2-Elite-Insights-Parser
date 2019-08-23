@@ -31,7 +31,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                     if (res.TryGetValue(evt.AgentItem, out var list))
                     {
                         list.Add(evt);
-                    } else
+                    }
+                    else
                     {
                         res[evt.AgentItem] = new List<AbstractMovementEvent>()
                         {
@@ -43,7 +44,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             return res;
         }
 
-        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset) 
+        public static void CreateStateChangeEvents(List<CombatItem> stateChangeEvents, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, AgentData agentData, long offset)
         {
             foreach (CombatItem c in stateChangeEvents)
             {
@@ -187,7 +188,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                             res.Add(new AnimatedCastEvent(startItem, agentData, skillData, offset, c.LogTime));
                         }
                         startItem = c;
-                    } else
+                    }
+                    else
                     {
                         if (startItem != null && startItem.SkillID == c.SkillID)
                         {

@@ -1,8 +1,8 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Models;
 using GW2EIParser.Parser;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -57,7 +57,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Defensive stats
         /// </summary>
-        public class JsonDefensesAll: JsonDefenses
+        public class JsonDefensesAll : JsonDefenses
         {
             /// <summary>
             /// Number of dodges

@@ -1,7 +1,7 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             phases.AddRange(GetPhasesByInvul(log, 895, mainTarget, true, true));
-            string[] namesFreezie = new [] { "Phase 1", "Heal 1", "Phase 2", "Heal 2", "Phase 3", "Heal 3" };
+            string[] namesFreezie = new[] { "Phase 1", "Heal 1", "Phase 2", "Heal 2", "Phase 3", "Heal 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

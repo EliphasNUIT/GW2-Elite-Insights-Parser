@@ -1,9 +1,9 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -63,7 +63,7 @@ namespace GW2EIParser.Builders.JsonModels
             TotalDamage = list.Sum(x => x.Damage);
             Min = list.Min(x => x.Damage);
             Max = list.Max(x => x.Damage);
-            Flank = IndirectDamage ? 0: list.Count(x => x.IsFlanking);
+            Flank = IndirectDamage ? 0 : list.Count(x => x.IsFlanking);
             Crit = IndirectDamage ? 0 : list.Count(x => x.HasCrit);
             Glance = IndirectDamage ? 0 : list.Count(x => x.HasGlanced);
             ShieldDamage = list.Sum(x => x.ShieldDamage);

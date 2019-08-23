@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GW2EIParser.Exceptions;
 
 namespace GW2EIParser
 {
@@ -50,7 +50,7 @@ namespace GW2EIParser
             {
                 Console.WriteLine("Something terrible has happened");
             }
-            
+
         }
     }
 }

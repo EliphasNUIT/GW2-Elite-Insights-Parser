@@ -1,16 +1,15 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Models;
-using GW2EIParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Models;
+using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
     public class JsonPlayer : JsonMasterActor
-    {      
+    {
         /// <summary>
         /// Account name of the player
         /// </summary>

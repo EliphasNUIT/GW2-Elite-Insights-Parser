@@ -16,7 +16,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 result == ParseEnum.EvtcConditionResult.InvulByPlayerSkill2 ||
                 result == ParseEnum.EvtcConditionResult.InvulByPlayerSkill3;
             HasHit = result == ParseEnum.EvtcConditionResult.ExpectedToHit;
-            ShieldDamage = evtcItem.IsShields > 0 ?  evtcItem.Value : 0 ;
+            ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.Value : 0;
         }
 
         public override bool IsCondi(ParsedLog log)

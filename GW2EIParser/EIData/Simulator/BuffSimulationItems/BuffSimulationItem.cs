@@ -1,6 +1,6 @@
-﻿using GW2EIParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
@@ -20,9 +20,9 @@ namespace GW2EIParser.EIData
         {
             if (end > 0 && end - start > 0)
             {
-                long startoffset = Math.Max(Math.Min(Duration, start - Start),0);
+                long startoffset = Math.Max(Math.Min(Duration, start - Start), 0);
                 long itemEnd = Start + Duration;
-                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end),0);
+                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end), 0);
                 return Duration - startoffset - endOffset;
             }
             return 0;

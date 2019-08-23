@@ -1,21 +1,21 @@
-﻿using System;
-using NUnit.Framework;
-using GW2EIParser.Parser;
-using System.IO;
+﻿using GW2EIParser;
 using GW2EIParser.Exceptions;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
+using GW2EIParser.Parser;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using GW2EIParser;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace LuckParser.tst
 {
     [TestFixture]
     public class StabilityTestEvtc
     {
-        private bool Loop(List<string> failed, List<string> messages,  string file)
+        private bool Loop(List<string> failed, List<string> messages, string file)
         {
             try
             {

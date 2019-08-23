@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
                 List<AbstractDamageEvent> combatitems = combatData.GetDamageTakenData(a);
                 foreach (AbstractDamageEvent c in combatitems)
                 {
-                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log) )
+                    if (c is DirectDamageEvent && c.HasHit && Keep(c, log))
                     {
                         foreach (Player p in log.PlayerList)
                         {
@@ -44,7 +44,7 @@ namespace GW2EIParser.EIData
                             }
                         }
                     }
-                    
+
                 }
             }
         }

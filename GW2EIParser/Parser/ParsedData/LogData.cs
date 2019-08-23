@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -30,7 +30,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 SetPOV(povEvt.PoV);
             }
-            foreach(BuildEvent buildEvt in combatData.GetBuildEvents())
+            foreach (BuildEvent buildEvt in combatData.GetBuildEvents())
             {
                 GW2Version = buildEvt.Build;
             }
@@ -57,7 +57,7 @@ namespace GW2EIParser.Parser.ParsedData
                 SetLogStart(unixEnd - dur);
             }
         }
-        
+
         // Setters
         private void SetPOV(AgentItem pov)
         {
@@ -65,7 +65,8 @@ namespace GW2EIParser.Parser.ParsedData
             try
             {
                 PoVName = pov.Name.Substring(0, pov.Name.LastIndexOf('\0')).Split(':')[0].TrimEnd('\u0000');
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 PoVName = pov.Name;
             }

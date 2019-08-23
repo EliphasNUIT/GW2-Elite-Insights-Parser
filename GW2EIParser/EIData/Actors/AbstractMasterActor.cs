@@ -1,11 +1,9 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
-using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
@@ -44,7 +42,8 @@ namespace GW2EIParser.EIData
                     if (auxMinions.TryGetValue(id, out Minions values))
                     {
                         values.AddMinion(new Minion(agent));
-                    } else
+                    }
+                    else
                     {
                         auxMinions[id] = new Minions(new Minion(agent));
                     }

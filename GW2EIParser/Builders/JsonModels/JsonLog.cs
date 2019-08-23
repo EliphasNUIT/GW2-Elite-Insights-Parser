@@ -1,11 +1,10 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonMechanics;
 
 namespace GW2EIParser.Builders.JsonModels

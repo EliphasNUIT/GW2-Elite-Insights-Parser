@@ -1,14 +1,13 @@
-using GW2EIParser.Controllers;
-using GW2EIParser.EIData;
-using GW2EIParser.Exceptions;
-//recommend CTRL+M+O to collapse all
-using GW2EIParser.Logic;
-using GW2EIParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using GW2EIParser.Controllers;
+using GW2EIParser.EIData;
+//recommend CTRL+M+O to collapse all
+using GW2EIParser.Logic;
+using GW2EIParser.Parser.ParsedData;
 
 //recommend CTRL+M+O to collapse all
 namespace GW2EIParser.Parser

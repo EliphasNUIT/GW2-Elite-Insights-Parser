@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GW2EIParser.Logic
 {
@@ -13,7 +13,7 @@ namespace GW2EIParser.Logic
         // TODO - add CR icons and some mechanics
         public BrokenKing(ushort triggerID) : base(triggerID)
         {
-            MechanicList.AddRange( new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new HitOnPlayerMechanic(48066, "King's Wrath", new MechanicPlotlySetting("triangle-left","rgb(0,100,255)"), "Cone Hit","King's Wrath (Auto Attack Cone Part)", "Cone Auto Attack",0),
             new HitOnPlayerMechanic(47531, "Numbing Breach", new MechanicPlotlySetting("asterisk-open","rgb(0,100,255)"), "Cracks","Numbing Breach (Ice Cracks in the Ground)", "Cracks",0),
@@ -63,13 +63,13 @@ namespace GW2EIParser.Logic
                         int end = start + c.ActualDuration;
                         int range = 450;
                         int angle = 100;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start+1000);
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing == null)
                         {
                             continue;
                         }
-                            replay.Actors.Add(new PieDecoration(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieDecoration(true, 0, range, facing, angle, (start+1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieDecoration(true, 0, range, facing, angle, (start, end), "rgba(0,100,255,0.2)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieDecoration(true, 0, range, facing, angle, (start + 1900, end), "rgba(0,100,255,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -84,7 +84,8 @@ namespace GW2EIParser.Logic
             SetSuccessByDeath(combatData, fightData, playerAgents, true, TriggerID);
         }
 
-        public override string GetFightName() {
+        public override string GetFightName()
+        {
             return "Statue of Ice";
         }
     }

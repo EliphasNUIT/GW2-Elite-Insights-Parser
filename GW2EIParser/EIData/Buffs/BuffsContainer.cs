@@ -1,8 +1,8 @@
-﻿using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData

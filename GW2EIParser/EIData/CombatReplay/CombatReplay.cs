@@ -25,8 +25,8 @@ namespace GW2EIParser.EIData
         {
             PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
             PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
-            _start = Math.Max(start,1);
-            _end = Math.Max(_start,end);
+            _start = Math.Max(start, 1);
+            _end = Math.Max(_start, end);
         }
 
         private void PositionPolling(int rate, long fightDuration, bool forceInterpolate)
@@ -175,7 +175,7 @@ namespace GW2EIParser.EIData
                         activePositions[i] = null;
                     }
                 }
-            }        
+            }
             return activePositions;
         }
     }

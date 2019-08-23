@@ -4,7 +4,7 @@ using static GW2EIParser.Builders.JsonModels.JsonCombatReplayDecorations;
 namespace GW2EIParser.EIData
 {
     public abstract class GenericDecoration
-    {    
+    {
         public (int start, int end) Lifespan { get; }
         protected Connector ConnectedTo { get; set; }
 

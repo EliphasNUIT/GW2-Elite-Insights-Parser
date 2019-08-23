@@ -1,11 +1,11 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
@@ -17,7 +17,7 @@ namespace GW2EIParser.Logic
         public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
-            { 
+            {
             new EnemyCastStartMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,150)"), "Qadim CC","Qadim CC", "Qadim CC",0),
             new EnemyCastEndMechanic(51943, "Qadim CC", new MechanicPlotlySetting("diamond-tall","rgb(0,160,0)"), "Qadim CCed","Qadim Breakbar broken", "Qadim CCed",0, (ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(52265, "Riposte", new MechanicPlotlySetting("diamond-tall","rgb(255,0,0)"), "Qadim CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
@@ -443,7 +443,7 @@ namespace GW2EIParser.Logic
         private void AddPlatformsToCombatReplay(Target target, ParsedLog log, CombatReplay replay)
         {
             // We later use the target to find out the timing of the last move
-            Debug.Assert(target.ID == (int) ParseEnum.EvtcTargetIDS.Qadim);
+            Debug.Assert(target.ID == (int)ParseEnum.EvtcTargetIDS.Qadim);
 
             // These values were all calculated by hand.
             // It would be way nicer to calculate them here, but we don't have a nice vector library
@@ -524,11 +524,11 @@ namespace GW2EIParser.Logic
             // If phase data is not calculated, only the first layout is used
             var phases = log.FightData.GetPhases(log);
 
-            int qadimPhase1Time = (int) (phases.Count > 1 ? phases[1].End : int.MaxValue);
-            int destroyerPhaseTime = (int) (phases.Count > 2 ? phases[2].End : int.MaxValue);
-            int qadimPhase2Time = (int) (phases.Count > 3 ? phases[3].End : int.MaxValue);
-            int wyvernPhaseTime = (int) (phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
-            int jumpingPuzzleTime = (int) (phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
+            int qadimPhase1Time = (int)(phases.Count > 1 ? phases[1].End : int.MaxValue);
+            int destroyerPhaseTime = (int)(phases.Count > 2 ? phases[2].End : int.MaxValue);
+            int qadimPhase2Time = (int)(phases.Count > 3 ? phases[3].End : int.MaxValue);
+            int wyvernPhaseTime = (int)(phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
+            int jumpingPuzzleTime = (int)(phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
             int finalPhaseTime = int.MaxValue;
             if (phases.Count > 6)
             {
@@ -554,7 +554,7 @@ namespace GW2EIParser.Logic
 
             // The following monstrosity is needed to avoid the final platform rotating all the way back
             int finalPlatformHalfRotationCount =
-                (int) Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
+                (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI,
                     MidpointRounding.AwayFromZero);
             double finalPlatformRotation = Math.PI * finalPlatformHalfRotationCount;
 

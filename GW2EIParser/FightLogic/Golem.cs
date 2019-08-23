@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GW2EIParser.Logic
 {
@@ -12,7 +12,7 @@ namespace GW2EIParser.Logic
     {
         public Golem(ushort id) : base(id)
         {
-            Mode = ParseMode.Golem;  
+            Mode = ParseMode.Golem;
             switch (id)
             {
                 case 16202:

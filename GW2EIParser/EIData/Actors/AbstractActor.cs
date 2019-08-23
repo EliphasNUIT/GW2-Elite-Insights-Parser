@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.Buff;
 
 namespace GW2EIParser.EIData
 {
@@ -29,7 +27,7 @@ namespace GW2EIParser.EIData
 
         // Cast logs
         public abstract List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end);
-    
+
         // Utilities
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {

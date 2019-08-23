@@ -22,7 +22,7 @@ namespace GW2EIParser.EIData
             }
 
             public int Compare(BoonStackItem x, BoonStackItem y)
-            {             
+            {
                 return -GetHealing(x).CompareTo(GetHealing(y));
             }
         }
@@ -30,7 +30,7 @@ namespace GW2EIParser.EIData
         public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
             CompareHealing comparator = new CompareHealing(log);
-            stacks.Sort(comparator.Compare);        
+            stacks.Sort(comparator.Compare);
         }
     }
 }

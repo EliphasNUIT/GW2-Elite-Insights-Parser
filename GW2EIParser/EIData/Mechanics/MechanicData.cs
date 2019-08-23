@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -16,7 +16,7 @@ namespace GW2EIParser.EIData
 
         public MechanicData(List<Mechanic> fightMechanics)
         {
-            foreach(Mechanic m in fightMechanics)
+            foreach (Mechanic m in fightMechanics)
             {
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
@@ -78,7 +78,8 @@ namespace GW2EIParser.EIData
                         if (pair.Key.IsEnemyMechanic)
                         {
                             toAddEnemy.Add(pair.Key);
-                        } else if (pair.Key.ShowOnTable)
+                        }
+                        else if (pair.Key.ShowOnTable)
                         {
                             toAddPlayer.Add(pair.Key);
                         }
@@ -87,7 +88,7 @@ namespace GW2EIParser.EIData
                 // ready enemy list
                 List<DummyActor> toAdd = new List<DummyActor>();
                 _enemyList.Add(toAdd);
-                foreach(Mechanic m in _mechanicLogs.Keys.Where(x=> x.IsEnemyMechanic))
+                foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
                 {
                     foreach (DummyActor p in _mechanicLogs[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Actor).Distinct())
                     {
@@ -125,7 +126,7 @@ namespace GW2EIParser.EIData
         {
             ProcessMechanics(log);
             Mechanic mech = _mechanicLogs.Keys.FirstOrDefault(x => x.SkillId == id);
-            if ( mech != null)
+            if (mech != null)
             {
                 return _mechanicLogs[mech];
             }

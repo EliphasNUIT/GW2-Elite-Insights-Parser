@@ -1,7 +1,7 @@
-﻿using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Logic
 {
@@ -41,7 +41,7 @@ namespace GW2EIParser.Logic
             }
             else
             {
-                switch(GenericFallBackMethod)
+                switch (GenericFallBackMethod)
                 {
                     case FallBackMethod.Death:
                         SetSuccessByDeath(combatData, fightData, playerAgents, true, GetSuccessCheckIds());

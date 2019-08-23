@@ -1,7 +1,7 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using System.Collections.Generic;
 using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic

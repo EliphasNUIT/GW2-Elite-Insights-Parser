@@ -1,6 +1,6 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
@@ -13,7 +13,7 @@ namespace GW2EIParser.EIData
 
         public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
-            Dictionary<AgentItem, BuffDistributionItem > distrib = GetDistrib(distribs, boonid);
+            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
             if (distrib.TryGetValue(agent, out var toModify))
             {

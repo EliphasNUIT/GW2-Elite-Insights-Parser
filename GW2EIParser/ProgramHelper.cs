@@ -1,14 +1,13 @@
-﻿using GW2EIParser.Exceptions;
-using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
-using GW2EIParser.Controllers;
 using System.IO;
+using System.IO.Compression;
 using System.Threading;
 using GW2EIParser.Builders;
-using System.IO.Compression;
+using GW2EIParser.Controllers;
+using GW2EIParser.Exceptions;
+using GW2EIParser.Parser;
 
 namespace GW2EIParser
 {
@@ -212,7 +211,8 @@ namespace GW2EIParser
                 if (Properties.Settings.Default.CompressRaw)
                 {
                     str = new MemoryStream();
-                } else
+                }
+                else
                 {
                     str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
                 }

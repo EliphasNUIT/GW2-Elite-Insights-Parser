@@ -1,7 +1,7 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser;
 
 namespace GW2EIParser.Builders.JsonModels
 {

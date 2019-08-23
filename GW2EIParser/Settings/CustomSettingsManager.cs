@@ -94,7 +94,8 @@ namespace GW2EIParser
             else if (type == typeof(String))
             {
                 Properties.Settings.Default[name] = value;
-            } else
+            }
+            else
             {
                 Console.WriteLine("Warning: Setting \"" + name + "\" of type \"" + type.Name + "\" cannot be processed.");
             }

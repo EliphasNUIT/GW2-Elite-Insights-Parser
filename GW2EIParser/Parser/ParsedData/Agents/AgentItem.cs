@@ -1,8 +1,8 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -22,10 +22,10 @@ namespace GW2EIParser.Parser.ParsedData
         public string Name { get; }
         public string Prof { get; }
         public uint Toughness { get; }
-        public uint Healing { get;  }
-        public uint Condition { get;  }
-        public uint Concentration { get;  }
-        public uint HitboxWidth { get;  }
+        public uint Healing { get; }
+        public uint Condition { get; }
+        public uint Concentration { get; }
+        public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
         // Constructors
@@ -53,7 +53,8 @@ namespace GW2EIParser.Parser.ParsedData
                         Type = AgentType.EnemyPlayer;
                     }
                 }
-            } catch (Exception)
+            }
+            catch (Exception)
             {
 
             }

@@ -1,7 +1,7 @@
-﻿using GW2EIParser.EIData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.EIData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -37,7 +37,7 @@ namespace GW2EIParser.Parser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst,_boonDataBySrc, _boonData, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonDataBySrc, _boonData, fightData.FightStartLogTime, skillData));
             HashSet<long> buffIDsToSort = new HashSet<long>();
             HashSet<AgentItem> dstAgentsToSort = new HashSet<AgentItem>();
             HashSet<AgentItem> srcAgentsToSort = new HashSet<AgentItem>();
@@ -54,7 +54,7 @@ namespace GW2EIParser.Parser.ParsedData
                         bf
                     };
                 }
-                dstAgentsToSort.Add(bf.To); 
+                dstAgentsToSort.Add(bf.To);
                 if (_boonDataBySrc.TryGetValue(bf.By, out var list3))
                 {
                     list3.Add(bf);
@@ -236,7 +236,7 @@ namespace GW2EIParser.Parser.ParsedData
             buffCombatEvents.AddRange(allCombatItems.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.BuffInitial));
             buffCombatEvents.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             List<AbstractBuffEvent> buffEvents = CombatEventFactory.CreateBuffEvents(buffCombatEvents, agentData, skillData, fightData.FightStartLogTime);
-            _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList()); 
+            _boonDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             _boonDataBySrc = buffEvents.Where(x => x.By != null).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
             _boonData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             // damage events

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Setting;
 
@@ -191,7 +191,8 @@ namespace GW2EIParser
                         row.State = RowState.Ready;
                         row.ButtonText = "Parse";
                     }
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Something terrible has happened");
                 }
@@ -279,7 +280,7 @@ namespace GW2EIParser
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
-        {          
+        {
             _settingsForm.Show();
             btnSettings.Enabled = false;
         }

@@ -1,5 +1,5 @@
-﻿using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -89,7 +89,7 @@ namespace GW2EIParser.EIData
                 pair.Value.Sort(CompareApplicationType);
             }
         }
-        
+
     }
 
 }

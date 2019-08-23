@@ -1,10 +1,10 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
                             (-27648, -9216, 27648, 12288),
                             (11774, 4480, 14078, 5376));
         }
-        
+
         public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
@@ -93,8 +93,8 @@ namespace GW2EIParser.Logic
                         int thirdRadius = 1000;
                         int fourthRadius = 1300;
                         replay.Actors.Add(new DoughnutDecoration(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2*duration, start + preCastTime + 3*duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5*duration, start + preCastTime + 6*duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -118,7 +118,7 @@ namespace GW2EIParser.Logic
         {
             return combatData.GetSkills().Contains(38098) ? 1 : 0;
         }
-        
+
         public override string GetFightName()
         {
             return "Cairn";

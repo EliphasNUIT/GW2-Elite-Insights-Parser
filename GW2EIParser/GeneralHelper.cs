@@ -1,14 +1,12 @@
-﻿using GW2EIParser.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
-using GW2EIParser.Controllers;
-using GW2EIParser.Controllers.GW2API;
-using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.EIData;
+using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser
 {
@@ -309,7 +307,7 @@ namespace GW2EIParser
                     return "https://i.imgur.com/vHka0QN.png";
                 case ConjuredShield:
                     return "https://i.imgur.com/wUiI19S.png";
-                case GreaterMagmaElemental1:                  
+                case GreaterMagmaElemental1:
                 case GreaterMagmaElemental2:
                     return "https://i.imgur.com/sr146T6.png";
                 case LavaElemental1:
@@ -342,7 +340,7 @@ namespace GW2EIParser
                 case HandOfEruption:
                     return "https://i.imgur.com/reGQHhr.png";
                 case VoltaicWisp:
-                    return "https://i.imgur.com/C1mvNGZ.png"; 
+                    return "https://i.imgur.com/C1mvNGZ.png";
                 case ParalyzingWisp:
                     return "https://i.imgur.com/YBl8Pqo.png";
                 case Pylon2:

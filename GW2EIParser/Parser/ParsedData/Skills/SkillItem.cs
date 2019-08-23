@@ -1,8 +1,8 @@
-﻿using GW2EIParser.Controllers;
-using GW2EIParser.Controllers.GW2API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Controllers;
+using GW2EIParser.Controllers.GW2API;
 
 namespace GW2EIParser.Parser.ParsedData
 {
@@ -144,7 +144,7 @@ namespace GW2EIParser.Parser.ParsedData
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
             int id = swapped == _firstLandSet ? 0 : swapped == _secondLandSet ? 2 : swapped == _firstWaterSet ? 4 : swapped == _secondWaterSet ? 6 : -1;
-            if (_weaponDescriptor == null || id == - 1 || !swapCheck)
+            if (_weaponDescriptor == null || id == -1 || !swapCheck)
             {
                 return false;
             }

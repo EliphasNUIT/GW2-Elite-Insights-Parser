@@ -9,7 +9,7 @@ namespace GW2EIParser.EIData
 
         public Dictionary<ModifierSource, List<DamageModifier>> DamageModifiersPerSource { get; }
 
-        public Dictionary<string, DamageModifier> DamageModifiersByName { get; } 
+        public Dictionary<string, DamageModifier> DamageModifiersByName { get; }
 
         public DamageModifiersContainer(ulong build)
         {

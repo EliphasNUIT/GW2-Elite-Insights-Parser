@@ -1,6 +1,6 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Linq;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using System.Linq;
 
 namespace GW2EIParser.EIData
 {
@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
             if (BoonStack.Count > 0 && timePassed > 0)
             {
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
-                   var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
+                var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
                     var last = GenerationSimulation.Last();

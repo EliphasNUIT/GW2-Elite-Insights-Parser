@@ -4,17 +4,11 @@ namespace GW2EIParser.Parser.ParsedData
 {
     public class SkillData
     {
-        public ICollection<SkillItem> Values
-        {
-            get
-            {
-                return _skills.Values;
-            }
-        }
+        public ICollection<SkillItem> Values => _skills.Values;
         // Fields
         private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
-        
-        
+
+
         // Public Methods
 
         public SkillItem Get(long ID)

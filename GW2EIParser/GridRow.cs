@@ -11,7 +11,7 @@ namespace GW2EIParser
         Pending = 4,
         ClearOnComplete = 5
     }
-    
+
 
     public class GridRow
     {

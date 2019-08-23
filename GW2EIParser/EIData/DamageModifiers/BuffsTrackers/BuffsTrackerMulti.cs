@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
     public class BuffsTrackerMulti : BuffsTracker
     {
         private readonly HashSet<long> _ids;
-        
+
         public BuffsTrackerMulti(List<long> buffsIds)
         {
             _ids = new HashSet<long>(buffsIds);

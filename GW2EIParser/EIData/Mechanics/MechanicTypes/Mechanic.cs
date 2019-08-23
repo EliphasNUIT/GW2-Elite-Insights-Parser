@@ -1,6 +1,6 @@
-﻿using GW2EIParser.Parser;
+﻿using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
