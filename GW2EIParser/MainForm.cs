@@ -36,11 +36,6 @@ namespace GW2EIParser
             AddLogFiles(filesArray);
         }
 
-        ~MainForm()
-        {
-            _settingsForm.Dispose();
-        }
-
         /// <summary>
         /// Adds log files to the bound data source for display in the interface
         /// </summary>

@@ -14,7 +14,7 @@ namespace GW2EIParser.Logic
         public enum ParseMode { Raid, Fractal, Golem, WvW, Unknown };
 
         private CombatReplayMap _map;
-        protected readonly List<Mechanic> MechanicList; //Resurrects (start), Resurrect
+        protected List<Mechanic> MechanicList { get; }
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public string Extension { get; protected set; }
         public string IconUrl { get; protected set; }
@@ -22,7 +22,7 @@ namespace GW2EIParser.Logic
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Target> Targets { get; } = new List<Target>();
-        protected readonly ushort TriggerID;
+        protected ushort TriggerID { get; }
 
         protected FightLogic(ushort triggerID)
         {
@@ -76,7 +76,7 @@ namespace GW2EIParser.Logic
             return target.Character;
         }
 
-        private void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
             if (agents.Count > 1)
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
                     Targets.Add(new Target(agentItem));
                 }
             }
-            List<ParseEnum.TrashIDS> ids2 = GetTrashMobsIDS();
+            List<ParseEnum.EvtcTrashIDS> ids2 = GetTrashMobsIDS();
             List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
@@ -137,7 +137,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        protected List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
+        protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, Target mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = new List<PhaseData>();
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected List<PhaseData> GetInitialPhase(ParsedLog log)
+        protected static List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightDuration;
@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
             return new List<AbstractBuffEvent>();
         }
 
-        protected void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
+        protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
         {
             List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
@@ -248,9 +248,9 @@ namespace GW2EIParser.Logic
         {
         }
 
-        protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected virtual List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ParseEnum.EvtcTrashIDS>();
         }
 
         public virtual int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
@@ -304,7 +304,7 @@ namespace GW2EIParser.Logic
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
-        protected void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
+        protected static void SetSuccessByCombatExit(List<Target> targets, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             if (targets.Count == 0)
             {

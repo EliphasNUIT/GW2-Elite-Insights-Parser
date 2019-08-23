@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.EIData;
@@ -54,7 +54,7 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        private void ComputeFightPhases(Target mainTarget, List<PhaseData> phases, ParsedLog log, List<AbstractCastEvent> castLogs, long fightDuration, long start)
+        private void ComputeFightPhases(List<PhaseData> phases, List<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
             AbstractCastEvent shield = castLogs.Find(x => x.SkillId == 47396);
             if (shield != null)
@@ -112,7 +112,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -129,7 +129,7 @@ namespace GW2EIParser.Logic
             if (dhuumCast.Count > 0)
             {
                 namesDh = new[] { "Main Fight", "Ritual" };
-                ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, 0);
+                ComputeFightPhases(phases, castLogs, fightDuration, 0);
                 _isBugged = true;
             }
             else
@@ -139,7 +139,7 @@ namespace GW2EIParser.Logic
                 {
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end));
-                    ComputeFightPhases(mainTarget, phases, log, castLogs, fightDuration, end + 1);
+                    ComputeFightPhases(phases, castLogs, fightDuration, end + 1);
                 }
                 else
                 {
@@ -166,9 +166,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 Echo,
                 Enforcer,
@@ -185,7 +185,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Dhuum:
+                case (ushort)ParseEnum.EvtcTargetIDS.Dhuum:
                     List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -327,7 +327,7 @@ namespace GW2EIParser.Logic
         {
             // spirit transform
             List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -412,7 +412,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Dhuum);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

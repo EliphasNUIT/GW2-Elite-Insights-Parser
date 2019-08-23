@@ -5,7 +5,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.Narella
+                (ushort)ParseEnum.EvtcTargetIDS.Narella
             };
         }
 
@@ -37,9 +37,9 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
+                (ushort)ParseEnum.EvtcTargetIDS.Berg,
+                (ushort)ParseEnum.EvtcTargetIDS.Zane,
+                (ushort)ParseEnum.EvtcTargetIDS.Narella
             };
         }
 
@@ -70,7 +70,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
+        public static void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
@@ -93,26 +93,26 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.Berg,
-                (ushort)ParseEnum.TargetIDS.Zane,
-                (ushort)ParseEnum.TargetIDS.Narella
+                (ushort)ParseEnum.EvtcTargetIDS.Berg,
+                (ushort)ParseEnum.EvtcTargetIDS.Zane,
+                (ushort)ParseEnum.EvtcTargetIDS.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target berg = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Berg);
+            Target berg = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            Target zane = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Zane);
+            Target zane = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane");
             }
-            Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Narella);
+            Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella");
@@ -134,9 +134,9 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 BanditSaboteur,
                 Warg,
@@ -166,9 +166,9 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Berg:
+                case (ushort)ParseEnum.EvtcTargetIDS.Berg:
                     break;
-                case (ushort)ParseEnum.TargetIDS.Zane:
+                case (ushort)ParseEnum.EvtcTargetIDS.Zane:
                     List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -190,7 +190,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (ushort)ParseEnum.TargetIDS.Narella:
+                case (ushort)ParseEnum.EvtcTargetIDS.Narella:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");

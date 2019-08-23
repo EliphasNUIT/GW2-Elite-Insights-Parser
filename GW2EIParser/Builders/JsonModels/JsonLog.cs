@@ -178,7 +178,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Upload links to dps.reports/raidar
         /// </summary>
-        public string[] UploadLinks { get; set; }
+        public List<string> UploadLinks { get; set; }
         /// <summary>
         /// Dictionary of skills' description, the key is in "'s' + id" format
         /// </summary>
@@ -235,9 +235,9 @@ namespace GW2EIParser.Builders.JsonModels
                 Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs));
             }
             //
-            if (uploadLink.FirstOrDefault(x => x != "") != null)
+            if (uploadLink.FirstOrDefault(x => x.Length > 0) != null)
             {
-                UploadLinks = uploadLink;
+                UploadLinks = uploadLink.ToList();
             }
             if (Properties.Settings.Default.ParseCombatReplay && log.CanCombatReplay)
             {

@@ -17,11 +17,11 @@ namespace GW2EIParser.Builders.JsonModels
         public List<JsonAbstractMasterActorCombatReplay> Mobs { get; set; } = new List<JsonAbstractMasterActorCombatReplay>();
         public List<JsonAbstractMasterActorCombatReplay> Npcs { get; set; } = new List<JsonAbstractMasterActorCombatReplay>();
         public List<JsonCombatReplayGenericDecoration> Decorations { get; set; } = new List<JsonCombatReplayGenericDecoration>();
-        public int[] Sizes;
-        public int MaxTime;
-        public float Inch;
-        public int PollingRate;
-        public List<JsonCombatReplayMap> Maps;
+        public List<int> Sizes { get; set; }
+        public int MaxTime { get; set; }
+        public float Inch { get; set; }
+        public int PollingRate { get; set; }
+        public List<JsonCombatReplayMap> Maps { get; set; }
 
         public class JsonCombatReplayMap
         {
@@ -44,7 +44,7 @@ namespace GW2EIParser.Builders.JsonModels
             CombatReplayMap map = log.FightData.Logic.GetCombatMap(log);
             Maps = map.Maps.Select(x => new JsonCombatReplayMap(x)).ToList();
             (int width, int height) = map.GetPixelMapSize();
-            Sizes = new int[2] { width, height };
+            Sizes = new List<int> { width, height };
             Inch = map.GetInch();
             MaxTime = log.PlayerList.First().GetCombatReplayTimes(log).Last();
             GetCombatReplayActors(log, map);

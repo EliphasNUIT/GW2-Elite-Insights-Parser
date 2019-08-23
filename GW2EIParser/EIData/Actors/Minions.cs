@@ -8,7 +8,7 @@ namespace GW2EIParser.EIData
 {
     public class Minions : AbstractActor
     {
-        public readonly int MinionID;
+        public int MinionID { get; }
         public List<Minion> MinionList { get; }
         private List<AbstractDamageEvent> _damageLogs;
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageLogsByDst;

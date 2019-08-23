@@ -28,7 +28,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(BuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.BuffRemove.All);
+            simulator.Remove(RemovedDuration, Time, ParseEnum.EvtcBuffRemove.All);
         }
     }
 }

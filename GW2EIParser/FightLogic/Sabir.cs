@@ -5,7 +5,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -30,9 +30,9 @@ namespace GW2EIParser.Logic
             IconUrl = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>()
+            return new List<ParseEnum.EvtcTrashIDS>()
             {
                 ParalyzingWisp,
                 VoltaicWisp,
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -127,7 +127,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Sabir);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

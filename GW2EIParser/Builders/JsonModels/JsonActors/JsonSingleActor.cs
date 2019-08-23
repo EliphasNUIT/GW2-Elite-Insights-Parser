@@ -18,18 +18,18 @@ namespace GW2EIParser.Builders.JsonModels
         /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates { get; set; }
+        public List<int[]> ConditionsStates { get; }
         /// <summary>
         /// Array of int[2] that represents the number of boons status \n
         /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get; set; }
+        public List<int[]> BoonsStates { get; }
         /// <summary>
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public List<JsonRotation> Rotation { get; set; }
+        public List<JsonRotation> Rotation { get; }
         /// <summary>
         /// Damage distribution data
         /// </summary>

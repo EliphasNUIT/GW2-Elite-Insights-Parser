@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace GW2EIParser
 {
-    static class Program
+    internal static class Program
     {
         [DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
@@ -17,7 +17,7 @@ namespace GW2EIParser
         [DllImport("kernel32.dll")]
         private static extern FileType GetFileType(IntPtr handle);
 
-        private const int AttachParentProcess = -1;
+        private const int _attachParentProcess = -1;
 
         private enum StandardHandle
         {
@@ -96,15 +96,15 @@ namespace GW2EIParser
                      */
                     if (IsRedirected(GetStdHandle(StandardHandle.Output)))
                     {
-                        var dummy = Console.Out;
+                        _ = Console.Out;
                     }
 
-                    if (!AttachConsole(AttachParentProcess))
+                    if (!AttachConsole(_attachParentProcess))
                     {
                         AllocConsole();
                     }
 
-                    AttachConsole(AttachParentProcess);
+                    AttachConsole(_attachParentProcess);
                 }
 
                 if (args.Contains("-c"))
@@ -143,7 +143,7 @@ namespace GW2EIParser
                 if (logFiles.Count > 0)
                 {
                     // Use the application through console 
-                    new ConsoleProgram(logFiles);
+                    _ = new ConsoleProgram(logFiles);
                     return 0;
                 }
             }

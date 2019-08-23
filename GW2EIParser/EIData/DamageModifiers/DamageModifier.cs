@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
         private readonly DamageType _srcType;
         private readonly DamageSource _dmgSrc;
         protected double GainPerStack { get; }
-        protected readonly GainComputer GainComputer;
+        protected GainComputer GainComputer { get; }
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
         public delegate bool DamageLogChecker(AbstractDamageEvent dl);
-        protected DamageLogChecker DLChecker;
+        protected DamageLogChecker DLChecker { get; set; }
 
         protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
         {

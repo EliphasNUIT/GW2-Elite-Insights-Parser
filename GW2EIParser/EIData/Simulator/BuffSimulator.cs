@@ -73,11 +73,11 @@ namespace GW2EIParser.EIData
         }
 
         // Fields
-        protected readonly List<BoonStackItem> BoonStack;
-        public readonly List<BuffSimulationItem> GenerationSimulation = new List<BuffSimulationItem>();
-        public readonly List<BuffSimulationItemOverstack> OverstackSimulationResult = new List<BuffSimulationItemOverstack>();
-        public readonly List<BuffSimulationItemWasted> WasteSimulationResult = new List<BuffSimulationItemWasted>();
-        protected readonly int Capacity;
+        protected List<BoonStackItem> BoonStack { get; }
+        public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
+        public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
+        public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
+        protected int Capacity { get; }
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
@@ -184,7 +184,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public void Remove(AgentItem provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        public void Remove(long boonDuration, long start, ParseEnum.EvtcBuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {
@@ -196,7 +196,7 @@ namespace GW2EIParser.EIData
             }
             switch (removeType)
             {
-                case ParseEnum.BuffRemove.All:
+                case ParseEnum.EvtcBuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
@@ -210,7 +210,7 @@ namespace GW2EIParser.EIData
                     }
                     BoonStack.Clear();
                     break;
-                case ParseEnum.BuffRemove.Single:
+                case ParseEnum.EvtcBuffRemove.Single:
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];

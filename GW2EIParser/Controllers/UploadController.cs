@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace GW2EIParser.Controllers
 {
-    public class UploadController
+    public static class UploadController
     {
-        private string  UploadDPSReportsEI(FileInfo fi)
+        private static string UploadDPSReportsEI(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=ei");
         }
-        private string UploadDPSReportsRH(FileInfo fi)
+        private static string UploadDPSReportsRH(FileInfo fi)
         {
             return UploadToDPSR(fi, "https://dps.report/uploadContent?generator=rh");
            
         }
-        private string UploadRaidar(FileInfo fi)
+        private static string UploadRaidar(FileInfo fi)
         {
             //string fileName = fi.Name;
             //byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -65,12 +65,12 @@ namespace GW2EIParser.Controllers
         {
             public string Permalink { get; set; }
         }
-        private string UploadToDPSR(FileInfo fi,string URI)
+        private static string UploadToDPSR(FileInfo fi,string URI)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
             Uri webService = new Uri(@URI);
-            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
+            using HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
             requestMessage.Headers.ExpectContinue = false;
 
             MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
@@ -111,10 +111,14 @@ namespace GW2EIParser.Controllers
                 return ex.Message;
                 // Console.WriteLine(ex.Message);
             }
+            finally
+            {
+                httpClient.Dispose();
+            }
             return "";
         }
 
-        public string[] UploadOperation(GridRow row, FileInfo fInfo)
+        public static string[] UploadOperation(GridRow row, FileInfo fInfo)
         {
             //Upload Process
             Task<string> DREITask = null;

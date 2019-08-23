@@ -25,7 +25,7 @@ namespace GW2EIParser.Parser
         public BuffsContainer Buffs { get; }
         public bool CanCombatReplay => CombatData.HasMovementData;
 
-        public readonly MechanicData MechanicData;
+        public MechanicData MechanicData { get; }
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData, 
                 List<CombatItem> combatItems, List<Player> playerList)

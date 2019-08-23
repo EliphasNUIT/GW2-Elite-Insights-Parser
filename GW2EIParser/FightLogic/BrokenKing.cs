@@ -55,7 +55,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.BrokenKing:
+                case (ushort)ParseEnum.EvtcTargetIDS.BrokenKing:
                     List<AbstractCastEvent> Cone = cls.Where(x => x.SkillId == 48066).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {

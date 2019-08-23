@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace GW2EIParser.EIData
 {
-    public class BuffMap : Dictionary<long, List<AbstractBuffEvent>>
+    public class BuffDictionary : Dictionary<long, List<AbstractBuffEvent>>
     {
         // Constructors
-        public BuffMap()
+        public BuffDictionary()
         {
         }
-        public BuffMap(Buff boon)
+        public BuffDictionary(Buff boon)
         {
             this[boon.ID] = new List<AbstractBuffEvent>();
         }
 
-        public BuffMap(IEnumerable<Buff> boons)
+        public BuffDictionary(IEnumerable<Buff> boons)
         {
             foreach (Buff boon in boons)
             {

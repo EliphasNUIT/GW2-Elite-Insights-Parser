@@ -47,8 +47,8 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
+                (ushort)ParseEnum.EvtcTargetIDS.Kenut,
+                (ushort)ParseEnum.EvtcTargetIDS.Nikare
             };
         }
 
@@ -108,8 +108,8 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.Kenut,
-                (ushort)ParseEnum.TargetIDS.Nikare
+                (ushort)ParseEnum.EvtcTargetIDS.Kenut,
+                (ushort)ParseEnum.EvtcTargetIDS.Nikare
             };
         }
 
@@ -188,13 +188,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            Target nikare = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Nikare);
             if (nikare == null)
             {
                 throw new InvalidOperationException("Nikare not found");
             }
             phases[0].Targets.Add(nikare);
-            Target kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Kenut);
+            Target kenut = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Kenut);
             if (kenut != null)
             {
                 phases[0].Targets.Add(kenut);
@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.Nikare:
+                case (ushort)ParseEnum.EvtcTargetIDS.Nikare:
                     //CC
                     List<AbstractCastEvent> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
@@ -239,7 +239,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)ParseEnum.TargetIDS.Kenut:
+                case (ushort)ParseEnum.EvtcTargetIDS.Kenut:
                     //CC
                     List<AbstractCastEvent> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
@@ -341,7 +341,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Nikare);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Nikare);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

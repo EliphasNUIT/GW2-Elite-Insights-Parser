@@ -1,7 +1,7 @@
 ﻿using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using System.Collections.Generic;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -41,9 +41,9 @@ namespace GW2EIParser.Logic
                             (11804, 4414, 12444, 5054));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 GreenKnight,
                 RedKnight,

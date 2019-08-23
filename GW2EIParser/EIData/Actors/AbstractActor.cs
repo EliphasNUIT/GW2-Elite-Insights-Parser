@@ -11,12 +11,12 @@ namespace GW2EIParser.EIData
     {
         public bool IsFakeActor { get; protected set; }
         // Damage
-        protected List<AbstractDamageEvent> DamageLogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst;
-        protected List<AbstractDamageEvent> DamageTakenlogs;
-        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc;
+        protected List<AbstractDamageEvent> DamageLogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageLogsByDst { get; set; }
+        protected List<AbstractDamageEvent> DamageTakenlogs { get; set; }
+        protected Dictionary<AgentItem, List<AbstractDamageEvent>> DamageTakenLogsBySrc { get; set; }
         // Cast
-        protected List<AbstractCastEvent> CastLogs;
+        protected List<AbstractCastEvent> CastLogs { get; set; }
 
         protected AbstractActor(AgentItem agent) : base(agent)
         {

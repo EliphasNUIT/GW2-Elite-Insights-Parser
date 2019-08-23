@@ -10,7 +10,7 @@ using System.Text;
 
 namespace LuckParser.tst
 {
-    public class TestHelper
+    public static class TestHelper
     {
 
         public static ParsedLog ParseLog(string location)

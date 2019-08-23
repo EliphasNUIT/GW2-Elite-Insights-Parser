@@ -4,7 +4,7 @@
     {
         public long Time { get; protected set; }
 #if DEBUG
-        protected CombatItem OriginalCombatEvent;
+        protected CombatItem OriginalCombatEvent { get; set; }
 #endif
 
         protected AbstractCombatEvent(long logTime, long offset)

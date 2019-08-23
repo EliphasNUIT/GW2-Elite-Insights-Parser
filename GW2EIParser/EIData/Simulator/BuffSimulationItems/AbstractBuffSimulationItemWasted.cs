@@ -4,9 +4,9 @@ namespace GW2EIParser.EIData
 {
     public abstract class AbstractBuffSimulationItemWasted : AbstractBuffSimulationItem
     {
-        protected readonly AgentItem Src;
+        protected AgentItem Src { get; }
         private readonly long _waste;
-        protected readonly long Time;
+        protected long Time { get;  }
 
         protected AbstractBuffSimulationItemWasted(AgentItem src, long waste, long time)
         {

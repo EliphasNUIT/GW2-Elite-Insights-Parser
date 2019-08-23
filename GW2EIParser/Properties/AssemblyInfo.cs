@@ -13,4 +13,3 @@ using System.Runtime.InteropServices;
 #else
 [assembly: AssemblyVersion("3.0.*")]
 #endif
-//[assembly: AssemblyFileVersion("1.8.10.34877")]

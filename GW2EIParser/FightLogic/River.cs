@@ -5,7 +5,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -33,9 +33,9 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 Enervator,
                 HollowedBomber,
@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+                Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -84,14 +84,14 @@ namespace GW2EIParser.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
                 if (firstMovement != null)
                 {
                     // update start
                     riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
+                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.EvtcStateChange.Position || c.IsStateChange == ParseEnum.EvtcStateChange.Rotation))
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAwareLogTime);
@@ -119,7 +119,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
         {
-            Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Desmina);
+            Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

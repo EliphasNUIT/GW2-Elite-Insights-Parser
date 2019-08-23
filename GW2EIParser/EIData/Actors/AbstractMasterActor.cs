@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         // Minions
         private Dictionary<string, Minions> _minions;
         // Replay
-        protected CombatReplay CombatReplay;
+        protected CombatReplay CombatReplay { get; set; }
 
         protected AbstractMasterActor(AgentItem agent) : base(agent)
         {

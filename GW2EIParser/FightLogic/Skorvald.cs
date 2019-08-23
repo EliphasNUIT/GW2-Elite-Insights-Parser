@@ -3,7 +3,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Skorvald);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
@@ -57,9 +57,9 @@ namespace GW2EIParser.Logic
             return (target.GetHealth(combatData) == 5551340) ? 1 : 0;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 FluxAnomaly4,
                 FluxAnomaly3,

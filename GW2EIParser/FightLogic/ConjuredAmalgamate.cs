@@ -5,7 +5,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -44,15 +44,15 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate,
-                (ushort)ParseEnum.TargetIDS.CARightArm,
-                (ushort)ParseEnum.TargetIDS.CALeftArm
+                (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.EvtcTargetIDS.CARightArm,
+                (ushort)ParseEnum.EvtcTargetIDS.CALeftArm
             };
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>()
+            return new List<ParseEnum.EvtcTrashIDS>()
             {
                 ConjuredGreatsword,
                 ConjuredShield
@@ -65,9 +65,9 @@ namespace GW2EIParser.Logic
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
             {
-                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.StateChange.None && c.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                if (c.SkillID == 52370 && c.IsStateChange == ParseEnum.EvtcStateChange.None && c.IsBuffRemove == ParseEnum.EvtcBuffRemove.None &&
                                         ((c.IsBuff == 1 && c.BuffDmg >= 0 && c.Value == 0) ||
-                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.IFF.Foe)
+                                        (c.IsBuff == 0 && c.Value >= 0)) && c.DstInstid != 0 && c.IFF == ParseEnum.EvtcIFF.Foe)
                 {
                     c.OverrideSrcValues(sword.Agent, sword.InstID, 0);
                 }
@@ -78,9 +78,9 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate,
-                (ushort)ParseEnum.TargetIDS.CALeftArm,
-                (ushort)ParseEnum.TargetIDS.CARightArm
+                (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.EvtcTargetIDS.CALeftArm,
+                (ushort)ParseEnum.EvtcTargetIDS.CARightArm
             };
         }
 
@@ -156,7 +156,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target ca = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
+            Target ca = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new InvalidOperationException("Conjurate Amalgamate not found");
@@ -183,7 +183,7 @@ namespace GW2EIParser.Logic
                 }
                 phase.Name = name;
             }
-            Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CALeftArm);
+            Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.CALeftArm);
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -197,7 +197,7 @@ namespace GW2EIParser.Logic
                     }
                 }
             }
-            Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.CARightArm);
+            Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.CARightArm);
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -225,7 +225,7 @@ namespace GW2EIParser.Logic
         {
             switch (target.ID)
             {
-                case (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate:
+                case (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate:
                     List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true);
                     int shieldStart = 0;
                     foreach (AbstractBuffEvent c in shield)
@@ -242,8 +242,8 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
-                case (ushort)ParseEnum.TargetIDS.CALeftArm:
-                case (ushort)ParseEnum.TargetIDS.CARightArm:
+                case (ushort)ParseEnum.EvtcTargetIDS.CALeftArm:
+                case (ushort)ParseEnum.EvtcTargetIDS.CARightArm:
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
@@ -271,7 +271,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.ConjuredAmalgamate);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

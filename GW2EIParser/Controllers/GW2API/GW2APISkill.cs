@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace GW2EIParser.Controllers.GW2API
 {
@@ -13,11 +14,11 @@ namespace GW2EIParser.Controllers.GW2API
         public string Type { get; set; }
         [JsonProperty(PropertyName = "weapon_type")]
         public string WeaponType { get; set; }
-        public string[] Professions { get; set; }
+        public List<string> Professions { get; set; }
         public string Slot { get; set; }
-        public string[] Categories { get; set; }
-        public string[] Flags { get; set; }
-        public GW2APIFact[] Facts { get; set; }
+        public List<string> Categories { get; set; }
+        public List<string> Flags { get; set; }
+        public List<GW2APIFact> Facts { get; set; }
         public long Specialization { get; set; }
         [JsonProperty(PropertyName = "dual_wield")]
         public string DualWield { get; set; }

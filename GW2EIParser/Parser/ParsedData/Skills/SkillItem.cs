@@ -85,21 +85,15 @@ namespace GW2EIParser.Parser.ParsedData
         public string Name { get; private set; }
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
-        private GW2APISkill _apiSkill;
+        private readonly GW2APISkill _apiSkill;
 
         // Constructor
+
         public SkillItem(long ID, string name)
         {
             this.ID = ID;
             Name = name.Replace("\0", "");
-            CompleteItem();
-        }
-
-        public SkillItem(long ID, string name, GW2APIController apiController)
-        {
-            this.ID = ID;
-            Name = name.Replace("\0", "");
-            _apiSkill = apiController.GetSkill(ID);
+            _apiSkill = GW2APIController.GetSkill(ID);
             CompleteItem();
         }
 
@@ -203,7 +197,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 Icon = _apiSkill != null ? _apiSkill.Icon : _defaultIcon;
             }
-            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Length > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Length == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
+            if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Count > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Count == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {
                 _weaponDescriptor = new WeaponDescriptor(_apiSkill);
             }

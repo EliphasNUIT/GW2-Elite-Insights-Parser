@@ -5,7 +5,7 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -30,18 +30,18 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<CombatItem> attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
+            List<CombatItem> attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
             long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
-                List<CombatItem> attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
+                List<CombatItem> attackables = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
                 List<long> attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
                 List<long> attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
+                List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.EvtcStateChange.Position || x.IsStateChange == ParseEnum.EvtcStateChange.Rotation || x.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Position);
                 ushort id = (ushort)HandOfErosion;
                 if (pos != null)
                 {
@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>()
             {
-                (ushort)ParseEnum.TargetIDS.Adina,
+                (ushort)ParseEnum.EvtcTargetIDS.Adina,
                 (ushort)HandOfErosion,
                 (ushort)HandOfEruption
             };
@@ -97,7 +97,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -195,7 +195,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.TargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

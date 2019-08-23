@@ -81,11 +81,12 @@ namespace LuckParser.tst
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
-            var writer = new JsonTextWriter(sw)
+            JsonTextWriter writer = new JsonTextWriter(sw)
             {
-                Formatting = Newtonsoft.Json.Formatting.Indented
+                Formatting = Formatting.Indented
             };
             serializer.Serialize(writer, dict);
+            writer.Close();
         }
 
         [Test]

@@ -101,7 +101,7 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private string BuildTemplates(string script)
+        private static string BuildTemplates(string script)
         {
             string tmplScript = script; 
             Dictionary<string, string> templates = new Dictionary<string, string>()
@@ -152,7 +152,7 @@ namespace GW2EIParser.Builders
             return tmplScript;
         }
 
-        private string BuildCRTemplates(string script)
+        private static string BuildCRTemplates(string script)
         {
             string tmplScript = script;
             Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
@@ -301,7 +301,7 @@ namespace GW2EIParser.Builders
             }
         }
 
-        private string ToJson(object value)
+        private static string ToJson(object value)
         {
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {

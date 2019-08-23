@@ -16,7 +16,7 @@ namespace GW2EIParser.EIData
                 _log = log;
             }
 
-            private uint GetHealing(BoonStackItem stack)
+            private static uint GetHealing(BoonStackItem stack)
             {
                 return stack.SeedSrc.Healing;
             }

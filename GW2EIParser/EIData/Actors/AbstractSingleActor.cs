@@ -13,8 +13,8 @@ namespace GW2EIParser.EIData
     {
         // Boons
         public HashSet<Buff> TrackedBuffs { get; } = new HashSet<Buff>();
-        protected Dictionary<long, BuffsGraphModel> BuffPoints;
-        private readonly List<BuffDistribution> _boonDistribution = new List<BuffDistribution>();
+        protected Dictionary<long, BuffsGraphModel> BuffPoints { get; set; }
+        private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // Statistics
         private readonly Dictionary<AbstractMasterActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
@@ -97,7 +97,7 @@ namespace GW2EIParser.EIData
         }
         protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
         {
-            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.IFF.Friend));
+            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.EvtcIFF.Friend));
         }
         protected void SetDamageTakenLogs(ParsedLog log)
         {
@@ -145,10 +145,10 @@ namespace GW2EIParser.EIData
             return BuffPoints;
         }
 
-        protected BuffMap GetBuffMap(ParsedLog log)
+        protected BuffDictionary GetBuffMap(ParsedLog log)
         {
             //
-            BuffMap buffMap = new BuffMap();
+            BuffDictionary buffMap = new BuffDictionary();
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
             {
@@ -191,12 +191,12 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
-                _boonDistribution.Add(new BuffDistribution());
+                _boonDistribution.Add(new BuffDistributionDictionary());
                 _buffPresence.Add(new Dictionary<long, long>());
             }
         }
 
-        protected void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid, bool updateCondiPresence)
+        protected void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             List<AbstractBuffSimulationItem> extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
@@ -220,7 +220,7 @@ namespace GW2EIParser.EIData
                 simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
             }
         }
-        public BuffDistribution GetBuffDistribution(ParsedLog log, int phaseIndex)
+        public BuffDistributionDictionary GetBuffDistribution(ParsedLog log, int phaseIndex)
         {
             if (BuffPoints == null)
             {
@@ -241,7 +241,7 @@ namespace GW2EIParser.EIData
         protected void SetBuffStatus(ParsedLog log)
         {
             BuffPoints = new Dictionary<long, BuffsGraphModel>();
-            BuffMap toUse = GetBuffMap(log);
+            BuffDictionary toUse = GetBuffMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
             BuffsGraphModel boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
@@ -278,7 +278,7 @@ namespace GW2EIParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    SetBuffStatusCleanseWasteData(log, simulator, boonid, updateCondiPresence);
+                    SetBuffStatusCleanseWasteData(log, simulator, boonid);
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
@@ -462,7 +462,7 @@ namespace GW2EIParser.EIData
             return _statsTarget[target];
         }
 
-        private void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final)
+        private static void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final)
         {
             HashSet<long> nonCritable = new HashSet<long>
                     {

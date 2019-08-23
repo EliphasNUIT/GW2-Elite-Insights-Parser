@@ -9,7 +9,7 @@ namespace GW2EIParser.EIData
     public class BuffDamageModifier : DamageModifier
     {
 
-        protected readonly BuffsTracker Tracker;
+        protected BuffsTracker Tracker { get; }
 
         public BuffDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, GainComputer gainComputer, string url, DamageLogChecker dlChecker = null) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, url, gainComputer, dlChecker, ulong.MinValue, ulong.MaxValue)
         {

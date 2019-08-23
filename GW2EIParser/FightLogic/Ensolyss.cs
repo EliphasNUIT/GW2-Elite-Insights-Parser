@@ -4,7 +4,7 @@ using GW2EIParser.Parser.ParsedData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GW2EIParser.Parser.ParseEnum.TrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
 
 namespace GW2EIParser.Logic
 {
@@ -49,13 +49,13 @@ namespace GW2EIParser.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.TargetIDS.Ensolyss).FirstOrDefault();
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.EvtcTargetIDS.Ensolyss).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SkillID == 762);
+            CombatItem invulLost = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsStateChange == ParseEnum.EvtcStateChange.None && x.IsBuffRemove != ParseEnum.EvtcBuffRemove.None && x.SkillID == 762);
             if (invulLost != null && invulLost.LogTime - fightData.FightStartLogTime < 5000)
             {
                 fightData.OverrideStart(invulLost.LogTime);
@@ -63,9 +63,9 @@ namespace GW2EIParser.Logic
             ComputeFightTargets(agentData, combatData);
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.EvtcTrashIDS>
             {
                 NightmareHallucination1,
                 NightmareHallucination2

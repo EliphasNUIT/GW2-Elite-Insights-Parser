@@ -183,39 +183,39 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Number of direct damage hit
             /// </summary>
-            public int DirectDamageCount;
+            public int DirectDamageCount { get; set; }
             /// <summary>
             /// Number of critable hit
             /// </summary>
-            public int CritableDirectDamageCount;
+            public int CritableDirectDamageCount { get; set; }
             /// <summary>
             /// Number of crit
             /// </summary>
-            public int CriticalRate;
+            public int CriticalRate { get; set; }
             /// <summary>
             /// Total critical damage
             /// </summary>
-            public int CriticalDmg;
+            public int CriticalDmg { get; set; }
             /// <summary>
             /// Number of hits while flanking
             /// </summary>
-            public int FlankingRate;
+            public int FlankingRate { get; set; }
             /// <summary>
             /// Number of glanced hits
             /// </summary>
-            public int GlanceRate;
+            public int GlanceRate { get; set; }
             /// <summary>
             /// Number of missed hits
             /// </summary>
-            public int Missed;
+            public int Missed { get; set; }
             /// <summary>
             /// Number of hits that interrupted a skill
             /// </summary>
-            public int Interrupts;
+            public int Interrupts { get; set; }
             /// <summary>
             /// Number of hits against invulnerable targets
             /// </summary>
-            public int Invulned;
+            public int Invulned { get; set; }
 
             public JsonStats(Statistics.FinalStats stats)
             {

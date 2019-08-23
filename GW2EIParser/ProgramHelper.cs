@@ -106,7 +106,6 @@ namespace GW2EIParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            UploadController up_controller = new UploadController();
             FileInfo fInfo = new FileInfo(row.Location);
             try
             {
@@ -125,7 +124,7 @@ namespace GW2EIParser
                 {
                     //Process evtc here
                     ParsedLog log = control.ParseLog(row, fInfo.FullName);
-                    string[] uploadresult = up_controller.UploadOperation(row, fInfo);
+                    string[] uploadresult = UploadController.UploadOperation(row, fInfo);
                     //Creating File
                     GenerateFiles(log, row, uploadresult, fInfo);
                 }

@@ -31,7 +31,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// When unknown, 'Unknown' value will appear \n
         /// If 2 handed weapon even indices will have "2Hand" as value
         /// </summary>
-        public string[] Weapons { get; set; }
+        public List<string> Weapons { get; set; }
         /// <summary>
         /// Damage modifiers against all
         /// </summary>
@@ -42,7 +42,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == # of targets
         /// </summary>
         /// <seealso cref="JsonBuffDamageModifierData"/>
-        public List<JsonBuffDamageModifierData>[] DamageModifiersTarget { get; set; }
+        public List<List<JsonBuffDamageModifierData>> DamageModifiersTarget { get; set; }
         /// <summary>
         /// List of buff status on uptimes + states \n
         /// Key is "'b' + id"
@@ -125,7 +125,7 @@ namespace GW2EIParser.Builders.JsonModels
         {
             // meta data
             Account = player.Account;
-            Weapons = player.GetWeaponsArray(log).Select(w => w ?? "Unknown").ToArray();
+            Weapons = player.GetWeaponsArray(log).Select(w => w ?? "").ToList();
             Group = player.Group;
             Profession = player.Prof;
             ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(player, log)).ToList();

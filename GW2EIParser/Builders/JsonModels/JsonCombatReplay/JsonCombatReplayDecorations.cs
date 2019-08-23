@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace GW2EIParser.Builders.JsonModels
 {
-    public class JsonCombatReplayDecorations
+    public static class JsonCombatReplayDecorations
     {
         public class JsonCombatReplayGenericDecoration
         {
@@ -37,7 +37,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public class JsonCombatReplayFacingDecoration : JsonCombatReplayGenericDecoration
         {
-            public int[] FacingData;
+            public List<int> FacingData { get; set; }
         }
 
 
@@ -75,7 +75,7 @@ namespace GW2EIParser.Builders.JsonModels
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                var positions = ((double x, double y, double z, double angle, double opacity, int time)[])value;
+                var positions = (List<(double x, double y, double z, double angle, double opacity, int time)>)value;
                 writer.WriteStartArray();
                 foreach (var position in positions)
                 {
@@ -114,7 +114,7 @@ namespace GW2EIParser.Builders.JsonModels
             public int Width { get; set; }
 
             [Newtonsoft.Json.JsonConverter(typeof(PositionConverter))]
-            public (double x, double y, double z, double angle, double opacity, int time)[] Positions { get; set; }
+            public List<(double x, double y, double z, double angle, double opacity, int time)> Positions { get; set; }
         }
 
         public class JsonCombatReplayLineDecoration : JsonCombatReplayFormDecoration

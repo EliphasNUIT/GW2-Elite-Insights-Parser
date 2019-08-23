@@ -28,7 +28,6 @@ namespace GW2EIParser.Builders
         private readonly List<PhaseData> _phases;
         public JsonLog JsonLog { get; }
         //
-        private readonly Dictionary<string, JsonLog.SkillDesc> _skillDesc = new Dictionary<string, JsonLog.SkillDesc>();
         private readonly Dictionary<string, JsonLog.BuffDesc> _buffDesc = new Dictionary<string, JsonLog.BuffDesc>();
         private readonly Dictionary<string, JsonLog.DamageModDesc> _damageModDesc = new Dictionary<string, JsonLog.DamageModDesc>();
         private readonly Dictionary<string, HashSet<long>> _personalBuffs = new Dictionary<string, HashSet<long>>();
@@ -145,7 +144,7 @@ namespace GW2EIParser.Builders
             return res;
         }
 
-        private List<int[]> BuildBuffStates(BuffsGraphModel bgm)
+        private static List<int[]> BuildBuffStates(BuffsGraphModel bgm)
         {
             if (bgm == null || bgm.BoonChart.Count == 0)
             {

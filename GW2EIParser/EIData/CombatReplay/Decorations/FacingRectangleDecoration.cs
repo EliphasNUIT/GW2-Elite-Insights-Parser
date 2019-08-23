@@ -26,15 +26,14 @@ namespace GW2EIParser.EIData
                 Start = Lifespan.start,
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
-                FacingData = new int[Data.Count],
+                FacingData = new List<int>(),
                 Width = _width,
                 Height = _height,
                 Color = _color
             };
-            int i = 0;
             foreach (int angle in Data)
             {
-                aux.FacingData[i++] = angle;
+                aux.FacingData.Add(angle);
             }
             return aux;
         }

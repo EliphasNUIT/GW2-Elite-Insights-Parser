@@ -63,7 +63,7 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                BuffDistribution boonDistribution = GetBuffDistribution(log, phaseIndex);
+                BuffDistributionDictionary boonDistribution = GetBuffDistribution(log, phaseIndex);
                 Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
@@ -135,14 +135,13 @@ namespace GW2EIParser.EIData
                 ID = GetCombatReplayID(log),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
-                Positions = new double[2 * CombatReplay.PolledPositions.Count]
+                Positions = new List<double>()
             };
-            int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = x;
-                aux.Positions[i++] = y;
+                aux.Positions.Add(x);
+                aux.Positions.Add(y);
             }
             return aux;
         }

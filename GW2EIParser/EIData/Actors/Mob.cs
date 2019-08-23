@@ -1,5 +1,6 @@
 ﻿using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using System.Collections.Generic;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 
 namespace GW2EIParser.EIData
@@ -26,17 +27,16 @@ namespace GW2EIParser.EIData
             JsonMobCombatReplay aux = new JsonMobCombatReplay
             {
                 Img = CombatReplay.Icon,
-                Positions = new double[2 * CombatReplay.PolledPositions.Count],
+                Positions = new List<double>(),
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 ID = GetCombatReplayID(log)
             };
-            int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = x;
-                aux.Positions[i++] = y;
+                aux.Positions.Add(x);
+                aux.Positions.Add(y);
             }
 
             return aux;

@@ -9,11 +9,11 @@ using System.Net.Http;
 
 namespace GW2EIParser.Controllers
 {
-    public class GW2APIController
+    public static class GW2APIController
     {
-        static HttpClient APIClient { get; set; }
+        private static HttpClient APIClient { get; set; }
 
-        private void GetAPIClient()
+        private static void GetAPIClient()
         {
             if (APIClient == null)
             {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Controllers
             }
             return skill;
         }*/
-        private List<GW2APISkill> GetListGW2APISkills()
+        private static List<GW2APISkill> GetListGW2APISkills()
         {
             if (APIClient == null) { GetAPIClient(); }
             List<GW2APISkill> skill_L = new List<GW2APISkill>();
@@ -81,7 +81,7 @@ namespace GW2EIParser.Controllers
            
             return skill_L;
         }
-        private SkillList GetSkillList()
+        private static SkillList GetSkillList()
         {
             if (_listOfSkills.Items.Count == 0)
             {
@@ -89,7 +89,7 @@ namespace GW2EIParser.Controllers
             }
             return _listOfSkills;
         }
-        public List<int> WriteSkillListToFile()
+        public static List<int> WriteSkillListToFile()
         {
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json", FileMode.Create);
@@ -126,7 +126,7 @@ namespace GW2EIParser.Controllers
             }
             return failedList;
         }
-        private void SetSkillList()
+        private static void SetSkillList()
         {
 
             if (_listOfSkills.Items.Count == 0)
@@ -138,19 +138,17 @@ namespace GW2EIParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Skilllist");
-                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SkillList.json"))
+                        using StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        + "/Content/SkillList.json");
+                        JsonSerializer serializer = new JsonSerializer()
                         {
-                            JsonSerializer serializer = new JsonSerializer()
+                            ContractResolver = new DefaultContractResolver()
                             {
-                                ContractResolver = new DefaultContractResolver()
-                                {
-                                    NamingStrategy = new CamelCaseNamingStrategy()
-                                }
-                            };
-                            _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                            reader.Close();
-                        }
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        };
+                        _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                        reader.Close();
                     }
                 }
                 if (_listOfSkills.Items.Count == 0)
@@ -167,9 +165,9 @@ namespace GW2EIParser.Controllers
             public List<GW2APISkill> Items { get; set; }
         }
 
-        static SkillList _listOfSkills = new SkillList();
+        private static SkillList _listOfSkills = new SkillList();
 
-        public GW2APISkill GetSkill(long id)
+        public static GW2APISkill GetSkill(long id)
         {
             GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
             //if (skill == null) {
@@ -179,7 +177,7 @@ namespace GW2EIParser.Controllers
             return skill;
         }
         //-----------------------------------------------------------------------------
-        private GW2APISpec GetGW2APISpec(string path)
+        private static GW2APISpec GetGW2APISpec(string path)
         {
             if (APIClient == null) { GetAPIClient(); }
             System.Threading.Thread.Sleep(100);
@@ -194,7 +192,7 @@ namespace GW2EIParser.Controllers
             return spec;
         }
 
-        private SpecList GetSpecList()
+        private static SpecList GetSpecList()
         {
             if (_listofSpecs.Items.Count == 0)
             {
@@ -202,7 +200,7 @@ namespace GW2EIParser.Controllers
             }
             return _listofSpecs;
         }
-        public List<int> WriteSpecListToFile()
+        public static List<int> WriteSpecListToFile()
         {
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json", FileMode.Create);
@@ -259,7 +257,7 @@ namespace GW2EIParser.Controllers
             return failedList;
         }
         
-        private void SetSpecList()
+        private static void SetSpecList()
         {
 
             if (_listofSpecs.Items.Count == 0)
@@ -271,19 +269,17 @@ namespace GW2EIParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading SpecList");
-                        using (StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                        + "/Content/SpecList.json"))
+                        using StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        + "/Content/SpecList.json");
+                        JsonSerializer serializer = new JsonSerializer()
                         {
-                            JsonSerializer serializer = new JsonSerializer()
+                            ContractResolver = new DefaultContractResolver()
                             {
-                                ContractResolver = new DefaultContractResolver()
-                                {
-                                    NamingStrategy = new CamelCaseNamingStrategy()
-                                }
-                            };
-                            _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
-                            reader.Close();
-                        }
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        };
+                        _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                        reader.Close();
                     }
                 }
                 if (_listofSpecs.Items.Count == 0)//if nothing in file or fail write new file
@@ -295,7 +291,7 @@ namespace GW2EIParser.Controllers
             return;
         }
 
-        public string GetAgentProfString(uint prof, uint elite)
+        public static string GetAgentProfString(uint prof, uint elite)
         {
             // non player
             if (elite == 0xFFFFFFFF)
@@ -383,9 +379,9 @@ namespace GW2EIParser.Controllers
             public List<GW2APISpec> Items { get; set; }
         }
      
-        static SpecList _listofSpecs = new SpecList();
+        private static SpecList _listofSpecs = new SpecList();
 
-        public GW2APISpec GetSpec(int id)
+        public static GW2APISpec GetSpec(int id)
         {
             GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
             

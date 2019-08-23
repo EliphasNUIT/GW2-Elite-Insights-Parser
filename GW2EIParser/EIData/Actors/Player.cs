@@ -111,7 +111,7 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                Dictionary<Player, BuffDistribution> boonDistributions = new Dictionary<Player, BuffDistribution>();
+                Dictionary<Player, BuffDistributionDictionary> boonDistributions = new Dictionary<Player, BuffDistributionDictionary>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
@@ -143,7 +143,7 @@ namespace GW2EIParser.EIData
                     int activePlayerCount = 0;
                     foreach (var pair in boonDistributions)
                     {
-                        BuffDistribution boons = pair.Value;
+                        BuffDistributionDictionary boons = pair.Value;
                         long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
                         if (boons.ContainsKey(boon.ID))
                         {
@@ -247,7 +247,7 @@ namespace GW2EIParser.EIData
 
                 PhaseData phase = phases[phaseIndex];
 
-                BuffDistribution selfBoons = GetBuffDistribution(log, phaseIndex);
+                BuffDistributionDictionary selfBoons = GetBuffDistribution(log, phaseIndex);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
                 long phaseDuration = phase.DurationInMS;
@@ -639,35 +639,31 @@ namespace GW2EIParser.EIData
                 Group = Group,
                 Img = CombatReplay.Icon,
                 ID = GetCombatReplayID(log),
-                Positions = new double[2 * CombatReplay.PolledPositions.Count],
-                Dead = new long[2 * deads.Count],
-                Down = new long[2 * downs.Count],
-                Dc = new long[2 * dcs.Count]
+                Positions = new List<double>(),
+                Dead = new List<long>(),
+                Down = new List<long>(),
+                Dc = new List<long>()
             };
-            int i = 0;
             foreach (Point3D pos in CombatReplay.PolledPositions)
             {
                 (double x, double y) = map.GetMapCoord(pos.X, pos.Y);
-                aux.Positions[i++] = x;
-                aux.Positions[i++] = y;
+                aux.Positions.Add(x);
+                aux.Positions.Add(y);
             }
-            i = 0;
             foreach ((long start, long end) in deads)
             {
-                aux.Dead[i++] = start;
-                aux.Dead[i++] = end;
+                aux.Dead.Add(start);
+                aux.Dead.Add(end);
             }
-            i = 0;
             foreach ((long start, long end) in downs)
             {
-                aux.Down[i++] = start;
-                aux.Down[i++] = end;
+                aux.Down.Add(start);
+                aux.Down.Add(end);
             }
-            i = 0;
             foreach ((long start, long end) in dcs)
             {
-                aux.Dc[i++] = start;
-                aux.Dc[i++] = end;
+                aux.Dc.Add(start);
+                aux.Dc.Add(end);
             }
 
             return aux;

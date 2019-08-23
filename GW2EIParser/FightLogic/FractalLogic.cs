@@ -53,7 +53,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        protected void SetSuccessByBuffCount(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
+        protected static void SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, Target target, long buffID, int count)
         {
             if (target == null)
             {

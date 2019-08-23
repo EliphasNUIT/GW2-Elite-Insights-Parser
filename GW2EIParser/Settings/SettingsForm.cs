@@ -96,16 +96,14 @@ namespace GW2EIParser.Setting
         private void ResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController tempcontroller = new GW2APIController();
-            tempcontroller.WriteSkillListToFile();
+            GW2APIController.WriteSkillListToFile();
             MessageBox.Show("Skill List has been redone");
         }
 
         private void ResetSpecListClick(object sender, EventArgs e)
         {
             //Update skill list
-            GW2APIController tempcontroller = new GW2APIController();
-            tempcontroller.WriteSpecListToFile();
+            GW2APIController.WriteSpecListToFile();
             MessageBox.Show("Spec List has been redone");
         }
 
@@ -267,7 +265,7 @@ namespace GW2EIParser.Setting
                 Title = "Save a Configuration file"
             };
             DialogResult result = saveFile.ShowDialog();
-            if (saveFile.FileName != "")
+            if (saveFile.FileName.Length > 0)
             {
                 FileStream fs = (FileStream)saveFile.OpenFile();
                 byte[] settings = new UTF8Encoding(true).GetBytes(dump);
@@ -284,7 +282,7 @@ namespace GW2EIParser.Setting
                 Title = "Load a Configuration file"
             };
             DialogResult result = loadFile.ShowDialog();
-            if (loadFile.FileName != "")
+            if (loadFile.FileName.Length > 0)
             {
                 CustomSettingsManager.ReadConfig(loadFile.FileName);
                 SetValues();

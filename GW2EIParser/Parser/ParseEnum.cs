@@ -2,10 +2,10 @@
 
 namespace GW2EIParser.Parser
 {
-    public class ParseEnum
+    public static class ParseEnum
     {
         // Activation
-        public enum Activation : byte
+        public enum EvtcActivation : byte
         {
             None         = 0,
             Normal       = 1,
@@ -17,15 +17,15 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static Activation GetActivation(byte bt)
+        public static EvtcActivation GetEvtcActivation(byte bt)
         {
-            return bt < (byte)Activation.Unknown
-                ? (Activation)bt
-                : Activation.Unknown;
+            return bt < (byte)EvtcActivation.Unknown
+                ? (EvtcActivation)bt
+                : EvtcActivation.Unknown;
         }
 
         // Buff remove
-        public enum BuffRemove : byte
+        public enum EvtcBuffRemove : byte
         {
             None   = 0,
             All    = 1,
@@ -33,16 +33,16 @@ namespace GW2EIParser.Parser
             Manual = 3
         };
 
-        public static BuffRemove GetBuffRemove(byte bt)
+        public static EvtcBuffRemove GetBuffRemove(byte bt)
         {
             return bt <= 3
-                ? (BuffRemove)bt
-                : BuffRemove.None;
+                ? (EvtcBuffRemove)bt
+                : EvtcBuffRemove.None;
         }
 
         // Result
         
-        public enum PhysicalResult : byte
+        public enum EvtcPhysicalResult : byte
         {
             Normal      = 0,
             Crit        = 1,
@@ -58,14 +58,14 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static PhysicalResult GetPhysicalResult(byte bt)
+        public static EvtcPhysicalResult GetPhysicalResult(byte bt)
         {
-            return bt < (byte)PhysicalResult.Unknown
-                ? (PhysicalResult)bt
-                : PhysicalResult.Unknown;
+            return bt < (byte)EvtcPhysicalResult.Unknown
+                ? (EvtcPhysicalResult)bt
+                : EvtcPhysicalResult.Unknown;
         }
 
-        public enum ConditionResult : byte
+        public enum EvtcConditionResult : byte
         {
             ExpectedToHit = 0,
             InvulByBuff = 1,
@@ -75,15 +75,15 @@ namespace GW2EIParser.Parser
 
             Unknown
         };
-        public static ConditionResult GetConditionResult(byte bt)
+        public static EvtcConditionResult GetConditionResult(byte bt)
         {
-            return bt < (byte)ConditionResult.Unknown
-                ? (ConditionResult)bt
-                : ConditionResult.Unknown;
+            return bt < (byte)EvtcConditionResult.Unknown
+                ? (EvtcConditionResult)bt
+                : EvtcConditionResult.Unknown;
         }
 
         // State Change    
-        public enum StateChange : byte
+        public enum EvtcStateChange : byte
         {
             None            =  0,
             EnterCombat     =  1,
@@ -118,16 +118,16 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static StateChange GetStateChange(byte bt)
+        public static EvtcStateChange GetStateChange(byte bt)
         {
-            return bt < (byte)StateChange.Unknown
-                ? (StateChange)bt
-                : StateChange.Unknown;
+            return bt < (byte)EvtcStateChange.Unknown
+                ? (EvtcStateChange)bt
+                : EvtcStateChange.Unknown;
         }
 
         // Friend of for
 
-        public enum IFF : byte
+        public enum EvtcIFF : byte
         {
             Friend  = 0,
             Foe     = 1,
@@ -135,14 +135,14 @@ namespace GW2EIParser.Parser
             Unknown
         };
 
-        public static IFF GetIFF(byte bt)
+        public static EvtcIFF GetIFF(byte bt)
         {
-            return bt < (byte)IFF.Unknown
-                ? (IFF)bt
-                : IFF.Unknown;
+            return bt < (byte)EvtcIFF.Unknown
+                ? (EvtcIFF)bt
+                : EvtcIFF.Unknown;
         }
 
-        public enum TrashIDS : ushort
+        public enum EvtcTrashIDS : ushort
         {
             // VG
             Seekers = 15426,
@@ -335,12 +335,12 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TrashIDS GetTrashIDS(ushort id)
+        public static EvtcTrashIDS GetTrashIDS(ushort id)
         {
-            return Enum.IsDefined(typeof(TrashIDS), id) ? (TrashIDS)id : TrashIDS.Unknown;
+            return Enum.IsDefined(typeof(EvtcTrashIDS), id) ? (EvtcTrashIDS)id : EvtcTrashIDS.Unknown;
         }
 
-        public enum TargetIDS : ushort
+        public enum EvtcTargetIDS : ushort
         {
             WorldVersusWorld        = 1,
             // Raid
@@ -392,47 +392,47 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static TargetIDS GetTargetIDS(ushort id)
+        public static EvtcTargetIDS GetTargetIDS(ushort id)
         {
-            return Enum.IsDefined(typeof(TargetIDS), id) ? (TargetIDS)id : TargetIDS.Unknown;
+            return Enum.IsDefined(typeof(EvtcTargetIDS), id) ? (EvtcTargetIDS)id : EvtcTargetIDS.Unknown;
         }
 
     }
 
-    static class PhysicalResultExtensions
+    static class EvtcPhysicalResultExtensions
     {
-        public static bool IsHit(this ParseEnum.PhysicalResult result)
+        public static bool IsHit(this ParseEnum.EvtcPhysicalResult result)
         {
-            return result == ParseEnum.PhysicalResult.Normal || result == ParseEnum.PhysicalResult.Crit || result == ParseEnum.PhysicalResult.Glance || result == ParseEnum.PhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
+            return result == ParseEnum.EvtcPhysicalResult.Normal || result == ParseEnum.EvtcPhysicalResult.Crit || result == ParseEnum.EvtcPhysicalResult.Glance || result == ParseEnum.EvtcPhysicalResult.KillingBlow; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt; 
         }
     }
 
-    static class ConditionResultExtensions
+    static class EvtcConditionResultExtensions
     {
-        public static bool IsHit(this ParseEnum.ConditionResult result)
+        public static bool IsHit(this ParseEnum.EvtcConditionResult result)
         {
-            return result == ParseEnum.ConditionResult.ExpectedToHit;
+            return result == ParseEnum.EvtcConditionResult.ExpectedToHit;
         }
     }
 
-    static class SpanwExtensions
+    static class EvtcSpawnExtensions
     {
-        public static bool IsSpawn(this ParseEnum.StateChange state)
+        public static bool IsSpawn(this ParseEnum.EvtcStateChange state)
         {
-            return state == ParseEnum.StateChange.None || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn || state == ParseEnum.StateChange.TeamChange;
+            return state == ParseEnum.EvtcStateChange.None || state == ParseEnum.EvtcStateChange.Position || state == ParseEnum.EvtcStateChange.Velocity || state == ParseEnum.EvtcStateChange.Rotation || state == ParseEnum.EvtcStateChange.MaxHealthUpdate || state == ParseEnum.EvtcStateChange.Spawn || state == ParseEnum.EvtcStateChange.TeamChange;
         }
     }
 
-    static class ActivationExtensions
+    static class EvtcActivationExtensions
     {
-        public static bool StartCasting(this ParseEnum.Activation activation)
+        public static bool StartCasting(this ParseEnum.EvtcActivation activation)
         {
-            return activation == ParseEnum.Activation.Normal || activation == ParseEnum.Activation.Quickness;
+            return activation == ParseEnum.EvtcActivation.Normal || activation == ParseEnum.EvtcActivation.Quickness;
         }
 
-        public static bool NoInterruptEndCasting(this ParseEnum.Activation activation)
+        public static bool NoInterruptEndCasting(this ParseEnum.EvtcActivation activation)
         {
-            return activation == ParseEnum.Activation.CancelFire || activation == ParseEnum.Activation.Reset;
+            return activation == ParseEnum.EvtcActivation.CancelFire || activation == ParseEnum.EvtcActivation.Reset;
         }
     }
 }

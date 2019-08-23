@@ -6,7 +6,7 @@ namespace GW2EIParser.EIData
 {
     public class FacingDecoration : GenericDecoration
     {
-        protected List<int> Data = new List<int>();
+        protected List<int> Data { get; } = new List<int>();
 
         public FacingDecoration((int start, int end) lifespan, AgentConnector connector, List<Point3D> facings) : base(lifespan, connector)
         {
@@ -26,12 +26,11 @@ namespace GW2EIParser.EIData
                 Start = Lifespan.start,
                 End = Lifespan.end,
                 ConnectedTo = ConnectedTo.GetConnectedTo(map, log),
-                FacingData = new int[Data.Count]
+                FacingData = new List<int>()
             };
-            int i = 0;
             foreach(int angle in Data)
             {
-                aux.FacingData[i++] = angle;
+                aux.FacingData.Add(angle);
             }
             return aux;
         }

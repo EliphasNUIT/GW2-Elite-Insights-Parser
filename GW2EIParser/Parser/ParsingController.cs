@@ -15,8 +15,6 @@ namespace GW2EIParser.Parser
 {
     public class ParsingController
     {
-        private readonly GW2APIController _aPIController = new GW2APIController();
-
         //Main data storage after binary parse
         private FightData _fightData;
         private AgentData _agentData;
@@ -46,17 +44,13 @@ namespace GW2EIParser.Parser
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
                 {
-                    using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
+                    using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
+                    if (arch.Entries.Count != 1)
                     {
-                        if (arch.Entries.Count != 1)
-                        {
-                            throw new InvalidDataException("Invalid Archive");
-                        }
-                        using (var data = arch.Entries[0].Open())
-                        {
-                            ParseLog(row, data);
-                        }
+                        throw new InvalidDataException("Invalid Archive");
                     }
+                    using var data = arch.Entries[0].Open();
+                    ParseLog(row, data);
                 }
                 else
                 {
@@ -88,12 +82,12 @@ namespace GW2EIParser.Parser
             row.BgWorker.ThrowIfCanceled(row);
         }
 
-        private BinaryReader CreateReader(Stream stream)
+        private static BinaryReader CreateReader(Stream stream)
         {
             return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
         }
 
-        private bool TryRead(Stream stream, byte[] data)
+        private static bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
             int count = data.Length;
@@ -116,19 +110,17 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseFightData(Stream stream)
         {
-            using (var reader = CreateReader(stream))
-            {
-                // 12 bytes: arc build version
-                _buildVersion = ParseHelper.GetString(stream, 12);
+            using var reader = CreateReader(stream);
+            // 12 bytes: arc build version
+            _buildVersion = ParseHelper.GetString(stream, 12);
 
-                // 1 byte: skip
-                _revision = reader.ReadByte();
+            // 1 byte: skip
+            _revision = reader.ReadByte();
 
-                // 2 bytes: fight instance ID
-                _id = reader.ReadUInt16();
-                // 1 byte: position
-                ParseHelper.SafeSkip(stream, 1);
-            }
+            // 2 bytes: fight instance ID
+            _id = reader.ReadUInt16();
+            // 1 byte: position
+            ParseHelper.SafeSkip(stream, 1);
         }
 
         /// <summary>
@@ -136,74 +128,72 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseAgentData(Stream stream)
         {
-            using (var reader = CreateReader(stream))
+            using var reader = CreateReader(stream);
+            // 4 bytes: player count
+            int playerCount = reader.ReadInt32();
+
+            // 96 bytes: each player
+            for (int i = 0; i < playerCount; i++)
             {
-                // 4 bytes: player count
-                int playerCount = reader.ReadInt32();
+                // 8 bytes: agent
+                ulong agent = reader.ReadUInt64();
 
-                // 96 bytes: each player
-                for (int i = 0; i < playerCount; i++)
+                // 4 bytes: profession
+                uint prof = reader.ReadUInt32();
+
+                // 4 bytes: is_elite
+                uint isElite = reader.ReadUInt32();
+
+                // 2 bytes: toughness
+                uint toughness = reader.ReadUInt16();
+                // 2 bytes: healing
+                uint concentration = reader.ReadUInt16();
+                // 2 bytes: healing
+                uint healing = reader.ReadUInt16();
+                // 2 bytes: hitbox width
+                uint hbWidth = (uint)2 * reader.ReadUInt16();
+                // 2 bytes: condition
+                uint condition = reader.ReadUInt16();
+                // 2 bytes: hitbox height
+                uint hbHeight = (uint)2 * reader.ReadUInt16();
+                // 68 bytes: name
+                string name = ParseHelper.GetString(stream, 68, false);
+                //Save
+                string agentProf = GW2APIController.GetAgentProfString(prof, isElite);
+                AgentItem.AgentType type;
+                ushort ID = 0;
+                switch (agentProf)
                 {
-                    // 8 bytes: agent
-                    ulong agent = reader.ReadUInt64();
-
-                    // 4 bytes: profession
-                    uint prof = reader.ReadUInt32();
-
-                    // 4 bytes: is_elite
-                    uint isElite = reader.ReadUInt32();
-
-                    // 2 bytes: toughness
-                    uint toughness = reader.ReadUInt16();
-                    // 2 bytes: healing
-                    uint concentration = reader.ReadUInt16();
-                    // 2 bytes: healing
-                    uint healing = reader.ReadUInt16();
-                    // 2 bytes: hitbox width
-                    uint hbWidth = (uint)2 * reader.ReadUInt16();
-                    // 2 bytes: condition
-                    uint condition = reader.ReadUInt16();
-                    // 2 bytes: hitbox height
-                    uint hbHeight = (uint)2 * reader.ReadUInt16();
-                    // 68 bytes: name
-                    string name = ParseHelper.GetString(stream, 68, false);
-                    //Save
-                    string agentProf = _aPIController.GetAgentProfString(prof, isElite);
-                    AgentItem.AgentType type;
-                    ushort ID = 0;
-                    switch (agentProf)
-                    {
-                        case "NPC":
-                            // NPC
-                            try
-                            {
-                                ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
-                            }
-                            catch (FormatException)
-                            {
-                                ID = 0;
-                            }
-                            type = AgentItem.AgentType.NPC;
-                            break;
-                        case "GDG":
-                            // Gadget
-                            try
-                            {
-                                ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
-                            }
-                            catch (FormatException)
-                            {
-                                ID = 0;
-                            }
-                            type = AgentItem.AgentType.Gadget;
-                            break;
-                        default:
-                            // Player
-                            type = AgentItem.AgentType.Player;
-                            break;
-                    }
-                    _allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
+                    case "NPC":
+                        // NPC
+                        try
+                        {
+                            ID = ushort.Parse(prof.ToString().PadLeft(5, '0'));
+                        }
+                        catch (FormatException)
+                        {
+                            ID = 0;
+                        }
+                        type = AgentItem.AgentType.NPC;
+                        break;
+                    case "GDG":
+                        // Gadget
+                        try
+                        {
+                            ID = ushort.Parse((prof & 0x0000ffff).ToString().PadLeft(5, '0'));
+                        }
+                        catch (FormatException)
+                        {
+                            ID = 0;
+                        }
+                        type = AgentItem.AgentType.Gadget;
+                        break;
+                    default:
+                        // Player
+                        type = AgentItem.AgentType.Player;
+                        break;
                 }
+                _allAgentsList.Add(new AgentItem(agent, name, agentProf, ID, type, toughness, healing, condition, concentration, hbWidth, hbHeight));
             }
         }
 
@@ -212,26 +202,24 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseSkillData(Stream stream)
         {
-            using (var reader = CreateReader(stream))
+            using var reader = CreateReader(stream);
+            // 4 bytes: player count
+            uint skillCount = reader.ReadUInt32();
+            //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
+            // 68 bytes: each skill
+            for (int i = 0; i < skillCount; i++)
             {
-                // 4 bytes: player count
-                uint skillCount = reader.ReadUInt32();
-                //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
-                // 68 bytes: each skill
-                for (int i = 0; i < skillCount; i++)
-                {
-                    // 4 bytes: skill ID
-                    int skillId = reader.ReadInt32();
-                    // 64 bytes: name
-                    var name = ParseHelper.GetString(stream, 64);
-                    //Save
-                    var skill = new SkillItem(skillId, name, _aPIController);
-                    _skillData.Add(skill);
-                }
+                // 4 bytes: skill ID
+                int skillId = reader.ReadInt32();
+                // 64 bytes: name
+                var name = ParseHelper.GetString(stream, 64);
+                //Save
+                var skill = new SkillItem(skillId, name);
+                _skillData.Add(skill);
             }
         }
 
-        private CombatItem ReadCombatItem(BinaryReader reader)
+        private static CombatItem ReadCombatItem(BinaryReader reader)
         {
             // 8 bytes: time
             long time = reader.ReadInt64();
@@ -267,7 +255,7 @@ namespace GW2EIParser.Parser
             ParseHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            ParseEnum.EvtcIFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -276,10 +264,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
+            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            ParseEnum.EvtcBuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -291,7 +279,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            ParseEnum.EvtcStateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();
@@ -310,7 +298,7 @@ namespace GW2EIParser.Parser
                 isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle);
         }
 
-        private CombatItem ReadCombatItemRev1(BinaryReader reader)
+        private static CombatItem ReadCombatItemRev1(BinaryReader reader)
         {
             // 8 bytes: time
             long time = reader.ReadInt64();
@@ -345,7 +333,7 @@ namespace GW2EIParser.Parser
             ushort dstmasterInstid = reader.ReadUInt16();
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            ParseEnum.EvtcIFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -354,10 +342,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
+            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            ParseEnum.EvtcBuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -369,7 +357,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            ParseEnum.EvtcStateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();
@@ -395,17 +383,15 @@ namespace GW2EIParser.Parser
         {
             // 64 bytes: each combat
             var data = new byte[64];
-            using (var ms = new MemoryStream(data, writable: false))
-            using (var reader = CreateReader(ms))
+            using var ms = new MemoryStream(data, writable: false);
+            using var reader = CreateReader(ms);
+            while (true)
             {
-                while (true)
-                {
-                    if (!TryRead(stream, data)) break;
-                    ms.Seek(0, SeekOrigin.Begin);
-                    CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                    if (!IsValid(combatItem)) continue;
-                    _combatItems.Add(combatItem);
-                }
+                if (!TryRead(stream, data)) break;
+                ms.Seek(0, SeekOrigin.Begin);
+                CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
+                if (!IsValid(combatItem)) continue;
+                _combatItems.Add(combatItem);
             }
         }
 
@@ -414,15 +400,15 @@ namespace GW2EIParser.Parser
         /// </summary>
         /// <param name="combatItem"></param>
         /// <returns>true if the combat item is valid</returns>
-        private bool IsValid(CombatItem combatItem)
+        private static bool IsValid(CombatItem combatItem)
         {
-            if (combatItem.IsStateChange == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            if (combatItem.IsStateChange == ParseEnum.EvtcStateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
                 // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
                 // If it is more than 200% health ignore this record
                 return false;
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.EvtcIFF.Unknown)
             {
                 return false;
             }
@@ -441,7 +427,7 @@ namespace GW2EIParser.Parser
                     {
                         if (agent.InstID == 0)
                         {
-                            agent.InstID = c.IsStateChange != ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
+                            agent.InstID = c.IsStateChange != ParseEnum.EvtcStateChange.None ? c.SrcInstid : (ushort)0;
                             if (agent.FirstAwareLogTime == 0)
                             {
                                 agent.FirstAwareLogTime = c.LogTime;
@@ -457,7 +443,7 @@ namespace GW2EIParser.Parser
                     }
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
-                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
+                if (c.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
                 {
                     foreach (AgentItem agent in agentList)
                     {

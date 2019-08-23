@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
 				pos.y = mapY;
 
 				return pos;
-			}).ToArray();
+			}).ToList();
 
 			JsonCombatReplayMovingPlatformDecoration aux = new JsonCombatReplayMovingPlatformDecoration
 			{
@@ -46,8 +46,8 @@ namespace GW2EIParser.EIData
 				Image = Image,
 				Width = Width,
 				Height = Height,
-				Start = Lifespan.Item1,
-				End = Lifespan.Item2,
+				Start = Lifespan.start,
+				End = Lifespan.end,
 				Positions = positions
 			};
 			return aux;

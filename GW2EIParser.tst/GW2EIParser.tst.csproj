@@ -10,6 +10,8 @@
     <Product>EliteInsights</Product>
     <Copyright>Copyright ©  2018</Copyright>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Authors>EliphasNUIT</Authors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
