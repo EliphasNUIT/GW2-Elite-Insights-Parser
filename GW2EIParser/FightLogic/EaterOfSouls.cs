@@ -46,6 +46,15 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)GreenSpirit1,
+                (ushort)GreenSpirit2
+            };
+        }
+
         public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
             int crStart = (int)replay.TimeOffsets.start;

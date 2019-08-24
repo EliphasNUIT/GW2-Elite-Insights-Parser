@@ -58,6 +58,17 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)Prisoner1,
+                (ushort)Prisoner2,
+                (ushort)CagedWarg,
+                (ushort)OilSlick,
+            };
+        }
+
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/cVuaOc5.png",

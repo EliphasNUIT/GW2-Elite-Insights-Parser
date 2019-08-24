@@ -121,6 +121,15 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)UnderworldReaper,
+                (ushort)DhuumDesmina
+            };
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightDuration;

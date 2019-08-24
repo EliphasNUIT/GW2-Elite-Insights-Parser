@@ -47,6 +47,14 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)Desmina,
+            };
+        }
+
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);

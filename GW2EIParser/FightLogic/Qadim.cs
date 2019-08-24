@@ -112,6 +112,16 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)IcebornHydra,
+                (ushort)IceElemental,
+                (ushort)Zommoros
+            };
+        }
+
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
