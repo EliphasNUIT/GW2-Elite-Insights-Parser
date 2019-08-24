@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
+using static GW2EIParser.Models.BuffStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Builders.JsonModels
                 return res;
             }
 
-            public JsonTargetBuffsData(Statistics.FinalTargetBuffs stats)
+            public JsonTargetBuffsData(FinalTargetBuffs stats)
             {
                 Uptime = stats.Uptime;
                 Presence = stats.Presence;

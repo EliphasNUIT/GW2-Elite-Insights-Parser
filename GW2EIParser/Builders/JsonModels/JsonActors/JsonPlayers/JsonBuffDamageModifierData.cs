@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.Models;
+using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -28,7 +28,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int TotalDamage { get; set; }
 
-            public JsonBuffDamageModifierItem(Statistics.DamageModifierData extraData)
+            public JsonBuffDamageModifierItem(DamageModifierData extraData)
             {
                 HitCount = extraData.HitCount;
                 TotalHitCount = extraData.TotalHitCount;

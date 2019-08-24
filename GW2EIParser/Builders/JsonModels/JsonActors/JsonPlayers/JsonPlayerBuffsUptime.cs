@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.Models;
+using static GW2EIParser.Models.BuffStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Presence { get; set; }
 
-            public JsonBuffsUptimeData(Statistics.FinalBuffs stats)
+            public JsonBuffsUptimeData(FinalBuffs stats)
             {
                 Uptime = stats.Uptime;
                 Presence = stats.Presence;

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser;
+using static GW2EIParser.Models.DefenseStatistics;
+using static GW2EIParser.Models.DPSStatistics;
+using static GW2EIParser.Models.GameplayStatistics;
+using static GW2EIParser.Models.SupportStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -11,7 +14,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Defensive stats 
         /// </summary>
-        public class JsonDefenses
+        public class JsonDefense
         {
             /// <summary>
             /// Total damage taken
@@ -42,7 +45,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int InterruptedCount { get; set; }
 
-            public JsonDefenses(Statistics.FinalDefenses defenses)
+            public JsonDefense(FinalDefense defenses)
             {
                 DamageTaken = defenses.DamageTaken;
                 BlockedCount = defenses.BlockedCount;
@@ -57,7 +60,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Defensive stats
         /// </summary>
-        public class JsonDefensesAll : JsonDefenses
+        public class JsonDefenseAll : JsonDefense
         {
             /// <summary>
             /// Number of dodges
@@ -91,7 +94,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int DcDuration { get; set; }
 
-            public JsonDefensesAll(Statistics.FinalDefensesAll defenses) : base(defenses)
+            public JsonDefenseAll(FinalDefenseAll defenses) : base(defenses)
             {
                 DodgeCount = defenses.DodgeCount;
                 DownCount = defenses.DownCount;
@@ -156,7 +159,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int ActorPowerDamage { get; set; }
 
-            public JsonDPS(Statistics.FinalDPS stats)
+            public JsonDPS(FinalDPS stats)
             {
                 Dps = stats.Dps;
                 Damage = stats.Damage;
@@ -178,7 +181,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Gameplay stats
         /// </summary>
-        public class JsonStats
+        public class JsonGameplay
         {
             /// <summary>
             /// Number of direct damage hit
@@ -217,7 +220,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int Invulned { get; set; }
 
-            public JsonStats(Statistics.FinalStats stats)
+            public JsonGameplay(FinalGameplay stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -230,7 +233,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Invulned = stats.Invulned;
             }
 
-            public JsonStats(Statistics.FinalStatsAll stats)
+            public JsonGameplay(FinalGameplayAll stats)
             {
                 DirectDamageCount = stats.DirectDamageCount;
                 CritableDirectDamageCount = stats.CritableDirectDamageCount;
@@ -244,7 +247,7 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public class JsonStatsAll : JsonStats
+        public class JsonGameplayAll : JsonGameplay
         {
             /// <summary>
             /// Number of time you interrupted your cast
@@ -283,7 +286,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int SwapCount { get; set; }
 
-            public JsonStatsAll(Statistics.FinalStatsAll stats) : base(stats)
+            public JsonGameplayAll(FinalGameplayAll stats) : base(stats)
             {
                 Wasted = stats.Wasted;
                 TimeWasted = stats.TimeWasted;
@@ -319,7 +322,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double BoonStripsTime { get; set; }
 
-            public JsonSupport(Statistics.FinalSupport stats)
+            public JsonSupport(FinalSupport stats)
             {
                 CondiCleanse = stats.CondiCleanse;
                 CondiCleanseTime = stats.CondiCleanseTime;
@@ -342,7 +345,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double ResurrectTime { get; set; }
 
-            public JsonSupportAll(Statistics.FinalSupportAll stats) : base(stats)
+            public JsonSupportAll(FinalSupportAll stats) : base(stats)
             {
                 Resurrects = stats.Resurrects;
                 ResurrectTime = stats.ResurrectTime;
@@ -354,29 +357,29 @@ namespace GW2EIParser.Builders.JsonModels
         /// Stats against all  \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonStatsAll"/>
-        public List<JsonStatsAll> StatsAll { get; set; }
+        /// <seealso cref="JsonGameplayAll"/>
+        public List<JsonGameplayAll> GameplayAll { get; set; }
 
         /// <summary>
         /// Stats against targets  \n
         /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
-        /// <seealso cref="JsonStats"/>
-        public List<List<JsonStats>> StatsTargets { get; set; } = new List<List<JsonStats>>();
+        /// <seealso cref="JsonGameplay"/>
+        public List<List<JsonGameplay>> GameplayTargets { get; set; } = new List<List<JsonGameplay>>();
 
         /// <summary>
         /// Defensive stats \n
         /// Length == # of phases
         /// </summary>
-        /// <seealso cref="JsonDefensesAll"/>
-        public List<JsonDefensesAll> DefensesAll { get; set; }
+        /// <seealso cref="JsonDefenseAll"/>
+        public List<JsonDefenseAll> DefenseAll { get; set; }
 
         /// <summary>
         /// Defensive stats against targets\n
         /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
         /// </summary>
-        /// <seealso cref="JsonDefensesAll"/>
-        public List<List<JsonDefenses>> DefensesTarget { get; set; } = new List<List<JsonDefenses>>();
+        /// <seealso cref="JsonDefenseAll"/>
+        public List<List<JsonDefense>> DefenseTarget { get; set; } = new List<List<JsonDefense>>();
 
         /// <summary>
         /// Support stats \n
@@ -409,14 +412,14 @@ namespace GW2EIParser.Builders.JsonModels
         public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
         {
             DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
-            StatsAll = actor.GetStats(log).Select(x => new JsonStatsAll(x)).ToList();
-            DefensesAll = actor.GetDefenses(log).Select(x => new JsonDefensesAll(x)).ToList();
+            GameplayAll = actor.GetStats(log).Select(x => new JsonGameplayAll(x)).ToList();
+            DefenseAll = actor.GetDefenses(log).Select(x => new JsonDefenseAll(x)).ToList();
             SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
             foreach (AbstractSingleActor target in targets)
             {
                 DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());
-                StatsTargets.Add(actor.GetStats(log, target).Select(x => new JsonStats(x)).ToList());
-                DefensesTarget.Add(actor.GetDefenses(log, target).Select(x => new JsonDefenses(x)).ToList());
+                GameplayTargets.Add(actor.GetStats(log, target).Select(x => new JsonGameplay(x)).ToList());
+                DefenseTarget.Add(actor.GetDefenses(log, target).Select(x => new JsonDefense(x)).ToList());
             }
             foreach (AbstractSingleActor target in allies)
             {
@@ -425,8 +428,8 @@ namespace GW2EIParser.Builders.JsonModels
             if (targets.Any())
             {
                 DpsTargets = null;
-                StatsTargets = null;
-                DefensesTarget = null;
+                GameplayTargets = null;
+                DefenseTarget = null;
             }
             if (allies.Any())
             {

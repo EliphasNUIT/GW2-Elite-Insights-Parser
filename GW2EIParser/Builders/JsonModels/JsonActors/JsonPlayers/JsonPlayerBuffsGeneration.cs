@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GW2EIParser.Models;
+using static GW2EIParser.Models.BuffStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public double Extended { get; set; }
 
-            public JsonBuffsGenerationData(Statistics.FinalBuffs stats)
+            public JsonBuffsGenerationData(FinalBuffs stats)
             {
                 Generation = stats.Generation;
                 Overstack = stats.Overstack;

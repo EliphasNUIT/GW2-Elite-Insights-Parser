@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using GW2EIParser.Models;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
+using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -33,7 +33,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonLog.BuffMap"/>
         public long Id { get; set; }
 
-        public JsonConsumable(Statistics.Consumable food)
+        public JsonConsumable(Consumable food)
         {
             Stack = food.Stack;
             Duration = food.Duration;
@@ -42,7 +42,7 @@ namespace GW2EIParser.Builders.JsonModels
             Initial = food.Initial;
         }
 
-        public static List<JsonConsumable> BuildConsumables(List<Statistics.Consumable> foods, Dictionary<string, BuffDesc> buffMap)
+        public static List<JsonConsumable> BuildConsumables(List<Consumable> foods, Dictionary<string, BuffDesc> buffMap)
         {
             List<JsonConsumable> res = new List<JsonConsumable>();
             foreach (var food in foods)

@@ -8,12 +8,61 @@ using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Models.Statistics;
+using static GW2EIParser.Models.BuffStatistics;
 
 namespace GW2EIParser.EIData
 {
     public class Player : AbstractSingleActor
     {
+        public class DamageModifierData
+        {
+            public int HitCount { get; }
+            public int TotalHitCount { get; }
+            public double DamageGain { get; }
+            public int TotalDamage { get; }
+
+            public DamageModifierData(int hitCount, int totalHitCount, double damageGain, int totalDamage)
+            {
+                HitCount = hitCount;
+                TotalHitCount = totalHitCount;
+                DamageGain = damageGain;
+                TotalDamage = totalDamage;
+            }
+        }
+
+        public class Consumable
+        {
+            public Buff Buff { get; }
+            public long Time { get; }
+            public int Duration { get; }
+            public int Stack { get; set; }
+            public bool Initial { get; set; }
+
+            public Consumable(Buff item, long time, int duration, bool initial)
+            {
+                Buff = item;
+                Time = time;
+                Duration = duration;
+                Stack = 1;
+                Initial = initial;
+            }
+        }
+
+        public class DeathRecap
+        {
+            public class DeathRecapDamageItem
+            {
+                public long ID { get; set; }
+                public bool IndirectDamage { get; set; }
+                public string Src { get; set; }
+                public int Damage { get; set; }
+                public int Time { get; set; }
+            }
+
+            public int DeathTime { get; set; }
+            public List<DeathRecapDamageItem> ToDown { get; set; }
+            public List<DeathRecapDamageItem> ToKill { get; set; }
+        }
         // Fields
         public string Account { get; protected set; }
         public int Group { get; }

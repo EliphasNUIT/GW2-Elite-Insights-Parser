@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml;
 using GW2EIParser.Builders.JsonModels;
-using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using static GW2EIParser.Builders.JsonModels.JsonBuffDamageModifierData;
-using static GW2EIParser.Builders.JsonModels.JsonNPCBuffs;
-using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsGeneration;
-using static GW2EIParser.Builders.JsonModels.JsonPlayerBuffsUptime;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Builders
 {

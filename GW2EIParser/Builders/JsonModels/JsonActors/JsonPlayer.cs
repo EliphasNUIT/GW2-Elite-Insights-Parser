@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Linq;
 using GW2EIParser.EIData;
-using GW2EIParser.Models;
 using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
+using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -129,7 +129,7 @@ namespace GW2EIParser.Builders.JsonModels
             Profession = player.Prof;
             ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(player, log)).ToList();
             // Death Recap
-            List<Statistics.DeathRecap> deathRecaps = player.GetDeathRecaps(log);
+            List<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
             DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x)).ToList();
             // Consumables
             Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), buffMap);

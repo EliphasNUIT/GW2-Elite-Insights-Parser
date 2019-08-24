@@ -6,7 +6,10 @@ using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Models.Statistics;
+using static GW2EIParser.Models.DefenseStatistics;
+using static GW2EIParser.Models.DPSStatistics;
+using static GW2EIParser.Models.GameplayStatistics;
+using static GW2EIParser.Models.SupportStatistics;
 
 namespace GW2EIParser.EIData
 {
@@ -20,10 +23,10 @@ namespace GW2EIParser.EIData
         // Statistics
         private readonly Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
         private List<FinalDPS> _dpsAll;
-        private readonly Dictionary<AbstractSingleActor, List<FinalStats>> _statsTarget = new Dictionary<AbstractSingleActor, List<FinalStats>>();
-        private List<FinalStatsAll> _statsAll;
-        private readonly Dictionary<AbstractSingleActor, List<FinalDefenses>> _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefenses>>();
-        private List<FinalDefensesAll> _defensesAll;
+        private readonly Dictionary<AbstractSingleActor, List<FinalGameplay>> _statsTarget = new Dictionary<AbstractSingleActor, List<FinalGameplay>>();
+        private List<FinalGameplayAll> _statsAll;
+        private readonly Dictionary<AbstractSingleActor, List<FinalDefense>> _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefense>>();
+        private List<FinalDefenseAll> _defensesAll;
         private readonly Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
         private List<FinalSupportAll> _support;
         private Dictionary<long, List<AbstractBuffEvent>> _buffsPerId;
@@ -364,79 +367,12 @@ namespace GW2EIParser.EIData
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
         // DPS
-        protected List<FinalDPS> GetFinalDPS(ParsedLog log, AbstractSingleActor target)
-        {
-            List<FinalDPS> res = new List<FinalDPS>();
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
-            {
-                double phaseDuration = (phase.DurationInMS) / 1000.0;
-                int damage;
-                double dps = 0.0;
-                FinalDPS final = new FinalDPS();
-                List<AbstractDamageEvent> damageLogs = GetDamageLogs(target, log, phase.Start, phase.End);
-                List<AbstractDamageEvent> damageLogsActor = GetJustActorDamageLogs(target, log, phase.Start, phase.End);
-                //DPS
-                damage = damageLogs.Sum(x => x.Damage);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.Dps = (int)Math.Round(dps);
-                final.Damage = damage;
-                //Condi DPS
-                damage = damageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.CondiDps = (int)Math.Round(dps);
-                final.CondiDamage = damage;
-                //Power DPS
-                damage = final.Damage - final.CondiDamage;
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.PowerDps = (int)Math.Round(dps);
-                final.PowerDamage = damage;
-                // Actor DPS
-                damage = damageLogsActor.Sum(x => x.Damage);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorDps = (int)Math.Round(dps);
-                final.ActorDamage = damage;
-                //Actor Condi DPS
-                damage = damageLogsActor.Sum(x => x.IsCondi(log) ? x.Damage : 0);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorCondiDps = (int)Math.Round(dps);
-                final.ActorCondiDamage = damage;
-                //Actor Power DPS
-                damage = final.ActorDamage - final.ActorCondiDamage;
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorPowerDps = (int)Math.Round(dps);
-                final.ActorPowerDamage = damage;
-                res.Add(final);
-            }
-            return res;
-        }
 
         public List<FinalDPS> GetDPS(ParsedLog log)
         {
             if (_dpsAll == null)
             {
-                _dpsAll = GetFinalDPS(log, null);
+                _dpsAll = GetFinalDPS(this, log, null);
             }
             return _dpsAll;
         }
@@ -449,21 +385,21 @@ namespace GW2EIParser.EIData
             }
             if (!_dpsTarget.ContainsKey(target))
             {
-                _dpsTarget[target] = GetFinalDPS(log, target);
+                _dpsTarget[target] = GetFinalDPS(this, log, target);
             }
             return _dpsTarget[target];
         }
         // Stats
-        public List<FinalStatsAll> GetStats(ParsedLog log)
+        public List<FinalGameplayAll> GetStats(ParsedLog log)
         {
             if (_statsAll == null)
             {
-                _statsAll = GetFinalStats(log);
+                _statsAll = GetFinalGameplay(this, log);
             }
             return _statsAll;
         }
 
-        public List<FinalStats> GetStats(ParsedLog log, AbstractSingleActor target)
+        public List<FinalGameplay> GetStats(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -471,139 +407,12 @@ namespace GW2EIParser.EIData
             }
             if (!_statsTarget.ContainsKey(target))
             {
-                _statsTarget[target] = GetFinalStats(log, target);
+                _statsTarget[target] = GetFinalGameplay(this, log, target);
             }
             return _statsTarget[target];
         }
-
-        private static void FillFinalStats(List<AbstractDamageEvent> dls, FinalStats final)
-        {
-            HashSet<long> nonCritable = new HashSet<long>
-                    {
-                        9292,
-                        5492,
-                        13014,
-                        30770,
-                        52370
-                    };
-            // (x - 1) / x
-            foreach (AbstractDamageEvent dl in dls)
-            {
-                if (!(dl is NonDirectDamageEvent))
-                {
-                    if (dl.HasCrit)
-                    {
-                        final.CriticalCount++;
-                        final.CriticalDmg += dl.Damage;
-                    }
-
-                    if (dl.IsFlanking)
-                    {
-                        final.FlankingCount++;
-                    }
-
-                    if (dl.HasGlanced)
-                    {
-                        final.GlanceCount++;
-                    }
-
-                    if (dl.IsBlind)
-                    {
-                        final.Missed++;
-                    }
-                    if (dl.HasInterrupted)
-                    {
-                        final.Interrupts++;
-                    }
-
-                    if (dl.IsAbsorbed)
-                    {
-                        final.Invulned++;
-                    }
-                    final.DamageAgainstBarrier += dl.ShieldDamage;
-                    final.DirectDamageCount++;
-                    if (!nonCritable.Contains(dl.SkillId))
-                    {
-                        final.CritableDirectDamageCount++;
-                    }
-                }
-            }
-        }
-
-        private List<FinalStatsAll> GetFinalStats(ParsedLog log)
-        {
-            List<FinalStatsAll> res = new List<FinalStatsAll>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-
-                FinalStatsAll final = new FinalStatsAll();
-                res.Add(final);
-                FillFinalStats(GetJustActorDamageLogs(null, log, phase.Start, phase.End), final);
-                // If conjured sword, stop
-                if (IsFakeActor)
-                {
-                    continue;
-                }
-                foreach (AbstractCastEvent cl in GetCastLogs(log, phase.Start, phase.End))
-                {
-                    if (cl.Interrupted)
-                    {
-                        final.Wasted++;
-                        final.TimeWasted += cl.ActualDuration;
-                    }
-                    if (cl.ReducedAnimation)
-                    {
-                        if (cl.ActualDuration < cl.ExpectedDuration)
-                        {
-                            final.Saved++;
-                            final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
-                        }
-                    }
-                    if (cl.SkillId == SkillItem.WeaponSwapId)
-                    {
-                        final.SwapCount++;
-                    }
-                }
-                final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, GeneralHelper.TimeDigit);
-                final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
-
-                double avgBoons = 0;
-                foreach (long duration in GetBuffPresence(log, i).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Boon).Select(x => x.Value))
-                {
-                    avgBoons += duration;
-                }
-                final.AvgBoons = Math.Round(avgBoons / phase.DurationInMS, GeneralHelper.BoonDigit);
-                long activeDuration = phase.GetActorActiveDuration(this, log);
-                final.AvgActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, GeneralHelper.BoonDigit) : 0.0;
-
-                double avgCondis = 0;
-                foreach (long duration in GetBuffPresence(log, i).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Condition).Select(x => x.Value))
-                {
-                    avgCondis += duration;
-                }
-                final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
-                final.AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BoonDigit) : 0.0;
-            }
-            return res;
-        }
-        private List<FinalStats> GetFinalStats(ParsedLog log, AbstractSingleActor target)
-        {
-            List<FinalStats> res = new List<FinalStats>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-
-                FinalStats final = new FinalStatsAll();
-                res.Add(final);
-                FillFinalStats(GetJustActorDamageLogs(target, log, phase.Start, phase.End), final);
-            }
-            return res;
-        }
         // Defenses
-        public List<FinalDefensesAll> GetDefenses(ParsedLog log)
+        public List<FinalDefenseAll> GetDefenses(ParsedLog log)
         {
             if (_defensesAll == null)
             {
@@ -612,7 +421,7 @@ namespace GW2EIParser.EIData
             return _defensesAll;
         }
 
-        public List<FinalDefenses> GetDefenses(ParsedLog log, AbstractSingleActor target)
+        public List<FinalDefense> GetDefenses(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -625,7 +434,7 @@ namespace GW2EIParser.EIData
             return _defensesTarget[target];
         }
 
-        private void FillFinalDefenses(FinalDefenses finalDefenses, ParsedLog log, long start, long end, AbstractSingleActor target)
+        private void FillFinalDefenses(FinalDefense finalDefenses, ParsedLog log, long start, long end, AbstractSingleActor target)
         {
 
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(target, log, start, end);
@@ -653,16 +462,16 @@ namespace GW2EIParser.EIData
             }
         }
 
-        private List<FinalDefensesAll> GetFinalDefenses(ParsedLog log)
+        private List<FinalDefenseAll> GetFinalDefenses(ParsedLog log)
         {
             List<(long start, long end)> dead = new List<(long start, long end)>();
             List<(long start, long end)> down = new List<(long start, long end)>();
             List<(long start, long end)> dc = new List<(long start, long end)>();
             AgentItem.GetAgentStatus(dead, down, dc, log);
-            List<FinalDefensesAll> res = new List<FinalDefensesAll>();
+            List<FinalDefenseAll> res = new List<FinalDefenseAll>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                FinalDefensesAll final = new FinalDefensesAll();
+                FinalDefenseAll final = new FinalDefenseAll();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -675,16 +484,16 @@ namespace GW2EIParser.EIData
 
                 final.DownDuration = final.DownCount > 0 ? (int)down.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start)) : 0;
                 final.DeadDuration = final.DeadCount > 0 ? (int)dead.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start)) : 0;
-                final.DcDuration = final.DcCount > 0?(int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start)) : 0;
+                final.DcDuration = final.DcCount > 0 ? (int)dc.Where(x => x.end >= start && x.start <= end).Sum(x => Math.Min(end, x.end) - Math.Max(x.start, start)) : 0;
             }
             return res;
         }
-        private List<FinalDefenses> GetFinalDefenses(ParsedLog log, AbstractSingleActor target)
+        private List<FinalDefense> GetFinalDefenses(ParsedLog log, AbstractSingleActor target)
         {
-            List<FinalDefenses> res = new List<FinalDefenses>();
+            List<FinalDefense> res = new List<FinalDefense>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                FinalDefensesAll final = new FinalDefensesAll();
+                FinalDefenseAll final = new FinalDefenseAll();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -697,7 +506,11 @@ namespace GW2EIParser.EIData
         {
             if (_support == null)
             {
-                _support = GetFinalSupport(log);
+                if (_buffsPerId == null)
+                {
+                    _buffsPerId = log.CombatData.GetBuffDataBySrc(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+                }
+                _support = GetFinalSupport(this, log, _buffsPerId);
             }
             return _support;
         }
@@ -709,154 +522,13 @@ namespace GW2EIParser.EIData
             }
             if (!_supportTarget.ContainsKey(target))
             {
-                _supportTarget[target] = GetFinalSupport(log, target);
+                if (_buffsPerId == null)
+                {
+                    _buffsPerId = log.CombatData.GetBuffDataBySrc(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+                }
+                _supportTarget[target] = GetFinalSupport(this, log, target, _buffsPerId);
             }
             return _supportTarget[target];
-        }
-        private long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return GetCleanses(log, phase);
-            }
-            long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
-            {
-                if (_buffsPerId.TryGetValue(id, out var list))
-                {
-                    foreach (AbstractBuffEvent bf in list)
-                    {
-                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
-                        {
-                            cleanse[0]++;
-                            cleanse[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
-                        }
-                    }
-                }
-            }
-            return cleanse;
-        }
-        private long[] GetCleanses(ParsedLog log, PhaseData phase)
-        {
-            long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
-            {
-                if (_buffsPerId.TryGetValue(id, out var list))
-                {
-                    foreach (AbstractBuffEvent bf in list)
-                    {
-                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
-                        {
-                            cleanse[0]++;
-                            cleanse[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
-                        }
-                    }
-                }
-            }
-            return cleanse;
-        }
-
-        private long[] GetBoonStrips(ParsedLog log, PhaseData phase)
-        {
-            long[] strips = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
-            {
-                if (_buffsPerId.TryGetValue(id, out var list))
-                {
-                    foreach (AbstractBuffEvent bf in list)
-                    {
-                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
-                        {
-                            strips[0]++;
-                            strips[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
-                        }
-                    }
-                }
-            }
-            return strips;
-        }
-        private long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractSingleActor target)
-        {
-            if (target == null)
-            {
-                return GetBoonStrips(log, phase);
-            }
-            long[] strips = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
-            {
-                if (_buffsPerId.TryGetValue(id, out var list))
-                {
-                    foreach (AbstractBuffEvent bf in list)
-                    {
-                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
-                        {
-                            strips[0]++;
-                            strips[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
-                        }
-                    }
-                }
-            }
-            return strips;
-        }
-
-        private long[] GetReses(ParsedLog log, long start, long end)
-        {
-            List<AbstractCastEvent> cls = GetCastLogs(log, start, end);
-            long[] reses = { 0, 0 };
-            foreach (AbstractCastEvent cl in cls)
-            {
-                if (cl.SkillId == SkillItem.ResurrectId)
-                {
-                    reses[0]++;
-                    reses[1] += cl.ActualDuration;
-                }
-            }
-            return reses;
-        }
-
-        private void FillFinalSupport(FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target)
-        {
-            if (_buffsPerId == null)
-            {
-                _buffsPerId = log.CombatData.GetBuffDataBySrc(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-            }
-            long[] cleanseArray = GetCleanses(log, phase, target);
-            long[] boonStrips = GetBoonStrips(log, phase, target);
-            finalSupport.CondiCleanse = cleanseArray[0];
-            finalSupport.CondiCleanseTime = cleanseArray[1] / 1000.0;
-            finalSupport.BoonStrips = boonStrips[0];
-            finalSupport.BoonStripsTime = boonStrips[1] / 1000.0;
-        }
-
-        private List<FinalSupportAll> GetFinalSupport(ParsedLog log)
-        {
-            List<FinalSupportAll> res = new List<FinalSupportAll>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                FinalSupportAll final = new FinalSupportAll();
-                res.Add(final);
-                PhaseData phase = phases[phaseIndex];
-
-                long[] resArray = GetReses(log, phase.Start, phase.End);
-                final.Resurrects = resArray[0];
-                final.ResurrectTime = resArray[1] / 1000.0;
-                FillFinalSupport(final, log, phase, null);
-            }
-            return res;
-        }
-        private List<FinalSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target)
-        {
-            List<FinalSupport> res = new List<FinalSupport>();
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-            {
-                FinalSupport final = new FinalSupport();
-                res.Add(final);
-                PhaseData phase = phases[phaseIndex];
-                FillFinalSupport(final, log, phase, target);
-            }
-            return res;
         }
         // Minions
         public Dictionary<long, Minions> GetMinions(ParsedLog log)

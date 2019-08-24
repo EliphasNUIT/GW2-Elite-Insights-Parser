@@ -2,7 +2,7 @@
 using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Models.Statistics;
+using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
 {

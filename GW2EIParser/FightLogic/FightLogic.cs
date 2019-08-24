@@ -251,7 +251,7 @@ namespace GW2EIParser.Logic
         protected int HPBasedCM(CombatData combatData, AgentData agentData, ushort id, double hpValue)
         {
             NPC target = NPCs.Find(x => x.ID == id);
-            if (target == null )
+            if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
             }

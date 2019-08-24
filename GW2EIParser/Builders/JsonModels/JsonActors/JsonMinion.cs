@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonLog;

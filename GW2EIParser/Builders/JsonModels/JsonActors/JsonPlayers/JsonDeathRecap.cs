@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using GW2EIParser.Models;
+using static GW2EIParser.EIData.Player;
+using static GW2EIParser.EIData.Player.DeathRecap;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -39,7 +40,7 @@ namespace GW2EIParser.Builders.JsonModels
             [DefaultValue(null)]
             public int Time { get; set; }
 
-            public JsonDeathRecapDamageItem(Statistics.DeathRecap.DeathRecapDamageItem item)
+            public JsonDeathRecapDamageItem(DeathRecapDamageItem item)
             {
                 Id = item.ID;
                 IndirectDamage = item.IndirectDamage;
@@ -63,7 +64,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<JsonDeathRecapDamageItem> ToKill { get; set; }
 
-        public JsonDeathRecap(Statistics.DeathRecap recap)
+        public JsonDeathRecap(DeathRecap recap)
         {
             DeathTime = recap.DeathTime;
             ToDown = recap.ToDown?.Select(x => new JsonDeathRecapDamageItem(x)).ToList();
