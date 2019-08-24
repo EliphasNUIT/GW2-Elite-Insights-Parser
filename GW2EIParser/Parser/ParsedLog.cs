@@ -40,15 +40,6 @@ namespace GW2EIParser.Parser
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList);
             LogData = new LogData(buildVersion, CombatData, combatItems);
             //
-            UpdateFightData();
-            //
-            Buffs = new BuffsContainer(LogData.GW2Version);
-            DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
-            MechanicData = FightData.Logic.GetMechanicData();
-        }
-
-        private void UpdateFightData()
-        {
             FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
             if (FightData.FightDuration <= 2200)
             {
@@ -59,6 +50,10 @@ namespace GW2EIParser.Parser
                 throw new SkipException();
             }
             FightData.SetCM(CombatData, AgentData, FightData);
+            //
+            Buffs = new BuffsContainer(LogData.GW2Version);
+            DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
+            MechanicData = FightData.Logic.GetMechanicData();
         }
 
         private void AddToDictionary(AbstractSingleActor actor)
@@ -73,8 +68,24 @@ namespace GW2EIParser.Parser
             }
         }
 
+        private void InitActorDictionaries()
+        {
+            if (_agentToActorDictionary == null)
+            {
+                _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
+                foreach (Player p in PlayerList)
+                {
+                    AddToDictionary(p);
+                }
+                foreach (NPC npc in FightData.Logic.NPCs)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
         /// <summary>
-        /// Find the corresponding actor, creates one otherwise
+        /// Find the corresponding actor
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
@@ -84,18 +95,7 @@ namespace GW2EIParser.Parser
             {
                 return null;
             }
-            if (_agentToActorDictionary == null)
-            {
-                _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
-                foreach (Player p in PlayerList)
-                {
-                   AddToDictionary(p);
-                }
-                foreach (NPC npc in FightData.Logic.NPCs)
-                {
-                    AddToDictionary(npc);
-                }
-            }
+            InitActorDictionaries();
             if (_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
             {
                 return actor;

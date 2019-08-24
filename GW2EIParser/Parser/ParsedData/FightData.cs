@@ -8,7 +8,7 @@ namespace GW2EIParser.Parser.ParsedData
     public class FightData
     {
         // Fields
-        private List<PhaseData> _phases = new List<PhaseData>();
+        private List<PhaseData> _phases;
         public ushort ID { get; }
         private readonly bool _requirePhases;
         public FightLogic Logic { get; }
@@ -168,8 +168,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<PhaseData> GetPhases(ParsedLog log)
         {
-
-            if (_phases.Count == 0)
+            if (_phases == null)
             {
                 long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);

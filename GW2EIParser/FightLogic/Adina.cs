@@ -82,7 +82,7 @@ namespace GW2EIParser.Logic
                 }
             }
             combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         protected override List<ushort> GetFightNPCsIDs()
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)EvtcNPCIDs.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)EvtcNPCIDs.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -174,17 +174,6 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override string GetFightName()
-        {
-            NPC target = NPCs.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
-            if (target == null)
-            {
-                return "UNKNOWN";
-            }
-            return target.Character;
-        }
-
-
         protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/3IBkNM6.png",
@@ -196,12 +185,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
-            if (target == null)
-            {
-                throw new InvalidOperationException("Target for CM detection not found");
-            }
-            return (target.GetHealth(combatData) > 23e6) ? 1 : 0;
+            return HPBasedCM(combatData, agentData, TriggerID, 23e6);
         }
     }
 }

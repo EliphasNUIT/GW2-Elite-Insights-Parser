@@ -54,7 +54,23 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, combatData);
+            AgentItem ca = agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate).FirstOrDefault();
+            AgentItem leftArm = agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.CALeftArm).FirstOrDefault();
+            AgentItem rightArm = agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.CARightArm).FirstOrDefault();
+            if (ca != null)
+            {
+                ca.OverrideType(AgentItem.AgentType.NPC);
+            }
+            if (leftArm != null)
+            {
+                leftArm.OverrideType(AgentItem.AgentType.NPC);
+            }
+            if (rightArm != null)
+            {
+                rightArm.OverrideType(AgentItem.AgentType.NPC);
+            }
+            agentData.Refresh();
+            ComputeFightNPCs(agentData, combatData);
             AgentItem sword = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.Player, "Conjured Sword\0:Conjured Sword\050", "Sword", 0);
             foreach (CombatItem c in combatData)
             {
@@ -255,11 +271,6 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate);
-            if (target == null)
-            {
-                throw new InvalidOperationException("Target for CM detection not found");
-            }
             return combatData.GetBuffData(53075).Count > 0 ? 1 : 0;
         }
     }

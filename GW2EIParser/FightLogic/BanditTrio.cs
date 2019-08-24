@@ -132,12 +132,13 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Narella");
             }
-            phases[0].Targets.AddRange(NPCs);
+            List<AbstractSingleActor> phaseTargets = new List<AbstractSingleActor> { berg, zane, narella };
+            phases[0].Targets.AddRange(phaseTargets);
             if (!requirePhases)
             {
                 return phases;
             }
-            foreach (NPC target in NPCs)
+            foreach (NPC target in phaseTargets)
             {
                 SetPhasePerTarget(target, phases, log);
             }

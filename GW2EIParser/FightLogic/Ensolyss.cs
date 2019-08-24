@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
             {
                 fightData.OverrideStart(invulLost.LogTime);
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         protected override List<ushort> GetFightNPCsIDs()

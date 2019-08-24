@@ -160,7 +160,7 @@ namespace GW2EIParser.Logic
                     break;
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         protected override List<ushort> GetFightNPCsIDs()

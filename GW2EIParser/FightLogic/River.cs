@@ -110,7 +110,7 @@ namespace GW2EIParser.Logic
             {
                 combatData.Sort((x, y) => x.LogTime.CompareTo(y.LogTime));
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)

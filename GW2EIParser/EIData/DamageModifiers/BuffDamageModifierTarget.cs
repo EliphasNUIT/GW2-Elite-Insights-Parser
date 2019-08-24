@@ -73,7 +73,7 @@ namespace GW2EIParser.EIData
                     return;
                 }
             }
-            foreach (NPC target in log.FightData.NPCs)
+            foreach (NPC target in log.FightData.Logic.NPCs)
             {
                 Dictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
                 if (!Tracker.Has(bgms) && GainComputer != ByAbsence)

@@ -201,7 +201,7 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
             // Find target
             NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
             if (target == null)
@@ -457,12 +457,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
-            if (target == null)
-            {
-                throw new InvalidOperationException("Target for CM detection not found");
-            }
-            return (target.GetHealth(combatData) > 40e6) ? 1 : 0;
+            return HPBasedCM(combatData, agentData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 40e6);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace GW2EIParser.Logic
                     fightData.OverrideStart(enterCombat.LogTime);
                 }
             }
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)

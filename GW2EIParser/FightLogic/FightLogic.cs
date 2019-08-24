@@ -75,7 +75,7 @@ namespace GW2EIParser.Logic
             return target.Character;
         }
 
-        private static void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        private static void RegroupNPCsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
         {
             List<AgentItem> agents = agentData.GetAgentsByID(id);
             if (agents.Count > 1)
@@ -112,15 +112,14 @@ namespace GW2EIParser.Logic
 
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
-        protected void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems)
+        protected void ComputeFightNPCs(AgentData agentData, List<CombatItem> combatItems)
         {
             foreach (ushort id in GetUniqueTargetIDs())
             {
-                RegroupTargetsByID(id, agentData, combatItems);
+                RegroupNPCsByID(id, agentData, combatItems);
             }
             List<ushort> ids = GetFightNPCsIDs();
             List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(x.ID)).ToList();
-            aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids.Contains(x.ID)));
             foreach (AgentItem a in aList)
             {
                 if (a.MasterAgent != null)
@@ -249,6 +248,16 @@ namespace GW2EIParser.Logic
         {
         }
 
+        protected int HPBasedCM(CombatData combatData, AgentData agentData, ushort id, double hpValue)
+        {
+            NPC target = NPCs.Find(x => x.ID == id);
+            if (target == null )
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.GetHealth(combatData) > hpValue) ? 1 : 0;
+        }
+
         public virtual int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
             return -1;
@@ -353,14 +362,18 @@ namespace GW2EIParser.Logic
 
         public virtual void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            ComputeFightTargets(agentData, combatData);
+            ComputeFightNPCs(agentData, combatData);
         }
 
         //
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart)
         {
+            return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart);
+        }
+        protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart)
+        {
             bool needStart = beginWithStart;
-            List<AbstractBuffEvent> main = combatData.GetBuffData(buffID).Where(x => x.To == target.AgentItem && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            List<AbstractBuffEvent> main = combatData.GetBuffData(buffID).Where(x => x.To == target && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {

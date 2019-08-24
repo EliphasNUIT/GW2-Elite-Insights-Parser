@@ -213,12 +213,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Samarog);
-            if (target == null)
-            {
-                throw new InvalidOperationException("Target for CM detection not found");
-            }
-            return (target.GetHealth(combatData) > 30e6) ? 1 : 0;
+            return HPBasedCM(combatData, agentData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 30e6);
         }
     }
 }
