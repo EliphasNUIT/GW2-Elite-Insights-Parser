@@ -23,6 +23,8 @@ namespace GW2EIParser.Parser
         public BuffsContainer Buffs { get; }
         public bool CanCombatReplay => CombatData.HasMovementData;
 
+        private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
+
         public MechanicData MechanicData { get; }
 
         public ParsedLog(string buildVersion, FightData fightData, AgentData agentData, SkillData skillData,
@@ -59,35 +61,46 @@ namespace GW2EIParser.Parser
             FightData.SetCM(CombatData, AgentData, FightData);
         }
 
+        private void AddToDictionary(AbstractSingleActor actor)
+        {
+            _agentToActorDictionary[actor.AgentItem] = actor;
+            foreach (Minions minions in actor.GetMinions(this).Values)
+            {
+                foreach (NPC npc in minions.MinionList)
+                {
+                    AddToDictionary(npc);
+                }
+            }
+        }
+
         /// <summary>
         /// Find the corresponding actor, creates one otherwise
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractSingleActor FindActor(AgentItem a)
+        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
         {
-            AbstractSingleActor res = PlayerList.FirstOrDefault(x => x.AgentItem == a);
-            if (res == null)
+            if (a == null || a == GeneralHelper.UnknownAgent || a.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
+                return null;
+            }
+            if (_agentToActorDictionary == null)
+            {
+                _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
                 foreach (Player p in PlayerList)
                 {
-                    Dictionary<long, Minions> minionsDict = p.GetMinions(this);
-                    foreach (Minions minions in minionsDict.Values)
-                    {
-                        res = minions.MinionList.FirstOrDefault(x => x.AgentItem == a);
-                        if (res != null)
-                        {
-                            return res;
-                        }
-                    }
+                   AddToDictionary(p);
                 }
-                res = FightData.Logic.NPCs.FirstOrDefault(x => x.AgentItem == a);
+                foreach (NPC npc in FightData.Logic.NPCs)
+                {
+                    AddToDictionary(npc);
+                }
             }
-            if (res == null)
+            if (_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
             {
-                throw new InvalidOperationException("Missing actor with id " + a.ID + " and name " + a.Name);
+                return actor;
             }
-            return res;
+            throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
         }
     }
 }

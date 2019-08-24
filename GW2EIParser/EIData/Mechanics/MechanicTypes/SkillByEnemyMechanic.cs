@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<ushort, DummyActor> regroupedMobs)
+        public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
         {
             CombatData combatData = log.CombatData;
             HashSet<AgentItem> playerAgents = log.PlayerAgents;
@@ -34,31 +34,7 @@ namespace GW2EIParser.EIData
                 DummyActor amp = null;
                 if (Keep(c, log))
                 {
-                    NPC target = log.FightData.Logic.NPCs.Find(x => x.AgentItem == c.From);
-                    if (target != null)
-                    {
-                        amp = target;
-                    }
-                    else
-                    {
-                        AgentItem a = c.From;
-                        if (playerAgents.Contains(a))
-                        {
-                            continue;
-                        }
-                        else if (c.MasterFrom != null)
-                        {
-                            if (playerAgents.Contains(c.MasterFrom))
-                            {
-                                continue;
-                            }
-                        }
-                        if (!regroupedMobs.TryGetValue(a.ID, out amp))
-                        {
-                            amp = new DummyActor(a);
-                            regroupedMobs.Add(a.ID, amp);
-                        }
-                    }
+                    amp = log.FindActor(c.From, false);
                 }
                 if (amp != null)
                 {

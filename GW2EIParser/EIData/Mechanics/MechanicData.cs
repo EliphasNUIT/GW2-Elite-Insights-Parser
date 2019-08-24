@@ -24,10 +24,9 @@ namespace GW2EIParser.EIData
 
         private void CheckMechanics(ParsedLog log)
         {
-            Dictionary<ushort, DummyActor> regroupedMobs = new Dictionary<ushort, DummyActor>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
-                mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
+                mech.CheckMechanic(log, _mechanicLogs);
             }
             // regroup same mechanics with diff ids
             Dictionary<string, Mechanic> altNames = new Dictionary<string, Mechanic>();
