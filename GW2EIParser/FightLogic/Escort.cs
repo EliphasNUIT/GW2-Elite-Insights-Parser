@@ -13,7 +13,7 @@ namespace GW2EIParser.Logic
             }
             );
             Extension = "escort";
-            IconUrl = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
+            Icon = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
         }
 
         /*protected override CombatReplayMap GetCombatMapInternal()

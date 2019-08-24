@@ -59,7 +59,7 @@ namespace GW2EIParser.Controllers
             while (!maxPageSizeReached)
             {
                 string path = "/v2/skills?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(path).Result;
+                HttpResponseMessage response = APIClient.GetAsync(new Uri(path)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string data = response.Content.ReadAsStringAsync().Result;
@@ -102,7 +102,7 @@ namespace GW2EIParser.Controllers
             GetAPIClient();
 
             _listOfSkills = new SkillList();
-            HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills")).Result;
             List<int> failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
@@ -183,7 +183,7 @@ namespace GW2EIParser.Controllers
             System.Threading.Thread.Sleep(100);
             GW2APISpec spec = null;
             //path = "/v2/specializations/" + isElite
-            HttpResponseMessage response = APIClient.GetAsync(path).Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri(path)).Result;
             if (response.IsSuccessStatusCode)
             {
                 spec = JsonConvert.DeserializeObject<GW2APISpec>(response.Content.ReadAsStringAsync().Result);
@@ -213,7 +213,7 @@ namespace GW2EIParser.Controllers
             GetAPIClient();
 
             _listofSpecs = new SpecList();
-            HttpResponseMessage response = APIClient.GetAsync("/v2/specializations").Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations")).Result;
             int[] idArray;
             List<int> failedList = new List<int>();
             if (response.IsSuccessStatusCode)

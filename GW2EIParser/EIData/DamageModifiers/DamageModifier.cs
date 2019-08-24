@@ -34,13 +34,13 @@ namespace GW2EIParser.EIData
         public ulong MaxBuild { get; } = ulong.MinValue;
         public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
-        public string Url { get; protected set; }
+        public string Icon { get; protected set; }
         public string Name { get; protected set; }
         public string Tooltip { get; protected set; }
         public delegate bool DamageLogChecker(AbstractDamageEvent dl);
         protected DamageLogChecker DLChecker { get; set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string url, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
+        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
         {
             Tooltip = tooltip;
             Name = name;
@@ -49,7 +49,7 @@ namespace GW2EIParser.EIData
             _compareType = compareType;
             _srcType = srctype;
             Src = src;
-            Url = url;
+            Icon = icon;
             GainComputer = gainComputer;
             DLChecker = dlChecker;
             MaxBuild = maxBuild;

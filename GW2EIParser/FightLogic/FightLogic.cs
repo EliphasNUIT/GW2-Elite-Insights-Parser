@@ -17,7 +17,7 @@ namespace GW2EIParser.Logic
         protected List<Mechanic> MechanicList { get; }
         public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
         public string Extension { get; protected set; }
-        public string IconUrl { get; protected set; }
+        public string Icon { get; protected set; }
         private readonly int _basicMechanicsCount;
         public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
         public List<Mob> TrashMobs { get; } = new List<Mob>();

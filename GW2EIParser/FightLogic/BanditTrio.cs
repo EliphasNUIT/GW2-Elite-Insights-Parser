@@ -22,7 +22,7 @@ namespace GW2EIParser.Logic
             });
             Extension = "trio";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://i.imgur.com/UZZQUdf.png";
+            Icon = "https://i.imgur.com/UZZQUdf.png";
         }
 
         protected override List<ushort> GetSuccessCheckIds()

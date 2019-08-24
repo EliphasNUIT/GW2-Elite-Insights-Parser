@@ -88,7 +88,7 @@ namespace GW2EIParser.Builders.JsonModels
             public DamageModDesc(DamageModifier item)
             {
                 Name = item.Name;
-                Icon = item.Url;
+                Icon = item.Icon;
                 Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
             }
@@ -209,7 +209,7 @@ namespace GW2EIParser.Builders.JsonModels
             // Meta data
             TriggerID = log.FightData.ID;
             FightName = log.FightData.Name;
-            FightIcon = log.FightData.Logic.IconUrl;
+            FightIcon = log.FightData.Logic.Icon;
             EliteInsightsVersion = Application.ProductVersion;
             ArcVersion = log.LogData.BuildVersion;
             RecordedBy = log.LogData.PoVName;

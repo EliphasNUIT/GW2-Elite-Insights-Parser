@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
             new PlayerBoonRemoveMechanic(49125, "Freed from Echo", new MechanicPlotlySetting("square","rgb(0,0,255)"), "F Echo","Freed from Ender's Echo", "Freed from Echo", 0, (br,log) => log.CombatData.GetDeadEvents(br.To).Where(x => Math.Abs(x.Time - br.Time) <= 20).Any())
             });
             Extension = "dhuum";
-            IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+            Icon = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

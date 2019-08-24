@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
             });
             Extension = "dei";
             GenericFallBackMethod = FallBackMethod.None;
-            IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+            Icon = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
         protected override CombatReplayMap GetCombatMapInternal()

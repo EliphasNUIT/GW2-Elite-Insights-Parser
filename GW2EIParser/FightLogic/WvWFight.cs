@@ -13,7 +13,7 @@ namespace GW2EIParser.Logic
         {
             Extension = "wvw";
             Mode = ParseMode.WvW;
-            IconUrl = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
+            Icon = "https://wiki.guildwars2.com/images/3/35/WvW_Rank_up.png";
         }
 
         protected override HashSet<ushort> GetUniqueTargetIDs()
