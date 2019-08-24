@@ -178,11 +178,10 @@ namespace GW2EIParser.Parser.ParsedData
             return _phases;
         }
 
-        public List<NPC> GetMainTargets(ParsedLog log)
+        public List<AbstractSingleActor> GetMainTargets(ParsedLog log)
         {
             if (_phases.Count == 0)
             {
-                long fightDuration = log.FightData.FightDuration;
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
             return _phases[0].Targets;

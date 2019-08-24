@@ -27,7 +27,6 @@ namespace GW2EIParser.EIData
 
         public override void CheckMechanic(ParsedLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
         {
-            CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
             {
                 foreach (AbstractCastEvent c in log.CombatData.GetCastDataById(SkillId))

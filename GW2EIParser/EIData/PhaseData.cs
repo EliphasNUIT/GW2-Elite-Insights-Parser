@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         public long DurationInMS { get; private set; }
         public long DurationInM { get; private set; }
         public string Name { get; set; }
-        public List<NPC> Targets { get; } = new List<NPC>();
+        public List<AbstractSingleActor> Targets { get; } = new List<AbstractSingleActor>();
 
         public PhaseData(long start, long end)
         {
