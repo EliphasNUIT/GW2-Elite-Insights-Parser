@@ -1,2 +1,6 @@
 language: csharp
 solution: GW2EI.sln
+mono: non
+dotnet: 3.0.100-preview8-013656
+script:
+    - dotnet restore
