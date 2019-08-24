@@ -59,22 +59,18 @@ namespace GW2EIParser.EIData
         }
 
         // Damage logs
-        protected void SetDamageLogs(ParsedLog log)
-        {
-            AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
-            Dictionary<long, Minions> minionsList = GetMinions(log);
-            foreach (Minions mins in minionsList.Values)
-            {
-                DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
-            }
-            DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
-        }
         public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs == null)
             {
                 DamageLogs = new List<AbstractDamageEvent>();
-                SetDamageLogs(log);
+                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ParseEnum.EvtcIFF.Friend));
+                Dictionary<long, Minions> minionsList = GetMinions(log);
+                foreach (Minions mins in minionsList.Values)
+                {
+                    DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
+                }
+                DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -96,7 +92,7 @@ namespace GW2EIParser.EIData
             if (DamageTakenlogs == null)
             {
                 DamageTakenlogs = new List<AbstractDamageEvent>();
-                SetDamageTakenLogs(log);
+                DamageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
                 DamageTakenLogsBySrc = DamageTakenlogs.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -113,14 +109,6 @@ namespace GW2EIParser.EIData
                 }
             }
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
-        }
-        protected void AddDamageLogs(List<AbstractDamageEvent> damageEvents)
-        {
-            DamageLogs.AddRange(damageEvents.Where(x => x.IFF != ParseEnum.EvtcIFF.Friend));
-        }
-        protected void SetDamageTakenLogs(ParsedLog log)
-        {
-            DamageTakenlogs.AddRange(log.CombatData.GetDamageTakenData(AgentItem));
         }
         public List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
