@@ -49,7 +49,7 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            foreach (NPC target in log.FightData.Logic.NPCs)
+            foreach (NPC target in log.FightData.NPCs)
             {
                 if (!dataTarget.TryGetValue(target, out var extra))
                 {
