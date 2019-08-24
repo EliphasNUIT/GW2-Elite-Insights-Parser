@@ -77,36 +77,38 @@ namespace GW2EIParser.Builders.JsonModels
             Dictionary<SkillItem, List<AbstractDamageEvent>> dict = damageEvents.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> pair in dict)
             {
-                if (pair.Value.Count == 0)
+                SkillItem skill = pair.Key;
+                long id = pair.Key.ID;
+                List<AbstractDamageEvent> damageLogs = pair.Value;
+                if (damageLogs.Count == 0)
                 {
                     continue;
                 }
-                SkillItem skill = pair.Key;
-                bool indirect = pair.Value.Exists(x => x is NonDirectDamageEvent);
+                bool indirect = damageLogs.Exists(x => x is NonDirectDamageEvent);
                 if (indirect)
                 {
-                    if (!buffMap.ContainsKey("b" + pair.Key))
+                    if (!buffMap.ContainsKey("b" + id))
                     {
-                        if (log.Buffs.BuffsByIds.TryGetValue(pair.Key.ID, out Buff buff))
+                        if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                         {
-                            buffMap["b" + pair.Key.ID] = new BuffDesc(buff);
+                            buffMap["b" + id] = new BuffDesc(buff);
                         }
                         else
                         {
-                            Buff auxBoon = new Buff(skill.Name, pair.Key.ID, skill.Icon);
-                            buffMap["b" + pair.Key.ID] = new BuffDesc(auxBoon);
+                            Buff auxBoon = new Buff(skill.Name, id, skill.Icon);
+                            buffMap["b" + id] = new BuffDesc(auxBoon);
                         }
                     }
                 }
                 else
                 {
-                    if (!skillMap.ContainsKey("s" + pair.Key))
+                    if (!skillMap.ContainsKey("s" + id))
                     {
-                        skillMap["s" + pair.Key] = new SkillDesc(skill);
+                        skillMap["s" + id] = new SkillDesc(skill);
                     }
                 }
                 string prefix = indirect ? "b" : "s";
-                damageDist.Add(new JsonDamageDist(pair.Value, indirect, pair.Key.ID));
+                damageDist.Add(new JsonDamageDist(damageLogs, indirect, id));
             }
             return damageDist;
         }
