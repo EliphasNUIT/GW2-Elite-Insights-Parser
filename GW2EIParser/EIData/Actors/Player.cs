@@ -87,6 +87,7 @@ namespace GW2EIParser.EIData
         // Constructors
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
+            Friendly = agent.Type == AgentItem.AgentType.Player;
             string[] name = agent.Name.Split('\0');
             if (name.Length < 2)
             {

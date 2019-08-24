@@ -120,7 +120,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<long> ActiveTimes { get; set; }
 
 
-        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, DamageModDesc> damageModMap) : base(log, player, skillMap, buffMap, log.FightData.GetMainTargets(log), log.PlayerList)
+        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, DamageModDesc> damageModMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, player, skillMap, buffMap, targets, allies)
         {
             // meta data
             Account = player.Account;

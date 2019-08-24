@@ -14,8 +14,9 @@ namespace GW2EIParser.EIData
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         private int _health = -1;
         // Constructors
-        public NPC(AgentItem agent) : base(agent)
+        public NPC(AgentItem agent, bool friendly) : base(agent)
         {
+            Friendly = friendly;
         }
 
         public void OverrideName(string name)

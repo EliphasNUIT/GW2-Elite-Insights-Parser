@@ -65,6 +65,11 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected virtual HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>();
+        }
+
         public virtual string GetFightName()
         {
             NPC target = NPCs.Find(x => x.ID == TriggerID);
@@ -119,9 +124,11 @@ namespace GW2EIParser.Logic
                 RegroupNPCsByID(id, agentData, combatItems);
             }
             List<ushort> ids = GetFightNPCsIDs();
+            HashSet<ushort> friendlies = GetFriendlyNPCsIDs();
             List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(x.ID)).ToList();
             foreach (AgentItem a in aList)
             {
+                bool friendly = friendlies.Contains(a.ID);
                 if (a.MasterAgent != null)
                 {
                     AgentItem master = a.MasterAgent;
@@ -131,12 +138,12 @@ namespace GW2EIParser.Logic
                     }
                     if (!ids.Contains(a.MasterAgent.ID))
                     {
-                        NPC masterNPC = new NPC(a.MasterAgent);
+                        NPC masterNPC = new NPC(a.MasterAgent, friendly);
                         NPCs.Add(masterNPC);
                     }
                     continue;
                 }
-                NPC target = new NPC(a);
+                NPC target = new NPC(a, friendly);
                 NPCs.Add(target);
             }
         }

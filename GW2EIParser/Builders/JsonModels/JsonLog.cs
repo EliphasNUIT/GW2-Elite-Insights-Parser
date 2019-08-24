@@ -222,16 +222,37 @@ namespace GW2EIParser.Builders.JsonModels
             // Mechanics
             Mechanics = BuildMechanics(log);
             // Players
+            List<AbstractSingleActor> friendlies = new List<AbstractSingleActor>();
+            List<AbstractSingleActor> enemies = new List<AbstractSingleActor>();
+            foreach (NPC npc in log.FightData.Logic.NPCs)
+            {
+                if (npc.Friendly)
+                {
+                    friendlies.Add(npc);
+                }
+                else
+                {
+                    enemies.Add(npc);
+                }
+            }
+            // Friendlies
             Friendlies = new List<JsonActor>();
             foreach (Player p in log.PlayerList)
             {
-                Friendlies.Add(new JsonPlayer(log, p, SkillMap, BuffMap, PersonalBuffs, DamageModMap));
+                Friendlies.Add(new JsonPlayer(log, p, SkillMap, BuffMap, PersonalBuffs, DamageModMap, enemies, friendlies));
             }
             // Targets
             Enemies = new List<JsonActor>();
             foreach (NPC tar in log.FightData.Logic.NPCs)
             {
-                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, log.PlayerList, log.FightData.Logic.NPCs));
+                if (tar.Friendly)
+                {
+                    Friendlies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, enemies, friendlies));
+                }
+                else
+                {
+                    Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, friendlies, enemies));
+                }
             }
             //
             if (uploadLink.FirstOrDefault(x => x.Length > 0) != null)

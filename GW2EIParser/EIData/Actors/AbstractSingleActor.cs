@@ -38,6 +38,8 @@ namespace GW2EIParser.EIData
         private Dictionary<long, Minions> _minions;
         // Replay
         protected CombatReplay CombatReplay { get; set; }
+        // Friendly
+        public bool Friendly { get; protected set; }
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -543,11 +545,11 @@ namespace GW2EIParser.EIData
                     long id = agent.ID;
                     if (auxMinions.TryGetValue(id, out Minions values))
                     {
-                        values.AddMinion(new NPC(agent));
+                        values.AddMinion(new NPC(agent, Friendly));
                     }
                     else
                     {
-                        auxMinions[id] = new Minions(new NPC(agent));
+                        auxMinions[id] = new Minions(new NPC(agent, Friendly));
                     }
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)

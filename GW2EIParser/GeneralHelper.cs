@@ -19,7 +19,7 @@ namespace GW2EIParser
 
         public static readonly AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
-        public static readonly NPC NullActor = new NPC(UnknownAgent);
+        public static readonly NPC NullActor = new NPC(UnknownAgent, false);
 
         public static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
