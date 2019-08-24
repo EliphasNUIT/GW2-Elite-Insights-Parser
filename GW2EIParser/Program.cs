@@ -17,7 +17,7 @@ namespace GW2EIParser
         [DllImport("kernel32.dll")]
         private static extern FileType GetFileType(IntPtr handle);
 
-        private const int _attachParentProcess = -1;
+        private const int AttachParentProcess = -1;
 
         private enum StandardHandle
         {
@@ -99,12 +99,12 @@ namespace GW2EIParser
                         _ = Console.Out;
                     }
 
-                    if (!AttachConsole(_attachParentProcess))
+                    if (!AttachConsole(AttachParentProcess))
                     {
                         AllocConsole();
                     }
 
-                    AttachConsole(_attachParentProcess);
+                    AttachConsole(AttachParentProcess);
                 }
 
                 if (args.Contains("-c"))

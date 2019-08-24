@@ -118,7 +118,7 @@ namespace GW2EIParser.EIData
             _logic = Logic.Unknown;
         }
 
-        private readonly static List<Buff> _boons = new List<Buff>
+        private static readonly List<Buff> _boons = new List<Buff>
         {
                 new Buff("Might", 740, BuffSource.Mixed, BuffType.Intensity, 25, BuffNature.Boon, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Buff("Fury", 725, BuffSource.Mixed, BuffType.Duration, 9, BuffNature.Boon, Logic.Queue, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
@@ -135,7 +135,7 @@ namespace GW2EIParser.EIData
                 new Buff("Number of Boons", ProfHelper.NumberOfBoonsID, BuffSource.Mixed, BuffType.Intensity, 0, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"),
         };
 
-        private readonly static List<Buff> _conditions = new List<Buff>
+        private static readonly List<Buff> _conditions = new List<Buff>
         {
                 new Buff("Bleeding", 736, BuffSource.Mixed, BuffType.Intensity, 1500, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
                 new Buff("Burning", 737, BuffSource.Mixed, BuffType.Intensity, 1500, BuffNature.Condition, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
@@ -154,7 +154,7 @@ namespace GW2EIParser.EIData
                 new Buff("Number of Conditions", ProfHelper.NumberOfConditionsID, BuffSource.Mixed, BuffType.Intensity, 0, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/3/38/Condition_Duration.png"),
         };
 
-        private readonly static List<Buff> _commons = new List<Buff>
+        private static readonly List<Buff> _commons = new List<Buff>
         {
                 new Buff("Stealth", 13017, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
@@ -192,7 +192,7 @@ namespace GW2EIParser.EIData
                 new Buff("Rigorous Certainty", 33652, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.DefensiveBuffTable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png"),
         };
 
-        private readonly static List<Buff> _gear = new List<Buff>
+        private static readonly List<Buff> _gear = new List<Buff>
         {
                 new Buff("Sigil of Concentration", 33719, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png",0 , 93543),
                 new Buff("Superior Rune of the Monk", 53285, BuffSource.Mixed, BuffType.Intensity, 10, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png", 93543, ulong.MaxValue),
@@ -206,7 +206,7 @@ namespace GW2EIParser.EIData
                 new Buff("Sigil of the Stars", 46953, BuffSource.Mixed, BuffType.Intensity, 25, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png"),
         };
 
-        private readonly static List<Buff> _fightSpecific = new List<Buff>
+        private static readonly List<Buff> _fightSpecific = new List<Buff>
         {
                 new Buff("Timed Bomb", 31485, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/91/Time_Bomb.png" ),
                 new Buff("Unnatural Signet",38224, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Unnatural_Signet.png"),
@@ -271,7 +271,7 @@ namespace GW2EIParser.EIData
                 new Buff("Unbridled Chaos", 56467, BuffSource.Enemy, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/7/74/Unbridled_Chaos.png"),
         };
 
-        private readonly static List<Buff> _revenant = new List<Buff>
+        private static readonly List<Buff> _revenant = new List<Buff>
         {         
                 //skills
                 new Buff("Crystal Hibernation", 28262, BuffSource.Revenant, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/4a/Crystal_Hibernation.png"),
@@ -325,7 +325,7 @@ namespace GW2EIParser.EIData
                 new Buff("Improved Kalla's Fervor",45614, BuffSource.Revenant, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Kalla%27s_Fervor.png"),
         };
 
-        private readonly static List<Buff> _warrior = new List<Buff>
+        private static readonly List<Buff> _warrior = new List<Buff>
         {
                 new Buff("Berserk",29502, BuffSource.Warrior, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/4/44/Berserk.png"),
             //skills
@@ -366,7 +366,7 @@ namespace GW2EIParser.EIData
                 new Buff("Berserker's Power",42539, BuffSource.Warrior, BuffType.Intensity, 3, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png"),
         };
 
-        private readonly static List<Buff> _guardian = new List<Buff>
+        private static readonly List<Buff> _guardian = new List<Buff>
         {        
                 //skills
                 new Buff("Zealot's Flame", 9103, BuffSource.Guardian, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png"),
@@ -409,7 +409,7 @@ namespace GW2EIParser.EIData
                 new Buff("Symbolic Avenger",56890, BuffSource.Guardian, BuffType.Intensity, 5, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png", 97950, ulong.MaxValue),
         };
 
-        private readonly static List<Buff> _engineer = new List<Buff>
+        private static readonly List<Buff> _engineer = new List<Buff>
         {       //skills
                 new Buff("Static Shield",6055, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/9/90/Static_Shield.png"),
                 new Buff("Absorb",6056, BuffSource.Engineer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/8/8a/Absorb.png"),
@@ -439,7 +439,7 @@ namespace GW2EIParser.EIData
 
         };
 
-        private readonly static List<Buff> _ranger = new List<Buff>
+        private static readonly List<Buff> _ranger = new List<Buff>
         {
 
                 new Buff("Celestial Avatar", 31508, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/5/59/Celestial_Avatar.png"),
@@ -498,7 +498,7 @@ namespace GW2EIParser.EIData
                 new Buff("Twice as Vicious",45600, BuffSource.Ranger, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/0/00/Twice_as_Vicious.png"),
         };
 
-        private readonly static List<Buff> _thief = new List<Buff>
+        private static readonly List<Buff> _thief = new List<Buff>
         {
                 //signets
                 new Buff("Signet of Malice",13049, BuffSource.Thief, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/ae/Signet_of_Malice.png"),
@@ -541,7 +541,7 @@ namespace GW2EIParser.EIData
 
         };
 
-        private readonly static List<Buff> _necromancer = new List<Buff>
+        private static readonly List<Buff> _necromancer = new List<Buff>
         {
             
                 //forms
@@ -574,7 +574,7 @@ namespace GW2EIParser.EIData
                 new Buff("Soul Barbs",53489, BuffSource.Necromancer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Soul_Barbs.png"),
         };
 
-        private readonly static List<Buff> _mesmer = new List<Buff>
+        private static readonly List<Buff> _mesmer = new List<Buff>
         {
             
                 //signets
@@ -604,7 +604,7 @@ namespace GW2EIParser.EIData
                 new Buff("Mirage Cloak",40408, BuffSource.Mesmer, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
         };
 
-        private readonly static List<Buff> _elementalist = new List<Buff>
+        private static readonly List<Buff> _elementalist = new List<Buff>
         {
             
                 //signets
@@ -674,7 +674,7 @@ namespace GW2EIParser.EIData
                 new Buff("Elements of Rage",42416, BuffSource.Elementalist, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
         };
 
-        private readonly static List<Buff> _consumables = new List<Buff>
+        private static readonly List<Buff> _consumables = new List<Buff>
         {
 
                 new Buff("Malnourished",46587, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
@@ -778,7 +778,7 @@ namespace GW2EIParser.EIData
                 _elementalist
         };
 
-        private readonly static Dictionary<string, List<Buff>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+        private static readonly Dictionary<string, List<Buff>> _allBoonsByName = AllBoons.SelectMany(x => x).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 
         // For damage modifiers
         public static Buff GetBoonByName(string name, ulong build)

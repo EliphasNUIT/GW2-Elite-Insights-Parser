@@ -48,18 +48,18 @@ namespace GW2EIParser
             }
         }
 
-        private readonly static HashSet<string> _compressedFiles = new HashSet<string>()
+        private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
         {
             ".zevtc",
             ".evtc.zip",
         };
 
-        private readonly static HashSet<string> _tmpFiles = new HashSet<string>()
+        private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
         {
             ".tmp.zip"
         };
 
-        private readonly static HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
+        private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
         {
             ".evtc"
         };

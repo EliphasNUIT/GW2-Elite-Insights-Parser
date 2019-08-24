@@ -422,13 +422,13 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 SupportTarget.Add(actor.GetSupport(log, target).Select(x => new JsonSupport(x)).ToList());
             }
-            if (targets.Count() == 0)
+            if (targets.Any())
             {
                 DpsTargets = null;
                 StatsTargets = null;
                 DefensesTarget = null;
             }
-            if (allies.Count() == 0)
+            if (allies.Any())
             {
                 SupportTarget = null;
             }

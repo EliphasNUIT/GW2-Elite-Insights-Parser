@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
 
         public override bool Has(Dictionary<long, BuffsGraphModel> bgms)
         {
-            return bgms.Keys.Intersect(_ids).Count() > 0;
+            return bgms.Keys.Intersect(_ids).Any();
         }
     }
 }

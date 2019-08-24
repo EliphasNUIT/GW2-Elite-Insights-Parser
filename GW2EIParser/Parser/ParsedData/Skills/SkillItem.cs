@@ -23,7 +23,7 @@ namespace GW2EIParser.Parser.ParsedData
         private const int _firstWaterSet = 0;
         private const int _secondWaterSet = 1;
 
-        readonly static Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
+        static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
@@ -64,7 +64,7 @@ namespace GW2EIParser.Parser.ParsedData
             {56329, "Big Magma Drop" },
         };
 
-        readonly static Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
+        static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
