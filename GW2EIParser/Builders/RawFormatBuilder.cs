@@ -82,9 +82,9 @@ namespace GW2EIParser.Builders
 
         private JsonDPS[][] BuildDPSTarget(Player p)
         {
-            JsonDPS[][] res = new JsonDPS[_log.FightData.Logic.Targets.Count][];
+            JsonDPS[][] res = new JsonDPS[_log.FightData.Logic.NPCs.Count][];
             int i = 0;
-            foreach (Target tar in _log.FightData.Logic.Targets)
+            foreach (NPC tar in _log.FightData.Logic.NPCs)
             {
                 res[i++] = p.GetDPS(_log, tar).Select(x => new JsonDPS(x)).ToArray();
             }
@@ -93,9 +93,9 @@ namespace GW2EIParser.Builders
 
         private JsonStats[][] BuildStatsTarget(Player p)
         {
-            JsonStats[][] res = new JsonStats[_log.FightData.Logic.Targets.Count][];
+            JsonStats[][] res = new JsonStats[_log.FightData.Logic.NPCs.Count][];
             int i = 0;
-            foreach (Target tar in _log.FightData.Logic.Targets)
+            foreach (NPC tar in _log.FightData.Logic.NPCs)
             {
                 res[i++] = p.GetStats(_log, tar).Select(x => new JsonStats(x)).ToArray();
             }
@@ -129,10 +129,10 @@ namespace GW2EIParser.Builders
 
         private List<JsonBuffDamageModifierData>[] BuildDamageModifiersTarget(Player p)
         {
-            List<JsonBuffDamageModifierData>[] res = new List<JsonBuffDamageModifierData>[_log.FightData.Logic.Targets.Count];
-            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            List<JsonBuffDamageModifierData>[] res = new List<JsonBuffDamageModifierData>[_log.FightData.Logic.NPCs.Count];
+            for (int i = 0; i < _log.FightData.Logic.NPCs.Count; i++)
             {
-                Target tar = _log.FightData.Logic.Targets[i];
+                NPC tar = _log.FightData.Logic.NPCs[i];
                 res[i] = BuildDamageModifiers(p.GetDamageModifierData(_log, tar));
             }
             return res;
@@ -148,7 +148,7 @@ namespace GW2EIParser.Builders
             return res.Count > 0 ? res : null;
         }
 
-        private List<JsonNPCBuffs> BuildTargetBuffs(List<Dictionary<long, Statistics.FinalTargetBuffs>> statBoons, Target target)
+        private List<JsonNPCBuffs> BuildTargetBuffs(List<Dictionary<long, Statistics.FinalTargetBuffs>> statBoons, NPC target)
         {
             var boons = new List<JsonNPCBuffs>();
 

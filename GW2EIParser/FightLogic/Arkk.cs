@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -57,34 +57,27 @@ namespace GW2EIParser.Logic
                             (11204, 4414, 13252, 6462));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                TemporalAnomaly2,
-                BLIGHT,
-                Fanatic,
-                SolarBloom2,
-                PLINK,
-                DOC,
-                CHOP,
-                ProjectionArkk
-            };
-        }
-
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Arkk,
+                (ushort)ParseEnum.EvtcNPCIDs.Arkk,
                 (ushort)Archdiviner,
-                (ushort)BrazenGladiator
+                (ushort)BrazenGladiator,
+                (ushort)TemporalAnomaly2,
+                (ushort)BLIGHT,
+                (ushort)Fanatic,
+                (ushort)SolarBloom2,
+                (ushort)PLINK,
+                (ushort)DOC,
+                (ushort)CHOP,
+                (ushort)ProjectionArkk
             };
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            SetSuccessByBuffCount(combatData, fightData, playerAgents, Targets.Find(x => x.ID == TriggerID), 762, 10);
+            SetSuccessByBuffCount(combatData, fightData, playerAgents, NPCs.Find(x => x.ID == TriggerID), 762, 10);
         }
     }
 }

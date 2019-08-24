@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -53,7 +53,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Xera);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -72,7 +72,7 @@ namespace GW2EIParser.Logic
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Xera);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -109,7 +109,7 @@ namespace GW2EIParser.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.EvtcTargetIDS.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -163,29 +163,30 @@ namespace GW2EIParser.Logic
             ComputeFightTargets(agentData, combatData);
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                WhiteMantleSeeker1,
-                WhiteMantleSeeker2,
-                WhiteMantleKnight1,
-                WhiteMantleKnight2,
-                WhiteMantleBattleMage1,
-                WhiteMantleBattleMage2,
-                ExquisiteConjunction,
-                ChargedBloodstone,
-                BloodstoneFragment,
-                XerasPhantasm,
+                (ushort)ParseEnum.EvtcNPCIDs.Xera,
+                (ushort)WhiteMantleSeeker1,
+                (ushort)WhiteMantleSeeker2,
+                (ushort)WhiteMantleKnight1,
+                (ushort)WhiteMantleKnight2,
+                (ushort)WhiteMantleBattleMage1,
+                (ushort)WhiteMantleBattleMage2,
+                (ushort)ExquisiteConjunction,
+                (ushort)ChargedBloodstone,
+                (ushort)BloodstoneFragment,
+                (ushort)XerasPhantasm,
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Xera:
+                case (ushort)ParseEnum.EvtcNPCIDs.Xera:
                     List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
@@ -193,7 +194,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
     }

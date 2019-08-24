@@ -25,7 +25,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public int CombatReplayID { get; set; }
 
-        protected JsonMasterActor(ParsedLog log, AbstractMasterActor actor, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractMasterActor> targets, IEnumerable<AbstractMasterActor> allies) : base(log, actor, skillMap, buffMap, targets, allies)
+        protected JsonMasterActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, actor, skillMap, buffMap, targets, allies)
         {
             // Minions
             Minions = actor.GetMinions(log).Select(x => new JsonMinions(log, x.Value, skillMap, buffMap, targets, allies)).ToList();

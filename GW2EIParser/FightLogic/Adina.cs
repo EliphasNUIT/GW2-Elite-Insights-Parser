@@ -5,7 +5,8 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -84,11 +85,11 @@ namespace GW2EIParser.Logic
             ComputeFightTargets(agentData, combatData);
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>()
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Adina,
+                (ushort)EvtcNPCIDs.Adina,
                 (ushort)HandOfErosion,
                 (ushort)HandOfEruption
             };
@@ -97,7 +98,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)EvtcNPCIDs.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -175,7 +176,7 @@ namespace GW2EIParser.Logic
 
         public override string GetFightName()
         {
-            Target target = Targets.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC target = NPCs.Find(x => x.ID == TriggerID && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -195,7 +196,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Adina && x.AgentItem.Type == AgentItem.AgentType.NPC);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

@@ -406,19 +406,19 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDPS"/>
         public List<List<JsonDPS>> DpsTargets { get; set; } = new List<List<JsonDPS>>();
 
-        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractMasterActor> targets, IEnumerable<AbstractMasterActor> allies)
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
         {
             DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
             StatsAll = actor.GetStats(log).Select(x => new JsonStatsAll(x)).ToList();
             DefensesAll = actor.GetDefenses(log).Select(x => new JsonDefensesAll(x)).ToList();
             SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
-            foreach (AbstractMasterActor target in targets)
+            foreach (AbstractSingleActor target in targets)
             {
                 DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());
                 StatsTargets.Add(actor.GetStats(log, target).Select(x => new JsonStats(x)).ToList());
                 DefensesTarget.Add(actor.GetDefenses(log, target).Select(x => new JsonDefenses(x)).ToList());
             }
-            foreach (AbstractMasterActor target in allies)
+            foreach (AbstractSingleActor target in allies)
             {
                 SupportTarget.Add(actor.GetSupport(log, target).Select(x => new JsonSupport(x)).ToList());
             }

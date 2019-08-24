@@ -36,7 +36,7 @@ namespace GW2EIParser.EIData
                 DummyActor amp = null;
                 if (Keep(c, log))
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == c.Caster);
+                    NPC target = log.FightData.Logic.NPCs.Find(x => x.AgentItem == c.Caster);
                     if (target != null)
                     {
                         amp = target;

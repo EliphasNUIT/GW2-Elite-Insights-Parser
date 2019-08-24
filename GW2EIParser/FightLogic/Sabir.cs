@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -30,28 +30,29 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>()
+            return new List<ushort>()
             {
-                ParalyzingWisp,
-                VoltaicWisp,
-                SmallKillerTornado,
-                SmallJumpyTornado,
-                BigKillerTornado
+                (ushort)ParseEnum.EvtcNPCIDs.Sabir,
+                (ushort)ParalyzingWisp,
+                (ushort)VoltaicWisp,
+                (ushort)SmallKillerTornado,
+                (ushort)SmallJumpyTornado,
+                (ushort)BigKillerTornado
             };
         }
 
         public override List<AbstractDamageEvent> SpecialDamageEventProcess(Dictionary<AgentItem, List<AbstractDamageEvent>> damageBySrc, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst, Dictionary<long, List<AbstractDamageEvent>> damageById, long offset, SkillData skillData)
         {
-            NegateDamageAgainstBarrier(Targets.Select(x => x.AgentItem).ToList(), damageByDst);
+            NegateDamageAgainstBarrier(NPCs.Select(x => x.AgentItem).ToList(), damageByDst);
             return new List<AbstractDamageEvent>();
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Sabir);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -103,31 +104,31 @@ namespace GW2EIParser.Logic
                             (33530, 34050, 35450, 35970));
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            switch (npc.ID)
             {
                 case (ushort)BigKillerTornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 420, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 420, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
                     break;
                 case (ushort)SmallKillerTornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
                     break;
                 case (ushort)SmallJumpyTornado:
                 case (ushort)ParalyzingWisp:
                 case (ushort)VoltaicWisp:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
 
             }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Sabir);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Sabir);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

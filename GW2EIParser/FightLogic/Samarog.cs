@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Samarog);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -92,24 +92,24 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Samarog,
+                (ushort)ParseEnum.EvtcNPCIDs.Samarog,
                 (ushort)Rigom,
                 (ushort)Guldhem,
             };
         }
 
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Samarog:
+                case (ushort)ParseEnum.EvtcNPCIDs.Samarog:
                     List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
@@ -129,7 +129,7 @@ namespace GW2EIParser.Logic
                 case (ushort)Guldhem:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
@@ -170,14 +170,14 @@ namespace GW2EIParser.Logic
             //fixated Ghuldem
             List<AbstractBuffEvent> fixatedGuldhem = GetFilteredList(log.CombatData, 38223, p, true);
             int fixationGuldhemStart = 0;
-            Target guldhem = null;
+            NPC guldhem = null;
             foreach (AbstractBuffEvent c in fixatedGuldhem)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationGuldhemStart = (int)c.Time;
                     long logTime = log.FightData.ToLogSpace(c.Time);
-                    guldhem = Targets.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    guldhem = NPCs.FirstOrDefault(x => x.ID == (ushort)Guldhem && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
@@ -191,14 +191,14 @@ namespace GW2EIParser.Logic
             //fixated Rigom
             List<AbstractBuffEvent> fixatedRigom = GetFilteredList(log.CombatData, 37693, p, true);
             int fixationRigomStart = 0;
-            Target rigom = null;
+            NPC rigom = null;
             foreach (AbstractBuffEvent c in fixatedRigom)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationRigomStart = (int)c.Time;
                     long logTime = log.FightData.ToLogSpace(c.Time);
-                    rigom = Targets.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
+                    rigom = NPCs.FirstOrDefault(x => x.ID == (ushort)Rigom && logTime >= x.FirstAwareLogTime && logTime <= x.LastAwareLogTime);
                 }
                 else
                 {
@@ -213,7 +213,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Samarog);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Samarog);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

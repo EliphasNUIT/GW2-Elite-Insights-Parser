@@ -41,9 +41,9 @@ namespace GW2EIParser.Builders.JsonModels
             End = phase.End;
             Name = phase.Name;
             Targets = new List<int>();
-            foreach (Target tar in phase.Targets)
+            foreach (NPC tar in phase.Targets)
             {
-                Targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+                Targets.Add(log.FightData.Logic.NPCs.IndexOf(tar));
             }
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int j = 1; j < phases.Count; j++)

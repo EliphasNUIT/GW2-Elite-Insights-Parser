@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Matthias);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -111,48 +111,27 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Storm,
-                Spirit,
-                Spirit2,
-                IcePatch,
-                Tornado
+                (ushort)ParseEnum.EvtcNPCIDs.Matthias,
+                (ushort)Storm,
+                (ushort)Spirit,
+                (ushort)Spirit2,
+                (ushort)IcePatch,
+                (ushort)Tornado
             };
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                case (ushort)Storm:
-                    replay.Actors.Add(new CircleDecoration(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)Spirit:
-                case (ushort)Spirit2:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)IcePatch:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)Tornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.EvtcTargetIDS.Matthias:
+                case (ushort)ParseEnum.EvtcNPCIDs.Matthias:
                     List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     List<int> humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
@@ -161,11 +140,11 @@ namespace GW2EIParser.Logic
                         if (i < humanShieldRemoval.Count)
                         {
                             int removal = humanShieldRemoval[i];
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
@@ -176,11 +155,11 @@ namespace GW2EIParser.Logic
                         if (i < aboShieldRemoval.Count)
                         {
                             int removal = aboShieldRemoval[i];
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     List<AbstractCastEvent> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
@@ -188,8 +167,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     }
                     List<AbstractCastEvent> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
                     foreach (AbstractCastEvent c in hadouken)
@@ -202,13 +181,26 @@ namespace GW2EIParser.Logic
                         if (facing != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
-                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
+                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(npc)));
+                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(npc)));
                         }
                     }
                     break;
+                case (ushort)Storm:
+                    replay.Actors.Add(new CircleDecoration(false, 0, 260, (crStart, crEnd), "rgba(0, 80, 255, 0.5)", new AgentConnector(npc)));
+                    break;
+                case (ushort)Spirit:
+                case (ushort)Spirit2:
+                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    break;
+                case (ushort)IcePatch:
+                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (crStart, crEnd), "rgba(0, 0, 255, 0.5)", new AgentConnector(npc)));
+                    break;
+                case (ushort)Tornado:
+                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

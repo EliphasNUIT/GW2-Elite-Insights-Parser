@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -35,11 +35,12 @@ namespace GW2EIParser.Logic
                             (11804, 4414, 12444, 5054));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Hallucination
+                (ushort)ParseEnum.EvtcNPCIDs.Siax,
+                (ushort)Hallucination
             };
         }
     }

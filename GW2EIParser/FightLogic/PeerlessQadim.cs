@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -36,15 +36,16 @@ namespace GW2EIParser.Logic
             Icon = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>()
+            return new List<ushort>()
             {
-                Pylon1,
-                Pylon2,
-                EntropicDistortion,
-                BigKillerTornado,
-                EnergyOrb,
+                (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim,
+                (ushort)Pylon1,
+                (ushort)Pylon2,
+                (ushort)EntropicDistortion,
+                (ushort)BigKillerTornado,
+                (ushort)EnergyOrb,
             };
         }
 
@@ -74,7 +75,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.PeerlessQadim);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -147,12 +148,14 @@ namespace GW2EIParser.Logic
                             (33530, 34050, 35450, 35970));
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.PeerlessQadim:
+                case (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim:
                     List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
@@ -166,43 +169,31 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, 0, magmaRadius, (end, (int)log.FightData.FightDuration), "rgba(255, 220, 0, 0.5)", new PositionConnector(pylonPosition)));
                     }
                     break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
                 case (ushort)EntropicDistortion:
                     //sapping surge, red tether
-                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, mob, true);
+                    List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, npc, true);
                     int surgeStart = 0;
-                    AbstractMasterActor source = null;
+                    AbstractSingleActor source = null;
                     foreach (AbstractBuffEvent c in sappingSurge)
                     {
                         if (c is BuffApplyEvent)
                         {
-                            Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.PeerlessQadim);
+                            NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
                             surgeStart = (int)c.Time;
-                            source = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                            source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
                         else
                         {
                             int surgeEnd = (int)c.Time;
                             if (source != null)
                             {
-                                replay.Actors.Add(new LineDecoration(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(mob), new AgentConnector(source)));
+                                replay.Actors.Add(new LineDecoration(0, (surgeStart, surgeEnd), "rgba(255, 0, 0, 0.3)", new AgentConnector(npc), new AgentConnector(source)));
                             }
                         }
                     }
                     break;
                 case (ushort)BigKillerTornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 450, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 450, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
                     break;
                 case (ushort)Pylon1:
                     break;
@@ -211,9 +202,9 @@ namespace GW2EIParser.Logic
                 case (ushort)EnergyOrb:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-
+                    break;
             }
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -263,14 +254,14 @@ namespace GW2EIParser.Logic
             //sapping surge, bad red tether
             List<AbstractBuffEvent> sappingSurge = GetFilteredList(log.CombatData, 56118, p, true);
             int surgeStart = 0;
-            AbstractMasterActor source = null;
+            AbstractSingleActor source = null;
             foreach (AbstractBuffEvent c in sappingSurge)
             {
                 if (c is BuffApplyEvent)
                 {
-                    Target qadim = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.PeerlessQadim);
+                    NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
                     surgeStart = (int)c.Time;
-                    source = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
+                    source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
                 else
                 {
@@ -284,14 +275,14 @@ namespace GW2EIParser.Logic
             // kinetic abundance, good (blue) tether
             List<AbstractBuffEvent> kineticAbundance = GetFilteredList(log.CombatData, 56609, p, true);
             int kinStart = 0;
-            AbstractMasterActor kinSource = null;
+            AbstractSingleActor kinSource = null;
             foreach (AbstractBuffEvent c in kineticAbundance)
             {
                 if (c is BuffApplyEvent)
                 {
                     kinStart = (int)c.Time;
                     //kinSource = log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By);
-                    kinSource = (AbstractMasterActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
+                    kinSource = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? NPCs.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {
@@ -306,7 +297,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.PeerlessQadim);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Gorseval);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Gorseval);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -72,30 +72,23 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Gorseval,
-                (ushort)ChargedSoul
+                (ushort)ParseEnum.EvtcNPCIDs.Gorseval,
+                (ushort)ChargedSoul,
+                (ushort)EnragedSpirit,
+                (ushort)AngeredSpirit
             };
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                EnragedSpirit,
-                AngeredSpirit
-            };
-        }
-
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Gorseval:
+                case (ushort)ParseEnum.EvtcNPCIDs.Gorseval:
                     List<AbstractCastEvent> blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {
@@ -128,11 +121,9 @@ namespace GW2EIParser.Logic
                             {
                                 break;
                             }
-                            List<string> patterns;
-                            switch (phaseIndex)
+                            var patterns = phaseIndex switch
                             {
-                                case 1:
-                                    patterns = new List<string>
+                                1 => new List<string>
                             {
                                 "2+3+5",
                                 "2+3+4",
@@ -140,10 +131,8 @@ namespace GW2EIParser.Logic
                                 "1+2+5",
                                 "1+3+5",
                                 "Full"
-                            };
-                                    break;
-                                case 3:
-                                    patterns = new List<string>
+                            },
+                                3 => new List<string>
                             {
                                 "2+3+4",
                                 "1+4+5",
@@ -151,10 +140,8 @@ namespace GW2EIParser.Logic
                                 "1+2+5",
                                 "1+2+3",
                                 "Full"
-                            };
-                                    break;
-                                case 5:
-                                    patterns = new List<string>
+                            },
+                                5 => new List<string>
                             {
                                 "1+4+5",
                                 "1+2+5",
@@ -162,11 +149,9 @@ namespace GW2EIParser.Logic
                                 "3+4+5",
                                 "3+4+5",
                                 "Full"
+                            },
+                                _ => throw new Exception("how the fuck"),
                             };
-                                    break;
-                                default:
-                                    throw new Exception("how the fuck");
-                            }
                             start += 2200;
                             for (int i = 0; i < ticks; i++)
                             {
@@ -241,7 +226,7 @@ namespace GW2EIParser.Logic
                     replay.Actors.Add(new CircleDecoration(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
     }

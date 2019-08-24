@@ -9,19 +9,19 @@ namespace GW2EIParser.EIData
     public class Minions : AbstractActor
     {
         public int MinionID { get; }
-        public List<Minion> MinionList { get; }
+        public List<NPC> MinionList { get; }
         private List<AbstractDamageEvent> _damageLogs;
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageLogsByDst;
         private List<AbstractDamageEvent> _damageTakenLogs;
         private Dictionary<AgentItem, List<AbstractDamageEvent>> _damageTakenLogsByDst;
         private List<AbstractCastEvent> _castLogs;
 
-        public Minions(Minion firstMinion) : base(firstMinion.AgentItem)
+        public Minions(NPC firstMinion) : base(firstMinion.AgentItem)
         {
-            MinionList = new List<Minion> { firstMinion };
+            MinionList = new List<NPC> { firstMinion };
         }
 
-        public void AddMinion(Minion minion)
+        public void AddMinion(NPC minion)
         {
             MinionList.Add(minion);
         }
@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
             if (_damageLogs == null)
             {
                 _damageLogs = new List<AbstractDamageEvent>();
-                foreach (Minion minion in MinionList)
+                foreach (NPC minion in MinionList)
                 {
                     _damageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
                 }
@@ -48,7 +48,7 @@ namespace GW2EIParser.EIData
             if (_damageTakenLogs == null)
             {
                 _damageTakenLogs = new List<AbstractDamageEvent>();
-                foreach (Minion minion in MinionList)
+                foreach (NPC minion in MinionList)
                 {
                     _damageTakenLogs.AddRange(minion.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration));
                 }
@@ -66,7 +66,7 @@ namespace GW2EIParser.EIData
             if (_castLogs == null)
             {
                 _castLogs = new List<AbstractCastEvent>();
-                foreach (Minion minion in MinionList)
+                foreach (NPC minion in MinionList)
                 {
                     _castLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));
                 }

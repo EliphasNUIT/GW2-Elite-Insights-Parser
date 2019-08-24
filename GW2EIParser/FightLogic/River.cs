@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -33,16 +33,17 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Enervator,
-                HollowedBomber,
-                RiverOfSouls,
-                SpiritHorde1,
-                SpiritHorde2,
-                SpiritHorde3
+                (ushort)Desmina,
+                (ushort)Enervator,
+                (ushort)HollowedBomber,
+                (ushort)RiverOfSouls,
+                (ushort)SpiritHorde1,
+                (ushort)SpiritHorde2,
+                (ushort)SpiritHorde3
             };
         }
 
@@ -51,7 +52,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Desmina);
+                NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -60,7 +61,7 @@ namespace GW2EIParser.Logic
                 if (ooc != null)
                 {
                     long time = 0;
-                    foreach (Mob mob in TrashMobs.Where(x => x.ID == (ushort)SpiritHorde3))
+                    foreach (NPC mob in NPCs.Where(x => x.ID == (ushort)SpiritHorde3))
                     {
                         DespawnEvent dspwnHorde = combatData.GetDespawnEvents(mob.AgentItem).LastOrDefault();
                         if (dspwnHorde != null)
@@ -117,32 +118,32 @@ namespace GW2EIParser.Logic
             // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            Target desmina = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Desmina);
+            NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            switch (npc.ID)
             {
                 case (ushort)HollowedBomber:
-                    List<AbstractCastEvent> bomberman = mob.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    List<AbstractCastEvent> bomberman = npc.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;
                         int endCast = startCast + bomb.ActualDuration;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                        replay.Actors.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
-                        replay.Actors.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
                     }
                     break;
                 case (ushort)RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
-                        replay.Actors.Add(new FacingRectangleDecoration((start, end), new AgentConnector(mob), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
+                        replay.Actors.Add(new FacingRectangleDecoration((start, end), new AgentConnector(npc), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:
@@ -152,7 +153,7 @@ namespace GW2EIParser.Logic
                 case (ushort)SpiritHorde3:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

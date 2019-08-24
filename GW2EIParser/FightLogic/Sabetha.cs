@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Sabetha);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Sabetha);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -95,11 +95,11 @@ namespace GW2EIParser.Logic
                 else
                 {
                     phase.Targets.Add(mainTarget);
-                    Target addTarget;
+                    NPC addTarget;
                     switch (i)
                     {
                         case 3:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Kernan);
+                            addTarget = NPCs.Find(x => x.ID == (ushort)Kernan);
                             if (addTarget == null)
                             {
                                 throw new InvalidOperationException("Kernan not found when we should have been able to");
@@ -107,7 +107,7 @@ namespace GW2EIParser.Logic
                             phase.Targets.Add(addTarget);
                             break;
                         case 5:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Knuckles);
+                            addTarget = NPCs.Find(x => x.ID == (ushort)Knuckles);
                             if (addTarget == null)
                             {
                                 throw new InvalidOperationException("Knuckles not found when we should have been able to");
@@ -115,7 +115,7 @@ namespace GW2EIParser.Logic
                             phase.Targets.Add(addTarget);
                             break;
                         case 7:
-                            addTarget = Targets.Find(x => x.ID == (ushort)Karde);
+                            addTarget = NPCs.Find(x => x.ID == (ushort)Karde);
                             if (addTarget == null)
                             {
                                 throw new InvalidOperationException("Karde not found when we should have been able to");
@@ -128,23 +128,23 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Sabetha,
+                (ushort)ParseEnum.EvtcNPCIDs.Sabetha,
                 (ushort)Kernan,
                 (ushort)Knuckles,
                 (ushort)Karde,
             };
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Sabetha:
+                case (ushort)ParseEnum.EvtcNPCIDs.Sabetha:
                     List<AbstractCastEvent> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
@@ -204,18 +204,8 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
-        }
-
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                BanditSapper,
-                BanditThug,
-                BanditArsonist
-            };
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
@@ -251,10 +241,13 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Sabetha,
+                (ushort)ParseEnum.EvtcNPCIDs.Sabetha,
                 (ushort)Kernan,
                 (ushort)Karde,
                 (ushort)Knuckles,
+                (ushort)BanditSapper,
+                (ushort)BanditThug,
+                (ushort)BanditArsonist
             };
         }
     }

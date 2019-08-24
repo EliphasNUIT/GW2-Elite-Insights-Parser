@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser
 {
@@ -17,9 +17,9 @@ namespace GW2EIParser
         public static readonly int BoonDigit = 2;
         public static readonly int TimeDigit = 3;
 
-        public static readonly AgentItem UnknownAgent = new AgentItem(0, "UNKNOWN");
+        public static readonly AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
-        public static readonly Mob NullActor = new Mob(UnknownAgent);
+        public static readonly NPC NullActor = new NPC(UnknownAgent);
 
         public static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
 
@@ -109,95 +109,93 @@ namespace GW2EIParser
 
         public static string GetNPCIcon(ushort id)
         {
-            switch (ParseEnum.GetTargetIDS(id))
+            switch (ParseEnum.GetNPCIDS(id))
             {
-                case ParseEnum.EvtcTargetIDS.WorldVersusWorld:
+                case ParseEnum.EvtcNPCIDs.WorldVersusWorld:
                     return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
-                case ParseEnum.EvtcTargetIDS.ValeGuardian:
+                case ParseEnum.EvtcNPCIDs.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
-                case ParseEnum.EvtcTargetIDS.Gorseval:
+                case ParseEnum.EvtcNPCIDs.Gorseval:
                     return "https://i.imgur.com/5hmMq12.png";
-                case ParseEnum.EvtcTargetIDS.Sabetha:
+                case ParseEnum.EvtcNPCIDs.Sabetha:
                     return "https://i.imgur.com/UqbFp9S.png";
-                case ParseEnum.EvtcTargetIDS.Slothasor:
+                case ParseEnum.EvtcNPCIDs.Slothasor:
                     return "https://i.imgur.com/h1xH3ER.png";
-                case ParseEnum.EvtcTargetIDS.Berg:
+                case ParseEnum.EvtcNPCIDs.Berg:
                     return "https://i.imgur.com/tLMXqL7.png";
-                case ParseEnum.EvtcTargetIDS.Narella:
+                case ParseEnum.EvtcNPCIDs.Narella:
                     return "https://i.imgur.com/FwMCoR0.png";
-                case ParseEnum.EvtcTargetIDS.Zane:
+                case ParseEnum.EvtcNPCIDs.Zane:
                     return "https://i.imgur.com/tkPWMST.png";
-                case ParseEnum.EvtcTargetIDS.Matthias:
+                case ParseEnum.EvtcNPCIDs.Matthias:
                     return "https://i.imgur.com/3uMMmTS.png";
-                case ParseEnum.EvtcTargetIDS.KeepConstruct:
+                case ParseEnum.EvtcNPCIDs.KeepConstruct:
                     return "https://i.imgur.com/Kq0kL07.png";
-                case ParseEnum.EvtcTargetIDS.Xera:
+                case ParseEnum.EvtcNPCIDs.Xera:
                     return "https://i.imgur.com/lYwJEyV.png";
-                case ParseEnum.EvtcTargetIDS.Cairn:
+                case ParseEnum.EvtcNPCIDs.Cairn:
                     return "https://i.imgur.com/gQY37Tf.png";
-                case ParseEnum.EvtcTargetIDS.MursaatOverseer:
+                case ParseEnum.EvtcNPCIDs.MursaatOverseer:
                     return "https://i.imgur.com/5LNiw4Y.png";
-                case ParseEnum.EvtcTargetIDS.Samarog:
+                case ParseEnum.EvtcNPCIDs.Samarog:
                     return "https://i.imgur.com/MPQhKfM.png";
-                case ParseEnum.EvtcTargetIDS.Deimos:
+                case ParseEnum.EvtcNPCIDs.Deimos:
                     return "https://i.imgur.com/mWfxBaO.png";
-                case ParseEnum.EvtcTargetIDS.SoullessHorror:
-                case ParseEnum.EvtcTargetIDS.Desmina:
+                case ParseEnum.EvtcNPCIDs.SoullessHorror:
+                case ParseEnum.EvtcNPCIDs.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
-                case ParseEnum.EvtcTargetIDS.BrokenKing:
+                case ParseEnum.EvtcNPCIDs.BrokenKing:
                     return "https://i.imgur.com/FNgUmvL.png";
-                case ParseEnum.EvtcTargetIDS.SoulEater:
+                case ParseEnum.EvtcNPCIDs.SoulEater:
                     return "https://i.imgur.com/Sd6Az8M.png";
-                case ParseEnum.EvtcTargetIDS.EyeOfFate:
-                case ParseEnum.EvtcTargetIDS.EyeOfJudgement:
+                case ParseEnum.EvtcNPCIDs.EyeOfFate:
+                case ParseEnum.EvtcNPCIDs.EyeOfJudgement:
                     return "https://i.imgur.com/kAgdoa5.png";
-                case ParseEnum.EvtcTargetIDS.Dhuum:
+                case ParseEnum.EvtcNPCIDs.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
-                case ParseEnum.EvtcTargetIDS.ConjuredAmalgamate:
+                case ParseEnum.EvtcNPCIDs.ConjuredAmalgamate:
                     return "https://i.imgur.com/C23rYTl.png";
-                case ParseEnum.EvtcTargetIDS.CALeftArm:
+                case ParseEnum.EvtcNPCIDs.CALeftArm:
                     return "https://i.imgur.com/qrkQvEY.png";
-                case ParseEnum.EvtcTargetIDS.CARightArm:
+                case ParseEnum.EvtcNPCIDs.CARightArm:
                     return "https://i.imgur.com/MVwjtH7.png";
-                case ParseEnum.EvtcTargetIDS.Kenut:
+                case ParseEnum.EvtcNPCIDs.Kenut:
                     return "https://i.imgur.com/6yq45Cc.png";
-                case ParseEnum.EvtcTargetIDS.Nikare:
+                case ParseEnum.EvtcNPCIDs.Nikare:
                     return "https://i.imgur.com/TLykcrJ.png";
-                case ParseEnum.EvtcTargetIDS.Qadim:
+                case ParseEnum.EvtcNPCIDs.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
-                case ParseEnum.EvtcTargetIDS.Freezie:
+                case ParseEnum.EvtcNPCIDs.Freezie:
                     return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
-                case ParseEnum.EvtcTargetIDS.Adina:
+                case ParseEnum.EvtcNPCIDs.Adina:
                     return "https://i.imgur.com/or3m1yb.png";
-                case ParseEnum.EvtcTargetIDS.Sabir:
+                case ParseEnum.EvtcNPCIDs.Sabir:
                     return "https://i.imgur.com/Q4WUXqw.png";
-                case ParseEnum.EvtcTargetIDS.PeerlessQadim:
+                case ParseEnum.EvtcNPCIDs.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
-                case ParseEnum.EvtcTargetIDS.MAMA:
+                case ParseEnum.EvtcNPCIDs.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
-                case ParseEnum.EvtcTargetIDS.Siax:
+                case ParseEnum.EvtcNPCIDs.Siax:
                     return "https://i.imgur.com/5C60cQb.png";
-                case ParseEnum.EvtcTargetIDS.Ensolyss:
+                case ParseEnum.EvtcNPCIDs.Ensolyss:
                     return "https://i.imgur.com/GUTNuyP.png";
-                case ParseEnum.EvtcTargetIDS.Skorvald:
+                case ParseEnum.EvtcNPCIDs.Skorvald:
                     return "https://i.imgur.com/IOPAHRE.png";
-                case ParseEnum.EvtcTargetIDS.Artsariiv:
+                case ParseEnum.EvtcNPCIDs.Artsariiv:
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
-                case ParseEnum.EvtcTargetIDS.Arkk:
+                case ParseEnum.EvtcNPCIDs.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
-                case ParseEnum.EvtcTargetIDS.LGolem:
+                case ParseEnum.EvtcNPCIDs.LGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
-                case ParseEnum.EvtcTargetIDS.AvgGolem:
+                case ParseEnum.EvtcNPCIDs.AvgGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ParseEnum.EvtcTargetIDS.StdGolem:
+                case ParseEnum.EvtcNPCIDs.StdGolem:
                     return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-                case ParseEnum.EvtcTargetIDS.MassiveGolem:
+                case ParseEnum.EvtcNPCIDs.MassiveGolem:
                     return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
-                case ParseEnum.EvtcTargetIDS.MedGolem:
+                case ParseEnum.EvtcNPCIDs.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-            }
-            switch (ParseEnum.GetTrashIDS(id))
-            {
+
                 case Spirit:
                 case Spirit2:
                 case ChargedSoul:
@@ -359,8 +357,10 @@ namespace GW2EIParser
                     return "https://i.imgur.com/4pXEnaX.png";
                 case DhuumDesmina:
                     return "https://i.imgur.com/jAiRplg.png";
+                default:
+                    return "https://i.imgur.com/HuJHqRZ.png";
+
             }
-            return "https://i.imgur.com/HuJHqRZ.png";
         }
 
 

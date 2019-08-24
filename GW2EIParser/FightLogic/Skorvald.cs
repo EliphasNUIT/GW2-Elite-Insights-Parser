@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Skorvald);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
@@ -57,15 +57,16 @@ namespace GW2EIParser.Logic
             return (target.GetHealth(combatData) == 5551340) ? 1 : 0;
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                FluxAnomaly4,
-                FluxAnomaly3,
-                FluxAnomaly2,
-                FluxAnomaly1,
-                SolarBloom
+                (ushort)ParseEnum.EvtcNPCIDs.Skorvald,
+                (ushort)FluxAnomaly4,
+                (ushort)FluxAnomaly3,
+                (ushort)FluxAnomaly2,
+                (ushort)FluxAnomaly1,
+                (ushort)SolarBloom
             };
         }
     }

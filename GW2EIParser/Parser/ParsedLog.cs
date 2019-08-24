@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Exceptions;
@@ -9,8 +10,6 @@ namespace GW2EIParser.Parser
 {
     public class ParsedLog
     {
-        private readonly List<Mob> _auxMobs = new List<Mob>();
-
         public LogData LogData { get; }
         public FightData FightData { get; }
         public AgentData AgentData { get; }
@@ -72,7 +71,7 @@ namespace GW2EIParser.Parser
             {
                 foreach (Player p in PlayerList)
                 {
-                    Dictionary<string, Minions> minionsDict = p.GetMinions(this);
+                    Dictionary<long, Minions> minionsDict = p.GetMinions(this);
                     foreach (Minions minions in minionsDict.Values)
                     {
                         res = minions.MinionList.FirstOrDefault(x => x.AgentItem == a);
@@ -82,20 +81,11 @@ namespace GW2EIParser.Parser
                         }
                     }
                 }
-                res = FightData.Logic.Targets.FirstOrDefault(x => x.AgentItem == a);
-                if (res == null)
-                {
-                    res = FightData.Logic.TrashMobs.FirstOrDefault(x => x.AgentItem == a);
-                    if (res == null)
-                    {
-                        res = _auxMobs.FirstOrDefault(x => x.AgentItem == a);
-                        if (res == null)
-                        {
-                            _auxMobs.Add(new Mob(a));
-                            res = _auxMobs.Last();
-                        }
-                    }
-                }
+                res = FightData.Logic.NPCs.FirstOrDefault(x => x.AgentItem == a);
+            }
+            if (res == null)
+            {
+                throw new InvalidOperationException("Missing actor with id " + a.ID + " and name " + a.Name);
             }
             return res;
         }

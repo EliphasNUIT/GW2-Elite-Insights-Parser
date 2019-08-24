@@ -12,7 +12,7 @@ using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
-    public class Player : AbstractMasterActor
+    public class Player : AbstractSingleActor
     {
         // Fields
         public string Account { get; protected set; }
@@ -22,7 +22,7 @@ namespace GW2EIParser.EIData
         private List<DeathRecap> _deathRecaps;
         private Dictionary<string, List<DamageModifierData>> _damageModifiers;
         private HashSet<string> _presentDamageModifiers;
-        private Dictionary<Target, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
+        private Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> _damageModifiersTargets;
         // statistics
         private List<Dictionary<long, FinalBuffs>> _selfBuffs;
         private List<Dictionary<long, FinalBuffs>> _groupBuffs;
@@ -558,7 +558,7 @@ namespace GW2EIParser.EIData
 
         }
         // Damage modifiers
-        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, Target target)
+        public Dictionary<string, List<DamageModifierData>> GetDamageModifierData(ParsedLog log, NPC target)
         {
             if (_damageModifiers == null)
             {
@@ -590,7 +590,7 @@ namespace GW2EIParser.EIData
         private void SetDamageModifiersData(ParsedLog log)
         {
             _damageModifiers = new Dictionary<string, List<DamageModifierData>>();
-            _damageModifiersTargets = new Dictionary<Target, Dictionary<string, List<DamageModifierData>>>();
+            _damageModifiersTargets = new Dictionary<NPC, Dictionary<string, List<DamageModifierData>>>();
             _presentDamageModifiers = new HashSet<string>();
             // If conjured sword or WvW, stop
             if (IsFakeActor || log.FightData.Logic.Mode == FightLogic.ParseMode.WvW)
@@ -605,7 +605,7 @@ namespace GW2EIParser.EIData
                 mod.ComputeDamageModifier(_damageModifiers, _damageModifiersTargets, this, log);
             }
             _presentDamageModifiers.UnionWith(_damageModifiers.Keys);
-            foreach (Target tar in _damageModifiersTargets.Keys)
+            foreach (NPC tar in _damageModifiersTargets.Keys)
             {
                 _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
             }
@@ -626,7 +626,7 @@ namespace GW2EIParser.EIData
         }
 
 
-        public override JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonAbstractSingleActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {

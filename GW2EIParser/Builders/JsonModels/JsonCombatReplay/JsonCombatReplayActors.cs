@@ -4,20 +4,20 @@ namespace GW2EIParser.Builders.JsonModels
 {
     public static class JsonCombatReplayActors
     {
-        public abstract class JsonAbstractMasterActorCombatReplay
+        public abstract class JsonAbstractSingleActorCombatReplay
         {
             public string Img { get; set; }
             public int ID { get; set; }
             public List<double> Positions { get; set; }
         }
 
-        public class JsonMobCombatReplay : JsonAbstractMasterActorCombatReplay
+        public class JsonMobCombatReplay : JsonAbstractSingleActorCombatReplay
         {
             public long Start { get; set; }
             public long End { get; set; }
         }
 
-        public class JsonPlayerCombatReplay : JsonAbstractMasterActorCombatReplay
+        public class JsonPlayerCombatReplay : JsonAbstractSingleActorCombatReplay
         {
             public int Group { get; set; }
             public List<long> Dead { get; set; }
@@ -26,7 +26,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
-        public class JsonTargetCombatReplay : JsonAbstractMasterActorCombatReplay
+        public class JsonTargetCombatReplay : JsonAbstractSingleActorCombatReplay
         {
             public long Start { get; set; }
             public long End { get; set; }

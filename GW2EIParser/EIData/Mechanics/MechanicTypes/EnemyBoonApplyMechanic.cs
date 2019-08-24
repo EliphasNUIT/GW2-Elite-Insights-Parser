@@ -35,7 +35,7 @@ namespace GW2EIParser.EIData
                 DummyActor amp = null;
                 if (c is BuffApplyEvent ba && Keep(ba, log))
                 {
-                    Target target = log.FightData.Logic.Targets.Find(x => x.AgentItem == ba.To);
+                    NPC target = log.FightData.Logic.NPCs.Find(x => x.AgentItem == ba.To);
                     if (target != null)
                     {
                         amp = target;

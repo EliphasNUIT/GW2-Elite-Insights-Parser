@@ -229,9 +229,9 @@ namespace GW2EIParser.Builders.JsonModels
             }
             // Targets
             Enemies = new List<JsonActor>();
-            foreach (Target tar in log.FightData.Logic.Targets)
+            foreach (NPC tar in log.FightData.Logic.NPCs)
             {
-                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, PersonalBuffs));
+                Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, log.PlayerList, log.FightData.Logic.NPCs));
             }
             //
             if (uploadLink.FirstOrDefault(x => x.Length > 0) != null)

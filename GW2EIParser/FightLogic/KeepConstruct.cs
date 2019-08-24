@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -50,7 +50,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.KeepConstruct);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -179,76 +179,39 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Core,
-                Jessica,
-                Olson,
-                Engul,
-                Faerla,
-                Caulle,
-                Henley,
-                Galletta,
-                Ianim,
-                GreenPhantasm,
-                InsidiousProjection,
-                UnstableLeyRift,
-                RadiantPhantasm,
-                CrimsonPhantasm,
-                RetrieverProjection
+                (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct,
+                (ushort)Core,
+                (ushort)Jessica,
+                (ushort)Olson,
+                (ushort)Engul,
+                (ushort)Faerla,
+                (ushort)Caulle,
+                (ushort)Henley,
+                (ushort)Galletta,
+                (ushort)Ianim,
+                (ushort)GreenPhantasm,
+                (ushort)InsidiousProjection,
+                (ushort)UnstableLeyRift,
+                (ushort)RadiantPhantasm,
+                (ushort)CrimsonPhantasm,
+                (ushort)RetrieverProjection
             };
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                case (ushort)Core:
-                    break;
-                case (ushort)Jessica:
-                case (ushort)Olson:
-                case (ushort)Engul:
-                case (ushort)Faerla:
-                case (ushort)Caulle:
-                case (ushort)Henley:
-                case (ushort)Galletta:
-                case (ushort)Ianim:
-                    Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.KeepConstruct);
-                    if (mainTarget == null)
-                    {
-                        throw new InvalidOperationException("Main target of the fight not found");
-                    }
-                    replay.Actors.Add(new CircleDecoration(false, 0, 600, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    replay.Actors.Add(new CircleDecoration(true, 0, 400, (start, end), "rgba(0, 125, 255, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)GreenPhantasm:
-                    int lifetime = 8000;
-                    replay.Actors.Add(new CircleDecoration(true, 0, 210, (start, start + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(mob)));
-                    replay.Actors.Add(new CircleDecoration(true, start + lifetime, 210, (start, start + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(mob)));
-                    break;
-                case (ushort)RetrieverProjection:
-                case (ushort)InsidiousProjection:
-                case (ushort)UnstableLeyRift:
-                case (ushort)RadiantPhantasm:
-                case (ushort)CrimsonPhantasm:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
+                case (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct:
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.EvtcTargetIDS.KeepConstruct:
-
-                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, target, true);
+                    List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, npc, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;
                     foreach (AbstractBuffEvent c in kcOrbCollect)
                     {
@@ -259,8 +222,8 @@ namespace GW2EIParser.Logic
                         else
                         {
                             kcOrbEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                            replay.Actors.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(false, 0, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                            replay.Actors.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     List<AbstractCastEvent> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
@@ -291,11 +254,11 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(npc)));
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -307,13 +270,13 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(npc)));
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, facing, 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades3)
@@ -325,15 +288,15 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(target)));
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
-                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts twice as long
+                        replay.Actors.Add(new CircleDecoration(true, 0, 200, (start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)", new AgentConnector(npc)));
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
+                        replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, (start, start + 2 * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
-                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(target))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 + 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
+                            replay.Actors.Add(new PieDecoration(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, -facing.X) * 180 / Math.PI + i * 360 / 8 - 120), 360 * 3 / 32, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)", new AgentConnector(npc))); // First blade lasts longer
                         }
                     }
                     // phantasms locations
@@ -348,7 +311,7 @@ namespace GW2EIParser.Logic
                         (ushort)Galletta,
                         (ushort)Ianim,
                     };
-                    foreach (Mob m in TrashMobs)
+                    foreach (NPC m in NPCs)
                     {
                         if (phantasmsID.Contains(m.ID))
                         {
@@ -362,8 +325,32 @@ namespace GW2EIParser.Logic
                         }
                     }
                     break;
+                case (ushort)Core:
+                    break;
+                case (ushort)Jessica:
+                case (ushort)Olson:
+                case (ushort)Engul:
+                case (ushort)Faerla:
+                case (ushort)Caulle:
+                case (ushort)Henley:
+                case (ushort)Galletta:
+                case (ushort)Ianim:
+                    replay.Actors.Add(new CircleDecoration(false, 0, 600, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 400, (crStart, crEnd), "rgba(0, 125, 255, 0.5)", new AgentConnector(npc)));
+                    break;
+                case (ushort)GreenPhantasm:
+                    int lifetime = 8000;
+                    replay.Actors.Add(new CircleDecoration(true, 0, 210, (crStart, crStart + lifetime), "rgba(0,255,0,0.2)", new AgentConnector(npc)));
+                    replay.Actors.Add(new CircleDecoration(true, crStart + lifetime, 210, (crStart, crStart + lifetime), "rgba(0,255,0,0.3)", new AgentConnector(npc)));
+                    break;
+                case (ushort)RetrieverProjection:
+                case (ushort)InsidiousProjection:
+                case (ushort)UnstableLeyRift:
+                case (ushort)RadiantPhantasm:
+                case (ushort)CrimsonPhantasm:
+                    break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }
@@ -390,13 +377,13 @@ namespace GW2EIParser.Logic
             //fixated Statue
             List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
-            Mob statue = null;
+            NPC statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)
             {
                 if (c is BuffApplyEvent)
                 {
                     fixationStatueStart = (int)c.Time;
-                    statue = TrashMobs.FirstOrDefault(x => x.AgentItem == c.By);
+                    statue = NPCs.FirstOrDefault(x => x.AgentItem == c.By);
                 }
                 else
                 {

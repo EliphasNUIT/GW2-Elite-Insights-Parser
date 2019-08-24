@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -56,7 +56,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Deimos,
+                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
                 (ushort)Thief,
                 (ushort)Drunkard,
                 (ushort)Gambler,
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            Target target = Targets.Find(x => x.ID == TriggerID);
+            NPC target = NPCs.Find(x => x.ID == TriggerID);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for success by combat exit not found");
@@ -135,7 +135,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success && _specialSplitLogTime > 0)
             {
-                Target target = Targets.Find(x => x.ID == TriggerID);
+                NPC target = NPCs.Find(x => x.ID == TriggerID);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
@@ -203,7 +203,7 @@ namespace GW2EIParser.Logic
         {
             ComputeFightTargets(agentData, combatData);
             // Find target
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Deimos);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Deimos);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -291,7 +291,7 @@ namespace GW2EIParser.Logic
                 phases[i].Name = names[i - 1];
                 phases[i].Targets.Add(mainTarget);
             }
-            foreach (Target tar in Targets)
+            foreach (NPC tar in NPCs)
             {
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
@@ -332,71 +332,40 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Deimos,
+                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
                 (ushort)Thief,
                 (ushort)Drunkard,
-                (ushort)Gambler
+                (ushort)Gambler,
+                (ushort)Saul,
+                (ushort)GamblerClones,
+                (ushort)GamblerReal,
+                (ushort)Greed,
+                (ushort)Pride,
+                (ushort)Oil,
+                (ushort)Tear,
+                (ushort)Hands
             };
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                Saul,
-                GamblerClones,
-                GamblerReal,
-                Greed,
-                Pride,
-                Oil,
-                Tear,
-                Hands
-            };
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
-                case (ushort)Saul:
-                case (ushort)GamblerClones:
-                case (ushort)GamblerReal:
-                case (ushort)Greed:
-                case (ushort)Pride:
-                case (ushort)Tear:
-                    break;
-                case (ushort)Hands:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(mob)));
-                    break;
-                case (ushort)Oil:
-                    int delay = 3000;
-                    replay.Actors.Add(new CircleDecoration(true, start + delay, 200, (start, start + delay), "rgba(255,100, 0, 0.5)", new AgentConnector(mob)));
-                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (start + delay, end), "rgba(0, 0, 0, 0.5)", new AgentConnector(mob)));
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
-        {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
-            {
-                case (ushort)ParseEnum.EvtcTargetIDS.Deimos:
+                case (ushort)ParseEnum.EvtcNPCIDs.Deimos:
                     List<AbstractCastEvent> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
                         int start = (int)c.Time;
                         int end = start + 5000;
-                        replay.Actors.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                         if (!log.FightData.IsCM)
                         {
                             replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
@@ -416,16 +385,16 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                            replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
+                            replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                             if (i % 5 != 0)
                             {
-                                replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
-                                replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                                replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
+                                replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                             }
                         }
                     }
-                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, target, true);
+                    List<AbstractBuffEvent> signets = GetFilteredList(log.CombatData, 38224, npc, true);
                     int sigStart = 0;
                     int sigEnd = 0;
                     foreach (AbstractBuffEvent signet in signets)
@@ -437,7 +406,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             sigEnd = (int)signet.Time;
-                            replay.Actors.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     break;
@@ -445,8 +414,23 @@ namespace GW2EIParser.Logic
                 case (ushort)Thief:
                 case (ushort)Drunkard:
                     break;
+                case (ushort)Saul:
+                case (ushort)GamblerClones:
+                case (ushort)GamblerReal:
+                case (ushort)Greed:
+                case (ushort)Pride:
+                case (ushort)Tear:
+                    break;
+                case (ushort)Hands:
+                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(npc)));
+                    break;
+                case (ushort)Oil:
+                    int oilDelay = 3000;
+                    replay.Actors.Add(new CircleDecoration(true, crStart + oilDelay, 200, (crStart, crStart + oilDelay), "rgba(255,100, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (crStart + oilDelay, crEnd), "rgba(0, 0, 0, 0.5)", new AgentConnector(npc)));
+                    break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }
@@ -473,7 +457,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Deimos);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

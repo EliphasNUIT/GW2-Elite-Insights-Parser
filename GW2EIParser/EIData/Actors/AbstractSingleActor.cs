@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
 using static GW2EIParser.EIData.Buff;
 using static GW2EIParser.Models.Statistics;
 
@@ -17,19 +18,23 @@ namespace GW2EIParser.EIData
         private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // Statistics
-        private readonly Dictionary<AbstractMasterActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractMasterActor, List<FinalDPS>>();
+        private readonly Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
         private List<FinalDPS> _dpsAll;
-        private readonly Dictionary<AbstractMasterActor, List<FinalStats>> _statsTarget = new Dictionary<AbstractMasterActor, List<FinalStats>>();
+        private readonly Dictionary<AbstractSingleActor, List<FinalStats>> _statsTarget = new Dictionary<AbstractSingleActor, List<FinalStats>>();
         private List<FinalStatsAll> _statsAll;
-        private readonly Dictionary<AbstractMasterActor, List<FinalDefenses>> _defensesTarget = new Dictionary<AbstractMasterActor, List<FinalDefenses>>();
+        private readonly Dictionary<AbstractSingleActor, List<FinalDefenses>> _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefenses>>();
         private List<FinalDefensesAll> _defensesAll;
-        private readonly Dictionary<AbstractMasterActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractMasterActor, List<FinalSupport>>();
+        private readonly Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
         private List<FinalSupportAll> _support;
         private Dictionary<long, List<AbstractBuffEvent>> _buffsPerId;
         //status
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
         private List<(long start, long end)> _dCs;
+        // Minions
+        private Dictionary<long, Minions> _minions;
+        // Replay
+        protected CombatReplay CombatReplay { get; set; }
 
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
@@ -49,7 +54,16 @@ namespace GW2EIParser.EIData
         }
 
         // Damage logs
-        protected abstract void SetDamageLogs(ParsedLog log);
+        protected void SetDamageLogs(ParsedLog log)
+        {
+            AddDamageLogs(log.CombatData.GetDamageData(AgentItem));
+            Dictionary<long, Minions> minionsList = GetMinions(log);
+            foreach (Minions mins in minionsList.Values)
+            {
+                DamageLogs.AddRange(mins.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
+            }
+            DamageLogs.Sort((x, y) => x.Time.CompareTo(y.Time));
+        }
         public override List<AbstractDamageEvent> GetDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             if (DamageLogs == null)
@@ -350,7 +364,7 @@ namespace GW2EIParser.EIData
             BuffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
         // DPS
-        protected List<FinalDPS> GetFinalDPS(ParsedLog log, AbstractMasterActor target)
+        protected List<FinalDPS> GetFinalDPS(ParsedLog log, AbstractSingleActor target)
         {
             List<FinalDPS> res = new List<FinalDPS>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -427,7 +441,7 @@ namespace GW2EIParser.EIData
             return _dpsAll;
         }
 
-        public List<FinalDPS> GetDPS(ParsedLog log, AbstractMasterActor target)
+        public List<FinalDPS> GetDPS(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -449,7 +463,7 @@ namespace GW2EIParser.EIData
             return _statsAll;
         }
 
-        public List<FinalStats> GetStats(ParsedLog log, AbstractMasterActor target)
+        public List<FinalStats> GetStats(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -574,7 +588,7 @@ namespace GW2EIParser.EIData
             }
             return res;
         }
-        private List<FinalStats> GetFinalStats(ParsedLog log, AbstractMasterActor target)
+        private List<FinalStats> GetFinalStats(ParsedLog log, AbstractSingleActor target)
         {
             List<FinalStats> res = new List<FinalStats>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -598,7 +612,7 @@ namespace GW2EIParser.EIData
             return _defensesAll;
         }
 
-        public List<FinalDefenses> GetDefenses(ParsedLog log, AbstractMasterActor target)
+        public List<FinalDefenses> GetDefenses(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -611,7 +625,7 @@ namespace GW2EIParser.EIData
             return _defensesTarget[target];
         }
 
-        private void FillFinalDefenses(FinalDefenses finalDefenses, ParsedLog log, long start, long end, AbstractMasterActor target)
+        private void FillFinalDefenses(FinalDefenses finalDefenses, ParsedLog log, long start, long end, AbstractSingleActor target)
         {
 
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(target, log, start, end);
@@ -665,7 +679,7 @@ namespace GW2EIParser.EIData
             }
             return res;
         }
-        private List<FinalDefenses> GetFinalDefenses(ParsedLog log, AbstractMasterActor target)
+        private List<FinalDefenses> GetFinalDefenses(ParsedLog log, AbstractSingleActor target)
         {
             List<FinalDefenses> res = new List<FinalDefenses>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
@@ -687,7 +701,7 @@ namespace GW2EIParser.EIData
             }
             return _support;
         }
-        public List<FinalSupport> GetSupport(ParsedLog log, AbstractMasterActor target)
+        public List<FinalSupport> GetSupport(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -699,7 +713,7 @@ namespace GW2EIParser.EIData
             }
             return _supportTarget[target];
         }
-        private long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractMasterActor target)
+        private long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -761,7 +775,7 @@ namespace GW2EIParser.EIData
             }
             return strips;
         }
-        private long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractMasterActor target)
+        private long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -800,7 +814,7 @@ namespace GW2EIParser.EIData
             return reses;
         }
 
-        private void FillFinalSupport(FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractMasterActor target)
+        private void FillFinalSupport(FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target)
         {
             if (_buffsPerId == null)
             {
@@ -831,7 +845,7 @@ namespace GW2EIParser.EIData
             }
             return res;
         }
-        private List<FinalSupport> GetFinalSupport(ParsedLog log, AbstractMasterActor target)
+        private List<FinalSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target)
         {
             List<FinalSupport> res = new List<FinalSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -844,5 +858,115 @@ namespace GW2EIParser.EIData
             }
             return res;
         }
+        // Minions
+        public Dictionary<long, Minions> GetMinions(ParsedLog log)
+        {
+            if (_minions == null)
+            {
+                _minions = new Dictionary<long, Minions>();
+                List<AgentItem> combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
+                Dictionary<long, Minions> auxMinions = new Dictionary<long, Minions>();
+                foreach (AgentItem agent in combatMinion)
+                {
+                    long id = agent.ID;
+                    if (auxMinions.TryGetValue(id, out Minions values))
+                    {
+                        values.AddMinion(new NPC(agent));
+                    }
+                    else
+                    {
+                        auxMinions[id] = new Minions(new NPC(agent));
+                    }
+                }
+                foreach (KeyValuePair<long, Minions> pair in auxMinions)
+                {
+                    if (pair.Value.GetDamageLogs(null, log, 0, log.FightData.FightDuration).Count > 0 || pair.Value.GetCastLogs(log, 0, log.FightData.FightDuration).Count > 0)
+                    {
+                        _minions[pair.Key] = pair.Value;
+                    }
+                }
+            }
+            return _minions;
+        }
+
+
+        // Combat Replay
+        protected void SetMovements(ParsedLog log)
+        {
+            foreach (AbstractMovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
+            {
+                movementEvent.AddPoint3D(CombatReplay);
+            }
+        }
+        public List<int> GetCombatReplayTimes(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.Times;
+        }
+
+        public List<Point3D> GetCombatReplayPolledPositions(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return CombatReplay.PolledPositions;
+        }
+
+        protected abstract void InitCombatReplay(ParsedLog log);
+
+        protected void TrimCombatReplay(ParsedLog log)
+        {
+            DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(AgentItem).LastOrDefault();
+            SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(AgentItem).LastOrDefault();
+            DeadEvent deathCheck = log.CombatData.GetDeadEvents(AgentItem).LastOrDefault();
+            if (deathCheck != null)
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), deathCheck.Time);
+            }
+            else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), despawnCheck.Time);
+            }
+            else
+            {
+                CombatReplay.Trim(log.FightData.ToFightSpace(AgentItem.FirstAwareLogTime), log.FightData.ToFightSpace(AgentItem.LastAwareLogTime));
+            }
+        }
+
+        public List<GenericDecoration> GetCombatReplayActors(ParsedLog log)
+        {
+            if (!log.CanCombatReplay || IsFakeActor)
+            {
+                // no combat replay support on fight
+                return null;
+            }
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            if (CombatReplay.NoActors)
+            {
+                CombatReplay.NoActors = false;
+                InitAdditionalCombatReplayData(log);
+            }
+            return CombatReplay.Actors;
+        }
+
+        public int GetCombatReplayID(ParsedLog log)
+        {
+            if (CombatReplay == null)
+            {
+                InitCombatReplay(log);
+            }
+            return (InstID + "_" + CombatReplay.TimeOffsets.start + "_" + CombatReplay.TimeOffsets.end).GetHashCode();
+        }
+        protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
+
+
+        public abstract JsonAbstractSingleActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }

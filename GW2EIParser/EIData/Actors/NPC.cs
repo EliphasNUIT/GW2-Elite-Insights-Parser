@@ -9,12 +9,12 @@ using static GW2EIParser.Models.Statistics;
 
 namespace GW2EIParser.EIData
 {
-    public class Target : AbstractMasterActor
+    public class NPC : AbstractSingleActor
     {
         private List<Dictionary<long, FinalTargetBuffs>> _buffs;
         private int _health = -1;
         // Constructors
-        public Target(AgentItem agent) : base(agent)
+        public NPC(AgentItem agent) : base(agent)
         {
         }
 
@@ -116,14 +116,14 @@ namespace GW2EIParser.EIData
         // Combat Replay
         protected override void InitAdditionalCombatReplayData(ParsedLog log)
         {
-            log.FightData.Logic.ComputeTargetCombatReplayActors(this, log, CombatReplay);
+            log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any())
             {
                 CombatReplay.Actors.Add(new FacingDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
             }
         }
 
-        public override JsonAbstractMasterActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
+        public override JsonAbstractSingleActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
             if (CombatReplay == null)
             {

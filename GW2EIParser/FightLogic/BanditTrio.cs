@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -29,17 +29,32 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Narella
+                (ushort)ParseEnum.EvtcNPCIDs.Narella
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Berg,
-                (ushort)ParseEnum.EvtcTargetIDS.Zane,
-                (ushort)ParseEnum.EvtcTargetIDS.Narella
+                (ushort)ParseEnum.EvtcNPCIDs.Berg,
+                (ushort)ParseEnum.EvtcNPCIDs.Zane,
+                (ushort)ParseEnum.EvtcNPCIDs.Narella,
+                (ushort)BanditSaboteur,
+                (ushort)Warg,
+                (ushort)CagedWarg,
+                (ushort)BanditAssassin,
+                (ushort)BanditSapperTrio ,
+                (ushort)BanditDeathsayer,
+                (ushort)BanditBrawler,
+                (ushort)BanditBattlemage,
+                (ushort)BanditCleric,
+                (ushort)BanditBombardier,
+                (ushort)BanditSniper,
+                (ushort)NarellaTornado,
+                (ushort)OilSlick,
+                (ushort)Prisoner1,
+                (ushort)Prisoner2
             };
         }
 
@@ -70,7 +85,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public static void SetPhasePerTarget(Target target, List<PhaseData> phases, ParsedLog log)
+        public static void SetPhasePerTarget(NPC target, List<PhaseData> phases, ParsedLog log)
         {
             long fightDuration = log.FightData.FightDuration;
             EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
@@ -93,36 +108,36 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Berg,
-                (ushort)ParseEnum.EvtcTargetIDS.Zane,
-                (ushort)ParseEnum.EvtcTargetIDS.Narella
+                (ushort)ParseEnum.EvtcNPCIDs.Berg,
+                (ushort)ParseEnum.EvtcNPCIDs.Zane,
+                (ushort)ParseEnum.EvtcNPCIDs.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target berg = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Berg);
+            NPC berg = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            Target zane = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Zane);
+            NPC zane = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane");
             }
-            Target narella = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Narella);
+            NPC narella = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella");
             }
-            phases[0].Targets.AddRange(Targets);
+            phases[0].Targets.AddRange(NPCs);
             if (!requirePhases)
             {
                 return phases;
             }
-            foreach (Target target in Targets)
+            foreach (NPC target in NPCs)
             {
                 SetPhasePerTarget(target, phases, log);
             }
@@ -134,41 +149,19 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                BanditSaboteur,
-                Warg,
-                CagedWarg,
-                BanditAssassin,
-                BanditSapperTrio ,
-                BanditDeathsayer,
-                BanditBrawler,
-                BanditBattlemage,
-                BanditCleric,
-                BanditBombardier,
-                BanditSniper,
-                NarellaTornado,
-                OilSlick,
-                Prisoner1,
-                Prisoner2
-            };
-        }
-
         public override string GetFightName()
         {
             return "Bandit Trio";
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Berg:
+                case (ushort)ParseEnum.EvtcNPCIDs.Berg:
                     break;
-                case (ushort)ParseEnum.EvtcTargetIDS.Zane:
+                case (ushort)ParseEnum.EvtcNPCIDs.Zane:
                     List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -190,10 +183,10 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (ushort)ParseEnum.EvtcTargetIDS.Narella:
+                case (ushort)ParseEnum.EvtcNPCIDs.Narella:
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
     }

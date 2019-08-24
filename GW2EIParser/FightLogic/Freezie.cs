@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -17,8 +17,8 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Freezie);
-            Target heartTarget = Targets.Find(x => x.ID == (ushort)FreeziesFrozenHeart);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Freezie);
+            NPC heartTarget = NPCs.Find(x => x.ID == (ushort)FreeziesFrozenHeart);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -50,16 +50,16 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Freezie,
+                (ushort)ParseEnum.EvtcNPCIDs.Freezie,
                 (ushort)FreeziesFrozenHeart
             };
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.Freezie,
+                (ushort)ParseEnum.EvtcNPCIDs.Freezie,
                 (ushort)FreeziesFrozenHeart
             };
         }

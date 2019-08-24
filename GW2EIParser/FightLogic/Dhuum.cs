@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -73,7 +73,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, Target dhuum, long mainStart, long mainEnd, bool hasRitual)
+        private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -107,12 +107,25 @@ namespace GW2EIParser.Logic
             phases.RemoveAll(x => x.DurationInMS <= 2200);
             return phases;
         }
+        protected override List<ushort> GetFightNPCsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.EvtcNPCIDs.Dhuum,
+                (ushort)Echo,
+                (ushort)Enforcer,
+                (ushort)Messenger,
+                (ushort)Deathling,
+                (ushort)UnderworldReaper,
+                (ushort)DhuumDesmina
+            };
+        }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -166,26 +179,16 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                Echo,
-                Enforcer,
-                Messenger,
-                Deathling,
-                UnderworldReaper,
-                DhuumDesmina
-            };
-        }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
             // TODO: correct position
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.Dhuum:
+                case (ushort)ParseEnum.EvtcNPCIDs.Dhuum:
                     List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -218,8 +221,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                     }
                     List<AbstractCastEvent> slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (AbstractCastEvent c in slash)
@@ -231,43 +234,31 @@ namespace GW2EIParser.Logic
                         {
                             continue;
                         }
-                        replay.Actors.Add(new PieDecoration(false, 0, 850, facing, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
+                        replay.Actors.Add(new PieDecoration(false, 0, 850, facing, 60, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                     }
 
                     if (majorSplit != null)
                     {
                         int start = (int)majorSplit.Time;
                         int end = (int)log.FightData.FightDuration;
-                        replay.Actors.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, 320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(npc)));
                     }
                     break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
                 case (ushort)DhuumDesmina:
                     break;
                 case (ushort)Echo:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)Enforcer:
                     break;
                 case (ushort)Messenger:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 125, 0, 0.5)", new AgentConnector(mob)));
+                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (crStart, crEnd), "rgba(255, 125, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)Deathling:
                     break;
                 case (ushort)UnderworldReaper:
                     // if not bugged and we assumed we are still on the reapers at the door, check if start is above 2 seconds (first reaper spawns around 10+ seconds). If yes, put _reapersSeen at 0 to start greens. 
-                    if (!_isBugged && _reapersSeen < 0 && start > 2000)
+                    if (!_isBugged && _reapersSeen < 0 && crStart > 2000)
                     {
                         //Reminder that agents appear in chronological order, after this one, reaper has spawned afer the first one
                         _reapersSeen = 0;
@@ -296,11 +287,11 @@ namespace GW2EIParser.Logic
                         foreach (int gstart in greens)
                         {
                             int gend = gstart + 5000;
-                            replay.Actors.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
-                            replay.Actors.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(mob)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
+                            replay.Actors.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
                         }
                     }
-                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, mob, true);
+                    List<AbstractBuffEvent> stealths = GetFilteredList(log.CombatData, 13017, npc, true);
                     int stealthStart = 0;
                     int stealthEnd = 0;
                     foreach (AbstractBuffEvent c in stealths)
@@ -312,22 +303,22 @@ namespace GW2EIParser.Logic
                         else
                         {
                             stealthEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(mob)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, 180, (stealthStart, stealthEnd), "rgba(80, 80, 80, 0.3)", new AgentConnector(npc)));
                         }
                     }
                     _reapersSeen++;
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-
+                    break;
             }
+
         }
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
             List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -412,7 +403,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.Dhuum);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

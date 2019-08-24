@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -40,22 +40,15 @@ namespace GW2EIParser.Logic
                             (13440, 14336, 15360, 16256));
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate,
-                (ushort)ParseEnum.EvtcTargetIDS.CARightArm,
-                (ushort)ParseEnum.EvtcTargetIDS.CALeftArm
-            };
-        }
-
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>()
-            {
-                ConjuredGreatsword,
-                ConjuredShield
+                (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate,
+                (ushort)CARightArm,
+                (ushort)CALeftArm,
+                (ushort)ConjuredGreatsword,
+                (ushort)ConjuredShield
             };
         }
 
@@ -78,38 +71,10 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate,
-                (ushort)ParseEnum.EvtcTargetIDS.CALeftArm,
-                (ushort)ParseEnum.EvtcTargetIDS.CARightArm
+                (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate,
+                (ushort)ParseEnum.EvtcNPCIDs.CALeftArm,
+                (ushort)ParseEnum.EvtcNPCIDs.CARightArm
             };
-        }
-
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            switch (mob.ID)
-            {
-                case (ushort)ConjuredGreatsword:
-                    break;
-                case (ushort)ConjuredShield:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, mob, true);
-                    int shieldStart = 0;
-                    foreach (AbstractBuffEvent c in shield)
-                    {
-                        if (c is BuffApplyEvent)
-                        {
-                            shieldStart = (int)c.Time;
-                        }
-                        else
-                        {
-                            int shieldEnd = (int)c.Time;
-                            int radius = 100;
-                            replay.Actors.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(mob)));
-                        }
-                    }
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
         }
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
@@ -117,7 +82,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target target = Targets.Find(x => x.ID == TriggerID);
+                NPC target = NPCs.Find(x => x.ID == TriggerID);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
@@ -136,7 +101,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        private List<long> GetTargetableTimes(ParsedLog log, Target target)
+        private List<long> GetTargetableTimes(ParsedLog log, NPC target)
         {
             List<AttackTargetEvent> attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
             List<AgentItem> attackTargets = new List<AgentItem>();
@@ -156,7 +121,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target ca = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate);
+            NPC ca = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate);
             if (ca == null)
             {
                 throw new InvalidOperationException("Conjurate Amalgamate not found");
@@ -183,7 +148,7 @@ namespace GW2EIParser.Logic
                 }
                 phase.Name = name;
             }
-            Target leftArm = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.CALeftArm);
+            NPC leftArm = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.CALeftArm);
             if (leftArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, leftArm);
@@ -197,7 +162,7 @@ namespace GW2EIParser.Logic
                     }
                 }
             }
-            Target rightArm = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.CARightArm);
+            NPC rightArm = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.CARightArm);
             if (rightArm != null)
             {
                 List<long> targetables = GetTargetableTimes(log, rightArm);
@@ -221,12 +186,12 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            switch (target.ID)
+            switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, target, true);
+                case (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate:
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 53003, npc, true);
                     int shieldStart = 0;
                     foreach (AbstractBuffEvent c in shield)
                     {
@@ -238,15 +203,34 @@ namespace GW2EIParser.Logic
                         {
                             int shieldEnd = (int)c.Time;
                             int radius = 500;
-                            replay.Actors.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, radius, (shieldStart, shieldEnd), "rgba(0, 150, 255, 0.3)", new AgentConnector(npc)));
                         }
                     }
                     break;
-                case (ushort)ParseEnum.EvtcTargetIDS.CALeftArm:
-                case (ushort)ParseEnum.EvtcTargetIDS.CARightArm:
+                case (ushort)ParseEnum.EvtcNPCIDs.CALeftArm:
+                case (ushort)ParseEnum.EvtcNPCIDs.CARightArm:
+                    break;
+                case (ushort)ConjuredGreatsword:
+                    break;
+                case (ushort)ConjuredShield:
+                    List<AbstractBuffEvent> shield2 = GetFilteredList(log.CombatData, 53003, npc, true);
+                    int shieldStart2 = 0;
+                    foreach (AbstractBuffEvent c in shield2)
+                    {
+                        if (c is BuffApplyEvent)
+                        {
+                            shieldStart2 = (int)c.Time;
+                        }
+                        else
+                        {
+                            int shieldEnd2 = (int)c.Time;
+                            int radius2 = 100;
+                            replay.Actors.Add(new CircleDecoration(true, 0, radius2, (shieldStart2, shieldEnd2), "rgba(0, 150, 255, 0.3)", new AgentConnector(npc)));
+                        }
+                    }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
@@ -271,7 +255,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.ConjuredAmalgamate);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.ConjuredAmalgamate);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

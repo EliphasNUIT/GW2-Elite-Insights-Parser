@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -38,11 +38,12 @@ namespace GW2EIParser.Logic
                             (11774, 4480, 14078, 5376));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Jade
+                (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer,
+                (ushort)Jade
             };
         }
 
@@ -51,7 +52,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.MursaatOverseer);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -99,13 +100,13 @@ namespace GW2EIParser.Logic
         }
 
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = mob.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (mob.ID)
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
                 case (ushort)Jade:
-                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, mob, true);
+                    List<AbstractBuffEvent> shield = GetFilteredList(log.CombatData, 38155, npc, true);
                     int shieldStart = 0;
                     int shieldRadius = 100;
                     foreach (AbstractBuffEvent c in shield)
@@ -117,7 +118,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             int shieldEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(mob)));
+                            replay.Actors.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(npc)));
                         }
                     }
                     List<AbstractCastEvent> explosion = cls.Where(x => x.SkillId == 37788).ToList();
@@ -127,18 +128,18 @@ namespace GW2EIParser.Logic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(mob)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(mob)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(npc)));
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
         }
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            Target target = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.MursaatOverseer);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");

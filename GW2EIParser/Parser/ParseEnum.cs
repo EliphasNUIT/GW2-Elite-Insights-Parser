@@ -142,8 +142,55 @@ namespace GW2EIParser.Parser
                 : EvtcIFF.Unknown;
         }
 
-        public enum EvtcTrashIDS : ushort
+        public enum EvtcNPCIDs : ushort
         {
+            WorldVersusWorld = 1,
+            // Raid
+            ValeGuardian = 15438,
+            Gorseval = 15429,
+            Sabetha = 15375,
+            Slothasor = 16123,
+            Berg = 16088,
+            Zane = 16137,
+            Narella = 16125,
+            Matthias = 16115,
+            Escort = 16253, // McLeod the Silent
+            KeepConstruct = 16235,
+            Xera = 16246,
+            Cairn = 17194,
+            MursaatOverseer = 17172,
+            Samarog = 17188,
+            Deimos = 17154,
+            SoullessHorror = 19767,
+            Desmina = 19828,
+            BrokenKing = 19691,
+            SoulEater = 19536,
+            EyeOfJudgement = 19651,
+            EyeOfFate = 19844,
+            Dhuum = 19450,
+            ConjuredAmalgamate = 43974,
+            CARightArm = 10142,
+            CALeftArm = 37464,
+            Nikare = 21105,
+            Kenut = 21089,
+            Qadim = 20934,
+            Freezie = 21333,
+            Adina = 22006,
+            Sabir = 21964,
+            PeerlessQadim = 22000,
+            // Fract
+            MAMA = 17021,
+            Siax = 17028,
+            Ensolyss = 16948,
+            Skorvald = 17632,
+            Artsariiv = 17949,
+            Arkk = 17759,
+            // Golems
+            MassiveGolem = 16202,
+            AvgGolem = 16177,
+            LGolem = 19676,
+            MedGolem = 19645,
+            StdGolem = 16199,
             // VG
             Seekers = 15426,
             RedGuardian = 15433,
@@ -335,66 +382,9 @@ namespace GW2EIParser.Parser
             //
             Unknown
         };
-        public static EvtcTrashIDS GetTrashIDS(ushort id)
+        public static EvtcNPCIDs GetNPCIDS(ushort id)
         {
-            return Enum.IsDefined(typeof(EvtcTrashIDS), id) ? (EvtcTrashIDS)id : EvtcTrashIDS.Unknown;
-        }
-
-        public enum EvtcTargetIDS : ushort
-        {
-            WorldVersusWorld = 1,
-            // Raid
-            ValeGuardian = 15438,
-            Gorseval = 15429,
-            Sabetha = 15375,
-            Slothasor = 16123,
-            Berg = 16088,
-            Zane = 16137,
-            Narella = 16125,
-            Matthias = 16115,
-            Escort = 16253, // McLeod the Silent
-            KeepConstruct = 16235,
-            Xera = 16246,
-            Cairn = 17194,
-            MursaatOverseer = 17172,
-            Samarog = 17188,
-            Deimos = 17154,
-            SoullessHorror = 19767,
-            Desmina = 19828,
-            BrokenKing = 19691,
-            SoulEater = 19536,
-            EyeOfJudgement = 19651,
-            EyeOfFate = 19844,
-            Dhuum = 19450,
-            ConjuredAmalgamate = 43974,
-            CARightArm = 10142,
-            CALeftArm = 37464,
-            Nikare = 21105,
-            Kenut = 21089,
-            Qadim = 20934,
-            Freezie = 21333,
-            Adina = 22006,
-            Sabir = 21964,
-            PeerlessQadim = 22000,
-            // Fract
-            MAMA = 17021,
-            Siax = 17028,
-            Ensolyss = 16948,
-            Skorvald = 17632,
-            Artsariiv = 17949,
-            Arkk = 17759,
-            // Golems
-            MassiveGolem = 16202,
-            AvgGolem = 16177,
-            LGolem = 19676,
-            MedGolem = 19645,
-            StdGolem = 16199,
-            //
-            Unknown
-        };
-        public static EvtcTargetIDS GetTargetIDS(ushort id)
-        {
-            return Enum.IsDefined(typeof(EvtcTargetIDS), id) ? (EvtcTargetIDS)id : EvtcTargetIDS.Unknown;
+            return Enum.IsDefined(typeof(EvtcNPCIDs), id) ? (EvtcNPCIDs)id : EvtcNPCIDs.Unknown;
         }
 
     }

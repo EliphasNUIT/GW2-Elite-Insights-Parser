@@ -13,9 +13,8 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonCombatReplay
     {
-        public List<JsonAbstractMasterActorCombatReplay> Players { get; set; } = new List<JsonAbstractMasterActorCombatReplay>();
-        public List<JsonAbstractMasterActorCombatReplay> Mobs { get; set; } = new List<JsonAbstractMasterActorCombatReplay>();
-        public List<JsonAbstractMasterActorCombatReplay> Npcs { get; set; } = new List<JsonAbstractMasterActorCombatReplay>();
+        public List<JsonAbstractSingleActorCombatReplay> Players { get; set; } = new List<JsonAbstractSingleActorCombatReplay>();
+        public List<JsonAbstractSingleActorCombatReplay> Npcs { get; set; } = new List<JsonAbstractSingleActorCombatReplay>();
         public List<JsonCombatReplayGenericDecoration> Decorations { get; set; } = new List<JsonCombatReplayGenericDecoration>();
         public List<int> Sizes { get; set; }
         public int MaxTime { get; set; }
@@ -48,10 +47,6 @@ namespace GW2EIParser.Builders.JsonModels
             Inch = map.GetInch();
             MaxTime = log.PlayerList.First().GetCombatReplayTimes(log).Last();
             GetCombatReplayActors(log, map);
-            if (Mobs.Count == 0)
-            {
-                Mobs = null;
-            }
             if (Decorations.Count == 0)
             {
                 Decorations = null;
@@ -76,19 +71,7 @@ namespace GW2EIParser.Builders.JsonModels
                     Decorations.Add(a.GetCombatReplayJSON(map, log));
                 }
             }
-            foreach (Mob m in log.FightData.Logic.TrashMobs)
-            {
-                if (m.GetCombatReplayPolledPositions(log).Count == 0)
-                {
-                    continue;
-                }
-                Mobs.Add(m.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration a in m.GetCombatReplayActors(log))
-                {
-                    Decorations.Add(a.GetCombatReplayJSON(map, log));
-                }
-            }
-            foreach (Target target in log.FightData.Logic.Targets)
+            foreach (NPC target in log.FightData.Logic.NPCs)
             {
                 if (target.GetCombatReplayPolledPositions(log).Count == 0)
                 {

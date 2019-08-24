@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -37,22 +37,14 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.EvtcTrashIDS>
-            {
-                LightThieves,
-                MazeMinotaur,
-            };
-        }
-
-
-        protected override List<ushort> GetFightTargetsIDs()
+        protected override List<ushort> GetFightNPCsIDs()
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.EyeOfFate,
-                (ushort)ParseEnum.EvtcTargetIDS.EyeOfJudgement
+                (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate,
+                (ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement,
+                (ushort)LightThieves,
+                (ushort)MazeMinotaur,
             };
         }
 
@@ -60,16 +52,16 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcTargetIDS.EyeOfFate,
-                (ushort)ParseEnum.EvtcTargetIDS.EyeOfJudgement
+                (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate,
+                (ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.EyeOfFate);
-            Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.EyeOfJudgement);
+            NPC eye1 = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate);
+            NPC eye2 = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");
@@ -81,8 +73,8 @@ namespace GW2EIParser.Logic
 
         private void HPCheck(CombatData combatData, FightData fightData)
         {
-            Target eye1 = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.EyeOfFate);
-            Target eye2 = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.EyeOfJudgement);
+            NPC eye1 = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate);
+            NPC eye2 = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement);
             if (eye2 == null || eye1 == null)
             {
                 throw new InvalidOperationException("Eyes not found");
@@ -128,7 +120,7 @@ namespace GW2EIParser.Logic
             // hp could be unreliable or missing, fall back (around 200 ms more)
             if (!fightData.Success)
             {
-                SetSuccessByDeath(combatData, fightData, playerAgents, false, (ushort)ParseEnum.EvtcTargetIDS.EyeOfFate, (ushort)ParseEnum.EvtcTargetIDS.EyeOfJudgement);
+                SetSuccessByDeath(combatData, fightData, playerAgents, false, (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate, (ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement);
             }
         }
 

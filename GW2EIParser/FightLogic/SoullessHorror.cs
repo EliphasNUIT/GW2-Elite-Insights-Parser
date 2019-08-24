@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcTrashIDS;
+using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -46,14 +46,15 @@ namespace GW2EIParser.Logic
                             (19072, 15484, 20992, 16508));
         }
 
-        protected override List<ParseEnum.EvtcTrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightNPCsIDs()
         {
-            return new List<ParseEnum.EvtcTrashIDS>
+            return new List<ushort>
             {
-                Scythe,
-                TormentedDead,
-                SurgingSoul,
-                FleshWurm
+                (ushort)ParseEnum.EvtcNPCIDs.SoullessHorror,
+                (ushort)Scythe,
+                (ushort)TormentedDead,
+                (ushort)SurgingSoul,
+                (ushort)FleshWurm
             };
         }
 
@@ -62,7 +63,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.SoullessHorror);
+                NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.SoullessHorror);
                 if (mainTarget == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -75,51 +76,11 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override void ComputeMobCombatReplayActors(Mob mob, ParsedLog log, CombatReplay replay)
-        {
-            int start = (int)replay.TimeOffsets.start;
-            int end = (int)replay.TimeOffsets.end;
-            switch (mob.ID)
-            {
-                case (ushort)Scythe:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 80, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(mob)));
-                    break;
-                case (ushort)TormentedDead:
-                    if (replay.Positions.Count == 0)
-                    {
-                        break;
-                    }
-                    replay.Actors.Add(new CircleDecoration(true, 0, 400, (end, end + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
-                    break;
-                case (ushort)SurgingSoul:
-                    List<Point3D> positions = replay.Positions;
-                    if (positions.Count < 2)
-                    {
-                        break;
-                    }
-                    if (positions[0].X < -12000 || positions[0].X > -9250)
-                    {
-                        replay.Actors.Add(new RectangleDecoration(true, 0, 240, 660, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
-                        break;
-                    }
-                    else if (positions[0].Y < -525 || positions[0].Y > 2275)
-                    {
-                        replay.Actors.Add(new RectangleDecoration(true, 0, 645, 238, (start, end), "rgba(255,100,0,0.5)", new AgentConnector(mob)));
-                        break;
-                    }
-                    break;
-                case (ushort)FleshWurm:
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
-            }
-        }
-
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            Target mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.EvtcTargetIDS.SoullessHorror);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.SoullessHorror);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -155,19 +116,21 @@ namespace GW2EIParser.Logic
             return phases;
         }
 
-        public override void ComputeTargetCombatReplayActors(Target target, ParsedLog log, CombatReplay replay)
+        public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
-            switch (target.ID)
+            int crStart = (int)replay.TimeOffsets.start;
+            int crEnd = (int)replay.TimeOffsets.end;
+            List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcTargetIDS.SoullessHorror:
+                case (ushort)ParseEnum.EvtcNPCIDs.SoullessHorror:
                     List<AbstractCastEvent> howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
+                        replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                     }
                     List<AbstractCastEvent> vortex = cls.Where(x => x.SkillId == 47327).ToList();
                     foreach (AbstractCastEvent c in vortex)
@@ -195,7 +158,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 8; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
@@ -212,7 +175,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
@@ -227,13 +190,42 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(target)));
+                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
                     break;
+                case (ushort)Scythe:
+                    replay.Actors.Add(new CircleDecoration(true, 0, 80, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    break;
+                case (ushort)TormentedDead:
+                    if (replay.Positions.Count == 0)
+                    {
+                        break;
+                    }
+                    replay.Actors.Add(new CircleDecoration(true, 0, 400, (crEnd, crEnd + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
+                    break;
+                case (ushort)SurgingSoul:
+                    List<Point3D> positions = replay.Positions;
+                    if (positions.Count < 2)
+                    {
+                        break;
+                    }
+                    if (positions[0].X < -12000 || positions[0].X > -9250)
+                    {
+                        replay.Actors.Add(new RectangleDecoration(true, 0, 240, 660, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
+                        break;
+                    }
+                    else if (positions[0].Y < -525 || positions[0].Y > 2275)
+                    {
+                        replay.Actors.Add(new RectangleDecoration(true, 0, 645, 238, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
+                        break;
+                    }
+                    break;
+                case (ushort)FleshWurm:
+                    break;
                 default:
-                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+                    break;
             }
 
         }

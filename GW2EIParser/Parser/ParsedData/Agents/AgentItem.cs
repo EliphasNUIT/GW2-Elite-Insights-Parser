@@ -19,8 +19,8 @@ namespace GW2EIParser.Parser.ParsedData
         public AgentType Type { get; }
         public long FirstAwareLogTime { get; set; }
         public long LastAwareLogTime { get; set; } = long.MaxValue;
-        public string Name { get; }
-        public string Prof { get; }
+        public string Name { get; } = "UNKNOWN";
+        public string Prof { get; } = "UNKNOWN";
         public uint Toughness { get; }
         public uint Healing { get; }
         public uint Condition { get; }
@@ -77,10 +77,8 @@ namespace GW2EIParser.Parser.ParsedData
             MasterAgent = other.MasterAgent;
         }
 
-        public AgentItem(ulong agent, string name)
+        public AgentItem()
         {
-            Agent = agent;
-            Name = name;
         }
 
         private static void AddValueToStatusList(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, AbstractStatusEvent cur, AbstractStatusEvent next, long endTime, int index)
