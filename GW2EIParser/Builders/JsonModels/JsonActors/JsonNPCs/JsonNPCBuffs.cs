@@ -50,7 +50,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             private static Dictionary<string, double> ConvertKeys(Dictionary<Player, double> toConvert)
             {
-                Dictionary<string, double> res = new Dictionary<string, double>();
+                var res = new Dictionary<string, double>();
                 foreach (var pair in toConvert)
                 {
                     res[pair.Key.Character] = pair.Value;

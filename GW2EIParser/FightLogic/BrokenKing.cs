@@ -34,7 +34,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> green = log.CombatData.GetBuffData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var green = log.CombatData.GetBuffData(47776).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in green)
             {
                 int duration = 45000;
@@ -55,7 +55,7 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.BrokenKing:
-                    List<AbstractCastEvent> Cone = cls.Where(x => x.SkillId == 48066).ToList();
+                    var Cone = cls.Where(x => x.SkillId == 48066).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
                         int start = (int)c.Time;

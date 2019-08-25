@@ -73,8 +73,8 @@ namespace GW2EIParser.Builders.JsonModels
 
         public static List<JsonDamageDist> BuildJsonDamageDists(List<AbstractDamageEvent> damageEvents, ParsedLog log, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap)
         {
-            List<JsonDamageDist> damageDist = new List<JsonDamageDist>();
-            Dictionary<SkillItem, List<AbstractDamageEvent>> dict = damageEvents.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
+            var damageDist = new List<JsonDamageDist>();
+            var dict = damageEvents.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> pair in dict)
             {
                 SkillItem skill = pair.Key;
@@ -95,7 +95,7 @@ namespace GW2EIParser.Builders.JsonModels
                         }
                         else
                         {
-                            Buff auxBoon = new Buff(skill.Name, id, skill.Icon);
+                            var auxBoon = new Buff(skill.Name, id, skill.Icon);
                             buffMap["b" + id] = new BuffDesc(auxBoon);
                         }
                     }

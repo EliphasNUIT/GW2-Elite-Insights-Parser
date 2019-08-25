@@ -20,7 +20,7 @@ namespace GW2EIParser.Builders
 
         public void CreateJSON(StreamWriter sw)
         {
-            DefaultContractResolver contractResolver = new DefaultContractResolver
+            var contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
@@ -31,7 +31,7 @@ namespace GW2EIParser.Builders
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
-            JsonTextWriter writer = new JsonTextWriter(sw)
+            var writer = new JsonTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
             };
@@ -41,24 +41,24 @@ namespace GW2EIParser.Builders
 
         public void CreateXML(StreamWriter sw)
         {
-            DefaultContractResolver contractResolver = new DefaultContractResolver
+            var contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
-            JsonSerializerSettings settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = contractResolver
             };
-            Dictionary<string, JsonLog> root = new Dictionary<string, JsonLog>()
+            var root = new Dictionary<string, JsonLog>()
             {
                 {"log", JsonLog }
             };
             string json = JsonConvert.SerializeObject(root, settings);
 
             XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(sw)
+            var xmlTextWriter = new XmlTextWriter(sw)
             {
                 Formatting = Properties.Settings.Default.IndentXML ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
             };

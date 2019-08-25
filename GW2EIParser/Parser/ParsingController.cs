@@ -519,7 +519,7 @@ namespace GW2EIParser.Parser
                     playerAgent.LastAwareLogTime = _fightData.FightEndLogTime;
                 }
                 bool skip = false;
-                Player player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
+                var player = new Player(playerAgent, _fightData.Logic.Mode == FightLogic.ParseMode.Fractal);
                 foreach (Player p in _playerList)
                 {
                     if (p.Account == player.Account)// same player
@@ -527,7 +527,7 @@ namespace GW2EIParser.Parser
                         if (p.Character == player.Character) // same character, can be fused
                         {
                             skip = true;
-                            Random rnd = new Random();
+                            var rnd = new Random();
                             ulong agent = 0;
                             while (_agentData.AgentValues.Contains(agent) || agent == 0)
                             {

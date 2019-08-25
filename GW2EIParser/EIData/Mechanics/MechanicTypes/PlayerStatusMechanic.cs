@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
             CombatData combatData = log.CombatData;
             foreach (Player p in log.PlayerList)
             {
-                List<long> cList = new List<long>();
+                var cList = new List<long>();
                 switch (SkillId)
                 {
                     case SkillItem.DeathId:
@@ -42,7 +42,7 @@ namespace GW2EIParser.EIData
                         break;
                     case SkillItem.DownId:
                         cList = combatData.GetDownEvents(p.AgentItem).Select(x => x.Time).ToList();
-                        List<long> downByVaporForm = combatData.GetBuffData(5620).Where(x => x.To == p.AgentItem && x is BuffRemoveAllEvent).Select(x => x.Time).ToList();
+                        var downByVaporForm = combatData.GetBuffData(5620).Where(x => x.To == p.AgentItem && x is BuffRemoveAllEvent).Select(x => x.Time).ToList();
                         foreach (long time in downByVaporForm)
                         {
                             cList.RemoveAll(x => Math.Abs(x - time) < 20);

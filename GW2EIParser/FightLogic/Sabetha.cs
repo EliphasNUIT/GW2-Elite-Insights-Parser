@@ -84,7 +84,7 @@ namespace GW2EIParser.Logic
                 phase.Name = namesSab[i - 1];
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) Kernan,
                        (ushort) Knuckles,
@@ -145,7 +145,7 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Sabetha:
-                    List<AbstractCastEvent> flameWall = cls.Where(x => x.SkillId == 31332).ToList();
+                    var flameWall = cls.Where(x => x.SkillId == 31332).ToList();
                     foreach (AbstractCastEvent c in flameWall)
                     {
                         int start = (int)c.Time;
@@ -162,7 +162,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 case (ushort)Kernan:
-                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
+                    var bulletHail = cls.Where(x => x.SkillId == 31721).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
@@ -183,14 +183,14 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 case (ushort)Knuckles:
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 31763).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 31763).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Actors.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     break;
                 case (ushort)Karde:
-                    List<AbstractCastEvent> flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
+                    var flameBlast = cls.Where(x => x.SkillId == 31761).ToList();
                     foreach (AbstractCastEvent c in flameBlast)
                     {
                         int start = (int)c.Time;
@@ -211,7 +211,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // timed bombs
-            List<AbstractBuffEvent> timedBombs = log.CombatData.GetBuffData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var timedBombs = log.CombatData.GetBuffData(31485).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in timedBombs)
             {
                 int start = (int)c.Time;

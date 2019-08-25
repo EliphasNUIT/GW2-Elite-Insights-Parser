@@ -155,7 +155,7 @@ namespace GW2EIParser.EIData
         protected BuffDictionary GetBuffMap(ParsedLog log)
         {
             //
-            BuffDictionary buffMap = new BuffDictionary();
+            var buffMap = new BuffDictionary();
             // Fill in Boon Map
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffDataByDst(AgentItem))
             {
@@ -206,7 +206,7 @@ namespace GW2EIParser.EIData
         protected void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            List<AbstractBuffSimulationItem> extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
+            var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
             extraSimulations.AddRange(simulator.WasteSimulationResult);
             foreach (AbstractBuffSimulationItem simul in extraSimulations)
             {
@@ -251,10 +251,10 @@ namespace GW2EIParser.EIData
             BuffDictionary toUse = GetBuffMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
-            BuffsGraphModel boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
-            BuffsGraphModel condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
-            HashSet<long> boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfBoonsID]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
+            var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
             InitBuffStatusData(log);
             foreach (Buff buff in TrackedBuffs)
             {
@@ -270,7 +270,7 @@ namespace GW2EIParser.EIData
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    List<BuffsGraphModel.SegmentWithSources> graphSegments = new List<BuffsGraphModel.SegmentWithSources>();
+                    var graphSegments = new List<BuffsGraphModel.SegmentWithSources>();
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         SetBuffStatusGenerationData(log, simul, boonid);
@@ -454,14 +454,14 @@ namespace GW2EIParser.EIData
 
         private List<FinalDefenseAll> GetFinalDefenses(ParsedLog log)
         {
-            List<(long start, long end)> dead = new List<(long start, long end)>();
-            List<(long start, long end)> down = new List<(long start, long end)>();
-            List<(long start, long end)> dc = new List<(long start, long end)>();
+            var dead = new List<(long start, long end)>();
+            var down = new List<(long start, long end)>();
+            var dc = new List<(long start, long end)>();
             AgentItem.GetAgentStatus(dead, down, dc, log);
-            List<FinalDefenseAll> res = new List<FinalDefenseAll>();
+            var res = new List<FinalDefenseAll>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                FinalDefenseAll final = new FinalDefenseAll();
+                var final = new FinalDefenseAll();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -480,10 +480,10 @@ namespace GW2EIParser.EIData
         }
         private List<FinalDefense> GetFinalDefenses(ParsedLog log, AbstractSingleActor target)
         {
-            List<FinalDefense> res = new List<FinalDefense>();
+            var res = new List<FinalDefense>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                FinalDefenseAll final = new FinalDefenseAll();
+                var final = new FinalDefenseAll();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -526,8 +526,8 @@ namespace GW2EIParser.EIData
             if (_minions == null)
             {
                 _minions = new Dictionary<long, Minions>();
-                List<AgentItem> combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
-                Dictionary<long, Minions> auxMinions = new Dictionary<long, Minions>();
+                var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
+                var auxMinions = new Dictionary<long, Minions>();
                 foreach (AgentItem agent in combatMinion)
                 {
                     long id = agent.ID;

@@ -40,7 +40,7 @@ namespace GW2EIParser.EIData
             {
                 throw new InvalidOperationException("Too much buff apply events in TranslateWeaverAttunement");
             }
-            HashSet<long> duals = new HashSet<long>
+            var duals = new HashSet<long>
             {
                 FireDual,
                 WaterDual,
@@ -78,8 +78,8 @@ namespace GW2EIParser.EIData
 
         public static List<AbstractBuffEvent> TransformWeaverAttunements(List<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
         {
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
-            HashSet<long> attunements = new HashSet<long>
+            var res = new List<AbstractBuffEvent>();
+            var attunements = new HashSet<long>
             {
                 5585,
                 5586,
@@ -95,7 +95,7 @@ namespace GW2EIParser.EIData
             const long waterEarth = 42792;
             const long airEarth = 45683;*/
 
-            HashSet<long> weaverAttunements = new HashSet<long>
+            var weaverAttunements = new HashSet<long>
             {
                _fireMajor,
                 _fireMinor,
@@ -119,18 +119,18 @@ namespace GW2EIParser.EIData
                 airEarth,*/
             };
             // first we get rid of standard attunements
-            List<AbstractBuffEvent> attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+            var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
             foreach (AbstractBuffEvent c in attuns)
             {
                 c.Invalidate(skillData);
             }
             // get all weaver attunements ids and group them by time
-            List<AbstractBuffEvent> weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
+            var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
             if (weaverAttuns.Count == 0)
             {
                 return res;
             }
-            Dictionary<long, List<AbstractBuffEvent>> groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
+            var groupByTime = new Dictionary<long, List<AbstractBuffEvent>>();
             foreach (AbstractBuffEvent c in weaverAttuns)
             {
                 long key = groupByTime.Keys.FirstOrDefault(x => Math.Abs(x - c.Time) < 10);
@@ -149,7 +149,7 @@ namespace GW2EIParser.EIData
             long prevID = 0;
             foreach (var pair in groupByTime)
             {
-                List<AbstractBuffEvent> applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
+                var applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
                 long curID = TranslateWeaverAttunement(applies);
                 foreach (AbstractBuffEvent c in pair.Value)
                 {

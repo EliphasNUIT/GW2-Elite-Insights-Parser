@@ -105,14 +105,14 @@ namespace GW2EIParser
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
-            FileInfo fInfo = new FileInfo(row.Location);
+            var fInfo = new FileInfo(row.Location);
             try
             {
                 if (!fInfo.Exists)
                 {
                     throw new FileNotFoundException("File " + fInfo.FullName + " does not exist");
                 }
-                ParsingController control = new ParsingController();
+                var control = new ParsingController();
 
                 if (!HasFormat())
                 {
@@ -149,7 +149,7 @@ namespace GW2EIParser
             byte[] data = str.ToArray();
             using FileStream outFile =
                         File.Create(file + ".gz");
-            using GZipStream Compress = new GZipStream(outFile, CompressionMode.Compress);
+            using var Compress = new GZipStream(outFile, CompressionMode.Compress);
             // Copy the source file into 
             // the compression stream.
             Compress.Write(data, 0, data.Length);
@@ -184,7 +184,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             rowData.BgWorker.ThrowIfCanceled(rowData);
-            RawFormatBuilder jsonBuilder = new RawFormatBuilder(log, uploadresult);
+            var jsonBuilder = new RawFormatBuilder(log, uploadresult);
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 string outputFile = Path.Combine(

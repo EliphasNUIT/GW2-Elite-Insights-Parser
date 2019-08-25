@@ -132,11 +132,11 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Matthias:
-                    List<AbstractCastEvent> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
-                    List<int> humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
+                    var humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < humanShield.Count; i++)
                     {
-                        var shield = humanShield[i];
+                        AbstractCastEvent shield = humanShield[i];
                         if (i < humanShieldRemoval.Count)
                         {
                             int removal = humanShieldRemoval[i];
@@ -147,11 +147,11 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
-                    List<AbstractCastEvent> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
-                    List<int> aboShieldRemoval = log.CombatData.GetBuffData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
+                    var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
+                    var aboShieldRemoval = log.CombatData.GetBuffData(34376).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (var i = 0; i < aboShield.Count; i++)
                     {
-                        var shield = aboShield[i];
+                        AbstractCastEvent shield = aboShield[i];
                         if (i < aboShieldRemoval.Count)
                         {
                             int removal = aboShieldRemoval[i];
@@ -162,7 +162,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
-                    List<AbstractCastEvent> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
+                    var rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
                     foreach (AbstractCastEvent c in rageShards)
                     {
                         int start = (int)c.Time;
@@ -170,7 +170,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                         replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     }
-                    List<AbstractCastEvent> hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
+                    var hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
                     foreach (AbstractCastEvent c in hadouken)
                     {
                         int start = (int)c.Time;
@@ -269,7 +269,7 @@ namespace GW2EIParser.Logic
                 }
             }
             // Bombs
-            List<AbstractBuffEvent> zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBuffData(34511).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time;

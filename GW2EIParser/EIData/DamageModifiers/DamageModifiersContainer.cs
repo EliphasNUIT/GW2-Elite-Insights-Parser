@@ -13,7 +13,7 @@ namespace GW2EIParser.EIData
 
         public DamageModifiersContainer(ulong build)
         {
-            List<DamageModifier> currentDamageMods = new List<DamageModifier>();
+            var currentDamageMods = new List<DamageModifier>();
             foreach (List<DamageModifier> boons in AllDamageModifiers)
             {
                 currentDamageMods.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));
@@ -60,7 +60,7 @@ namespace GW2EIParser.EIData
 
         public List<DamageModifier> GetModifiersPerProf(string prof)
         {
-            List<DamageModifier> res = new List<DamageModifier>();
+            var res = new List<DamageModifier>();
             List<ModifierSource> srcs = ProfToEnum(prof);
             foreach (ModifierSource src in srcs)
             {

@@ -10,7 +10,7 @@ namespace GW2EIParser.EIData
 
         public static void RemoveDualBuffs(List<AbstractBuffEvent> buffsPerDst, SkillData skillData)
         {
-            HashSet<long> duals = new HashSet<long>
+            var duals = new HashSet<long>
             {
                 FireDual,
                 WaterDual,

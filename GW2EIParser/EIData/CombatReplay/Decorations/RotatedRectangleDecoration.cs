@@ -30,7 +30,7 @@ namespace GW2EIParser.EIData
 
         public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            JsonCombatReplayRotatedRectangleDecoration aux = new JsonCombatReplayRotatedRectangleDecoration
+            var aux = new JsonCombatReplayRotatedRectangleDecoration
             {
                 Type = "RotatedRectangle",
                 Width = Width,

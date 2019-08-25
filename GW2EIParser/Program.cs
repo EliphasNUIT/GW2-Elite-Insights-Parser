@@ -54,7 +54,7 @@ namespace GW2EIParser
                 Properties.Settings.Default.Outdated = false;
             }
 
-            List<string> logFiles = new List<string>();
+            var logFiles = new List<string>();
             bool uiMode = true;
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)

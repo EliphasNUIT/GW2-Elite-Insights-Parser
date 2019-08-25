@@ -74,7 +74,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         private string GetDateTime(double unixSeconds)
         {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
             return dtDateTime.ToString(_dateFormat);
         }

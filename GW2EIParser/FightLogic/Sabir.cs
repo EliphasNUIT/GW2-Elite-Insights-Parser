@@ -63,13 +63,13 @@ namespace GW2EIParser.Logic
                 return phases;
             }
             List<AbstractCastEvent> cls = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
+            var wallopingWinds = cls.Where(x => x.SkillId == 56094).ToList();
             long start = 0, end = 0;
             for (int i = 0; i < wallopingWinds.Count; i++)
             {
                 AbstractCastEvent wW = wallopingWinds[i];
                 end = wW.Time;
-                PhaseData phase = new PhaseData(start, end)
+                var phase = new PhaseData(start, end)
                 {
                     Name = "Phase " + (i + 1)
                 };

@@ -65,7 +65,7 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Cairn:
-                    List<AbstractCastEvent> swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
+                    var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {
                         int start = (int)c.Time;
@@ -82,7 +82,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> wave = cls.Where(x => x.SkillId == 37910).ToList();
+                    var wave = cls.Where(x => x.SkillId == 37910).ToList();
                     foreach (AbstractCastEvent c in wave)
                     {
                         int start = (int)c.Time;
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // shared agony
-            List<AbstractBuffEvent> agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var agony = log.CombatData.GetBuffData(38049).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
                 int agonyStart = (int)c.Time;

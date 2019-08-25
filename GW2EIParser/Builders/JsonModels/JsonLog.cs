@@ -222,8 +222,8 @@ namespace GW2EIParser.Builders.JsonModels
             // Mechanics
             Mechanics = BuildMechanics(log);
             // Players
-            List<AbstractSingleActor> friendlies = new List<AbstractSingleActor>();
-            List<AbstractSingleActor> enemies = new List<AbstractSingleActor>();
+            var friendlies = new List<AbstractSingleActor>();
+            var enemies = new List<AbstractSingleActor>();
             foreach (NPC npc in log.FightData.Logic.NPCs)
             {
                 if (npc.Friendly)

@@ -68,12 +68,12 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
+            var sleepy = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 34515).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in sleepy)
             {
-                PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
                 {
                     Name = "Phase " + i++
                 };
@@ -81,7 +81,7 @@ namespace GW2EIParser.Logic
                 start = c.Time + c.ActualDuration;
                 phases.Add(phase);
             }
-            PhaseData lastPhase = new PhaseData(start, fightDuration)
+            var lastPhase = new PhaseData(start, fightDuration)
             {
                 Name = "Phase " + i++
             };
@@ -97,12 +97,12 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Slothasor:
-                    List<AbstractCastEvent> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {
                         replay.Actors.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> breath = cls.Where(x => x.SkillId == 34516).ToList();
+                    var breath = cls.Where(x => x.SkillId == 34516).ToList();
                     foreach (AbstractCastEvent c in breath)
                     {
                         int start = (int)c.Time;
@@ -118,7 +118,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new PieDecoration(true, 0, range, direction, angle, (start + preCastTime, start + preCastTime + duration), "rgba(255,200,0,0.4)", new AgentConnector(target)));
                         }
                     }
-                    List<AbstractCastEvent> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    var tantrum = cls.Where(x => x.SkillId == 34547).ToList();
                     foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
@@ -126,7 +126,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                         replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    var shakes = cls.Where(x => x.SkillId == 34482).ToList();
                     foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;

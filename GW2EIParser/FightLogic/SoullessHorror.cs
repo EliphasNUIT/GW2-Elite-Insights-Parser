@@ -90,12 +90,12 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
+            var howling = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48662).ToList();
             long start = 0;
             int i = 1;
             foreach (AbstractCastEvent c in howling)
             {
-                PhaseData phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
+                var phase = new PhaseData(start, Math.Min(c.Time, fightDuration))
                 {
                     Name = "Pre-Breakbar " + i++
                 };
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
             }
             if (fightDuration - start > 3000)
             {
-                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                var lastPhase = new PhaseData(start, fightDuration)
                 {
                     Name = "Final"
                 };
@@ -124,7 +124,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.SoullessHorror:
-                    List<AbstractCastEvent> howling = cls.Where(x => x.SkillId == 48662).ToList();
+                    var howling = cls.Where(x => x.SkillId == 48662).ToList();
                     foreach (AbstractCastEvent c in howling)
                     {
                         int start = (int)c.Time;
@@ -132,7 +132,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                         replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                     }
-                    List<AbstractCastEvent> vortex = cls.Where(x => x.SkillId == 47327).ToList();
+                    var vortex = cls.Where(x => x.SkillId == 47327).ToList();
                     foreach (AbstractCastEvent c in vortex)
                     {
                         int start = (int)c.Time;
@@ -146,7 +146,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
                         }
                     }
-                    List<AbstractCastEvent> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+                    var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         int start = (int)c.Time;
@@ -162,8 +162,8 @@ namespace GW2EIParser.Logic
                         }
 
                     }
-                    List<AbstractCastEvent> quad1 = cls.Where(x => x.SkillId == 48363).ToList();
-                    List<AbstractCastEvent> quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+                    var quad1 = cls.Where(x => x.SkillId == 48363).ToList();
+                    var quad2 = cls.Where(x => x.SkillId == 47915).ToList();
                     foreach (AbstractCastEvent c in quad1)
                     {
                         int start = (int)c.Time;
@@ -232,13 +232,13 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            List<AbstractBuffEvent> necrosis = combatData.GetBuffData(47414).Where(x => x is BuffApplyEvent).ToList();
+            var necrosis = combatData.GetBuffData(47414).Where(x => x is BuffApplyEvent).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
             }
             // split necrosis
-            Dictionary<AgentItem, List<AbstractBuffEvent>> splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
+            var splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
             foreach (AbstractBuffEvent c in necrosis)
             {
                 AgentItem tank = c.To;

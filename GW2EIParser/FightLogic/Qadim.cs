@@ -172,7 +172,7 @@ namespace GW2EIParser.Logic
                     case 2:
                     case 4:
                     case 6:
-                        List<long> pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
+                        var pyresFirstAware = log.AgentData.GetAgentsByID((ushort)PyreGuardian).Where(x => phase.InInterval(log.FightData.ToFightSpace(x.FirstAwareLogTime))).Select(x => log.FightData.ToFightSpace(x.FirstAwareLogTime)).ToList();
                         if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                         {
                             phase.OverrideStart(pyresFirstAware.Max());
@@ -180,7 +180,7 @@ namespace GW2EIParser.Logic
                         phase.Targets.Add(qadim);
                         break;
                     default:
-                        List<ushort> ids = new List<ushort>
+                        var ids = new List<ushort>
                         {
                            (ushort) WyvernMatriarch,
                            (ushort) WyvernPatriarch,
@@ -204,21 +204,21 @@ namespace GW2EIParser.Logic
                 case (ushort)ParseEnum.EvtcNPCIDs.Qadim:
                     //CC
                     AddPlatformsToCombatReplay(target, log, replay);
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 51943).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 51943).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Riposte
-                    List<AbstractCastEvent> riposte = cls.Where(x => x.SkillId == 52265).ToList();
+                    var riposte = cls.Where(x => x.SkillId == 52265).ToList();
                     foreach (AbstractCastEvent c in riposte)
                     {
                         int radius = 2200;
                         replay.Actors.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
                     }
                     //Big Hit
-                    List<AbstractCastEvent> maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
+                    var maceShockwave = cls.Where(x => x.SkillId == 52310).ToList();
                     foreach (AbstractCastEvent c in maceShockwave)
                     {
                         int start = (int)c.Time;
@@ -231,7 +231,7 @@ namespace GW2EIParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)));
@@ -240,13 +240,13 @@ namespace GW2EIParser.Logic
                     break;
                 case (ushort)AncientInvokedHydra:
                     //CC
-                    List<AbstractCastEvent> fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
+                    var fieryMeteor = cls.Where(x => x.SkillId == 52941).ToList();
                     foreach (AbstractCastEvent c in fieryMeteor)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
+                    var eleBreath = cls.Where(x => x.SkillId == 52520).ToList();
                     foreach (AbstractCastEvent c in eleBreath)
                     {
                         int start = (int)c.Time;
@@ -263,7 +263,7 @@ namespace GW2EIParser.Logic
                     break;
                 case (ushort)WyvernMatriarch:
                     //Wing Buffet
-                    List<AbstractCastEvent> wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
+                    var wingBuffet = cls.Where(x => x.SkillId == 52734).ToList();
                     foreach (AbstractCastEvent c in wingBuffet)
                     {
                         int start = (int)c.Time;
@@ -280,7 +280,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     //Breath
-                    List<AbstractCastEvent> matBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    var matBreath = cls.Where(x => x.SkillId == 52726).ToList();
                     foreach (AbstractCastEvent c in matBreath)
                     {
                         int start = (int)c.Time;
@@ -298,7 +298,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     //Tail Swipe
-                    List<AbstractCastEvent> matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    var matSwipe = cls.Where(x => x.SkillId == 52705).ToList();
                     foreach (AbstractCastEvent c in matSwipe)
                     {
                         int start = (int)c.Time;
@@ -323,14 +323,14 @@ namespace GW2EIParser.Logic
                     break;
                 case (ushort)WyvernPatriarch:
                     //CC
-                    List<AbstractCastEvent> patCC = cls.Where(x => x.SkillId == 53132).ToList();
+                    var patCC = cls.Where(x => x.SkillId == 53132).ToList();
                     foreach (AbstractCastEvent c in patCC)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Breath
-                    List<AbstractCastEvent> patBreath = cls.Where(x => x.SkillId == 52726).ToList();
+                    var patBreath = cls.Where(x => x.SkillId == 52726).ToList();
                     foreach (AbstractCastEvent c in patBreath)
                     {
                         int start = (int)c.Time;
@@ -348,7 +348,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     //Tail Swipe
-                    List<AbstractCastEvent> patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
+                    var patSwipe = cls.Where(x => x.SkillId == 52705).ToList();
                     foreach (AbstractCastEvent c in patSwipe)
                     {
                         int start = (int)c.Time;
@@ -371,7 +371,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 case (ushort)ApocalypseBringer:
-                    List<AbstractCastEvent> jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
+                    var jumpShockwave = cls.Where(x => x.SkillId == 51923).ToList();
                     foreach (AbstractCastEvent c in jumpShockwave)
                     {
                         int start = (int)c.Time;
@@ -380,7 +380,7 @@ namespace GW2EIParser.Logic
                         int maxRadius = 2000;
                         replay.Actors.Add(new CircleDecoration(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
+                    var stompShockwave = cls.Where(x => x.SkillId == 52330).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
                     {
                         int start = (int)c.Time;
@@ -393,21 +393,21 @@ namespace GW2EIParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleDecoration(true, 0, impactRadius, (start, start + delay), "rgba(255, 100, 0, 0.1)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(true, 0, impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(false, start + delay + duration, maxRadius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.5)", new PositionConnector(position)));
                         }
                     }
                     //CC
-                    List<AbstractCastEvent> summon = cls.Where(x => x.SkillId == 52054).ToList();
+                    var summon = cls.Where(x => x.SkillId == 52054).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
                         int radius = ccRadius;
                         replay.Actors.Add(new CircleDecoration(true, 0, ccRadius, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Pizza
-                    List<AbstractCastEvent> forceWave = cls.Where(x => x.SkillId == 51759).ToList();
+                    var forceWave = cls.Where(x => x.SkillId == 51759).ToList();
                     foreach (AbstractCastEvent c in forceWave)
                     {
                         int start = (int)c.Time;

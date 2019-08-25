@@ -51,13 +51,13 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out var list))
             {
-                Dictionary<AgentItem, List<AbstractBuffEvent>> sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                var sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (var pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
                 {
-                    List<AbstractBuffEvent> sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
+                    var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
                     foreach (AbstractBuffEvent sglRemoval in sglRemovals)
                     {
                         AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
@@ -85,10 +85,10 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<long> phaseStarts = new List<long>();
-            List<long> phaseEnds = new List<long>();
+            var phaseStarts = new List<long>();
+            var phaseEnds = new List<long>();
             //
-            List<AbstractBuffEvent> magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
+            var magmaDrops = log.CombatData.GetBuffData(56475).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent magmaDrop in magmaDrops)
             {
                 if (phaseEnds.Count > 0)
@@ -129,7 +129,7 @@ namespace GW2EIParser.Logic
             }
             for (int i = 0; i < phaseStarts.Count; i++)
             {
-                PhaseData phase = new PhaseData(phaseStarts[i], phaseEnds[i])
+                var phase = new PhaseData(phaseStarts[i], phaseEnds[i])
                 {
                     Name = "Phase " + (i + 1)
                 };
@@ -156,7 +156,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim:
-                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
                     {

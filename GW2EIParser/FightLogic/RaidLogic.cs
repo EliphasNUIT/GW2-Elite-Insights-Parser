@@ -26,7 +26,7 @@ namespace GW2EIParser.Logic
 
         public override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            HashSet<int> raidRewardsTypes = new HashSet<int>
+            var raidRewardsTypes = new HashSet<int>
                 {
                     55821,
                     60685,

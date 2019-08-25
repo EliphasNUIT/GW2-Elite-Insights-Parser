@@ -104,7 +104,7 @@ namespace GW2EIParser.Builders
         private static string BuildTemplates(string script)
         {
             string tmplScript = script;
-            Dictionary<string, string> templates = new Dictionary<string, string>()
+            var templates = new Dictionary<string, string>()
             {
                 {"${tmplBuffStats}",Properties.Resources.tmplBuffStats },
                 {"${tmplBuffStatsTarget}",Properties.Resources.tmplBuffStatsTarget },
@@ -155,7 +155,7 @@ namespace GW2EIParser.Builders
         private static string BuildCRTemplates(string script)
         {
             string tmplScript = script;
-            Dictionary<string, string> CRtemplates = new Dictionary<string, string>()
+            var CRtemplates = new Dictionary<string, string>()
                 {
                     {"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
                     {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
@@ -211,7 +211,7 @@ namespace GW2EIParser.Builders
 
         private string BuildEIJs(string path)
         {
-            List<string> orderedScripts = new List<string>()
+            var orderedScripts = new List<string>()
             {
                 Properties.Resources.globalJS,
                 Properties.Resources.commonsJS,
@@ -264,7 +264,7 @@ namespace GW2EIParser.Builders
             {
                 return "";
             }
-            List<string> orderedScripts = new List<string>()
+            var orderedScripts = new List<string>()
             {
                 Properties.Resources.combatReplayStatsUI,
                 Properties.Resources.combatReplayStatsJS,
@@ -303,11 +303,11 @@ namespace GW2EIParser.Builders
 
         private static string ToJson(object value)
         {
-            DefaultContractResolver contractResolver = new DefaultContractResolver
+            var contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
-            JsonSerializerSettings settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = contractResolver,

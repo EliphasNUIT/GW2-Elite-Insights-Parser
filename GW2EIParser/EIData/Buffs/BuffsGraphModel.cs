@@ -111,7 +111,7 @@ namespace GW2EIParser.EIData
 
         private void FuseFromSegmentsWithSource()
         {
-            List<Segment> newChart = new List<Segment>();
+            var newChart = new List<Segment>();
             Segment last = null;
             foreach (Segment seg in _boonChartWithSource)
             {
@@ -142,7 +142,7 @@ namespace GW2EIParser.EIData
 
         public void FuseSegments()
         {
-            List<Segment> newChart = new List<Segment>();
+            var newChart = new List<Segment>();
             Segment last = null;
             foreach (Segment seg in BoonChart)
             {
@@ -177,7 +177,7 @@ namespace GW2EIParser.EIData
             {
                 return null;
             }
-            List<int[]> res = BoonChart.Select(x => new int[2] { (int)x.Start, x.Value }).ToList();
+            var res = BoonChart.Select(x => new int[2] { (int)x.Start, x.Value }).ToList();
             return res.Count > 0 ? res : null;
         }
 

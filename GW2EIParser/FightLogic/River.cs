@@ -138,7 +138,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)HollowedBomber:
-                    List<AbstractCastEvent> bomberman = npc.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
+                    var bomberman = npc.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 48272).ToList();
                     foreach (AbstractCastEvent bomb in bomberman)
                     {
                         int startCast = (int)bomb.Time;

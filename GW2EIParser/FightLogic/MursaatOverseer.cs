@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<int> limit = new List<int>()
+            var limit = new List<int>()
             {
                 75,
                 50,
@@ -79,7 +79,7 @@ namespace GW2EIParser.Logic
                 {
                     break;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
+                var phase = new PhaseData(start, Math.Min(evt.Time, fightDuration))
                 {
                     Name = (25 + limit[i]) + "% - " + limit[i] + "%"
                 };
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
             }
             if (i < 4)
             {
-                PhaseData lastPhase = new PhaseData(start, fightDuration)
+                var lastPhase = new PhaseData(start, fightDuration)
                 {
                     Name = (25 + limit[i]) + "% -" + limit[i] + "%"
                 };
@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(npc)));
                         }
                     }
-                    List<AbstractCastEvent> explosion = cls.Where(x => x.SkillId == 37788).ToList();
+                    var explosion = cls.Where(x => x.SkillId == 37788).ToList();
                     foreach (AbstractCastEvent c in explosion)
                     {
                         int start = (int)c.Time;

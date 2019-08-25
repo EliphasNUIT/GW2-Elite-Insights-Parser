@@ -18,7 +18,7 @@ namespace GW2EIParser
             }
             else
             {
-                List<Task> tasks = new List<Task>();
+                var tasks = new List<Task>();
 
                 foreach (string file in logFiles)
                 {
@@ -31,7 +31,7 @@ namespace GW2EIParser
 
         private void ParseLog(object logFile)
         {
-            GridRow row = new GridRow(logFile as string, "Ready to parse")
+            var row = new GridRow(logFile as string, "Ready to parse")
             {
                 BgWorker = new System.ComponentModel.BackgroundWorker()
                 {

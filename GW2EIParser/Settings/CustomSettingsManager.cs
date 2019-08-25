@@ -8,7 +8,7 @@ namespace GW2EIParser
     {
         public static void ReadConfig(string filename)
         {
-            FileInfo f = new FileInfo(filename);
+            var f = new FileInfo(filename);
             if (!f.Exists)
             {
                 Console.WriteLine("Warning: settings file \"" + filename + "\" not found");
@@ -34,7 +34,7 @@ namespace GW2EIParser
 
         private static void ReadConfFile(string filename)
         {
-            using (StreamReader sr = new StreamReader(filename))
+            using (var sr = new StreamReader(filename))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)

@@ -143,11 +143,11 @@ namespace GW2EIParser.Models
 
         public static List<FinalSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
-            List<FinalSupportAll> res = new List<FinalSupportAll>();
+            var res = new List<FinalSupportAll>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                FinalSupportAll final = new FinalSupportAll();
+                var final = new FinalSupportAll();
                 res.Add(final);
                 PhaseData phase = phases[phaseIndex];
 
@@ -160,11 +160,11 @@ namespace GW2EIParser.Models
         }
         public static List<FinalSupport> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
-            List<FinalSupport> res = new List<FinalSupport>();
+            var res = new List<FinalSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                FinalSupport final = new FinalSupport();
+                var final = new FinalSupport();
                 res.Add(final);
                 PhaseData phase = phases[phaseIndex];
                 FillFinalSupport(actor, final, log, phase, target, buffsPerId);

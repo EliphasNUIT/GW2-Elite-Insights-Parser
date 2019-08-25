@@ -52,7 +52,7 @@ namespace GW2EIParser
 
                 _logsFiles.Add(file);
 
-                GridRow gRow = new GridRow(file, "Ready to parse")
+                var gRow = new GridRow(file, "Ready to parse")
                 {
                     BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
                 };
@@ -143,7 +143,7 @@ namespace GW2EIParser
         /// <param name="e"></param>
         private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            GridRow rowData = e.Argument as GridRow;
+            var rowData = e.Argument as GridRow;
             e.Result = rowData;
             _runningCount++;
             _anyRunning = true;
@@ -247,7 +247,7 @@ namespace GW2EIParser
         private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
-            HashSet<GridRow> rows = new HashSet<GridRow>(_logQueue);
+            var rows = new HashSet<GridRow>(_logQueue);
             _logQueue.Clear();
 
             //Cancel all workers
@@ -301,7 +301,7 @@ namespace GW2EIParser
 
             for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
             {
-                GridRow row = gridRowBindingSource[i] as GridRow;
+                var row = gridRowBindingSource[i] as GridRow;
                 if (row.BgWorker.IsBusy)
                 {
                     row.Cancel();
@@ -344,7 +344,7 @@ namespace GW2EIParser
         {
             if (e.ColumnIndex == 2)
             {
-                GridRow row = (GridRow)gridRowBindingSource[e.RowIndex];
+                var row = (GridRow)gridRowBindingSource[e.RowIndex];
 
                 switch (row.State)
                 {

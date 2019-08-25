@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.SoulEater:
-                    List<AbstractCastEvent> breakbar = cls.Where(x => x.SkillId == 48007).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == 48007).ToList();
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         int start = (int)c.Time;
@@ -71,7 +71,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                         replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                     }
-                    List<AbstractCastEvent> vomit = cls.Where(x => x.SkillId == 47303).ToList();
+                    var vomit = cls.Where(x => x.SkillId == 47303).ToList();
                     foreach (AbstractCastEvent c in vomit)
                     {
                         int start = (int)c.Time + 2100;
@@ -86,7 +86,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
-                    List<AbstractCastEvent> pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
+                    var pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
                     foreach (AbstractCastEvent c in pseudoDeath)
                     {
                         int start = (int)c.Time;
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
                     break;
                 case (ushort)GreenSpirit1:
                 case (ushort)GreenSpirit2:
-                    List<AbstractCastEvent> green = cls.Where(x => x.SkillId == 47153).ToList();
+                    var green = cls.Where(x => x.SkillId == 47153).ToList();
                     foreach (AbstractCastEvent c in green)
                     {
                         int gstart = (int)c.Time + 667;
@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
-            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 30000;

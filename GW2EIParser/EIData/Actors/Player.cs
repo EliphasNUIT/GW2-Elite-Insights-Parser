@@ -150,8 +150,8 @@ namespace GW2EIParser.EIData
 
         private (List<Dictionary<long, FinalBuffs>>, List<Dictionary<long, FinalBuffs>>) GetBoonsForPlayers(List<Player> playerList, ParsedLog log)
         {
-            List<Dictionary<long, FinalBuffs>> uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
-            List<Dictionary<long, FinalBuffs>> uptimesActiveByPhase = new List<Dictionary<long, FinalBuffs>>();
+            var uptimesByPhase = new List<Dictionary<long, FinalBuffs>>();
+            var uptimesActiveByPhase = new List<Dictionary<long, FinalBuffs>>();
 
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
@@ -159,17 +159,17 @@ namespace GW2EIParser.EIData
                 PhaseData phase = phases[phaseIndex];
                 long phaseDuration = phase.DurationInMS;
 
-                Dictionary<Player, BuffDistributionDictionary> boonDistributions = new Dictionary<Player, BuffDistributionDictionary>();
+                var boonDistributions = new Dictionary<Player, BuffDistributionDictionary>();
                 foreach (Player p in playerList)
                 {
                     boonDistributions[p] = p.GetBuffDistribution(log, phaseIndex);
                 }
 
-                HashSet<Buff> boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
+                var boonsToTrack = new HashSet<Buff>(boonDistributions.SelectMany(x => x.Value).Select(x => log.Buffs.BuffsByIds[x.Key]));
 
-                Dictionary<long, FinalBuffs> final =
+                var final =
                     new Dictionary<long, FinalBuffs>();
-                Dictionary<long, FinalBuffs> finalActive =
+                var finalActive =
                     new Dictionary<long, FinalBuffs>();
 
                 foreach (Buff boon in boonsToTrack)
@@ -230,8 +230,8 @@ namespace GW2EIParser.EIData
 
                     if (hasGeneration)
                     {
-                        FinalBuffs uptime = new FinalBuffs();
-                        FinalBuffs uptimeActive = new FinalBuffs();
+                        var uptime = new FinalBuffs();
+                        var uptimeActive = new FinalBuffs();
                         final[boon.ID] = uptime;
                         finalActive[boon.ID] = uptimeActive;
                         if (boon.Type == Buff.BuffType.Duration)
@@ -290,8 +290,8 @@ namespace GW2EIParser.EIData
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                Dictionary<long, FinalBuffs> final = new Dictionary<long, FinalBuffs>();
-                Dictionary<long, FinalBuffs> finalActive = new Dictionary<long, FinalBuffs>();
+                var final = new Dictionary<long, FinalBuffs>();
+                var finalActive = new Dictionary<long, FinalBuffs>();
 
                 PhaseData phase = phases[phaseIndex];
 
@@ -304,7 +304,7 @@ namespace GW2EIParser.EIData
                 {
                     if (selfBoons.ContainsKey(boon.ID))
                     {
-                        FinalBuffs uptime = new FinalBuffs
+                        var uptime = new FinalBuffs
                         {
                             Uptime = 0,
                             Generation = 0,
@@ -314,7 +314,7 @@ namespace GW2EIParser.EIData
                             ByExtension = 0,
                             Extended = 0
                         };
-                        FinalBuffs uptimeActive = new FinalBuffs
+                        var uptimeActive = new FinalBuffs
                         {
                             Uptime = 0,
                             Generation = 0,
@@ -430,21 +430,21 @@ namespace GW2EIParser.EIData
             List<AbstractDamageEvent> damageLogs = GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration);
             foreach (DeadEvent dead in deads)
             {
-                DeathRecap recap = new DeathRecap()
+                var recap = new DeathRecap()
                 {
                     DeathTime = (int)dead.Time
                 };
                 DownEvent downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
                 if (downed != null)
                 {
-                    List<AbstractDamageEvent> damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
+                    var damageToDown = damageLogs.Where(x => x.Time <= downed.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToDown = damageToDown.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToDown.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToDown[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -459,13 +459,13 @@ namespace GW2EIParser.EIData
                             break;
                         }
                     }
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
+                    var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasDowned) && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToKill[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -479,14 +479,14 @@ namespace GW2EIParser.EIData
                 else
                 {
                     recap.ToDown = null;
-                    List<AbstractDamageEvent> damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
+                    var damageToKill = damageLogs.Where(x => x.Time < dead.Time && x.Damage > 0 && x.Time > lastDeathTime).ToList();
                     recap.ToKill = damageToKill.Count > 0 ? new List<DeathRecap.DeathRecapDamageItem>() : null;
                     int damage = 0;
                     for (int i = damageToKill.Count - 1; i >= 0; i--)
                     {
                         AbstractDamageEvent dl = damageToKill[i];
                         AgentItem ag = dl.From;
-                        DeathRecap.DeathRecapDamageItem item = new DeathRecap.DeathRecapDamageItem()
+                        var item = new DeathRecap.DeathRecapDamageItem()
                         {
                             Time = (int)dl.Time,
                             IndirectDamage = dl is NonDirectDamageEvent,
@@ -537,7 +537,7 @@ namespace GW2EIParser.EIData
             List<AbstractCastEvent> casting = GetCastLogs(log, 0, log.FightData.FightDuration);
             int swapped = -1;
             long swappedTime = 0;
-            List<int> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
+            var swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Select(x =>
             {
                 if (x is WeaponSwapEvent wse)
                 {
@@ -647,7 +647,7 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            List<DamageModifier> damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
@@ -683,7 +683,7 @@ namespace GW2EIParser.EIData
                 InitCombatReplay(log);
             }
             (List<(long start, long end)> deads, List<(long start, long end)> downs, List<(long start, long end)> dcs) = GetStatus(log);
-            JsonPlayerCombatReplay aux = new JsonPlayerCombatReplay
+            var aux = new JsonPlayerCombatReplay
             {
                 Group = Group,
                 Img = CombatReplay.Icon,

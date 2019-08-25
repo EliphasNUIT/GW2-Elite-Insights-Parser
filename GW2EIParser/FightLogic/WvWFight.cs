@@ -61,12 +61,12 @@ namespace GW2EIParser.Logic
         {
             AgentItem dummyAgent = agentData.AddCustomAgent(combatData.First().LogTime, combatData.Last().LogTime, AgentItem.AgentType.NPC, "Enemy Players", "", TriggerID);
             ComputeFightNPCs(agentData, combatData);
-            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.EnemyPlayer).ToList();
             /*foreach (AgentItem a in aList)
             {
                 TrashMobs.Add(new Mob(a));
             }*/
-            Dictionary<ulong, AgentItem> enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
+            var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             foreach (CombatItem c in combatData)
             {
                 if (c.IsStateChange == ParseEnum.EvtcStateChange.None &&

@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
 
         public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            JsonCombatReplayDoughnutDecoration aux = new JsonCombatReplayDoughnutDecoration
+            var aux = new JsonCombatReplayDoughnutDecoration
             {
                 Type = "Doughnut",
                 OuterRadius = OuterRadius,

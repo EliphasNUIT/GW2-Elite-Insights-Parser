@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
                 return pos;
             }).ToList();
 
-            JsonCombatReplayMovingPlatformDecoration aux = new JsonCombatReplayMovingPlatformDecoration
+            var aux = new JsonCombatReplayMovingPlatformDecoration
             {
                 Type = "MovingPlatform",
                 Image = Image,

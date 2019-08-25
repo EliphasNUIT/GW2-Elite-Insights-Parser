@@ -156,7 +156,7 @@ namespace GW2EIParser.EIData
 
         public List<Point3D> GetActivePositions(List<(long start, long end)> deads, List<(long start, long end)> dcs)
         {
-            List<Point3D> activePositions = new List<Point3D>(PolledPositions);
+            var activePositions = new List<Point3D>(PolledPositions);
 
             for (var i = 0; i < activePositions.Count; i++)
             {

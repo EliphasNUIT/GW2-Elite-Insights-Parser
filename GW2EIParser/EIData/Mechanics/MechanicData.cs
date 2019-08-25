@@ -29,8 +29,8 @@ namespace GW2EIParser.EIData
                 mech.CheckMechanic(log, _mechanicLogs);
             }
             // regroup same mechanics with diff ids
-            Dictionary<string, Mechanic> altNames = new Dictionary<string, Mechanic>();
-            List<Mechanic> toRemove = new List<Mechanic>();
+            var altNames = new Dictionary<string, Mechanic>();
+            var toRemove = new List<Mechanic>();
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 if (altNames.ContainsKey(mech.ShortName))
@@ -63,9 +63,9 @@ namespace GW2EIParser.EIData
             // ready present mechanics
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                HashSet<Mechanic> toAddPlayer = new HashSet<Mechanic>();
-                HashSet<Mechanic> toAddEnemy = new HashSet<Mechanic>();
-                HashSet<Mechanic> toAddAll = new HashSet<Mechanic>();
+                var toAddPlayer = new HashSet<Mechanic>();
+                var toAddEnemy = new HashSet<Mechanic>();
+                var toAddAll = new HashSet<Mechanic>();
                 _presentOnPlayerMechanics.Add(toAddPlayer);
                 _presentOnEnemyMechanics.Add(toAddEnemy);
                 _presentMechanics.Add(toAddAll);
@@ -85,7 +85,7 @@ namespace GW2EIParser.EIData
                     }
                 }
                 // ready enemy list
-                List<DummyActor> toAdd = new List<DummyActor>();
+                var toAdd = new List<DummyActor>();
                 _enemyList.Add(toAdd);
                 foreach (Mechanic m in _mechanicLogs.Keys.Where(x => x.IsEnemyMechanic))
                 {
@@ -98,7 +98,7 @@ namespace GW2EIParser.EIData
                     }
                 }
             }
-            List<Mechanic> emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
+            var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
             foreach (Mechanic m in emptyMechanic)
             {
                 _mechanicLogs.Remove(m);

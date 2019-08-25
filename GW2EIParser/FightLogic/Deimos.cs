@@ -67,14 +67,14 @@ namespace GW2EIParser.Logic
         {
             // get unique id for the fusion
             ushort instID = 0;
-            Random rnd = new Random();
+            var rnd = new Random();
             while (agentData.InstIDValues.Contains(instID) || instID == 0)
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
             target.InstID = instID;
             agentData.Refresh();
-            HashSet<ulong> allAgents = new HashSet<ulong>(gadgetAgents)
+            var allAgents = new HashSet<ulong>(gadgetAgents)
             {
                 target.Agent
             };
@@ -103,7 +103,7 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Target for success by combat exit not found");
             }
-            List<AbstractBuffEvent> res = new List<AbstractBuffEvent>();
+            var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(38224, out var list))
             {
                 foreach (AbstractBuffEvent bfe in list)
@@ -147,7 +147,7 @@ namespace GW2EIParser.Logic
                 }
                 long specialSplitTime = fightData.ToFightSpace(_specialSplitLogTime);
                 AgentItem attackTarget = attackTargets.Last().AttackTarget;
-                List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
+                var playerExits = new List<ExitCombatEvent>();
                 foreach (AgentItem a in playerAgents)
                 {
                     playerExits.AddRange(combatData.GetExitCombatEvents(a));
@@ -224,7 +224,7 @@ namespace GW2EIParser.Logic
             }
             // Deimos gadgets
             CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.LogTime > combatData.First().LogTime && x.DstAgent > 0);
-            HashSet<ulong> gadgetAgents = new HashSet<ulong>();
+            var gadgetAgents = new HashSet<ulong>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
             if (firstAware == 0)
@@ -232,7 +232,7 @@ namespace GW2EIParser.Logic
                 CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= target.LastAwareLogTime && (x.SkillID == 37980 || x.SkillID == 37982 || x.SkillID == 38046) && x.SrcAgent != 0 && x.SrcInstid != 0);
                 if (armDeimosDamageEvent != null)
                 {
-                    List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAwareLogTime > armDeimosDamageEvent.LogTime).ToList();
+                    var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAwareLogTime > armDeimosDamageEvent.LogTime).ToList();
                     if (deimosGadgets.Count > 0)
                     {
                         firstAware = deimosGadgets.Max(x => x.FirstAwareLogTime);
@@ -296,7 +296,7 @@ namespace GW2EIParser.Logic
                 if (tar.ID == (ushort)Thief || tar.ID == (ushort)Drunkard || tar.ID == (ushort)Gambler)
                 {
                     string name = (tar.ID == (ushort)Thief ? "Thief" : (tar.ID == (ushort)Drunkard ? "Drunkard" : (tar.ID == (ushort)Gambler ? "Gambler" : "")));
-                    PhaseData tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, Math.Min(log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000, fightDuration));
+                    var tarPhase = new PhaseData(log.FightData.ToFightSpace(tar.FirstAwareLogTime) - 1000, Math.Min(log.FightData.ToFightSpace(tar.LastAwareLogTime) + 1000, fightDuration));
                     tarPhase.Targets.Add(tar);
                     tarPhase.OverrideTimes(log);
                     // override first then add Deimos so that it does not disturb the override process
@@ -319,7 +319,7 @@ namespace GW2EIParser.Logic
                 else
                 {
                     sigEnd = Math.Min(signet.Time - 1, fightDuration);
-                    PhaseData burstPhase = new PhaseData(sigStart, sigEnd)
+                    var burstPhase = new PhaseData(sigStart, sigEnd)
                     {
                         Name = "Burst " + burstID++
                     };
@@ -367,7 +367,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Deimos:
-                    List<AbstractCastEvent> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
+                    var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
                         int start = (int)c.Time;
@@ -379,7 +379,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
                         }
                     }
-                    List<AbstractCastEvent> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+                    var annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
                     foreach (AbstractCastEvent c in annihilate)
                     {
                         int start = (int)c.Time;

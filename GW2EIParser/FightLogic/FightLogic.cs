@@ -86,15 +86,15 @@ namespace GW2EIParser.Logic
             if (agents.Count > 1)
             {
                 AgentItem firstItem = agents.First();
-                HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
-                AgentItem newTargetAgent = new AgentItem(firstItem)
+                var agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
+                var newTargetAgent = new AgentItem(firstItem)
                 {
                     FirstAwareLogTime = agents.Min(x => x.FirstAwareLogTime),
                     LastAwareLogTime = agents.Max(x => x.LastAwareLogTime)
                 };
                 // get unique id for the fusion
                 ushort instID = 0;
-                Random rnd = new Random();
+                var rnd = new Random();
                 while (agentData.InstIDValues.Contains(instID) || instID == 0)
                 {
                     instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
@@ -125,7 +125,7 @@ namespace GW2EIParser.Logic
             }
             List<ushort> ids = GetFightNPCsIDs();
             HashSet<ushort> friendlies = GetFriendlyNPCsIDs();
-            List<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(x.ID)).ToList();
+            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(x.ID)).ToList();
             foreach (AgentItem a in aList)
             {
                 bool friendly = friendlies.Contains(a.ID);
@@ -138,12 +138,12 @@ namespace GW2EIParser.Logic
                     }
                     if (!ids.Contains(a.MasterAgent.ID))
                     {
-                        NPC masterNPC = new NPC(a.MasterAgent, friendly);
+                        var masterNPC = new NPC(a.MasterAgent, friendly);
                         NPCs.Add(masterNPC);
                     }
                     continue;
                 }
-                NPC target = new NPC(a, friendly);
+                var target = new NPC(a, friendly);
                 NPCs.Add(target);
             }
         }
@@ -151,7 +151,7 @@ namespace GW2EIParser.Logic
         protected static List<PhaseData> GetPhasesByInvul(ParsedLog log, long skillID, NPC mainTarget, bool addSkipPhases, bool beginWithStart)
         {
             long fightDuration = log.FightData.FightDuration;
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long last = 0;
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart);
             for (int i = 0; i < invuls.Count; i++)
@@ -187,7 +187,7 @@ namespace GW2EIParser.Logic
 
         protected static List<PhaseData> GetInitialPhase(ParsedLog log)
         {
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long fightDuration = log.FightData.FightDuration;
             phases.Add(new PhaseData(0, fightDuration));
             phases[0].Name = "Full Fight";
@@ -225,7 +225,7 @@ namespace GW2EIParser.Logic
 
         protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
         {
-            List<AbstractDamageEvent> dmgEvts = new List<AbstractDamageEvent>();
+            var dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
                 if (damageByDst.TryGetValue(agentItem, out var list))
@@ -272,7 +272,7 @@ namespace GW2EIParser.Logic
 
         protected void SetSuccessByDeath(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, bool all, ushort idFirst, params ushort[] ids)
         {
-            List<ushort> idsToUse = new List<ushort>
+            var idsToUse = new List<ushort>
             {
                 idFirst
             };
@@ -312,7 +312,7 @@ namespace GW2EIParser.Logic
 
         protected void SetSuccessByCombatExit(HashSet<ushort> targetIds, CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents)
         {
-            List<NPC> targets = NPCs.Where(x => targetIds.Contains(x.ID)).ToList();
+            var targets = NPCs.Where(x => targetIds.Contains(x.ID)).ToList();
             SetSuccessByCombatExit(targets, combatData, fightData, playerAgents);
         }
 
@@ -322,9 +322,9 @@ namespace GW2EIParser.Logic
             {
                 return;
             }
-            List<ExitCombatEvent> playerExits = new List<ExitCombatEvent>();
-            List<ExitCombatEvent> targetExits = new List<ExitCombatEvent>();
-            List<AbstractDamageEvent> lastTargetDamages = new List<AbstractDamageEvent>();
+            var playerExits = new List<ExitCombatEvent>();
+            var targetExits = new List<ExitCombatEvent>();
+            var lastTargetDamages = new List<AbstractDamageEvent>();
             foreach (AgentItem a in playerAgents)
             {
                 playerExits.AddRange(combatData.GetExitCombatEvents(a));
@@ -380,8 +380,8 @@ namespace GW2EIParser.Logic
         protected static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart)
         {
             bool needStart = beginWithStart;
-            List<AbstractBuffEvent> main = combatData.GetBuffData(buffID).Where(x => x.To == target && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
-            List<AbstractBuffEvent> filtered = new List<AbstractBuffEvent>();
+            var main = combatData.GetBuffData(buffID).Where(x => x.To == target && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
                 AbstractBuffEvent c = main[i];

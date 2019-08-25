@@ -267,7 +267,7 @@ namespace GW2EIParser.Setting
             DialogResult result = saveFile.ShowDialog();
             if (saveFile.FileName.Length > 0)
             {
-                FileStream fs = (FileStream)saveFile.OpenFile();
+                var fs = (FileStream)saveFile.OpenFile();
                 byte[] settings = new UTF8Encoding(true).GetBytes(dump);
                 fs.Write(settings, 0, settings.Length);
                 fs.Close();

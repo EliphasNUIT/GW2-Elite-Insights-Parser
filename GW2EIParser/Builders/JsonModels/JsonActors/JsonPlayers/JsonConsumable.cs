@@ -44,7 +44,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public static List<JsonConsumable> BuildConsumables(List<Consumable> foods, Dictionary<string, BuffDesc> buffMap)
         {
-            List<JsonConsumable> res = new List<JsonConsumable>();
+            var res = new List<JsonConsumable>();
             foreach (var food in foods)
             {
                 if (!buffMap.ContainsKey("b" + food.Buff.ID))

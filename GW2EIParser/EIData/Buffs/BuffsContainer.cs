@@ -21,7 +21,7 @@ namespace GW2EIParser.EIData
 
         public BuffsContainer(ulong build)
         {
-            List<Buff> currentBoons = new List<Buff>();
+            var currentBoons = new List<Buff>();
             foreach (List<Buff> boons in AllBoons)
             {
                 currentBoons.AddRange(boons.Where(x => x.MaxBuild > build && build >= x.MinBuild));

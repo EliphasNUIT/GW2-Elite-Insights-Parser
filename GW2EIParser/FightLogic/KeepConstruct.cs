@@ -87,11 +87,11 @@ namespace GW2EIParser.Logic
             }
             // add burn phases
             int offset = phases.Count;
-            List<AbstractBuffEvent> orbItems = log.CombatData.GetBuffData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
+            var orbItems = log.CombatData.GetBuffData(35096).Where(x => x.To == mainTarget.AgentItem).ToList();
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;
-            List<BuffsGraphModel.Segment> segments = new List<BuffsGraphModel.Segment>();
+            var segments = new List<BuffsGraphModel.Segment>();
             foreach (AbstractBuffEvent c in orbItems)
             {
                 if (c is BuffApplyEvent)
@@ -122,7 +122,7 @@ namespace GW2EIParser.Logic
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             // pre burn phases
             int preBurnCount = 1;
-            List<PhaseData> preBurnPhase = new List<PhaseData>();
+            var preBurnPhase = new List<PhaseData>();
             List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             foreach (AbstractBuffEvent invul in kcInvuls)
             {
@@ -150,7 +150,7 @@ namespace GW2EIParser.Logic
             // add leftover phases
             PhaseData cur = null;
             int leftOverCount = 1;
-            List<PhaseData> leftOverPhases = new List<PhaseData>();
+            var leftOverPhases = new List<PhaseData>();
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -164,7 +164,7 @@ namespace GW2EIParser.Logic
                     {
                         if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
                         {
-                            PhaseData leftOverPhase = new PhaseData(phase.End + 1, cur.End)
+                            var leftOverPhase = new PhaseData(phase.End + 1, cur.End)
                             {
                                 Name = "Leftover " + leftOverCount++,
                             };
@@ -226,7 +226,7 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, kcOrbEnd, 300, (kcOrbStart, kcOrbEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                         }
                     }
-                    List<AbstractCastEvent> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    var towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         int start = (int)c.Time;
@@ -240,9 +240,9 @@ namespace GW2EIParser.Logic
                             replay.Actors.Add(new CircleDecoration(true, skillCast, 400, (start, skillCast), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, end)));
                         }
                     }
-                    List<AbstractCastEvent> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-                    List<AbstractCastEvent> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-                    List<AbstractCastEvent> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    var blades1 = cls.Where(x => x.SkillId == 35064).ToList();
+                    var blades2 = cls.Where(x => x.SkillId == 35137).ToList();
+                    var blades3 = cls.Where(x => x.SkillId == 34971).ToList();
                     int bladeDelay = 150;
                     int duration = 1000;
                     foreach (AbstractCastEvent c in blades1)
@@ -300,7 +300,7 @@ namespace GW2EIParser.Logic
                         }
                     }
                     // phantasms locations
-                    HashSet<ushort> phantasmsID = new HashSet<ushort>
+                    var phantasmsID = new HashSet<ushort>
                     {
                         (ushort)Jessica,
                         (ushort)Olson,
@@ -375,7 +375,7 @@ namespace GW2EIParser.Logic
 
             }
             //fixated Statue
-            List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
+            var fixatedStatue = GetFilteredList(log.CombatData, 34912, p, true).Concat(GetFilteredList(log.CombatData, 34925, p, true)).ToList();
             int fixationStatueStart = 0;
             NPC statue = null;
             foreach (AbstractBuffEvent c in fixatedStatue)

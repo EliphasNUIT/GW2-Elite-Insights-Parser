@@ -33,13 +33,13 @@ namespace GW2EIParser.Models
 
         public static List<FinalDPS> GetFinalDPS(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target)
         {
-            List<FinalDPS> res = new List<FinalDPS>();
+            var res = new List<FinalDPS>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 double phaseDuration = (phase.DurationInMS) / 1000.0;
                 int damage;
                 double dps = 0.0;
-                FinalDPS final = new FinalDPS();
+                var final = new FinalDPS();
                 List<AbstractDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
                 List<AbstractDamageEvent> damageLogsActor = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
                 //DPS

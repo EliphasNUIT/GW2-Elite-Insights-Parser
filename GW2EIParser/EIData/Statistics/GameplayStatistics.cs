@@ -49,7 +49,7 @@ namespace GW2EIParser.Models
 
         private static void FillFinalGameplay(List<AbstractDamageEvent> dls, FinalGameplay final)
         {
-            HashSet<long> nonCritable = new HashSet<long>
+            var nonCritable = new HashSet<long>
                     {
                         9292,
                         5492,
@@ -103,13 +103,13 @@ namespace GW2EIParser.Models
 
         public static List<FinalGameplayAll> GetFinalGameplay(AbstractSingleActor actor, ParsedLog log)
         {
-            List<FinalGameplayAll> res = new List<FinalGameplayAll>();
+            var res = new List<FinalGameplayAll>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
 
-                FinalGameplayAll final = new FinalGameplayAll();
+                var final = new FinalGameplayAll();
                 res.Add(final);
                 FillFinalGameplay(actor.GetJustActorDamageLogs(null, log, phase.Start, phase.End), final);
                 // If conjured sword, stop
@@ -161,13 +161,13 @@ namespace GW2EIParser.Models
         }
         public static List<FinalGameplay> GetFinalGameplay(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target)
         {
-            List<FinalGameplay> res = new List<FinalGameplay>();
+            var res = new List<FinalGameplay>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
 
-                FinalGameplay final = new FinalGameplay();
+                var final = new FinalGameplay();
                 res.Add(final);
                 FillFinalGameplay(actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End), final);
             }

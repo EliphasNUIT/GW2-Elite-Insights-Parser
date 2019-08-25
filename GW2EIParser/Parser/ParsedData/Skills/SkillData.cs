@@ -17,7 +17,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 return value;
             }
-            SkillItem item = new SkillItem(ID, "UNKNOWN");
+            var item = new SkillItem(ID, "UNKNOWN");
             Add(item);
             return item;
         }

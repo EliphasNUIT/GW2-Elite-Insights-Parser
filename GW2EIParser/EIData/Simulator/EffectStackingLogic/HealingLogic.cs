@@ -29,7 +29,7 @@ namespace GW2EIParser.EIData
 
         public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
-            CompareHealing comparator = new CompareHealing(log);
+            var comparator = new CompareHealing(log);
             stacks.Sort(comparator.Compare);
         }
     }

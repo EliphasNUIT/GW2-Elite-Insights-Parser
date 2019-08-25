@@ -65,7 +65,7 @@ namespace GW2EIParser.EIData
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 BuffDistributionDictionary boonDistribution = GetBuffDistribution(log, phaseIndex);
-                Dictionary<long, FinalTargetBuffs> rates = new Dictionary<long, FinalTargetBuffs>();
+                var rates = new Dictionary<long, FinalTargetBuffs>();
                 _buffs.Add(rates);
                 Dictionary<long, long> buffPresence = GetBuffPresence(log, phaseIndex);
 
@@ -76,7 +76,7 @@ namespace GW2EIParser.EIData
                 {
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
-                        FinalTargetBuffs buff = new FinalTargetBuffs(log.PlayerList);
+                        var buff = new FinalTargetBuffs(log.PlayerList);
                         rates[boon.ID] = buff;
                         if (boon.Type == Buff.BuffType.Duration)
                         {
@@ -130,7 +130,7 @@ namespace GW2EIParser.EIData
             {
                 InitCombatReplay(log);
             }
-            JsonTargetCombatReplay aux = new JsonTargetCombatReplay
+            var aux = new JsonTargetCombatReplay
             {
                 Img = CombatReplay.Icon,
                 ID = GetCombatReplayID(log),

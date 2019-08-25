@@ -31,17 +31,17 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            List<CombatItem> attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget).ToList();
+            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
             long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
-                List<CombatItem> attackables = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
-                List<long> attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                List<long> attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                List<CombatItem> posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.EvtcStateChange.Position || x.IsStateChange == ParseEnum.EvtcStateChange.Rotation || x.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)).ToList();
+                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
+                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.EvtcStateChange.Position || x.IsStateChange == ParseEnum.EvtcStateChange.Rotation || x.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Position);
                 ushort id = (ushort)HandOfErosion;
                 if (pos != null)
@@ -74,7 +74,7 @@ namespace GW2EIParser.Logic
                     }
                     foreach (CombatItem c in posFacingHP)
                     {
-                        CombatItem cExtra = new CombatItem(c);
+                        var cExtra = new CombatItem(c);
                         cExtra.OverrideTime(extra.FirstAwareLogTime);
                         cExtra.OverrideSrcValues(extra.Agent, extra.InstID);
                         combatData.Add(cExtra);
@@ -108,7 +108,7 @@ namespace GW2EIParser.Logic
             {
                 return phases;
             }
-            List<AbstractCastEvent> quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
+            var quantumQuakes = mainTarget.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => x.SkillId == 56035 || x.SkillId == 56381).ToList();
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, 762, mainTarget, true);
             long start = 0, end = 0;
             for (int i = 0; i < invuls.Count; i++)
@@ -134,7 +134,7 @@ namespace GW2EIParser.Logic
                     });
                 }
             }
-            List<PhaseData> mainPhases = new List<PhaseData>();
+            var mainPhases = new List<PhaseData>();
             start = 0;
             end = 0;
             for (int i = 1; i < phases.Count; i++)

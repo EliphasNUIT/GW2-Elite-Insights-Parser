@@ -16,7 +16,7 @@ namespace GW2EIParser.EIData
 
         public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            JsonCombatReplayLineDecoration aux = new JsonCombatReplayLineDecoration
+            var aux = new JsonCombatReplayLineDecoration
             {
                 Type = "Line",
                 Fill = Filled,

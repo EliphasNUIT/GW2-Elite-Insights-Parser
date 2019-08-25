@@ -75,9 +75,9 @@ namespace GW2EIParser.EIData
 
         public long GetActorActiveDuration(AbstractSingleActor actor, ParsedLog log)
         {
-            List<(long start, long end)> dead = new List<(long start, long end)>();
-            List<(long start, long end)> down = new List<(long start, long end)>();
-            List<(long start, long end)> dc = new List<(long start, long end)>();
+            var dead = new List<(long start, long end)>();
+            var down = new List<(long start, long end)>();
+            var dc = new List<(long start, long end)>();
             actor.AgentItem.GetAgentStatus(dead, down, dc, log);
             return DurationInMS -
                 dead.Sum(x =>

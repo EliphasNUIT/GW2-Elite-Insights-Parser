@@ -117,7 +117,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public void GetAgentStatus(List<(long start, long end)> dead, List<(long start, long end)> down, List<(long start, long end)> dc, ParsedLog log)
         {
-            List<AbstractStatusEvent> status = new List<AbstractStatusEvent>();
+            var status = new List<AbstractStatusEvent>();
             status.AddRange(log.CombatData.GetDownEvents(this));
             status.AddRange(log.CombatData.GetAliveEvents(this));
             status.AddRange(log.CombatData.GetDeadEvents(this));
@@ -153,7 +153,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
             AbstractSingleActor actor = log.FindActor(this, true);
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
-            if (bgms.TryGetValue(buffId, out var bgm))
+            if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
                 return bgm.IsPresent(time, 10);
             }

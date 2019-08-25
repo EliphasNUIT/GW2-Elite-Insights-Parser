@@ -785,7 +785,7 @@ namespace GW2EIParser.EIData
         {
             if (_allBoonsByName.TryGetValue(name, out var list))
             {
-                List<Buff> subList = list.Where(x => x.MaxBuild >= build).ToList();
+                var subList = list.Where(x => x.MaxBuild >= build).ToList();
                 if (subList.Count != 1)
                 {
                     throw new InvalidOperationException("No boon with correct build");

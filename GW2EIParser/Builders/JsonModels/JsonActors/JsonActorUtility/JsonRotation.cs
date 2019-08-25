@@ -66,7 +66,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public static List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls, Dictionary<string, SkillDesc> skillMap)
         {
-            Dictionary<long, List<JsonSkill>> dict = new Dictionary<long, List<JsonSkill>>();
+            var dict = new Dictionary<long, List<JsonSkill>>();
             foreach (AbstractCastEvent cl in cls)
             {
                 SkillItem skill = cl.Skill;
@@ -75,7 +75,7 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     skillMap["s" + cl.SkillId] = new SkillDesc(skill);
                 }
-                JsonSkill jSkill = new JsonSkill(cl);
+                var jSkill = new JsonSkill(cl);
                 if (dict.TryGetValue(cl.SkillId, out var list))
                 {
                     list.Add(jSkill);
@@ -88,7 +88,7 @@ namespace GW2EIParser.Builders.JsonModels
                     };
                 }
             }
-            List<JsonRotation> res = new List<JsonRotation>();
+            var res = new List<JsonRotation>();
             foreach (var pair in dict)
             {
                 res.Add(new JsonRotation()

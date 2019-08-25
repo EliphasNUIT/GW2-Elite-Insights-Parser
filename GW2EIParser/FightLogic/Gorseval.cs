@@ -62,7 +62,7 @@ namespace GW2EIParser.Logic
                 }
                 else
                 {
-                    List<ushort> ids = new List<ushort>
+                    var ids = new List<ushort>
                     {
                        (ushort) ChargedSoul
                     };
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Gorseval:
-                    List<AbstractCastEvent> blooms = cls.Where(x => x.SkillId == 31616).ToList();
+                    var blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
@@ -100,7 +100,7 @@ namespace GW2EIParser.Logic
                     List<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
-                        List<AbstractCastEvent> rampage = cls.Where(x => x.SkillId == 31834).ToList();
+                        var rampage = cls.Where(x => x.SkillId == 31834).ToList();
                         Point3D pos = replay.PolledPositions.First();
                         foreach (AbstractCastEvent c in rampage)
                         {
@@ -195,7 +195,7 @@ namespace GW2EIParser.Logic
                             }
                         }
                     }
-                    List<AbstractCastEvent> slam = cls.Where(x => x.SkillId == 31875).ToList();
+                    var slam = cls.Where(x => x.SkillId == 31875).ToList();
                     foreach (AbstractCastEvent c in slam)
                     {
                         int start = (int)c.Time;
@@ -222,7 +222,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
                 case (ushort)ChargedSoul:
-                    (int, int) lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+                    var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                     replay.Actors.Add(new CircleDecoration(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)", new AgentConnector(target)));
                     break;
                 default:

@@ -84,7 +84,7 @@ namespace GW2EIParser.Logic
             if (!fightData.Success)
             {
                 List<AgentItem> prisoners = agentData.GetAgentsByID((ushort)Prisoner2);
-                List<DeadEvent> prisonerDeaths = new List<DeadEvent>();
+                var prisonerDeaths = new List<DeadEvent>();
                 foreach (AgentItem prisoner in prisoners)
                 {
                     prisonerDeaths.AddRange(combatData.GetDeadEvents(prisoner));
@@ -109,7 +109,7 @@ namespace GW2EIParser.Logic
                 {
                     end = phaseEnd.Time;
                 }
-                PhaseData phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
+                var phase = new PhaseData(start, Math.Min(end, log.FightData.FightDuration));
                 phase.Targets.Add(target);
                 phases.Add(phase);
             }
@@ -143,7 +143,7 @@ namespace GW2EIParser.Logic
             {
                 throw new InvalidOperationException("Narella");
             }
-            List<AbstractSingleActor> phaseTargets = new List<AbstractSingleActor> { berg, zane, narella };
+            var phaseTargets = new List<AbstractSingleActor> { berg, zane, narella };
             phases[0].Targets.AddRange(phaseTargets);
             if (!requirePhases)
             {
@@ -174,7 +174,7 @@ namespace GW2EIParser.Logic
                 case (ushort)ParseEnum.EvtcNPCIDs.Berg:
                     break;
                 case (ushort)ParseEnum.EvtcNPCIDs.Zane:
-                    List<AbstractCastEvent> bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
+                    var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;

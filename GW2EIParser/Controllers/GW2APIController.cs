@@ -52,7 +52,7 @@ namespace GW2EIParser.Controllers
         private static List<GW2APISkill> GetListGW2APISkills()
         {
             if (APIClient == null) { GetAPIClient(); }
-            List<GW2APISkill> skill_L = new List<GW2APISkill>();
+            var skill_L = new List<GW2APISkill>();
             bool maxPageSizeReached = false;
             int page = 0;
             int pagesize = 200;
@@ -103,12 +103,12 @@ namespace GW2EIParser.Controllers
 
             _listOfSkills = new SkillList();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills")).Result;
-            List<int> failedList = new List<int>();
+            var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list           
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
-                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json");
                 var serializer = new JsonSerializer
                 {
@@ -138,9 +138,9 @@ namespace GW2EIParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading Skilllist");
-                        using StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SkillList.json");
-                        JsonSerializer serializer = new JsonSerializer()
+                        var serializer = new JsonSerializer()
                         {
                             ContractResolver = new DefaultContractResolver()
                             {
@@ -215,7 +215,7 @@ namespace GW2EIParser.Controllers
             _listofSpecs = new SpecList();
             HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations")).Result;
             int[] idArray;
-            List<int> failedList = new List<int>();
+            var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list
@@ -223,7 +223,7 @@ namespace GW2EIParser.Controllers
 
                 foreach (int id in idArray)
                 {
-                    GW2APISpec curSpec = new GW2APISpec();
+                    var curSpec = new GW2APISpec();
                     curSpec = GetGW2APISpec("/v2/specializations/" + id);
                     if (curSpec != null)
                     {
@@ -238,7 +238,7 @@ namespace GW2EIParser.Controllers
                     }
 
                 }
-                StreamWriter writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json");
 
                 var serializer = new JsonSerializer
@@ -269,9 +269,9 @@ namespace GW2EIParser.Controllers
                     if (new FileInfo(path).Length != 0)
                     {
                         Console.WriteLine("Reading SpecList");
-                        using StreamReader reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SpecList.json");
-                        JsonSerializer serializer = new JsonSerializer()
+                        var serializer = new JsonSerializer()
                         {
                             ContractResolver = new DefaultContractResolver()
                             {

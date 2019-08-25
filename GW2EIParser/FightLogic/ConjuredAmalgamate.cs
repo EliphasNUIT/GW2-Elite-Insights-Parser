@@ -119,13 +119,13 @@ namespace GW2EIParser.Logic
 
         private List<long> GetTargetableTimes(ParsedLog log, NPC target)
         {
-            List<AttackTargetEvent> attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
-            List<AgentItem> attackTargets = new List<AgentItem>();
+            var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).Take(2).ToList(); // 3rd one is weird
+            var attackTargets = new List<AgentItem>();
             foreach (AttackTargetEvent c in attackTargetsAgents)
             {
                 attackTargets.Add(c.AttackTarget);
             }
-            List<long> targetables = new List<long>();
+            var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
                 var aux = log.CombatData.GetTargetableEvents(attackTarget);
@@ -253,7 +253,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             List<AbstractCastEvent> cls = p.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
+            var shieldCast = cls.Where(x => x.SkillId == 52780).ToList();
             foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;

@@ -68,11 +68,11 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 return null;
             }
-            List<JsonMechanics> res = new List<JsonMechanics>();
-            Dictionary<string, List<JsonMechanic>> dict = new Dictionary<string, List<JsonMechanic>>();
+            var res = new List<JsonMechanics>();
+            var dict = new Dictionary<string, List<JsonMechanic>>();
             foreach (MechanicEvent ml in mechanicLogs)
             {
-                JsonMechanic mech = new JsonMechanic(ml);
+                var mech = new JsonMechanic(ml);
                 if (dict.TryGetValue(ml.InGameName, out var list))
                 {
                     list.Add(mech);

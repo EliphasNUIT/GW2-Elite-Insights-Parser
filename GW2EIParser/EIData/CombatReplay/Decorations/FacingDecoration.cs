@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
 
         public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            JsonCombatReplayFacingDecoration aux = new JsonCombatReplayFacingDecoration
+            var aux = new JsonCombatReplayFacingDecoration
             {
                 Type = "Facing",
                 Start = Lifespan.start,

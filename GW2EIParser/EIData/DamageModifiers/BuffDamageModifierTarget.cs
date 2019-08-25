@@ -87,7 +87,7 @@ namespace GW2EIParser.EIData
                 Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
                 if (!dict.TryGetValue(Name, out var list))
                 {
-                    List<DamageModifierData> extraDataList = new List<DamageModifierData>();
+                    var extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)
                     {
                         int totalDamage = GetTotalDamage(p, log, target, i);

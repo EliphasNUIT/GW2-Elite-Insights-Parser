@@ -47,8 +47,8 @@ namespace GW2EIParser.Builders.JsonModels
             }
             foreach (AbstractSingleActor target in targets)
             {
-                List<List<JsonDamageDist>> TargetDamageDist = new List<List<JsonDamageDist>>();
-                List<List<JsonDamageDist>> TargetDamageTakenDist = new List<List<JsonDamageDist>>();
+                var TargetDamageDist = new List<List<JsonDamageDist>>();
+                var TargetDamageTakenDist = new List<List<JsonDamageDist>>();
                 foreach (PhaseData phase in phases)
                 {
                     TargetDamageDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(target, log, phase.Start, phase.End), log, skillMap, buffMap));

@@ -69,18 +69,18 @@ namespace GW2EIParser.Controllers
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            Uri webService = new Uri(@URI);
-            using HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
+            var webService = new Uri(@URI);
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
             requestMessage.Headers.ExpectContinue = false;
 
-            MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
-            ByteArrayContent byteArrayContent = new ByteArrayContent(fileContents);
+            var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
+            var byteArrayContent = new ByteArrayContent(fileContents);
             byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
             multiPartContent.Add(byteArrayContent, "file", fileName);
             //multiPartContent.Add(new StringContent("generator=ei"), "gen", "ei");
             requestMessage.Content = multiPartContent;
 
-            HttpClient httpClient = new HttpClient();
+            var httpClient = new HttpClient();
             try
             {
                 Task<HttpResponseMessage> httpRequest = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);

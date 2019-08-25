@@ -76,13 +76,13 @@ namespace GW2EIParser.Logic
         private List<PhaseData> GetInBetweenSoulSplits(ParsedLog log, NPC dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
             List<AbstractCastEvent> cls = dhuum.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            List<AbstractCastEvent> gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
+            var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+            var gDeathmark = cls.Where(x => x.SkillId == 48210).ToList();
             if (gDeathmark.Count < cataCycle.Count)
             {
                 return new List<PhaseData>();
             }
-            List<PhaseData> phases = new List<PhaseData>();
+            var phases = new List<PhaseData>();
             long start = mainStart;
             long end = 0;
             int i = 1;
@@ -198,7 +198,7 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Dhuum:
-                    List<AbstractCastEvent> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+                    var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
                     {
@@ -217,7 +217,7 @@ namespace GW2EIParser.Logic
                         Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 3000);
                         if (facing != null && targetPosition != null)
                         {
-                            Point3D position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
+                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z, targetPosition.Time);
                             replay.Actors.Add(new CircleDecoration(true, zoneActive, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(false, 0, radius, (start, zoneActive), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
                             replay.Actors.Add(new CircleDecoration(true, 0, radius, (zoneActive, zoneDeadly), "rgba(200, 255, 100, 0.5)", new PositionConnector(position)));
@@ -225,7 +225,7 @@ namespace GW2EIParser.Logic
 
                         }
                     }
-                    List<AbstractCastEvent> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         int start = (int)c.Time;
@@ -233,7 +233,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 150, 0, 0.7)", new AgentConnector(npc)));
                         replay.Actors.Add(new CircleDecoration(true, 0, 300, (start, end), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                     }
-                    List<AbstractCastEvent> slash = cls.Where(x => x.SkillId == 47561).ToList();
+                    var slash = cls.Where(x => x.SkillId == 47561).ToList();
                     foreach (AbstractCastEvent c in slash)
                     {
                         int start = (int)c.Time;
@@ -288,7 +288,7 @@ namespace GW2EIParser.Logic
                         }
                         int multiplier = 210000;
                         int gStart = _greenStart + _reapersSeen * 30000;
-                        List<int> greens = new List<int>() {
+                        var greens = new List<int>() {
                             gStart,
                             gStart + multiplier,
                             gStart + 2 * multiplier
@@ -326,7 +326,7 @@ namespace GW2EIParser.Logic
         public override void ComputePlayerCombatReplayActors(Player p, ParsedLog log, CombatReplay replay)
         {
             // spirit transform
-            List<AbstractBuffEvent> spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
             NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
             if (mainTarget == null)
             {
@@ -367,7 +367,7 @@ namespace GW2EIParser.Logic
                 }
             }
             // shackles connection
-            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
+            var shackles = GetFilteredList(log.CombatData, 47335, p, true).Concat(GetFilteredList(log.CombatData, 48591, p, true)).ToList();
             int shacklesStart = 0;
             Player shacklesTarget = null;
             foreach (AbstractBuffEvent c in shackles)

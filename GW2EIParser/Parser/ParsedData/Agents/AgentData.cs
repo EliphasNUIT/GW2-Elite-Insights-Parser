@@ -23,7 +23,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem AddCustomAgent(long start, long end, AgentItem.AgentType type, string name, string prof, ushort ID, uint toughness = 0, uint healing = 0, uint condition = 0, uint concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
         {
-            Random rnd = new Random();
+            var rnd = new Random();
             ulong agentValue = 0;
             while (AgentValues.Contains(agentValue) || agentValue == 0)
             {
@@ -34,7 +34,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
             }
-            AgentItem agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
+            var agent = new AgentItem(agentValue, name, prof, ID, type, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight)
             {
                 InstID = instID,
                 LastAwareLogTime = end,

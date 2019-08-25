@@ -68,8 +68,8 @@ namespace GW2EIParser.Logic
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
-            List<PhaseData> targetPhases = new List<PhaseData>();
-            List<AbstractCombatEvent> states = new List<AbstractCombatEvent>();
+            var targetPhases = new List<PhaseData>();
+            var states = new List<AbstractCombatEvent>();
             states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
             states.AddRange(GetFilteredList(log.CombatData, 762, target, true).Where(x => x is BuffApplyEvent));
             states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
@@ -223,13 +223,13 @@ namespace GW2EIParser.Logic
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Nikare:
                     //CC
-                    List<AbstractCastEvent> barrageN = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<AbstractCastEvent> aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainN = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
@@ -241,13 +241,13 @@ namespace GW2EIParser.Logic
                     break;
                 case (ushort)ParseEnum.EvtcNPCIDs.Kenut:
                     //CC
-                    List<AbstractCastEvent> barrageK = cls.Where(x => x.SkillId == 51977).ToList();
+                    var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    List<AbstractCastEvent> aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
+                    var aquaticDomainK = cls.Where(x => x.SkillId == 52374).ToList();
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
@@ -256,7 +256,7 @@ namespace GW2EIParser.Logic
                         int radius = 800;
                         replay.Actors.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> shockwave = cls.Where(x => x.SkillId == 53018).ToList();
+                    var shockwave = cls.Where(x => x.SkillId == 53018).ToList();
                     foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
@@ -265,7 +265,7 @@ namespace GW2EIParser.Logic
                         int radius = 1200;
                         replay.Actors.Add(new CircleDecoration(false, start + delay + duration, radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)));
                     }
-                    List<AbstractCastEvent> boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
+                    var boonSteal = cls.Where(x => x.SkillId == 51965).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
                     {
                         int start = (int)c.Time;

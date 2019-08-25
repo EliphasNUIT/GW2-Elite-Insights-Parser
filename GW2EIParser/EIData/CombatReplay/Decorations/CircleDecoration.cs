@@ -23,7 +23,7 @@ namespace GW2EIParser.EIData
 
         public override JsonCombatReplayGenericDecoration GetCombatReplayJSON(CombatReplayMap map, ParsedLog log)
         {
-            JsonCombatReplayCircleDecoration aux = new JsonCombatReplayCircleDecoration
+            var aux = new JsonCombatReplayCircleDecoration
             {
                 Type = "Circle",
                 Radius = Radius,
