@@ -11,8 +11,12 @@ namespace GW2EIParser.EIData
         {
             var res = new List<AnimatedCastEvent>();
             long cloakStart = 0;
-            foreach (AbstractBuffEvent ba in buffs.Where(x => x is BuffApplyEvent))
+            foreach (AbstractBuffEvent ba in buffs)
             {
+                if (!(ba is BuffApplyEvent))
+                {
+                    continue;
+                }
                 if (ba.Time - cloakStart > 10)
                 {
                     var dodgeLog = new AnimatedCastEvent(ba.Time, skillData.Get(SkillItem.DodgeId), 50, ba.To);

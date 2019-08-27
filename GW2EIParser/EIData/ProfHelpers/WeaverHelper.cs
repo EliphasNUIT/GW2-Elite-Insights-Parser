@@ -147,7 +147,7 @@ namespace GW2EIParser.EIData
                 }
             }
             long prevID = 0;
-            foreach (var pair in groupByTime)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {
                 var applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
                 long curID = TranslateWeaverAttunement(applies);
