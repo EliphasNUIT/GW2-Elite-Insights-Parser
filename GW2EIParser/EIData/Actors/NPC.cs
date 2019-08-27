@@ -133,7 +133,7 @@ namespace GW2EIParser.EIData
             var aux = new JsonTargetCombatReplay
             {
                 Img = CombatReplay.Icon,
-                ID = GetCombatReplayID(log),
+                ID = AgentItem.UniqueID,
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 Positions = new List<double>()

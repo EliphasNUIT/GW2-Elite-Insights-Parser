@@ -28,6 +28,8 @@ namespace GW2EIParser.Parser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
+        public int UniqueID => (InstID + "_" + FirstAwareLogTime + "_" + LastAwareLogTime).GetHashCode();
+
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {

@@ -37,6 +37,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonStatistics"/>
         public JsonStatistics Statistics { get; set; }
+        /// <summary>
+        /// Unique ID representing the actor
+        /// </summary>
+        public int UniqueID { get; set; }
 
         protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(actor)
         {
@@ -55,6 +59,8 @@ namespace GW2EIParser.Builders.JsonModels
             DamageDistributionData = new JsonDamageDistData(log, actor, description, targets);
             // Stats
             Statistics = new JsonStatistics(log, actor, targets, allies);
+            //
+            UniqueID = actor.AgentItem.UniqueID;
         }
     }
 }

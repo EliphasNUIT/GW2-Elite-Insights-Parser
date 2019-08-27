@@ -687,7 +687,7 @@ namespace GW2EIParser.EIData
             {
                 Group = Group,
                 Img = CombatReplay.Icon,
-                ID = GetCombatReplayID(log),
+                ID = AgentItem.UniqueID,
                 Positions = new List<double>(),
                 Dead = new List<long>(),
                 Down = new List<long>(),

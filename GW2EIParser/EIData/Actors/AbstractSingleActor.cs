@@ -617,15 +617,6 @@ namespace GW2EIParser.EIData
             }
             return CombatReplay.Actors;
         }
-
-        public int GetCombatReplayID(ParsedLog log)
-        {
-            if (CombatReplay == null)
-            {
-                InitCombatReplay(log);
-            }
-            return (InstID + "_" + CombatReplay.TimeOffsets.start + "_" + CombatReplay.TimeOffsets.end).GetHashCode();
-        }
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 
 
