@@ -8,6 +8,7 @@ namespace GW2EIParser.Builders.JsonModels
         {
             public string Img { get; set; }
             public int ID { get; set; }
+            public int MasterID { get; set; }
             public List<double> Positions { get; set; }
         }
 

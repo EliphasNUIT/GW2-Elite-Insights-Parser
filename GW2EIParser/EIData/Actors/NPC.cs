@@ -134,6 +134,7 @@ namespace GW2EIParser.EIData
             {
                 Img = CombatReplay.Icon,
                 ID = AgentItem.UniqueID,
+                MasterID = AgentItem.MasterAgent != null ? AgentItem.MasterAgent.UniqueID : 0,
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 Positions = new List<double>()
