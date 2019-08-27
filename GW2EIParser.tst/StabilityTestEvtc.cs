@@ -76,7 +76,7 @@ namespace LuckParser.tst
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
 
-            var serializer = new JsonSerializer
+            JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = contractResolver

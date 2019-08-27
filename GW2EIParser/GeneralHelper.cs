@@ -25,7 +25,7 @@ namespace GW2EIParser
 
         public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {
-            if (dict.TryGetValue(key, out var list))
+            if (dict.TryGetValue(key, out List<T> list))
             {
                 list.Add(evt);
             }
@@ -64,9 +64,17 @@ namespace GW2EIParser
 
         public static string FindPattern(string source, string regex)
         {
-            if (string.IsNullOrEmpty(source)) return null;
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+
             Match match = Regex.Match(source, regex);
-            if (match.Success) return match.Groups[1].Value;
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
             return null;
         }
 

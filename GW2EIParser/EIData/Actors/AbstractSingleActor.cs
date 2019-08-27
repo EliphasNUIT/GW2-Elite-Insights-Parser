@@ -75,7 +75,7 @@ namespace GW2EIParser.EIData
             }
             if (target != null)
             {
-                if (DamageLogsByDst.TryGetValue(target.AgentItem, out var list))
+                if (DamageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
@@ -97,7 +97,7 @@ namespace GW2EIParser.EIData
             }
             if (target != null)
             {
-                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out var list))
+                if (DamageTakenLogsBySrc.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
                 {
                     long targetStart = log.FightData.ToFightSpace(target.FirstAwareLogTime);
                     long targetEnd = log.FightData.ToFightSpace(target.LastAwareLogTime);
@@ -179,13 +179,13 @@ namespace GW2EIParser.EIData
             // add buff remove all for each despawn events
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(AgentItem))
             {
-                foreach (var pair in buffMap)
+                foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), 1, int.MaxValue));
                 }
             }
             buffMap.Sort();
-            foreach (var pair in buffMap)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
             {
                 TrackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
             }

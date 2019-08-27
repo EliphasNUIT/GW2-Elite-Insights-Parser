@@ -124,7 +124,7 @@ namespace GW2EIParser.Parser.ParsedData
             status.AddRange(log.CombatData.GetSpawnEvents(this));
             status.AddRange(log.CombatData.GetDespawnEvents(this));
             status = status.OrderBy(x => x.Time).ToList();
-            for (var i = 0; i < status.Count - 1; i++)
+            for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];

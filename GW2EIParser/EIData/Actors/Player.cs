@@ -189,7 +189,7 @@ namespace GW2EIParser.EIData
                     double totalActiveExtended = 0;
                     bool hasGeneration = false;
                     int activePlayerCount = 0;
-                    foreach (var pair in boonDistributions)
+                    foreach (KeyValuePair<Player, BuffDistributionDictionary> pair in boonDistributions)
                     {
                         BuffDistributionDictionary boons = pair.Value;
                         long playerActiveDuration = phase.GetActorActiveDuration(pair.Key, log);
@@ -616,7 +616,7 @@ namespace GW2EIParser.EIData
             }
             if (target != null)
             {
-                if (_damageModifiersTargets.TryGetValue(target, out var res))
+                if (_damageModifiersTargets.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> res))
                 {
                     return res;
                 }

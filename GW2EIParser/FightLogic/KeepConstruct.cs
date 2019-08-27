@@ -110,7 +110,7 @@ namespace GW2EIParser.Logic
                 }
             }
             int burnCount = 1;
-            foreach (var seg in segments)
+            foreach (BuffsGraphModel.Segment seg in segments)
             {
                 var phase = new PhaseData(seg.Start, seg.End)
                 {

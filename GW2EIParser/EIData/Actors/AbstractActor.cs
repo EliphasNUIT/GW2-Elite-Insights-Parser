@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
         // Utilities
         protected static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
-            if (dictionary.TryGetValue(key, out var existing))
+            if (dictionary.TryGetValue(key, out long existing))
             {
                 dictionary[key] = existing + value;
             }

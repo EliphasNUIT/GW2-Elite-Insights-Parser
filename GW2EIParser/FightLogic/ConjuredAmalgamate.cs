@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
             var targetables = new List<long>();
             foreach (AgentItem attackTarget in attackTargets)
             {
-                var aux = log.CombatData.GetTargetableEvents(attackTarget);
+                List<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
                 targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
             }
             return targetables;

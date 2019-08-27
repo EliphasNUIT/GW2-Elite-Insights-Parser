@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
                 var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
                 if (GenerationSimulation.Count > 0)
                 {
-                    var last = GenerationSimulation.Last();
+                    BuffSimulationItem last = GenerationSimulation.Last();
                     if (last.End > toAdd.Start)
                     {
                         last.SetEnd(toAdd.Start);

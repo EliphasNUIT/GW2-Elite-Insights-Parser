@@ -72,7 +72,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (id != 0)
             {
-                if (_allAgentsByID.TryGetValue(id, out var list))
+                if (_allAgentsByID.TryGetValue(id, out List<AgentItem> list))
                 {
                     return list;
                 }
@@ -84,7 +84,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (instid != 0)
             {
-                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     return list;
                 }
@@ -96,7 +96,7 @@ namespace GW2EIParser.Parser.ParsedData
         {
             if (instid != 0)
             {
-                if (_allAgentsByInstID.TryGetValue(instid, out var list))
+                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     AgentItem a = list.FirstOrDefault(x => x.FirstAwareLogTime <= logTime && x.LastAwareLogTime >= logTime);
                     if (a != null)
@@ -127,7 +127,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
         {
-            if (_allAgentsByType.TryGetValue(type, out var list))
+            if (_allAgentsByType.TryGetValue(type, out List<AgentItem> list))
             {
                 return list;
             }

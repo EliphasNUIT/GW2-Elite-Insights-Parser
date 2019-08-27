@@ -64,7 +64,7 @@ namespace GW2EIParser.EIData
             List<ModifierSource> srcs = ProfToEnum(prof);
             foreach (ModifierSource src in srcs)
             {
-                if (DamageModifiersPerSource.TryGetValue(src, out var list))
+                if (DamageModifiersPerSource.TryGetValue(src, out List<DamageModifier> list))
                 {
                     res.AddRange(list);
                 }

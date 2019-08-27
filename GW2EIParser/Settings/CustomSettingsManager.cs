@@ -56,7 +56,11 @@ namespace GW2EIParser
 
         private static void ProcessSettingsLine(string line)
         {
-            if (line.StartsWith("#")) return; // commented out line
+            if (line.StartsWith("#"))
+            {
+                return; // commented out line
+            }
+
             int equalsPos = line.IndexOf("=");
             if (equalsPos <= 0)
             {

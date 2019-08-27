@@ -52,10 +52,10 @@ namespace GW2EIParser.Logic
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<AgentItem, List<AbstractBuffEvent>> buffsBySrc, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(56118, out var list))
+            if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
             {
                 var sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (var pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
+                foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
                 {
                     var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
                     foreach (AbstractBuffEvent sglRemoval in sglRemovals)

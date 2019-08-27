@@ -28,7 +28,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 }
                 if (evt != null)
                 {
-                    if (res.TryGetValue(evt.AgentItem, out var list))
+                    if (res.TryGetValue(evt.AgentItem, out List<AbstractMovementEvent> list))
                     {
                         list.Add(evt);
                     }
@@ -175,7 +175,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             var res = new List<AnimatedCastEvent>();
             var castEventsBySrcAgent = castEvents.GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var pair in castEventsBySrcAgent)
+            foreach (KeyValuePair<ulong, List<CombatItem>> pair in castEventsBySrcAgent)
             {
                 CombatItem startItem = null;
                 foreach (CombatItem c in pair.Value)

@@ -75,7 +75,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 var positions = (List<(double x, double y, double z, double angle, double opacity, int time)>)value;
                 writer.WriteStartArray();
-                foreach (var position in positions)
+                foreach ((double x, double y, double z, double angle, double opacity, int time) position in positions)
                 {
                     (double x, double y, double z, double angle, double opacity, int time) = position;
                     writer.WriteStartArray();

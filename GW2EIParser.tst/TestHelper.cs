@@ -121,7 +121,7 @@ namespace LuckParser.tst
                 else
                 {
                     JToken expected = sourcePair.Value;
-                    var actual = target.SelectToken("['" + sourcePair.Key + "']");
+                    JToken actual = target.SelectToken("['" + sourcePair.Key + "']");
                     if (actual == null)
                     {
                         returnString.Append("Key " + sourcePair.Key
@@ -151,21 +151,21 @@ namespace LuckParser.tst
         /// <returns>Text string</returns>
         public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
         {
-            var returnString = new StringBuilder();
-            for (var index = 0; index < source.Count; index++)
+            StringBuilder returnString = new StringBuilder();
+            for (int index = 0; index < source.Count; index++)
             {
 
-                var expected = source[index];
+                JToken expected = source[index];
                 if (expected.Type == JTokenType.Object)
                 {
-                    var actual = (index >= target.Count) ? new JObject() : target[index];
+                    JToken actual = (index >= target.Count) ? new JObject() : target[index];
                     returnString.Append(CompareObjects(expected.ToObject<JObject>(),
                         actual.ToObject<JObject>()));
                 }
                 else
                 {
 
-                    var actual = (index >= target.Count) ? "" : target[index];
+                    JToken actual = (index >= target.Count) ? "" : target[index];
                     if (!JToken.DeepEquals(expected, actual))
                     {
                         if (String.IsNullOrEmpty(arrayName))

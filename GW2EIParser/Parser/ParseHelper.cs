@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser
 
         public static string GetString(Stream stream, int length, bool nullTerminated = true)
         {
-            var bytes = new byte[length];
+            byte[] bytes = new byte[length];
             stream.Read(bytes, 0, length);
             if (nullTerminated)
             {

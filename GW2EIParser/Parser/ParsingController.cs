@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -48,7 +48,7 @@ namespace GW2EIParser.Parser
                     {
                         throw new InvalidDataException("Invalid Archive");
                     }
-                    using var data = arch.Entries[0].Open();
+                    using Stream data = arch.Entries[0].Open();
                     ParseLog(row, data);
                 }
                 else
@@ -92,7 +92,7 @@ namespace GW2EIParser.Parser
             int count = data.Length;
             while (count > 0)
             {
-                var bytesRead = stream.Read(data, offset, count);
+                int bytesRead = stream.Read(data, offset, count);
                 if (bytesRead == 0)
                 {
                     return false;
@@ -109,7 +109,7 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseFightData(Stream stream)
         {
-            using var reader = CreateReader(stream);
+            using BinaryReader reader = CreateReader(stream);
             // 12 bytes: arc build version
             _buildVersion = ParseHelper.GetString(stream, 12);
 
@@ -127,7 +127,7 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseAgentData(Stream stream)
         {
-            using var reader = CreateReader(stream);
+            using BinaryReader reader = CreateReader(stream);
             // 4 bytes: player count
             int playerCount = reader.ReadInt32();
 
@@ -201,7 +201,7 @@ namespace GW2EIParser.Parser
         /// </summary>
         private void ParseSkillData(Stream stream)
         {
-            using var reader = CreateReader(stream);
+            using BinaryReader reader = CreateReader(stream);
             // 4 bytes: player count
             uint skillCount = reader.ReadUInt32();
             //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
@@ -211,7 +211,7 @@ namespace GW2EIParser.Parser
                 // 4 bytes: skill ID
                 int skillId = reader.ReadInt32();
                 // 64 bytes: name
-                var name = ParseHelper.GetString(stream, 64);
+                string name = ParseHelper.GetString(stream, 64);
                 //Save
                 var skill = new SkillItem(skillId, name);
                 _skillData.Add(skill);
@@ -381,15 +381,23 @@ namespace GW2EIParser.Parser
         private void ParseCombatList(Stream stream)
         {
             // 64 bytes: each combat
-            var data = new byte[64];
+            byte[] data = new byte[64];
             using var ms = new MemoryStream(data, writable: false);
-            using var reader = CreateReader(ms);
+            using BinaryReader reader = CreateReader(ms);
             while (true)
             {
-                if (!TryRead(stream, data)) break;
+                if (!TryRead(stream, data))
+                {
+                    break;
+                }
+
                 ms.Seek(0, SeekOrigin.Begin);
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-                if (!IsValid(combatItem)) continue;
+                if (!IsValid(combatItem))
+                {
+                    continue;
+                }
+
                 _combatItems.Add(combatItem);
             }
         }
@@ -420,7 +428,7 @@ namespace GW2EIParser.Parser
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
-                if (agentsLookup.TryGetValue(c.SrcAgent, out var agentList))
+                if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> agentList))
                 {
                     foreach (AgentItem agent in agentList)
                     {
@@ -469,10 +477,10 @@ namespace GW2EIParser.Parser
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
+                    AgentItem master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
                     if (master != null)
                     {
-                        if (agentsLookup.TryGetValue(c.SrcAgent, out var minionList))
+                        if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> minionList))
                         {
                             foreach (AgentItem minion in minionList)
                             {
@@ -495,7 +503,7 @@ namespace GW2EIParser.Parser
         private void CompletePlayers()
         {
             //Fix Disconnected players
-            var playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
+            List<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
 
             foreach (AgentItem playerAgent in playerAgentList)
             {

@@ -114,7 +114,7 @@ namespace GW2EIParser.EIData
         public List<MechanicEvent> GetMechanicLogs(ParsedLog log, Mechanic mech)
         {
             ProcessMechanics(log);
-            if (_mechanicLogs.TryGetValue(mech, out var list))
+            if (_mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list))
             {
                 return list;
             }

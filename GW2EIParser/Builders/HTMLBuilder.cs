@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders
         // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
         private static string CompressAndBase64(string s)
         {
-            var bytes = Encoding.UTF8.GetBytes(s);
+            byte[] bytes = Encoding.UTF8.GetBytes(s);
             using var msi = new MemoryStream(bytes);
             using var mso = new MemoryStream();
             using (var gs = new GZipStream(mso, CompressionMode.Compress))
@@ -141,7 +141,7 @@ namespace GW2EIParser.Builders
                 {"${tmplTargetTabGraph}",Properties.Resources.tmplTargetTabGraph },
                 {"${tmplTargetData}",Properties.Resources.tmplTargetData },
             };
-            foreach (var entry in templates)
+            foreach (KeyValuePair<string, string> entry in templates)
             {
 #if DEBUG
                 tmplScript = tmplScript.Replace(entry.Key, entry.Value);
@@ -173,7 +173,7 @@ namespace GW2EIParser.Builders
                     {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
                     {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },
                 };
-            foreach (var entry in CRtemplates)
+            foreach (KeyValuePair<string, string> entry in CRtemplates)
             {
                 tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
             }

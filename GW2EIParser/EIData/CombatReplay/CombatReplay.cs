@@ -158,7 +158,7 @@ namespace GW2EIParser.EIData
         {
             var activePositions = new List<Point3D>(PolledPositions);
 
-            for (var i = 0; i < activePositions.Count; i++)
+            for (int i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];
                 foreach ((long start, long end) in deads)

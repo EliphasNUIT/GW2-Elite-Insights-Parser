@@ -104,7 +104,7 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Target for success by combat exit not found");
             }
             var res = new List<AbstractBuffEvent>();
-            if (buffsById.TryGetValue(38224, out var list))
+            if (buffsById.TryGetValue(38224, out List<AbstractBuffEvent> list))
             {
                 foreach (AbstractBuffEvent bfe in list)
                 {

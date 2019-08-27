@@ -228,7 +228,7 @@ namespace GW2EIParser.Logic
             var dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
-                if (damageByDst.TryGetValue(agentItem, out var list))
+                if (damageByDst.TryGetValue(agentItem, out List<AbstractDamageEvent> list))
                 {
                     dmgEvts.AddRange(list);
                 }

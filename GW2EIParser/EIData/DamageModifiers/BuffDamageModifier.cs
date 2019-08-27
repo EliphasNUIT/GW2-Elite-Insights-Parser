@@ -51,12 +51,12 @@ namespace GW2EIParser.EIData
             }
             foreach (NPC target in log.FightData.Logic.NPCs)
             {
-                if (!dataTarget.TryGetValue(target, out var extra))
+                if (!dataTarget.TryGetValue(target, out Dictionary<string, List<DamageModifierData>> extra))
                 {
                     dataTarget[target] = new Dictionary<string, List<DamageModifierData>>();
                 }
                 Dictionary<string, List<DamageModifierData>> dict = dataTarget[target];
-                if (!dict.TryGetValue(Name, out var list))
+                if (!dict.TryGetValue(Name, out List<DamageModifierData> list))
                 {
                     var extraDataList = new List<DamageModifierData>();
                     for (int i = 0; i < phases.Count; i++)

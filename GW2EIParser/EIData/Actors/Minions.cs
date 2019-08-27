@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out var list))
+            if (target != null && _damageLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
@@ -54,7 +54,7 @@ namespace GW2EIParser.EIData
                 }
                 _damageTakenLogsByDst = _damageLogs.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && _damageTakenLogsByDst.TryGetValue(target.AgentItem, out var list))
+            if (target != null && _damageTakenLogsByDst.TryGetValue(target.AgentItem, out List<AbstractDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }

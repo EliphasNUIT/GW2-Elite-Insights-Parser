@@ -521,7 +521,7 @@ namespace GW2EIParser.Logic
             const int lastPhasePreparationDuration = 13000;
 
             // If phase data is not calculated, only the first layout is used
-            var phases = log.FightData.GetPhases(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
 
             int qadimPhase1Time = (int)(phases.Count > 1 ? phases[1].End : int.MaxValue);
             int destroyerPhaseTime = (int)(phases.Count > 2 ? phases[2].End : int.MaxValue);
@@ -815,14 +815,14 @@ namespace GW2EIParser.Logic
 
             // Add movement "keyframes" on a movement end and on the start of the next one.
             // This approach requires one extra movement at the start for initial positions (should be of duration 0)
-            for (var i = 0; i < movements.Length; i++)
+            for (int i = 0; i < movements.Length; i++)
             {
-                var movement = movements[i];
-                var positions = movement.platforms;
+                (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms) movement = movements[i];
+                (int x, int y, int z, double angle, double opacity)[] positions = movement.platforms;
 
-                for (var platformIndex = 0; platformIndex < platformCount; platformIndex++)
+                for (int platformIndex = 0; platformIndex < platformCount; platformIndex++)
                 {
-                    var platform = platforms[platformIndex];
+                    MovingPlatformDecoration platform = platforms[platformIndex];
                     (int x, int y, int z, double angle, double opacity) = positions[platformIndex];
 
                     // Add a keyframe for movement end.

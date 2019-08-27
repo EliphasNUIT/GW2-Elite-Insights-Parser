@@ -38,7 +38,7 @@ namespace GW2EIParser.Models
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out var list))
+                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
                 {
                     foreach (AbstractBuffEvent bf in list)
                     {
@@ -57,7 +57,7 @@ namespace GW2EIParser.Models
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out var list))
+                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
                 {
                     foreach (AbstractBuffEvent bf in list)
                     {
@@ -77,7 +77,7 @@ namespace GW2EIParser.Models
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out var list))
+                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
                 {
                     foreach (AbstractBuffEvent bf in list)
                     {
@@ -100,7 +100,7 @@ namespace GW2EIParser.Models
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out var list))
+                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
                 {
                     foreach (AbstractBuffEvent bf in list)
                     {

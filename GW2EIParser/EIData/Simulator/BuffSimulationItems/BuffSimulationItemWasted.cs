@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
-            if (distrib.TryGetValue(agent, out var toModify))
+            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
                 toModify.Waste += GetValue(start, end);
                 distrib[agent] = toModify;

@@ -73,7 +73,7 @@ namespace GW2EIParser.Builders.JsonModels
             foreach (MechanicEvent ml in mechanicLogs)
             {
                 var mech = new JsonMechanic(ml);
-                if (dict.TryGetValue(ml.InGameName, out var list))
+                if (dict.TryGetValue(ml.InGameName, out List<JsonMechanic> list))
                 {
                     list.Add(mech);
                 }
@@ -85,7 +85,7 @@ namespace GW2EIParser.Builders.JsonModels
                         };
                 }
             }
-            foreach (var pair in dict)
+            foreach (KeyValuePair<string, List<JsonMechanic>> pair in dict)
             {
                 MechanicEvent first = pair.Value.First().MechEvent;
                 res.Add(new JsonMechanics()

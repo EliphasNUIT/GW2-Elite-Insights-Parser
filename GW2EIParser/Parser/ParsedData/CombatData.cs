@@ -43,7 +43,7 @@ namespace GW2EIParser.Parser.ParsedData
             var srcAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
             {
-                if (_boonDataByDst.TryGetValue(bf.To, out var list1))
+                if (_boonDataByDst.TryGetValue(bf.To, out List<AbstractBuffEvent> list1))
                 {
                     list1.Add(bf);
                 }
@@ -55,7 +55,7 @@ namespace GW2EIParser.Parser.ParsedData
                     };
                 }
                 dstAgentsToSort.Add(bf.To);
-                if (_boonDataBySrc.TryGetValue(bf.By, out var list3))
+                if (_boonDataBySrc.TryGetValue(bf.By, out List<AbstractBuffEvent> list3))
                 {
                     list3.Add(bf);
                 }
@@ -67,7 +67,7 @@ namespace GW2EIParser.Parser.ParsedData
                     };
                 }
                 srcAgentsToSort.Add(bf.By);
-                if (_boonData.TryGetValue(bf.BuffID, out var list2))
+                if (_boonData.TryGetValue(bf.BuffID, out List<AbstractBuffEvent> list2))
                 {
                     list2.Add(bf);
                 }
@@ -103,7 +103,7 @@ namespace GW2EIParser.Parser.ParsedData
             var srcToSort = new HashSet<AgentItem>();
             foreach (AbstractDamageEvent de in toAdd)
             {
-                if (_damageTakenData.TryGetValue(de.To, out var list1))
+                if (_damageTakenData.TryGetValue(de.To, out List<AbstractDamageEvent> list1))
                 {
                     list1.Add(de);
                 }
@@ -115,7 +115,7 @@ namespace GW2EIParser.Parser.ParsedData
                     };
                 }
                 dstToSort.Add(de.To);
-                if (_damageData.TryGetValue(de.From, out var list3))
+                if (_damageData.TryGetValue(de.From, out List<AbstractDamageEvent> list3))
                 {
                     list1.Add(de);
                 }
@@ -127,7 +127,7 @@ namespace GW2EIParser.Parser.ParsedData
                     };
                 }
                 srcToSort.Add(de.To);
-                if (_damageDataById.TryGetValue(de.SkillId, out var list2))
+                if (_damageDataById.TryGetValue(de.SkillId, out List<AbstractDamageEvent> list2))
                 {
                     list2.Add(de);
                 }
@@ -168,7 +168,7 @@ namespace GW2EIParser.Parser.ParsedData
             var castAgentsToSort = new HashSet<AgentItem>();
             foreach (AnimatedCastEvent cast in toAdd)
             {
-                if (_castData.TryGetValue(cast.Caster, out var list1))
+                if (_castData.TryGetValue(cast.Caster, out List<AnimatedCastEvent> list1))
                 {
                     list1.Add(cast);
                 }
@@ -180,7 +180,7 @@ namespace GW2EIParser.Parser.ParsedData
                     };
                 }
                 castAgentsToSort.Add(cast.Caster);
-                if (_castDataById.TryGetValue(cast.SkillId, out var list2))
+                if (_castDataById.TryGetValue(cast.SkillId, out List<AbstractCastEvent> list2))
                 {
                     list2.Add(cast);
                 }
@@ -213,7 +213,7 @@ namespace GW2EIParser.Parser.ParsedData
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
-            var noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.None && x.IsActivation == ParseEnum.EvtcActivation.None && x.IsBuffRemove == ParseEnum.EvtcBuffRemove.None);
+            IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.None && x.IsActivation == ParseEnum.EvtcActivation.None && x.IsBuffRemove == ParseEnum.EvtcBuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
                        x.IsStateChange == ParseEnum.EvtcStateChange.Position ||
@@ -264,7 +264,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<AliveEvent> GetAliveEvents(AgentItem key)
         {
-            if (_statusEvents.AliveEvents.TryGetValue(key, out var list))
+            if (_statusEvents.AliveEvents.TryGetValue(key, out List<AliveEvent> list))
             {
                 return list;
             }
@@ -273,7 +273,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<AttackTargetEvent> GetAttackTargetEvents(AgentItem key)
         {
-            if (_statusEvents.AttackTargetEvents.TryGetValue(key, out var list))
+            if (_statusEvents.AttackTargetEvents.TryGetValue(key, out List<AttackTargetEvent> list))
             {
                 return list;
             }
@@ -282,7 +282,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<DeadEvent> GetDeadEvents(AgentItem key)
         {
-            if (_statusEvents.DeadEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DeadEvents.TryGetValue(key, out List<DeadEvent> list))
             {
                 return list;
             }
@@ -291,7 +291,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<DespawnEvent> GetDespawnEvents(AgentItem key)
         {
-            if (_statusEvents.DespawnEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DespawnEvents.TryGetValue(key, out List<DespawnEvent> list))
             {
                 return list;
             }
@@ -300,7 +300,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<DownEvent> GetDownEvents(AgentItem key)
         {
-            if (_statusEvents.DownEvents.TryGetValue(key, out var list))
+            if (_statusEvents.DownEvents.TryGetValue(key, out List<DownEvent> list))
             {
                 return list;
             }
@@ -309,7 +309,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<EnterCombatEvent> GetEnterCombatEvents(AgentItem key)
         {
-            if (_statusEvents.EnterCombatEvents.TryGetValue(key, out var list))
+            if (_statusEvents.EnterCombatEvents.TryGetValue(key, out List<EnterCombatEvent> list))
             {
                 return list;
             }
@@ -318,7 +318,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<ExitCombatEvent> GetExitCombatEvents(AgentItem key)
         {
-            if (_statusEvents.ExitCombatEvents.TryGetValue(key, out var list))
+            if (_statusEvents.ExitCombatEvents.TryGetValue(key, out List<ExitCombatEvent> list))
             {
                 return list;
             }
@@ -327,7 +327,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<GuildEvent> GetGuildEvents(AgentItem key)
         {
-            if (_statusEvents.GuildEvents.TryGetValue(key, out var list))
+            if (_statusEvents.GuildEvents.TryGetValue(key, out List<GuildEvent> list))
             {
                 return list;
             }
@@ -336,7 +336,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem key)
         {
-            if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out var list))
+            if (_statusEvents.HealthUpdateEvents.TryGetValue(key, out List<HealthUpdateEvent> list))
             {
                 return list;
             }
@@ -345,7 +345,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem key)
         {
-            if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out var list))
+            if (_statusEvents.MaxHealthUpdateEvents.TryGetValue(key, out List<MaxHealthUpdateEvent> list))
             {
                 return list;
             }
@@ -359,7 +359,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<SpawnEvent> GetSpawnEvents(AgentItem key)
         {
-            if (_statusEvents.SpawnEvents.TryGetValue(key, out var list))
+            if (_statusEvents.SpawnEvents.TryGetValue(key, out List<SpawnEvent> list))
             {
                 return list;
             }
@@ -368,7 +368,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<TargetableEvent> GetTargetableEvents(AgentItem key)
         {
-            if (_statusEvents.TargetableEvents.TryGetValue(key, out var list))
+            if (_statusEvents.TargetableEvents.TryGetValue(key, out List<TargetableEvent> list))
             {
                 return list;
             }
@@ -377,7 +377,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<TeamChangeEvent> GetTeamChangeEvents(AgentItem key)
         {
-            if (_statusEvents.TeamChangeEvents.TryGetValue(key, out var list))
+            if (_statusEvents.TeamChangeEvents.TryGetValue(key, out List<TeamChangeEvent> list))
             {
                 return list;
             }

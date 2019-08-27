@@ -84,7 +84,7 @@ namespace GW2EIParser.EIData
 
         public void Sort()
         {
-            foreach (var pair in this)
+            foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in this)
             {
                 pair.Value.Sort(CompareApplicationType);
             }

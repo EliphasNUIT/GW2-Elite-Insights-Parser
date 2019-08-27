@@ -121,7 +121,7 @@ namespace GW2EIParser.Logic
                             {
                                 break;
                             }
-                            var patterns = phaseIndex switch
+                            List<string> patterns = phaseIndex switch
                             {
                                 1 => new List<string>
                             {

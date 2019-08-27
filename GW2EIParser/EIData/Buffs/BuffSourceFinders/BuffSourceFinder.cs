@@ -76,7 +76,7 @@ namespace GW2EIParser.EIData
                 // unknown or self
                 return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
             }
-            if (DurationToIDs.TryGetValue(extension, out var idsToCheck))
+            if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 if (cls.Count == 1)
