@@ -35,15 +35,15 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDamageDist"/>
         public List<List<List<JsonDamageDist>>> TargetDamageTakenDists { get; set; } = new List<List<List<JsonDamageDist>>>();
 
-        public JsonDamageDistData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractSingleActor> targets)
+        public JsonDamageDistData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             TotalDamageDists = new List<List<JsonDamageDist>>();
             TotalDamageTakenDists = new List<List<JsonDamageDist>>();
             foreach (PhaseData phase in phases)
             {
-                TotalDamageDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(null, log, phase.Start, phase.End), log, skillMap, buffMap));
-                TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, skillMap, buffMap));
+                TotalDamageDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(null, log, phase.Start, phase.End), log, description));
+                TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, description));
             }
             foreach (AbstractSingleActor target in targets)
             {
@@ -51,8 +51,8 @@ namespace GW2EIParser.Builders.JsonModels
                 var TargetDamageTakenDist = new List<List<JsonDamageDist>>();
                 foreach (PhaseData phase in phases)
                 {
-                    TargetDamageDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(target, log, phase.Start, phase.End), log, skillMap, buffMap));
-                    TargetDamageTakenDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(target, log, phase.Start, phase.End), log, skillMap, buffMap));
+                    TargetDamageDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageLogs(target, log, phase.Start, phase.End), log, description));
+                    TargetDamageTakenDist.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(target, log, phase.Start, phase.End), log, description));
                 }
                 TargetDamageDists.Add(TargetDamageDist);
                 TargetDamageTakenDists.Add(TargetDamageTakenDist);

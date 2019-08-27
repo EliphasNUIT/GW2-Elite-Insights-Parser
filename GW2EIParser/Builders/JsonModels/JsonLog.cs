@@ -14,10 +14,23 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonLog
     {
+
+        public class Desc
+        {
+            /// <summary>
+            /// Name of the item
+            /// </summary>
+            public string Name { get; set; }
+            /// <summary>
+            /// Icon of the item
+            /// </summary>
+            public string Icon { get; set; }
+        }
+
         /// <summary>
         /// Describes the skill item
         /// </summary>
-        public class SkillDesc
+        public class SkillDesc : Desc
         {
             public SkillDesc(SkillItem item)
             {
@@ -27,41 +40,24 @@ namespace GW2EIParser.Builders.JsonModels
             }
 
             /// <summary>
-            /// Name of the skill
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
             /// If the skill is an auto attack
             /// </summary>
             public bool AutoAttack { get; set; }
-            /// <summary>
-            /// Icon of the skill
-            /// </summary>
-            public string Icon { get; set; }
         }
 
         /// <summary>
         /// Describs the buff item
         /// </summary>
-        public class BuffDesc
+        public class BuffDesc : Desc
         {
             public BuffDesc(Buff item)
             {
                 Name = item.Name;
-                Icon = item.Link;
+                Icon = item.Icon;
                 Stacking = item.Type == Buff.BuffType.Intensity;
                 Nature = item.Nature;
                 Source = item.Source;
             }
-
-            /// <summary>
-            /// Name of the buff
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
-            /// Icon of the buff
-            /// </summary>
-            public string Icon { get; set; }
             /// <summary>
             /// True if the buff is stacking
             /// </summary>
@@ -83,7 +79,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Describs the damage modifier item
         /// </summary>
-        public class DamageModDesc
+        public class DamageModDesc : Desc
         {
             public DamageModDesc(DamageModifier item)
             {
@@ -92,15 +88,6 @@ namespace GW2EIParser.Builders.JsonModels
                 Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
             }
-
-            /// <summary>
-            /// Name of the damage modifier
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
-            /// Icon of the damage modifier
-            /// </summary>
-            public string Icon { get; set; }
             /// <summary>
             /// Description of the damage modifier
             /// </summary>
@@ -179,24 +166,15 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<string> UploadLinks { get; set; }
         /// <summary>
-        /// Dictionary of skills' description, the key is in "'s' + id" format
+        /// Dictionary of descriptions
         /// </summary>
         /// <seealso cref="SkillDesc"/>
-        public Dictionary<string, SkillDesc> SkillMap { get; set; } = new Dictionary<string, SkillDesc>();
-        /// <summary>
-        /// Dictionary of buffs' description, the key is in "'b' + id" format
-        /// </summary>
         /// <seealso cref="BuffDesc"/>
-        public Dictionary<string, BuffDesc> BuffMap { get; set; } = new Dictionary<string, BuffDesc>();
-        /// <summary>
-        /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
-        /// </summary>
-        /// <seealso cref="DamageModDesc"/>
-        public Dictionary<string, DamageModDesc> DamageModMap { get; set; } = new Dictionary<string, DamageModDesc>();
+        public Dictionary<string, Desc> Descriptions { get; set; } = new Dictionary<string, Desc>();
         /// <summary>
         /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
         /// </summary>
-        public Dictionary<string, HashSet<long>> PersonalBuffs { get; set; } = new Dictionary<string, HashSet<long>>();
+        public Dictionary<string, HashSet<string>> PersonalBuffs { get; set; } = new Dictionary<string, HashSet<string>>();
         /// <summary>
         /// Combat Replay data
         /// </summary>
@@ -239,7 +217,7 @@ namespace GW2EIParser.Builders.JsonModels
             Friendlies = new List<JsonActor>();
             foreach (Player p in log.PlayerList)
             {
-                Friendlies.Add(new JsonPlayer(log, p, SkillMap, BuffMap, PersonalBuffs, DamageModMap, enemies, friendlies));
+                Friendlies.Add(new JsonPlayer(log, p, Descriptions, enemies, friendlies));
             }
             // Targets
             Enemies = new List<JsonActor>();
@@ -247,11 +225,11 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 if (tar.Friendly)
                 {
-                    Friendlies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, enemies, friendlies));
+                    Friendlies.Add(new JsonNPC(log, tar, Descriptions, enemies, friendlies));
                 }
                 else
                 {
-                    Enemies.Add(new JsonNPC(log, tar, SkillMap, BuffMap, friendlies, enemies));
+                    Enemies.Add(new JsonNPC(log, tar, Descriptions, friendlies, enemies));
                 }
             }
             //

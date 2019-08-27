@@ -120,7 +120,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<long> ActiveTimes { get; set; }
 
 
-        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, DamageModDesc> damageModMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, player, skillMap, buffMap, targets, allies)
+        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, player, description, targets, allies)
         {
             // meta data
             Account = player.Account;
@@ -132,7 +132,7 @@ namespace GW2EIParser.Builders.JsonModels
             List<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
             DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x)).ToList();
             // Consumables
-            Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), buffMap);
+            Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), description);
         }
     }
 }

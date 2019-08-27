@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonStatistics"/>
         public JsonStatistics Statistics { get; set; }
 
-        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(actor)
+        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(actor)
         {
             // # of Boons and Conditions States
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))
@@ -50,9 +50,9 @@ namespace GW2EIParser.Builders.JsonModels
                 ConditionsStates = bgmCondition.ToList();
             }
             // Rotation
-            Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), skillMap);
+            Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), description);
             // Damage dist
-            DamageDistributionData = new JsonDamageDistData(log, actor, skillMap, buffMap, targets);
+            DamageDistributionData = new JsonDamageDistData(log, actor, description, targets);
             // Stats
             Statistics = new JsonStatistics(log, actor, targets, allies);
         }

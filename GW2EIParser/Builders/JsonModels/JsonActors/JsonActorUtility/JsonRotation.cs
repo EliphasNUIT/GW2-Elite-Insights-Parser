@@ -56,27 +56,27 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// ID of the skill
         /// </summary>
-        /// <seealso cref="JsonLog.SkillMap"/>
-        public long Id { get; set; }
+        /// <seealso cref="JsonLog.Descriptions"/>
+        public string Id { get; set; }
         /// <summary>
         /// List of casted skills
         /// </summary>
         /// <seealso cref="JsonSkill"/>
         public List<JsonSkill> Skills { get; set; }
 
-        public static List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls, Dictionary<string, SkillDesc> skillMap)
+        public static List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls, Dictionary<string, Desc> description)
         {
             var dict = new Dictionary<long, List<JsonSkill>>();
             foreach (AbstractCastEvent cl in cls)
             {
                 SkillItem skill = cl.Skill;
                 string skillName = skill.Name;
-                if (!skillMap.ContainsKey("s" + cl.SkillId))
+                if (!description.ContainsKey("s" + cl.SkillId))
                 {
-                    skillMap["s" + cl.SkillId] = new SkillDesc(skill);
+                    description["s" + cl.SkillId] = new SkillDesc(skill);
                 }
                 var jSkill = new JsonSkill(cl);
-                if (dict.TryGetValue(cl.SkillId, out var list))
+                if (dict.TryGetValue(cl.SkillId, out List<JsonSkill> list))
                 {
                     list.Add(jSkill);
                 }
@@ -89,11 +89,11 @@ namespace GW2EIParser.Builders.JsonModels
                 }
             }
             var res = new List<JsonRotation>();
-            foreach (var pair in dict)
+            foreach (KeyValuePair<long, List<JsonSkill>> pair in dict)
             {
                 res.Add(new JsonRotation()
                 {
-                    Id = pair.Key,
+                    Id = "s" + pair.Key,
                     Skills = pair.Value
                 });
             }

@@ -49,7 +49,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonNPCBuffs"/>
         public List<JsonNPCBuffs> Buffs { get; set; }
 
-        public JsonNPC(ParsedLog log, NPC target, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, target, skillMap, buffMap, targets, allies)
+        public JsonNPC(ParsedLog log, NPC target, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, target, description, targets, allies)
         {
             // meta data
             Id = target.ID;

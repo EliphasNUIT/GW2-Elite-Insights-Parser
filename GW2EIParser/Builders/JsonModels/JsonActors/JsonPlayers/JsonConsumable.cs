@@ -31,25 +31,25 @@ namespace GW2EIParser.Builders.JsonModels
         /// ID of the consumable
         /// </summary>
         /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         public JsonConsumable(Consumable food)
         {
             Stack = food.Stack;
             Duration = food.Duration;
             Time = food.Time;
-            Id = food.Buff.ID;
+            Id = "b" + food.Buff.ID;
             Initial = food.Initial;
         }
 
-        public static List<JsonConsumable> BuildConsumables(List<Consumable> foods, Dictionary<string, BuffDesc> buffMap)
+        public static List<JsonConsumable> BuildConsumables(List<Consumable> foods, Dictionary<string, Desc> description)
         {
             var res = new List<JsonConsumable>();
-            foreach (var food in foods)
+            foreach (Consumable food in foods)
             {
-                if (!buffMap.ContainsKey("b" + food.Buff.ID))
+                if (!description.ContainsKey("b" + food.Buff.ID))
                 {
-                    buffMap["b" + food.Buff.ID] = new BuffDesc(food.Buff);
+                    description["b" + food.Buff.ID] = new BuffDesc(food.Buff);
                 }
                 res.Add(new JsonConsumable(food));
             }

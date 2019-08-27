@@ -19,13 +19,8 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Id of the skill
             /// </summary>
-            /// <seealso cref="JsonLog.SkillMap"/>
-            /// <seealso cref="JsonLog.BuffMap"/>
-            public long Id { get; set; }
-            /// <summary>
-            /// True if the damage was indirect
-            /// </summary>
-            public bool IndirectDamage { get; set; }
+            /// <seealso cref="JsonLog.Descriptions"/>
+            public string Id { get; set; }
             /// <summary>
             /// Source of the damage
             /// </summary>
@@ -42,8 +37,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public JsonDeathRecapDamageItem(DeathRecapDamageItem item)
             {
-                Id = item.ID;
-                IndirectDamage = item.IndirectDamage;
+                Id = (item.IndirectDamage ? "b" : "s") + item.ID;
                 Src = item.Src;
                 Damage = item.Damage;
                 Time = item.Time;

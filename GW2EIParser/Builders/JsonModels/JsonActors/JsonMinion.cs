@@ -8,7 +8,7 @@ namespace GW2EIParser.Builders.JsonModels
     public class JsonMinion : JsonNPC
     {
 
-        public JsonMinion(ParsedLog log, NPC minion, Dictionary<string, SkillDesc> skillMap, Dictionary<string, BuffDesc> buffMap, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, minion, skillMap, buffMap, targets, allies)
+        public JsonMinion(ParsedLog log, NPC minion, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, minion, description, targets, allies)
         {
             Condition = 0;
             Concentration = 0;

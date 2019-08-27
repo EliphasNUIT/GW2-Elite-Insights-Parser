@@ -66,7 +66,7 @@ namespace GW2EIParser.EIData
         public ulong MaxBuild { get; } = ulong.MaxValue;
         public ulong MinBuild { get; } = ulong.MinValue;
         public int Capacity { get; }
-        public string Link { get; }
+        public string Icon { get; }
         private readonly Logic _logic;
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace GW2EIParser.EIData
             Type = type;
             Capacity = capacity;
             Nature = nature;
-            Link = link;
+            Icon = link;
             _logic = logic;
         }
 
@@ -100,7 +100,7 @@ namespace GW2EIParser.EIData
             Type = type;
             Capacity = capacity;
             Nature = nature;
-            Link = link;
+            Icon = link;
             _logic = logic;
             MaxBuild = maxBuild;
             MinBuild = minBuild;
@@ -114,7 +114,7 @@ namespace GW2EIParser.EIData
             Type = BuffType.Unknown;
             Capacity = 0;
             Nature = BuffNature.Unknow;
-            Link = link;
+            Icon = link;
             _logic = Logic.Unknown;
         }
 
@@ -783,7 +783,7 @@ namespace GW2EIParser.EIData
         // For damage modifiers
         public static Buff GetBoonByName(string name, ulong build)
         {
-            if (_allBoonsByName.TryGetValue(name, out var list))
+            if (_allBoonsByName.TryGetValue(name, out List<Buff> list))
             {
                 var subList = list.Where(x => x.MaxBuild >= build).ToList();
                 if (subList.Count != 1)
