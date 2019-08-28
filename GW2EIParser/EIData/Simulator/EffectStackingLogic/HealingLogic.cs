@@ -9,13 +9,6 @@ namespace GW2EIParser.EIData
 
         private struct CompareHealing
         {
-            private readonly ParsedLog _log;
-
-            public CompareHealing(ParsedLog log)
-            {
-                _log = log;
-            }
-
             private static uint GetHealing(BoonStackItem stack)
             {
                 return stack.SeedSrc.Healing;
@@ -29,7 +22,7 @@ namespace GW2EIParser.EIData
 
         public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
-            var comparator = new CompareHealing(log);
+            var comparator = new CompareHealing();
             stacks.Sort(comparator.Compare);
         }
     }

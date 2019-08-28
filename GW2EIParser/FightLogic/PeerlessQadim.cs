@@ -297,7 +297,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, agentData, (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim, 48e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim, 48e6);
         }
     }
 }

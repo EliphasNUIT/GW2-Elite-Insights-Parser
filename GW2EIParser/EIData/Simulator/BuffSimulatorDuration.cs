@@ -42,7 +42,7 @@ namespace GW2EIParser.EIData
                 }
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = BoonStack[0].BoonDuration - timePassed;
-                long diff = 0;
+                long diff;
                 long leftOver = 0;
                 if (timeDiff < 0)
                 {

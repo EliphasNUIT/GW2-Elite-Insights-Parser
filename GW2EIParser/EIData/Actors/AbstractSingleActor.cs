@@ -498,7 +498,7 @@ namespace GW2EIParser.EIData
             {
                 if (_buffsPerId == null)
                 {
-                    _buffsPerId = log.CombatData.GetBuffDataBySrc(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+                    _buffsPerId = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
                 }
                 _support = GetFinalSupport(this, log, _buffsPerId);
             }
@@ -514,9 +514,9 @@ namespace GW2EIParser.EIData
             {
                 if (_buffsPerId == null)
                 {
-                    _buffsPerId = log.CombatData.GetBuffDataBySrc(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+                    _buffsPerId = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
                 }
-                _supportTarget[target] = GetFinalSupport(this, log, target, _buffsPerId);
+                _supportTarget[target] = GetFinalSupport(log, target, _buffsPerId);
             }
             return _supportTarget[target];
         }

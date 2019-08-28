@@ -255,7 +255,7 @@ namespace GW2EIParser.Logic
         {
         }
 
-        protected int HPBasedCM(CombatData combatData, AgentData agentData, ushort id, double hpValue)
+        protected int HPBasedCM(CombatData combatData, ushort id, double hpValue)
         {
             NPC target = NPCs.Find(x => x.ID == id);
             if (target == null)

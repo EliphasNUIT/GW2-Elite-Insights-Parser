@@ -136,7 +136,9 @@ namespace GW2EIParser
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm(logFiles));
+                var form = new MainForm(logFiles);
+                Application.Run(form);
+                form.Dispose();
             }
             else
             {

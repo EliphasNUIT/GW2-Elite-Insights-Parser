@@ -128,13 +128,9 @@ namespace GW2EIParser.Controllers
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);
-                DREITask = Task.Factory.StartNew(() => UploadDPSReportsEI(fInfo));
+                DREITask = Task.Run(() => UploadDPSReportsEI(fInfo));
                 if (DREITask != null)
                 {
-                    while (!DREITask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[0] = DREITask.Result;
                 }
                 else
@@ -146,13 +142,9 @@ namespace GW2EIParser.Controllers
             if (Properties.Settings.Default.UploadToDPSReportsRH)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using RH...", 40);
-                DRRHTask = Task.Factory.StartNew(() => UploadDPSReportsRH(fInfo));
+                DRRHTask = Task.Run(() => UploadDPSReportsRH(fInfo));
                 if (DRRHTask != null)
                 {
-                    while (!DRRHTask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[1] = DRRHTask.Result;
                 }
                 else
@@ -164,13 +156,9 @@ namespace GW2EIParser.Controllers
             if (Properties.Settings.Default.UploadToRaidar)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to Raidar...", 40);
-                RaidarTask = Task.Factory.StartNew(() => UploadRaidar(fInfo));
+                RaidarTask = Task.Run(() => UploadRaidar(fInfo));
                 if (RaidarTask != null)
                 {
-                    while (!RaidarTask.IsCompleted)
-                    {
-                        System.Threading.Thread.Sleep(100);
-                    }
                     uploadresult[2] = RaidarTask.Result;
                 }
                 else

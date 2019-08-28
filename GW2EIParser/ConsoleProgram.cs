@@ -22,7 +22,7 @@ namespace GW2EIParser
 
                 foreach (string file in logFiles)
                 {
-                    tasks.Add(Task.Factory.StartNew(ParseLog, file));
+                    tasks.Add(Task.Run(() => ParseLog(file)));
                 }
 
                 Task.WaitAll(tasks.ToArray());

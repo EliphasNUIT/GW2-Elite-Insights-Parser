@@ -27,31 +27,8 @@ namespace GW2EIParser.Controllers
             return;
         }
 
-        /*private GW2APISkill GetGW2APISKillAsync(string path)
-        {
-            if (APIClient == null) { GetAPIClient(); }
-            GW2APISkill skill = null;
-            HttpResponseMessage response = APIClient.GetAsync(path).Result;
-            if (response.IsSuccessStatusCode)
-            {
-
-                skill = JsonConvert.DeserializeObject<GW2APISkill>(response.Content.ReadAsStringAsync().Result);
-            }
-            else
-            {//try again after a wait
-                System.Threading.Thread.Sleep(1000);
-                response = APIClient.GetAsync(path).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    skill = JsonConvert.DeserializeObject<GW2APISkill>(response.Content.ReadAsStringAsync().Result);
-
-                }
-            }
-            return skill;
-        }*/
         private static List<GW2APISkill> GetListGW2APISkills()
         {
-            if (APIClient == null) { GetAPIClient(); }
             var skill_L = new List<GW2APISkill>();
             bool maxPageSizeReached = false;
             int page = 0;
@@ -170,17 +147,11 @@ namespace GW2EIParser.Controllers
         public static GW2APISkill GetSkill(long id)
         {
             GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
-            //if (skill == null) {
-            //    string path = "/v2/skills/" + id;
-            //    skill = GetGW2APISKill(path);
-            //}
             return skill;
         }
         //-----------------------------------------------------------------------------
         private static GW2APISpec GetGW2APISpec(string path)
         {
-            if (APIClient == null) { GetAPIClient(); }
-            System.Threading.Thread.Sleep(100);
             GW2APISpec spec = null;
             //path = "/v2/specializations/" + isElite
             HttpResponseMessage response = APIClient.GetAsync(new Uri(path)).Result;

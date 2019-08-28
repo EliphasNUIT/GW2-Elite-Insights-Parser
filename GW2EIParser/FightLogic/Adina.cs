@@ -185,7 +185,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, agentData, TriggerID, 23e6);
+            return HPBasedCM(combatData, TriggerID, 23e6);
         }
     }
 }

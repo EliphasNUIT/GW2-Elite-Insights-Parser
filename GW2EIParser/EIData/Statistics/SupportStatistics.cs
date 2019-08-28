@@ -29,11 +29,11 @@ namespace GW2EIParser.Models
         }
 
 
-        private static long[] GetCleanses(AbstractSingleActor actor, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
             if (target == null)
             {
-                return GetCleanses(actor, log, phase, buffsPerId);
+                return GetCleanses(log, phase, buffsPerId);
             }
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
@@ -52,7 +52,7 @@ namespace GW2EIParser.Models
             }
             return cleanse;
         }
-        private static long[] GetCleanses(AbstractSingleActor actor, ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetCleanses(ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
@@ -72,7 +72,7 @@ namespace GW2EIParser.Models
             return cleanse;
         }
 
-        private static long[] GetBoonStrips(AbstractSingleActor actor, ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
@@ -91,11 +91,11 @@ namespace GW2EIParser.Models
             }
             return strips;
         }
-        private static long[] GetBoonStrips(AbstractSingleActor actor, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
             if (target == null)
             {
-                return GetBoonStrips(actor, log, phase, buffsPerId);
+                return GetBoonStrips(log, phase, buffsPerId);
             }
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
@@ -130,11 +130,11 @@ namespace GW2EIParser.Models
             return reses;
         }
 
-        private static void FillFinalSupport(AbstractSingleActor actor, FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static void FillFinalSupport(FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
 
-            long[] cleanseArray = GetCleanses(actor, log, phase, target, buffsPerId);
-            long[] boonStrips = GetBoonStrips(actor, log, phase, target, buffsPerId);
+            long[] cleanseArray = GetCleanses(log, phase, target, buffsPerId);
+            long[] boonStrips = GetBoonStrips(log, phase, target, buffsPerId);
             finalSupport.CondiCleanse = cleanseArray[0];
             finalSupport.CondiCleanseTime = cleanseArray[1] / 1000.0;
             finalSupport.BoonStrips = boonStrips[0];
@@ -154,11 +154,11 @@ namespace GW2EIParser.Models
                 long[] resArray = GetReses(actor, log, phase.Start, phase.End);
                 final.Resurrects = resArray[0];
                 final.ResurrectTime = resArray[1] / 1000.0;
-                FillFinalSupport(actor, final, log, phase, null, buffsPerId);
+                FillFinalSupport(final, log, phase, null, buffsPerId);
             }
             return res;
         }
-        public static List<FinalSupport> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        public static List<FinalSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
             var res = new List<FinalSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -167,7 +167,7 @@ namespace GW2EIParser.Models
                 var final = new FinalSupport();
                 res.Add(final);
                 PhaseData phase = phases[phaseIndex];
-                FillFinalSupport(actor, final, log, phase, target, buffsPerId);
+                FillFinalSupport(final, log, phase, target, buffsPerId);
             }
             return res;
         }

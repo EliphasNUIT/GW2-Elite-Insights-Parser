@@ -106,7 +106,6 @@ namespace GW2EIParser.Logic
         public override void ComputeNPCCombatReplayActors(NPC target, ParsedLog log, CombatReplay replay)
         {
             // TODO: facing information (shock wave)
-            List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
                 case (ushort)ParseEnum.EvtcNPCIDs.Samarog:
@@ -213,7 +212,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, agentData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 30e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 30e6);
         }
     }
 }
