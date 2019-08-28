@@ -36,7 +36,7 @@ namespace GW2EIParser.Controllers
             while (!maxPageSizeReached)
             {
                 string path = "/v2/skills?page=" + page + "&page_size=" + pagesize;
-                HttpResponseMessage response = APIClient.GetAsync(new Uri(path)).Result;
+                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string data = response.Content.ReadAsStringAsync().Result;
@@ -79,7 +79,7 @@ namespace GW2EIParser.Controllers
             GetAPIClient();
 
             _listOfSkills = new SkillList();
-            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills")).Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/skills", UriKind.Relative)).Result;
             var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
             {
@@ -90,7 +90,7 @@ namespace GW2EIParser.Controllers
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                    Formatting = Newtonsoft.Json.Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     ContractResolver = new DefaultContractResolver()
                     {
@@ -154,7 +154,7 @@ namespace GW2EIParser.Controllers
         {
             GW2APISpec spec = null;
             //path = "/v2/specializations/" + isElite
-            HttpResponseMessage response = APIClient.GetAsync(new Uri(path)).Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
             if (response.IsSuccessStatusCode)
             {
                 spec = JsonConvert.DeserializeObject<GW2APISpec>(response.Content.ReadAsStringAsync().Result);
@@ -184,7 +184,7 @@ namespace GW2EIParser.Controllers
             GetAPIClient();
 
             _listofSpecs = new SpecList();
-            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations")).Result;
+            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/specializations", UriKind.Relative)).Result;
             int[] idArray;
             var failedList = new List<int>();
             if (response.IsSuccessStatusCode)
@@ -215,7 +215,7 @@ namespace GW2EIParser.Controllers
                 var serializer = new JsonSerializer
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                    Formatting = Newtonsoft.Json.Formatting.None,
                     ContractResolver = new DefaultContractResolver()
                     {
                         NamingStrategy = new CamelCaseNamingStrategy()
