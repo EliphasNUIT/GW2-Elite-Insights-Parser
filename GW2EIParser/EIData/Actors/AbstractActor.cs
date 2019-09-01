@@ -5,8 +5,24 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class AbstractActor : DummyActor
+    public abstract class AbstractActor
     {
+        public AgentItem AgentItem { get; }
+        public string Character { get; protected set; }
+
+        public uint Toughness => AgentItem.Toughness;
+        public uint Condition => AgentItem.Condition;
+        public uint Concentration => AgentItem.Concentration;
+        public uint Healing => AgentItem.Healing;
+        public ushort InstID => AgentItem.InstID;
+        public string Prof => AgentItem.Prof;
+        public string UniqueID => AgentItem.UniqueID;
+        public ulong Agent => AgentItem.Agent;
+        public long LastAwareLogTime => AgentItem.LastAwareLogTime;
+        public long FirstAwareLogTime => AgentItem.FirstAwareLogTime;
+        public ushort ID => AgentItem.ID;
+        public uint HitboxHeight => AgentItem.HitboxHeight;
+        public uint HitboxWidth => AgentItem.HitboxWidth;
         public bool IsFakeActor { get; protected set; }
         // Damage
         protected List<AbstractDamageEvent> DamageLogs { get; set; }
@@ -16,8 +32,11 @@ namespace GW2EIParser.EIData
         // Cast
         protected List<AbstractCastEvent> CastLogs { get; set; }
 
-        protected AbstractActor(AgentItem agent) : base(agent)
+        protected AbstractActor(AgentItem agent)
         {
+            string[] name = agent.Name.Split('\0');
+            Character = name[0];
+            AgentItem = agent;
         }
 
         // Damage logs

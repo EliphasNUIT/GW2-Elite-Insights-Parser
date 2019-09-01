@@ -41,8 +41,11 @@ namespace GW2EIParser.EIData
         // Friendly
         public bool Friendly { get; protected set; }
 
+        public string Icon { get; }
+
         protected AbstractSingleActor(AgentItem agent) : base(agent)
         {
+            Icon = GeneralHelper.GetIcon(this);
         }
         // Status
 

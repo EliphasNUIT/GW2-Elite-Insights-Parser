@@ -14,7 +14,7 @@ namespace GW2EIParser.Builders.JsonModels
     public abstract class JsonMasterActor : JsonSingleActor
     {
         /// <summary>
-        /// List of minions
+        /// List of minions, regrouped by type
         /// </summary>
         /// <seealso cref="JsonMinions"/>
         public List<JsonMinions> Minions { get; set; }

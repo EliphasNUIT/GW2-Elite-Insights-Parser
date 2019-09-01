@@ -15,8 +15,6 @@ namespace GW2EIParser.EIData
         private long _start = -1;
         private long _end = -1;
         public (long start, long end) TimeOffsets => (_start, _end);
-        // icon
-        public string Icon { get; set; }
         // actors
         public bool NoActors { get; set; } = true;
         public List<GenericDecoration> Actors { get; } = new List<GenericDecoration>();

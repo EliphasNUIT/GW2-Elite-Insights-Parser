@@ -30,7 +30,7 @@ namespace GW2EIParser.EIData
         {
             foreach (AbstractCastEvent c in log.CombatData.GetCastDataById(SkillId))
             {
-                DummyActor amp = null;
+                AbstractSingleActor amp = null;
                 if (Keep(c, log))
                 {
                     amp = log.FindActor(c.Caster, false);

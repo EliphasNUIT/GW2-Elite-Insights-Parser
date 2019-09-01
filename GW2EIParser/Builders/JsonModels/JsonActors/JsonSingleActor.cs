@@ -40,13 +40,9 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// Unique ID representing the actor
         /// </summary>
-        public int UniqueID { get; set; }
-        /// <summary>
-        /// Unique ID representing the actor's master
-        /// </summary>
-        public int UniqueMasterID { get; set; }
+        public string UniqueID { get; set; }
 
-        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(actor)
+        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
         {
             // # of Boons and Conditions States
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))
@@ -65,8 +61,6 @@ namespace GW2EIParser.Builders.JsonModels
             Statistics = new JsonStatistics(log, actor, targets, allies);
             //
             UniqueID = actor.AgentItem.UniqueID;
-            //
-            UniqueMasterID = actor.AgentItem.MasterAgent != null ? actor.AgentItem.MasterAgent.UniqueID : 0;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace GW2EIParser.EIData
         {
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(SkillId))
             {
-                DummyActor amp = null;
+                AbstractSingleActor amp = null;
                 if (c is BuffApplyEvent ba && Keep(ba, log))
                 {
                     amp = log.FindActor(ba.To, false);

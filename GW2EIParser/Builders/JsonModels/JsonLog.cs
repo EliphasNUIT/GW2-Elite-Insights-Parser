@@ -99,6 +99,108 @@ namespace GW2EIParser.Builders.JsonModels
             public bool NonMultiplier { get; set; }
         }
 
+        public class IconDesc : Desc
+        {
+
+        }
+
+        public abstract class AgentDesc : Desc
+        {
+            public string MasterID { get; set; }
+            /// <summary>
+            /// Condition damage score
+            /// </summary>
+            public uint Condition { get; set; }
+            /// <summary>
+            /// Concentration score
+            /// </summary>
+            public uint Concentration { get; set; }
+            /// <summary>
+            /// Healing Power score
+            /// </summary>
+            public uint Healing { get; set; }
+            /// <summary>
+            /// Toughness score
+            /// </summary>
+            public uint Toughness { get; set; }
+            /// <summary>
+            /// Height of the hitbox
+            /// </summary>
+            public uint HitboxHeight { get; set; }
+            /// <summary>
+            /// Width of the hitbox
+            /// </summary>
+            public uint HitboxWidth { get; set; }
+            /// <summary>
+            /// Time at which actor became active
+            /// </summary>
+            [DefaultValue(null)]
+            public int FirstAware { get; set; }
+            /// <summary>
+            /// Time at which actor became inactive 
+            /// </summary>
+            [DefaultValue(null)]
+            public int LastAware { get; set; }
+            public AgentDesc(AbstractSingleActor actor, ParsedLog log)
+            {
+                Name = actor.Character;
+                Icon = actor.Icon;
+                if (actor.AgentItem.MasterAgent != null)
+                {
+                    MasterID = actor.AgentItem.MasterAgent.UniqueID;
+                }
+                Condition = actor.Condition;
+                Concentration = actor.Concentration;
+                Healing = actor.Healing;
+                Toughness = actor.Toughness;
+                HitboxHeight = actor.HitboxHeight;
+                HitboxWidth = actor.HitboxWidth;
+                FirstAware = (int)(log.FightData.ToFightSpace(actor.FirstAwareLogTime));
+                LastAware = (int)(log.FightData.ToFightSpace(actor.LastAwareLogTime));
+            }
+        }
+
+        public class PlayerDesc : AgentDesc
+        {
+            /// <summary>
+            /// Account name of the player
+            /// </summary>
+            public string Account { get; set; }
+            /// <summary>
+            /// Group of the player
+            /// </summary>
+            [DefaultValue(null)]
+            public int Group { get; set; }
+            /// <summary>
+            /// Profession of the player
+            /// </summary>
+            public string Profession { get; set; }
+            public PlayerDesc(Player player, ParsedLog log) : base(player, log)
+            {
+
+                Account = player.Account;
+                Group = player.Group;
+                Profession = player.Prof;
+            }
+        }
+
+        public class NPCDesc : AgentDesc
+        {
+            /// <summary>
+            /// Game ID of the npc
+            /// </summary>
+            public ushort Id { get; set; }
+            /// <summary>
+            /// Total health of the npc
+            /// </summary>
+            public int TotalHealth { get; set; }
+            public NPCDesc(NPC npc, ParsedLog log) : base(npc, log)
+            {
+                Id = npc.ID;
+                TotalHealth = npc.GetHealth(log.CombatData);
+            }
+        }
+
         /// <summary>
         /// The used EI version
         /// </summary>
@@ -199,6 +301,11 @@ namespace GW2EIParser.Builders.JsonModels
             Phases = log.FightData.GetPhases(log).Select(x => new JsonPhase(log, x)).ToList();
             // Mechanics
             Mechanics = BuildMechanics(log);
+            //
+            Descriptions["toughness"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/1/12/Toughness.png" };
+            Descriptions["condition"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" };
+            Descriptions["concentration"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" };
+            Descriptions["healingPower"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/8/81/Healing_Power.png" };
             // Players
             var friendlies = new List<AbstractSingleActor>();
             var enemies = new List<AbstractSingleActor>();

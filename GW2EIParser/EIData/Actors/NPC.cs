@@ -132,9 +132,7 @@ namespace GW2EIParser.EIData
             }
             var aux = new JsonTargetCombatReplay
             {
-                Img = CombatReplay.Icon,
                 ID = AgentItem.UniqueID,
-                MasterID = AgentItem.MasterAgent != null ? AgentItem.MasterAgent.UniqueID : 0,
                 Start = CombatReplay.TimeOffsets.start,
                 End = CombatReplay.TimeOffsets.end,
                 Positions = new List<double>()
@@ -155,10 +153,7 @@ namespace GW2EIParser.EIData
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay
-            {
-                Icon = GeneralHelper.GetNPCIcon(ID)
-            };
+            CombatReplay = new CombatReplay();
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, log.FightData.GetMainTargets(log).Contains(this));
             TrimCombatReplay(log);

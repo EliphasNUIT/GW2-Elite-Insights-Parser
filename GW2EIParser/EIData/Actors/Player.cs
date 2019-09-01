@@ -686,7 +686,6 @@ namespace GW2EIParser.EIData
             var aux = new JsonPlayerCombatReplay
             {
                 Group = Group,
-                Img = CombatReplay.Icon,
                 ID = AgentItem.UniqueID,
                 Positions = new List<double>(),
                 Dead = new List<long>(),
@@ -725,10 +724,7 @@ namespace GW2EIParser.EIData
                 // no combat replay support on fight
                 return;
             }
-            CombatReplay = new CombatReplay
-            {
-                Icon = GeneralHelper.GetProfIcon(Prof)
-            };
+            CombatReplay = new CombatReplay();
             SetMovements(log);
             CombatReplay.PollingRate(log.FightData.FightDuration, true);
         }

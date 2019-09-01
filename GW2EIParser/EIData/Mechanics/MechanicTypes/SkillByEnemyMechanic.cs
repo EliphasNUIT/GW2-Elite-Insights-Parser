@@ -28,7 +28,7 @@ namespace GW2EIParser.EIData
         {
             foreach (AbstractDamageEvent c in log.CombatData.GetDamageDataById(SkillId))
             {
-                DummyActor amp = null;
+                AbstractSingleActor amp = null;
                 if (Keep(c, log))
                 {
                     amp = log.FindActor(c.From, false);

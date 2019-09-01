@@ -26,15 +26,15 @@ namespace GW2EIParser.Builders.JsonModels
             [DefaultValue(null)]
             public long Time { get; set; }
             /// <summary>
-            /// The actor who was hit by the mechanic
+            /// The unique id of the actor who was hit by the mechanic
             /// </summary>
-            public string Actor { get; set; }
+            public string UniqueID { get; set; }
 
             public JsonMechanic(MechanicEvent mechEvent)
             {
                 MechEvent = mechEvent;
                 Time = mechEvent.Time;
-                Actor = mechEvent.Actor.Character;
+                UniqueID = mechEvent.Actor.UniqueID;
             }
         }
 
