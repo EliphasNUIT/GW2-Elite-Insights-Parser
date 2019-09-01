@@ -17,6 +17,7 @@ namespace GW2EIParser.EIData
             _src = other.Src;
             _seedSrc = other.SeedSrc;
             _isExtension = other.IsExtension;
+            Sources = new List<AgentItem>() { _src };
         }
 
         public override void SetEnd(long end)
@@ -27,11 +28,6 @@ namespace GW2EIParser.EIData
         public override int GetStack()
         {
             return 1;
-        }
-
-        public override List<AgentItem> GetSources()
-        {
-            return new List<AgentItem>() { _src };
         }
 
         public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)

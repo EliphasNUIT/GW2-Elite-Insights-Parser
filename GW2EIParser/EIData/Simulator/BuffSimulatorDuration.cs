@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
             if (BoonStack.Count > 0 && timePassed > 0)
             {
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
-                var toAdd = new BuffSimulationItemDuration(BoonStack[0]);
+                var toAdd = new BuffSimulationItemQueue(BoonStack);
                 if (GenerationSimulation.Count > 0)
                 {
                     BuffSimulationItem last = GenerationSimulation.Last();

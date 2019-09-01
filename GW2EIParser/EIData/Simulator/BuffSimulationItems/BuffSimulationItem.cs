@@ -9,6 +9,7 @@ namespace GW2EIParser.EIData
         public long Duration { get; protected set; }
         public long Start { get; protected set; }
         public long End => Start + Duration;
+        public List<AgentItem> Sources { get; protected set; }
 
         protected BuffSimulationItem(long start, long duration)
         {
@@ -30,12 +31,10 @@ namespace GW2EIParser.EIData
 
         public BuffsGraphModel.SegmentWithSources ToSegment()
         {
-            return new BuffsGraphModel.SegmentWithSources(Start, End, GetStack(), GetSources().ToArray());
+            return new BuffsGraphModel.SegmentWithSources(Start, End, GetStack(), Sources.ToArray());
         }
 
         public abstract void SetEnd(long end);
-
-        public abstract List<AgentItem> GetSources();
 
         public abstract int GetStack();
     }
