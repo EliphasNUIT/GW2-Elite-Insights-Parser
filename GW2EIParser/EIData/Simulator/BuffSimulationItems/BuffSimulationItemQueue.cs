@@ -18,7 +18,7 @@ namespace GW2EIParser.EIData
             {
                 var stack = new BuffSimulationItemDuration(queue[i]);
                 _queue.Add(stack);
-                Sources.AddRange(stack.Sources);
+                //Sources.AddRange(stack.Sources);
             }
         }
     }
