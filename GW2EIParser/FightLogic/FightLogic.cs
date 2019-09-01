@@ -225,19 +225,17 @@ namespace GW2EIParser.Logic
 
         protected static void NegateDamageAgainstBarrier(List<AgentItem> agentItems, Dictionary<AgentItem, List<AbstractDamageEvent>> damageByDst)
         {
-            var dmgEvts = new List<AbstractDamageEvent>();
             foreach (AgentItem agentItem in agentItems)
             {
                 if (damageByDst.TryGetValue(agentItem, out List<AbstractDamageEvent> list))
                 {
-                    dmgEvts.AddRange(list);
-                }
-            }
-            foreach (AbstractDamageEvent de in dmgEvts)
-            {
-                if (de.ShieldDamage > 0)
-                {
-                    de.NegateDamage();
+                    foreach (AbstractDamageEvent de in list)
+                    {
+                        if (de.ShieldDamage > 0)
+                        {
+                            de.NegateDamage();
+                        }
+                    }
                 }
             }
         }
