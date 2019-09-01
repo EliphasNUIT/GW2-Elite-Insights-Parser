@@ -37,63 +37,29 @@ namespace GW2EIParser.Models
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 double phaseDuration = (phase.DurationInMS) / 1000.0;
-                int damage;
-                double dps = 0.0;
                 var final = new FinalDPS();
-                List<AbstractDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
-                List<AbstractDamageEvent> damageLogsActor = actor.GetJustActorDamageLogs(target, log, phase.Start, phase.End);
                 //DPS
-                damage = damageLogs.Sum(x => x.Damage);
-
-                if (phaseDuration > 0)
+                List<AbstractDamageEvent> damageLogs = actor.GetDamageLogs(target, log, phase.Start, phase.End);
+                foreach(AbstractDamageEvent evt in damageLogs)
                 {
-                    dps = damage / phaseDuration;
+                    final.Damage += evt.Damage;
+                    final.CondiDamage += evt.IsCondi(log) ? evt.Damage : 0;
+                    if (evt.From == actor.AgentItem)
+                    {
+                        final.ActorDamage += evt.Damage;
+                        final.CondiDamage += evt.IsCondi(log) ? evt.Damage : 0;
+                    }
                 }
-                final.Dps = (int)Math.Round(dps);
-                final.Damage = damage;
-                //Condi DPS
-                damage = damageLogs.Sum(x => x.IsCondi(log) ? x.Damage : 0);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.CondiDps = (int)Math.Round(dps);
-                final.CondiDamage = damage;
-                //Power DPS
-                damage = final.Damage - final.CondiDamage;
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.PowerDps = (int)Math.Round(dps);
-                final.PowerDamage = damage;
-                // Actor DPS
-                damage = damageLogsActor.Sum(x => x.Damage);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorDps = (int)Math.Round(dps);
-                final.ActorDamage = damage;
-                //Actor Condi DPS
-                damage = damageLogsActor.Sum(x => x.IsCondi(log) ? x.Damage : 0);
-
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorCondiDps = (int)Math.Round(dps);
-                final.ActorCondiDamage = damage;
-                //Actor Power DPS
-                damage = final.ActorDamage - final.ActorCondiDamage;
-                if (phaseDuration > 0)
-                {
-                    dps = damage / phaseDuration;
-                }
-                final.ActorPowerDps = (int)Math.Round(dps);
-                final.ActorPowerDamage = damage;
+                //
+                final.Dps = (int)Math.Round(final.Damage / phaseDuration);
+                final.CondiDps = (int)Math.Round(final.CondiDamage / phaseDuration);
+                final.PowerDamage = final.Damage - final.CondiDamage;
+                final.PowerDps = (int)Math.Round(final.PowerDamage / phaseDuration);
+                //
+                final.ActorDps = (int)Math.Round(final.ActorDamage / phaseDuration);
+                final.ActorCondiDps = (int)Math.Round(final.ActorCondiDamage / phaseDuration);
+                final.ActorPowerDamage = final.ActorDamage - final.ActorCondiDamage;
+                final.ActorPowerDps = (int)Math.Round(final.ActorPowerDamage / phaseDuration);
                 res.Add(final);
             }
             return res;

@@ -2,6 +2,8 @@
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
+using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.Models.DefenseStatistics;
 using static GW2EIParser.Models.DPSStatistics;
 using static GW2EIParser.Models.GameplayStatistics;
@@ -353,6 +355,103 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
 
+
+        // Buffs
+        public class JsonBuffs
+        {
+            public double Uptime { get; set; }
+            public Dictionary<string, double> Generation { get; } = new Dictionary<string, double>();
+            public Dictionary<string, double> Overstack { get; } = new Dictionary<string, double>();
+            public Dictionary<string, double> Wasted { get; } = new Dictionary<string, double>();
+            public Dictionary<string, double> ByExtension { get; } = new Dictionary<string, double>();
+            public Dictionary<string, double> Extended { get; } = new Dictionary<string, double>();
+            public Dictionary<string, double> UnknownExtended { get; } = new Dictionary<string, double>();
+            public double Presence { get; set; }
+
+            public JsonBuffs(Buff buff, Dictionary<AgentItem, BuffDistributionItem> dict, Dictionary<long, long> presence, Dictionary<string, Desc> description)
+            {
+                double multiplier = 100.0;
+                if (buff.Type == Buff.BuffType.Intensity)
+                {
+                    multiplier = 1.0;
+                    if (presence.TryGetValue(buff.ID, out long pres) && pres > 0)
+                    {
+                        Presence = 100.0 * pres;
+                    }
+                }
+                Uptime = multiplier * dict.Sum(x => x.Value.Generation);
+                foreach (AgentItem ag in dict.Keys)
+                {
+                    string uniqueID = ag.UniqueID;
+                    if (!description.ContainsKey(uniqueID))
+                    {
+
+                    }
+                    BuffDistributionItem item = dict[ag];
+                    if (item.Generation > 0)
+                    {
+                        Generation[uniqueID] = multiplier * item.Generation;
+                    }
+                    if (item.Overstack > 0)
+                    {
+                        Overstack[uniqueID] = multiplier * item.Overstack;
+                    }
+                    if (item.Wasted > 0)
+                    {
+                        Wasted[uniqueID] = multiplier * item.Wasted;
+                    }
+                    if (item.ByExtension > 0)
+                    {
+                        ByExtension[uniqueID] = multiplier * item.ByExtension;
+                    }
+                    if (item.Extended > 0)
+                    {
+                        Extended[uniqueID] = multiplier * item.Extended;
+                    }
+                    if (item.UnknownExtended > 0)
+                    {
+                        UnknownExtended[uniqueID] = multiplier * item.UnknownExtended;
+                    }
+                }
+            }
+        }
+
+        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        {
+            var buffs = new List<Dictionary<string, JsonBuffs>>();
+            var buffStates = new Dictionary<string, List<int>>();
+            Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+            for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
+            {
+                BuffDistributionDictionary buffDistribution = actor.GetBuffDistribution(log, i);
+                Dictionary<long, long> buffPresence = actor.GetBuffPresence(log, i);
+                var buffDict = new Dictionary<string, JsonBuffs>();
+
+                foreach (long buffID in buffDistribution.Keys)
+                {
+                    Buff buff = log.Buffs.BuffsByIds[buffID];
+                    Dictionary<AgentItem, BuffDistributionItem> dict = buffDistribution[buffID];
+
+                    string id = "b" + buffID;
+                    if (!description.ContainsKey(id))
+                    {
+                        description[id] = new BuffDesc(buff);
+                    }
+                    if (!buffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
+                    {
+                        buffStates[id] = bgm.ToList();
+                    }
+                    var jsonBuff = new JsonBuffs(buff, dict, buffPresence, description);
+                    buffDict.Add(id, jsonBuff);
+                }
+
+                buffs.Add(buffDict);
+            }
+
+            return (buffs, buffStates);
+        }
+
+
         /// <summary>
         /// Stats against all  \n
         /// Length == # of phases
@@ -409,12 +508,16 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDPS"/>
         public List<List<JsonDPS>> DpsTargets { get; set; } = new List<List<JsonDPS>>();
 
-        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
+        public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
+        public Dictionary<string, List<int>> BuffStates { get; set; }
+
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies, Dictionary<string, Desc> description)
         {
             DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
             GameplayAll = actor.GetStats(log).Select(x => new JsonGameplayAll(x)).ToList();
             DefenseAll = actor.GetDefenses(log).Select(x => new JsonDefenseAll(x)).ToList();
             SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
+            (Buffs,BuffStates) = GetJsonBuffs(actor, log, description);
             foreach (AbstractSingleActor target in targets)
             {
                 DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());
@@ -436,5 +539,6 @@ namespace GW2EIParser.Builders.JsonModels
                 SupportTarget = null;
             }
         }
+
     }
 }

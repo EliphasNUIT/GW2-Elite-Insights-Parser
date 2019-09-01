@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
             AgentItem agent = Src;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Waste += GetValue(start, end);
+                toModify.Wasted += GetValue(start, end);
                 distrib[agent] = toModify;
             }
             else

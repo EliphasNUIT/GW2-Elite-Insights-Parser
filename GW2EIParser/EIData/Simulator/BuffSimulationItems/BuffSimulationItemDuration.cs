@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
             AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
-                toModify.Value += cDur;
+                toModify.Generation += cDur;
                 distrib[agent] = toModify;
             }
             else
@@ -51,7 +51,7 @@ namespace GW2EIParser.EIData
             {
                 if (distrib.TryGetValue(agent, out toModify))
                 {
-                    toModify.Extension += cDur;
+                    toModify.ByExtension += cDur;
                     distrib[agent] = toModify;
                 }
                 else
@@ -79,7 +79,7 @@ namespace GW2EIParser.EIData
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
                 {
-                    toModify.UnknownExtension += cDur;
+                    toModify.UnknownExtended += cDur;
                     distrib[seedAgent] = toModify;
                 }
                 else

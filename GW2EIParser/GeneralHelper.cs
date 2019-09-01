@@ -14,7 +14,7 @@ namespace GW2EIParser
     {
         public static readonly int PollingRate = 150;
 
-        public static readonly int BoonDigit = 2;
+        public static readonly int BoonDigit = 3;
         public static readonly int TimeDigit = 3;
 
         public static readonly AgentItem UnknownAgent = new AgentItem();

@@ -29,11 +29,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonConsumable"/>
         public List<JsonConsumable> Consumables { get; set; }
-        /// <summary>
-        /// List of time during which the player was active (not dead and not dc) \n
-        /// Length == number of phases
-        /// </summary>
-        public List<long> ActiveTimes { get; set; }
 
 
         public JsonPlayer(ParsedLog log, Player player, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, player, description, targets, allies)
@@ -47,7 +42,6 @@ namespace GW2EIParser.Builders.JsonModels
                     description.Add(wep, new IconDesc() { Icon = GeneralHelper.GetWeaponIcon(wep) });
                 }
             }
-            ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(player, log)).ToList();
             // Death Recap
             List<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
             DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x)).ToList();

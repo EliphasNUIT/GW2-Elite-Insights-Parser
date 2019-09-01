@@ -171,13 +171,18 @@ namespace GW2EIParser.EIData
             BoonChart = newChart;
         }
 
-        public List<int[]> ToList()
+        public List<int> ToList()
         {
             if (BoonChart.Count == 0)
             {
                 return null;
             }
-            var res = BoonChart.Select(x => new int[2] { (int)x.Start, x.Value }).ToList();
+            var res = new List<int>();
+            foreach(Segment item in BoonChart)
+            {
+                res.Add((int)item.Start);
+                res.Add(item.Value);
+            }
             return res.Count > 0 ? res : null;
         }
 

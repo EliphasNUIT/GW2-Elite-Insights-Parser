@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
@@ -11,17 +12,17 @@ namespace GW2EIParser.Builders.JsonModels
     public abstract class JsonSingleActor : JsonActor
     {
         /// <summary>
-        /// Array of int[2] that represents the number of conditions status \n
-        /// Value[i][0] will be the time, value[i][1] will be the number of conditions present from value[i][0] to value[i+1][0] \n
+        /// Array of int that represents the number of conditions status \n
+        /// Value[2*i] will be the time, value[2*i+1] will be the number of conditions present from value[2*i] to value[2*(i+1)] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// </summary>
-        public List<int[]> ConditionsStates { get; }
+        public List<int> ConditionsStates { get; }
         /// <summary>
-        /// Array of int[2] that represents the number of boons status \n
-        /// Value[i][0] will be the time, value[i][1] will be the number of boons present from value[i][0] to value[i+1][0] \n
+        /// Array of int that represents the number of boons status \n
+        /// Value[2*i] will be the time, value[2*i+1] will be the number of boons present from value[2*i] to value[2*(i+1)] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public List<int[]> BoonsStates { get; }
+        public List<int> BoonsStates { get; }
         /// <summary>
         /// Rotation data
         /// </summary>
@@ -46,6 +47,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string DescriptionID { get; set; }
 
+        /// <summary>
+        /// List of time during which the actor was active (not dead and not dc) \n
+        /// Length == number of phases
+        /// </summary>
+        public List<long> ActiveTimes { get; set; }
+
         protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
         {
             // # of Boons and Conditions States
@@ -62,9 +69,11 @@ namespace GW2EIParser.Builders.JsonModels
             // Damage dist
             DamageDistributionData = new JsonDamageDistData(log, actor, description, targets);
             // Stats
-            Statistics = new JsonStatistics(log, actor, targets, allies);
+            Statistics = new JsonStatistics(log, actor, targets, allies, description);
             //
             UniqueID = actor.AgentItem.UniqueID;
+            //
+            ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(actor, log)).ToList();
         }
     }
 }
