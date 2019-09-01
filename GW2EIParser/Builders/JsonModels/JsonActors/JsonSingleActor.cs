@@ -41,6 +41,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// Unique ID representing the actor
         /// </summary>
         public string UniqueID { get; set; }
+        /// <summary>
+        /// Unique ID representing the description of the actor
+        /// </summary>
+        public string DescriptionID { get; set; }
 
         protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
         {

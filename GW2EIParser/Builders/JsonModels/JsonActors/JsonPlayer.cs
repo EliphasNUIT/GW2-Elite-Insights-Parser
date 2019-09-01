@@ -54,6 +54,8 @@ namespace GW2EIParser.Builders.JsonModels
             // Consumables
             Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), description);
             //
+            DescriptionID = UniqueID;
+            //
             if (!description.ContainsKey(UniqueID))
             {
                 description.Add(UniqueID, new PlayerDesc(player, log));

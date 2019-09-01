@@ -22,8 +22,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<double[]> HealthPercents { get; set; }
 
-        public string DescriptionID { get; set; }
-
         public JsonNPC(ParsedLog log, NPC npc, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, npc, description, targets, allies)
         {
             HpLeft = 0.0;
