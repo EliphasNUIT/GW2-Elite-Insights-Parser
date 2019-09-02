@@ -8,12 +8,13 @@ namespace GW2EIParser.Parser.ParsedData
 {
     public class AgentItem
     {
-
+        private static ulong AgentCount = 0;
         public enum AgentType { NPC, Gadget, Player, EnemyPlayer }
 
         // Fields
         public ulong Agent { get; set; }
         public ushort ID { get; }
+        private readonly ulong _uniqueID;
         public AgentItem MasterAgent { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; private set; }
@@ -28,11 +29,12 @@ namespace GW2EIParser.Parser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
-        public string UniqueID => "ag" + (InstID + "_" + FirstAwareLogTime + "_" + LastAwareLogTime).GetHashCode();
+        public string UniqueID => "ag" + _uniqueID;
 
         // Constructors
         public AgentItem(ulong agent, string name, string prof, ushort id, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
+            _uniqueID = AgentCount++;
             Agent = agent;
             Name = name;
             Prof = prof;
@@ -64,6 +66,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem(AgentItem other)
         {
+            _uniqueID = AgentCount++;
             Agent = other.Agent;
             Name = other.Name;
             Prof = other.Prof;
@@ -81,6 +84,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public AgentItem()
         {
+            _uniqueID = AgentCount++;
         }
 
         public void OverrideType(AgentType type)
