@@ -12,12 +12,10 @@ namespace GW2EIParser.EIData
 
         public BuffSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
         {
-            Sources = new List<AgentItem>();
             foreach (BoonStackItem stack in stacks)
             {
                 var bstack = new BuffSimulationItemDuration(stack);
                 _stacks.Add(bstack);
-                Sources.AddRange(bstack.Sources);
             }
             Duration = _stacks.Max(x => x.Duration);
         }
@@ -44,9 +42,15 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public override int GetStacksCount()
+
+        public override List<object> GetStackStatusList()
         {
-            return _stacks.Count;
+            var res = new List<object>();
+            foreach (BuffSimulationItemDuration item in _stacks)
+            {
+                res.Add(new object[]{ item.Src.UniqueID});
+            }
+            return res;
         }
     }
 }

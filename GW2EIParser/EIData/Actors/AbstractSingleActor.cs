@@ -257,7 +257,7 @@ namespace GW2EIParser.EIData
                         {
                             graphSegments.Add(new BuffSegment(0, simul.Start, 0));
                         }
-                        else if (graphSegments.Last().End != simul.Start)
+                        else if (graphSegments.Count > 0 && graphSegments.Last().End != simul.Start)
                         {
                             graphSegments.Add(new BuffSegment(graphSegments.Last().End, simul.Start, 0));
                         }

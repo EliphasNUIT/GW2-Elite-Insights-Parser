@@ -9,7 +9,6 @@ namespace GW2EIParser.EIData
         public long Duration { get; protected set; }
         public long Start { get; protected set; }
         public long End => Start + Duration;
-        public List<AgentItem> Sources { get; protected set; }
 
         protected BuffSimulationItem(long start, long duration)
         {
@@ -33,7 +32,7 @@ namespace GW2EIParser.EIData
 
         public abstract int GetTickingStacksCount();
 
-        public abstract int GetStacksCount();
+        public abstract List<object> GetStackStatusList();
 
     }
 }

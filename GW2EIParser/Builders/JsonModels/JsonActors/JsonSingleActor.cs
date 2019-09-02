@@ -58,11 +58,11 @@ namespace GW2EIParser.Builders.JsonModels
             // # of Boons and Conditions States
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))
             {
-                BoonsStates = bgmBoon.ToList();
+                BoonsStates = bgmBoon.GetStatesList();
             }
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfConditionsID, out BuffsGraphModel bgmCondition))
             {
-                ConditionsStates = bgmCondition.ToList();
+                ConditionsStates = bgmCondition.GetStatesList();
             }
             // Rotation
             Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), description);

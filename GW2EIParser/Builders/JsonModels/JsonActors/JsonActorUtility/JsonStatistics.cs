@@ -417,10 +417,11 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<object>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
             var buffs = new List<Dictionary<string, JsonBuffs>>();
             var buffStates = new Dictionary<string, List<int>>();
+            var buffStackStates = new Dictionary<string, List<object>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
             {
@@ -440,7 +441,8 @@ namespace GW2EIParser.Builders.JsonModels
                     }
                     if (!buffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
                     {
-                        buffStates[id] = bgm.ToList();
+                        buffStates[id] = bgm.GetStatesList();
+                        buffStackStates[id] = bgm.GetStackStatusList();
                     }
                     var jsonBuff = new JsonBuffs(buff, dict, buffPresence, description);
                     buffDict.Add(id, jsonBuff);
@@ -449,7 +451,7 @@ namespace GW2EIParser.Builders.JsonModels
                 buffs.Add(buffDict);
             }
 
-            return (buffs, buffStates);
+            return (buffs, buffStates, buffStackStates);
         }
 
 
@@ -511,6 +513,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
         public Dictionary<string, List<int>> BuffStates { get; set; }
+        public Dictionary<string, List<object>> BuffStackStates { get; set; }
 
         public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies, Dictionary<string, Desc> description)
         {
@@ -518,7 +521,7 @@ namespace GW2EIParser.Builders.JsonModels
             GameplayAll = actor.GetStats(log).Select(x => new JsonGameplayAll(x)).ToList();
             DefenseAll = actor.GetDefenses(log).Select(x => new JsonDefenseAll(x)).ToList();
             SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
-            (Buffs,BuffStates) = GetJsonBuffs(actor, log, description);
+            (Buffs,BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
             foreach (AbstractSingleActor target in targets)
             {
                 DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());

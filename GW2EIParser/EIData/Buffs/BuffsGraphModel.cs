@@ -82,7 +82,7 @@ namespace GW2EIParser.EIData
             ValueBasedBoonChart = newChart;
         }
 
-        public List<int> ToList()
+        public List<int> GetStatesList()
         {
             if (ValueBasedBoonChart.Count == 0)
             {
@@ -93,6 +93,26 @@ namespace GW2EIParser.EIData
             {
                 res.Add((int)item.Start);
                 res.Add(item.Value);
+            }
+            return res.Count > 0 ? res : null;
+        }
+
+        public List<object> GetStackStatusList()
+        {
+            if (ValueBasedBoonChart.Count == 0)
+            {
+                return null;
+            }
+            var res = new List<object>();
+            foreach (BuffSimulationItem item in _sourceBasedBoonChart)
+            {
+                var subArray = new List<object>
+                {
+                    item.Start,
+                    item.Duration
+                };
+                subArray.Add(item.GetStackStatusList());
+                res.Add(subArray);
             }
             return res.Count > 0 ? res : null;
         }

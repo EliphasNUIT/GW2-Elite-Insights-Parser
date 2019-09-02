@@ -8,16 +8,15 @@ namespace GW2EIParser.EIData
 {
     public class BuffSimulationItemDuration : BuffSimulationItem
     {
-        private readonly AgentItem _src;
+        public AgentItem Src { get; }
         private readonly AgentItem _seedSrc;
         private readonly bool _isExtension;
 
         public BuffSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
-            _src = other.Src;
+            Src = other.Src;
             _seedSrc = other.SeedSrc;
             _isExtension = other.IsExtension;
-            Sources = new List<AgentItem>() { _src };
         }
 
         public override void OverrideEnd(long end)
@@ -29,16 +28,12 @@ namespace GW2EIParser.EIData
         {
             return 1;
         }
-        public override int GetStacksCount()
-        {
-            return 1;
-        }
 
         public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
-            AgentItem agent = _src;
+            AgentItem agent = Src;
             AgentItem seedAgent = _seedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
@@ -93,6 +88,11 @@ namespace GW2EIParser.EIData
                         0, 0, cDur, 0, 0));
                 }
             }
+        }
+
+        public override List<object> GetStackStatusList()
+        {
+            throw new InvalidOperationException();
         }
     }
 }

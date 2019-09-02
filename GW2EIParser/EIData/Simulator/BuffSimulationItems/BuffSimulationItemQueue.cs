@@ -18,13 +18,20 @@ namespace GW2EIParser.EIData
             {
                 var stack = new BuffSimulationItemDuration(queue[i]);
                 _queue.Add(stack);
-                Sources.AddRange(stack.Sources);
             }
         }
 
-        public override int GetStacksCount()
+        public override List<object> GetStackStatusList()
         {
-            return 1 + _queue.Count;
+            var res = new List<object>()
+            {
+                new object[]{Src.UniqueID}
+            };
+            foreach (BuffSimulationItemDuration item in _queue)
+            {
+                res.Add(new object[] { item.Src.UniqueID, item.Duration });
+            }
+            return res;
         }
     }
 }
