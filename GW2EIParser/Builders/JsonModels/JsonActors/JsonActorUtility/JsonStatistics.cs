@@ -383,6 +383,7 @@ namespace GW2EIParser.Builders.JsonModels
                 foreach (AgentItem ag in dict.Keys)
                 {
                     string uniqueID = ag.UniqueID;
+                    // TODO: think of something for here
                     if (!description.ContainsKey(uniqueID))
                     {
 

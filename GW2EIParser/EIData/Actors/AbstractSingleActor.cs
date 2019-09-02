@@ -194,40 +194,6 @@ namespace GW2EIParser.EIData
             }
             return buffMap;
         }
-        protected void InitBuffStatusData(ParsedLog log)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                _boonDistribution.Add(new BuffDistributionDictionary());
-                _buffPresence.Add(new Dictionary<long, long>());
-            }
-        }
-
-        protected void SetBuffStatusCleanseWasteData(ParsedLog log, BuffSimulator simulator, long boonid)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
-            extraSimulations.AddRange(simulator.WasteSimulationResult);
-            foreach (AbstractBuffSimulationItem simul in extraSimulations)
-            {
-                for (int i = 0; i < phases.Count; i++)
-                {
-                    PhaseData phase = phases[i];
-                    simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
-                }
-            }
-        }
-        protected void SetBuffStatusGenerationData(ParsedLog log, BuffSimulationItem simul, long boonid)
-        {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            for (int i = 0; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-                Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
-                simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
-            }
-        }
         public BuffDistributionDictionary GetBuffDistribution(ParsedLog log, int phaseIndex)
         {
             if (BuffPoints == null)
@@ -256,7 +222,13 @@ namespace GW2EIParser.EIData
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[ProfHelper.NumberOfConditionsID]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByNature[BuffNature.Condition].Select(x => x.ID));
-            InitBuffStatusData(log);
+            List<PhaseData> phases = log.FightData.GetPhases(log);
+            // Init data
+            for (int i = 0; i < phases.Count; i++)
+            {
+                _boonDistribution.Add(new BuffDistributionDictionary());
+                _buffPresence.Add(new Dictionary<long, long>());
+            }
             foreach (Buff buff in TrackedBuffs)
             {
                 long boonid = buff.ID;
@@ -272,9 +244,15 @@ namespace GW2EIParser.EIData
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
                     var graphSegments = new List<BuffsGraphModel.SegmentWithSources>();
+                    // Uptime + generation
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
-                        SetBuffStatusGenerationData(log, simul, boonid);
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phase = phases[i];
+                            Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
+                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                        }
                         BuffsGraphModel.SegmentWithSources segment = simul.ToSegment();
                         if (graphSegments.Count == 0 && segment.Start > 0)
                         {
@@ -286,7 +264,6 @@ namespace GW2EIParser.EIData
                         }
                         graphSegments.Add(segment);
                     }
-                    SetBuffStatusCleanseWasteData(log, simulator, boonid);
                     if (graphSegments.Count > 0)
                     {
                         graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
@@ -295,7 +272,19 @@ namespace GW2EIParser.EIData
                     {
                         graphSegments.Add(new BuffsGraphModel.SegmentWithSources(0, dur, 0, GeneralHelper.UnknownAgent));
                     }
+                    // Wasted and Overstack
+                    var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
+                    extraSimulations.AddRange(simulator.WasteSimulationResult);
+                    foreach (AbstractBuffSimulationItem simul in extraSimulations)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            PhaseData phase = phases[i];
+                            simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
+                        }
+                    }
                     BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
+                    // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {
                         List<BuffsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
