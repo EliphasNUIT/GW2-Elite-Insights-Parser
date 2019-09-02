@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
                     BuffSimulationItem last = GenerationSimulation.Last();
                     if (last.End > toAdd.Start)
                     {
-                        last.SetEnd(toAdd.Start);
+                        last.OverrideEnd(toAdd.Start);
                     }
                 }
                 GenerationSimulation.Add(toAdd);

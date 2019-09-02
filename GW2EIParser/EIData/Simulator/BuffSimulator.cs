@@ -103,7 +103,7 @@ namespace GW2EIParser.EIData
                 BuffSimulationItem data = GenerationSimulation[i];
                 if (data.End > fightDuration)
                 {
-                    data.SetEnd(fightDuration);
+                    data.OverrideEnd(fightDuration);
                 }
                 else
                 {
@@ -191,7 +191,7 @@ namespace GW2EIParser.EIData
                 BuffSimulationItem last = GenerationSimulation.Last();
                 if (last.End > start)
                 {
-                    last.SetEnd(start);
+                    last.OverrideEnd(start);
                 }
             }
             switch (removeType)

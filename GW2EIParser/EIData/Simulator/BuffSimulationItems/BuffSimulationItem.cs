@@ -29,12 +29,7 @@ namespace GW2EIParser.EIData
             return 0;
         }
 
-        public BuffsGraphModel.SegmentWithSources ToSegment()
-        {
-            return new BuffsGraphModel.SegmentWithSources(Start, End, GetStack(), Sources.ToArray());
-        }
-
-        public abstract void SetEnd(long end);
+        public abstract void OverrideEnd(long end);
 
         public abstract int GetStack();
     }

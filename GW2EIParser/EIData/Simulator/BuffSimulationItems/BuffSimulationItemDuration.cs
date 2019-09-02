@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
             Sources = new List<AgentItem>() { _src };
         }
 
-        public override void SetEnd(long end)
+        public override void OverrideEnd(long end)
         {
             Duration = Math.Min(Math.Max(end - Start, 0), Duration);
         }

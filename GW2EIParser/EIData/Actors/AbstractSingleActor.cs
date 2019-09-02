@@ -243,7 +243,7 @@ namespace GW2EIParser.EIData
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
                     bool updateCondiPresence = condiIds.Contains(boonid);
-                    var graphSegments = new List<BuffsGraphModel.SegmentWithSources>();
+                    var graphSegments = new List<BuffSegment>();
                     // Uptime + generation
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
@@ -253,24 +253,23 @@ namespace GW2EIParser.EIData
                             Add(_buffPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
-                        BuffsGraphModel.SegmentWithSources segment = simul.ToSegment();
-                        if (graphSegments.Count == 0 && segment.Start > 0)
+                        if (graphSegments.Count == 0 && simul.Start > 0)
                         {
-                            graphSegments.Add(new BuffsGraphModel.SegmentWithSources(0, segment.Start, 0, GeneralHelper.UnknownAgent));
+                            graphSegments.Add(new BuffSegment(0, simul.Start, 0));
                         }
-                        else if (graphSegments.Last().End != segment.Start)
+                        else if (graphSegments.Last().End != simul.Start)
                         {
-                            graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, segment.Start, 0, GeneralHelper.UnknownAgent));
+                            graphSegments.Add(new BuffSegment(graphSegments.Last().End, simul.Start, 0));
                         }
-                        graphSegments.Add(segment);
+                        graphSegments.Add(new BuffSegment(simul.Start, simul.End, simul.GetStack()));
                     }
                     if (graphSegments.Count > 0)
                     {
-                        graphSegments.Add(new BuffsGraphModel.SegmentWithSources(graphSegments.Last().End, dur, 0, GeneralHelper.UnknownAgent));
+                        graphSegments.Add(new BuffSegment(graphSegments.Last().End, dur, 0));
                     }
                     else
                     {
-                        graphSegments.Add(new BuffsGraphModel.SegmentWithSources(0, dur, 0, GeneralHelper.UnknownAgent));
+                        graphSegments.Add(new BuffSegment(0, dur, 0));
                     }
                     // Wasted and Overstack
                     var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
@@ -283,26 +282,26 @@ namespace GW2EIParser.EIData
                             simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }
-                    BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments);
+                    BuffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation);
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BuffsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
+                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.ValueBasedBoonChart : condiPresenceGraph.ValueBasedBoonChart;
                         bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BuffsGraphModel.Segment seg in BuffPoints[boonid].BoonChart)
+                        foreach (BuffSegment seg in BuffPoints[boonid].ValueBasedBoonChart)
                         {
                             long start = seg.Start;
                             long end = seg.End;
                             int value = seg.Value > 0 ? 1 : 0;
                             if (firstPass)
                             {
-                                segmentsToFill.Add(new BuffsGraphModel.Segment(start, end, value));
+                                segmentsToFill.Add(new BuffSegment(start, end, value));
                             }
                             else
                             {
                                 for (int i = 0; i < segmentsToFill.Count; i++)
                                 {
-                                    BuffsGraphModel.Segment curSeg = segmentsToFill[i];
+                                    BuffSegment curSeg = segmentsToFill[i];
                                     long curEnd = curSeg.End;
                                     long curStart = curSeg.Start;
                                     int curVal = curSeg.Value;
@@ -317,14 +316,14 @@ namespace GW2EIParser.EIData
                                     if (end <= curEnd)
                                     {
                                         curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffsGraphModel.Segment(start, end, curVal + value));
-                                        segmentsToFill.Insert(i + 2, new BuffsGraphModel.Segment(end, curEnd, curVal));
+                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, end, curVal + value));
+                                        segmentsToFill.Insert(i + 2, new BuffSegment(end, curEnd, curVal));
                                         break;
                                     }
                                     else
                                     {
                                         curSeg.End = start;
-                                        segmentsToFill.Insert(i + 1, new BuffsGraphModel.Segment(start, curEnd, curVal + value));
+                                        segmentsToFill.Insert(i + 1, new BuffSegment(start, curEnd, curVal + value));
                                         start = curEnd;
                                         i++;
                                     }
