@@ -31,7 +31,7 @@ namespace GW2EIParser.EIData
             Duration = _stacks.Max(x => x.Duration);
         }
 
-        public override int GetStack()
+        public override int GetTickingStacksCount()
         {
             return _stacks.Count;
         }
@@ -44,5 +44,9 @@ namespace GW2EIParser.EIData
             }
         }
 
+        public override int GetStacksCount()
+        {
+            return _stacks.Count;
+        }
     }
 }

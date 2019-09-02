@@ -31,6 +31,9 @@ namespace GW2EIParser.EIData
 
         public abstract void OverrideEnd(long end);
 
-        public abstract int GetStack();
+        public abstract int GetTickingStacksCount();
+
+        public abstract int GetStacksCount();
+
     }
 }

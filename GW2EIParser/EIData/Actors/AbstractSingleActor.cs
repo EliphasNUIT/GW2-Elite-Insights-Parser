@@ -261,7 +261,7 @@ namespace GW2EIParser.EIData
                         {
                             graphSegments.Add(new BuffSegment(graphSegments.Last().End, simul.Start, 0));
                         }
-                        graphSegments.Add(new BuffSegment(simul.Start, simul.End, simul.GetStack()));
+                        graphSegments.Add(new BuffSegment(simul.Start, simul.End, simul.GetTickingStacksCount()));
                     }
                     if (graphSegments.Count > 0)
                     {

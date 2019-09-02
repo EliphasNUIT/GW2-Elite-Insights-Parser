@@ -25,7 +25,11 @@ namespace GW2EIParser.EIData
             Duration = Math.Min(Math.Max(end - Start, 0), Duration);
         }
 
-        public override int GetStack()
+        public override int GetTickingStacksCount()
+        {
+            return 1;
+        }
+        public override int GetStacksCount()
         {
             return 1;
         }

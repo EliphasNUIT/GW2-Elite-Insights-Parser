@@ -21,5 +21,10 @@ namespace GW2EIParser.EIData
                 Sources.AddRange(stack.Sources);
             }
         }
+
+        public override int GetStacksCount()
+        {
+            return 1 + _queue.Count;
+        }
     }
 }
