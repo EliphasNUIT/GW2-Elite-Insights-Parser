@@ -38,6 +38,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public int Glance { get; set; }
         /// <summary>
+        /// Number of downed
+        /// </summary>
+        public int Downed { get; set; }
+        /// <summary>
         /// Number of flanks
         /// </summary>
         public int Flank { get; set; }
@@ -51,17 +55,60 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonLog.Descriptions"/>
         public string Id { get; set; }
 
-        public JsonDamageDist(List<AbstractDamageEvent> list, bool indirectDamage, long id)
+        public JsonDamageDist(List<AbstractDamageEvent> list, SkillItem skill, ParsedLog log, Dictionary<string, Desc> description)
         {
-            Hits = list.Count;
-            TotalDamage = list.Sum(x => x.Damage);
-            Min = list.Min(x => x.Damage);
-            Max = list.Max(x => x.Damage);
-            Flank = indirectDamage ? 0 : list.Count(x => x.IsFlanking);
-            Crit = indirectDamage ? 0 : list.Count(x => x.HasCrit);
-            Glance = indirectDamage ? 0 : list.Count(x => x.HasGlanced);
-            ShieldDamage = list.Sum(x => x.ShieldDamage);
-            Id = (indirectDamage ? "b" : "s" ) + id;
+            bool isIndirectDamage = log.Buffs.BuffsByIds.ContainsKey(skill.ID);
+            Max = int.MinValue;
+            Min = int.MaxValue;
+            foreach (AbstractDamageEvent dl in list)
+            {
+                isIndirectDamage = isIndirectDamage || dl is NonDirectDamageEvent;
+                int curdmg = dl.Damage;
+                TotalDamage += curdmg;
+                if (curdmg < Min) { Min = curdmg; }
+                if (curdmg > Max) { Max = curdmg; }
+                Hits++;
+                if (dl.HasCrit)
+                {
+                    Crit++;
+                }
+                if (dl.HasDowned)
+                {
+                    Downed++;
+                }
+                if (dl.HasGlanced)
+                {
+                    Glance++;
+                }
+                if (dl.IsFlanking)
+                {
+                    Flank++;
+                }
+                ShieldDamage += dl.ShieldDamage;
+            }
+            Id = (isIndirectDamage ? "b" : "s" ) + skill.ID;
+            if (isIndirectDamage)
+            {
+                if (!description.ContainsKey(Id))
+                {
+                    if (log.Buffs.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                    {
+                        description[Id] = new BuffDesc(buff);
+                    }
+                    else
+                    {
+                        var auxBoon = new Buff(skill.Name, skill.ID, skill.Icon);
+                        description[Id] = new BuffDesc(auxBoon);
+                    }
+                }
+            }
+            else
+            {
+                if (!description.ContainsKey(Id))
+                {
+                    description[Id] = new SkillDesc(skill);
+                }
+            }
         }
 
 
@@ -72,36 +119,12 @@ namespace GW2EIParser.Builders.JsonModels
             foreach (KeyValuePair<SkillItem, List<AbstractDamageEvent>> pair in dict)
             {
                 SkillItem skill = pair.Key;
-                long id = pair.Key.ID;
                 List<AbstractDamageEvent> damageLogs = pair.Value;
                 if (damageLogs.Count == 0)
                 {
                     continue;
                 }
-                bool indirect = damageLogs.Exists(x => x is NonDirectDamageEvent);
-                if (indirect)
-                {
-                    if (!description.ContainsKey("b" + id))
-                    {
-                        if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
-                        {
-                            description["b" + id] = new BuffDesc(buff);
-                        }
-                        else
-                        {
-                            var auxBoon = new Buff(skill.Name, id, skill.Icon);
-                            description["b" + id] = new BuffDesc(auxBoon);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!description.ContainsKey("s" + id))
-                    {
-                        description["s" + id] = new SkillDesc(skill);
-                    }
-                }
-                damageDist.Add(new JsonDamageDist(damageLogs, indirect, id));
+                damageDist.Add(new JsonDamageDist(damageLogs, skill, log, description));
             }
             return damageDist;
         }
