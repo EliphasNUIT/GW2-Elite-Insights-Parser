@@ -25,10 +25,15 @@ namespace GW2EIParser.Builders.JsonModels
             /// Icon of the item
             /// </summary>
             public string Icon { get; set; }
+            /// <summary>
+            /// Type of the description
+            /// </summary>
+            [DefaultValue(null)]
+            public int Type { get; set; }
         }
 
         /// <summary>
-        /// Describes the skill item
+        /// Describes the skill item, type == 0
         /// </summary>
         public class SkillDesc : Desc
         {
@@ -37,6 +42,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Name = item.Name;
                 AutoAttack = item.AA;
                 Icon = item.Icon;
+                Type = 0;
             }
 
             /// <summary>
@@ -46,7 +52,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
         /// <summary>
-        /// Describs the buff item
+        /// Describs the buff item, type == 1
         /// </summary>
         public class BuffDesc : Desc
         {
@@ -57,6 +63,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Stacking = item.Type == Buff.BuffType.Intensity;
                 Nature = item.Nature;
                 Source = item.Source;
+                Type = 1;
             }
             /// <summary>
             /// True if the buff is stacking
@@ -77,7 +84,7 @@ namespace GW2EIParser.Builders.JsonModels
         }
 
         /// <summary>
-        /// Describs the damage modifier item
+        /// Describs the damage modifier item, type == 2
         /// </summary>
         public class DamageModDesc : Desc
         {
@@ -87,6 +94,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Icon = item.Icon;
                 Description = item.Tooltip;
                 NonMultiplier = !item.Multiplier;
+                Type = 2;
             }
             /// <summary>
             /// Description of the damage modifier
@@ -99,13 +107,25 @@ namespace GW2EIParser.Builders.JsonModels
             public bool NonMultiplier { get; set; }
         }
 
+        /// <summary>
+        /// Simple icon description, for ui stuff, type == 3
+        /// </summary>
         public class IconDesc : Desc
         {
-
+            public IconDesc()
+            {
+                Type = 3;
+            }
         }
 
+        /// <summary>
+        /// Agent description
+        /// </summary>
         public abstract class AgentDesc : Desc
         {
+            /// <summary>
+            /// Master of this agent
+            /// </summary>
             public string MasterID { get; set; }
             /// <summary>
             /// Condition damage score
@@ -160,6 +180,9 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
+        /// <summary>
+        /// Player description, type == 4
+        /// </summary>
         public class PlayerDesc : AgentDesc
         {
             /// <summary>
@@ -181,9 +204,13 @@ namespace GW2EIParser.Builders.JsonModels
                 Account = player.Account;
                 Group = player.Group;
                 Profession = player.Prof;
+                Type = 4;
             }
         }
 
+        /// <summary>
+        /// NPC description, type == 5
+        /// </summary>
         public class NPCDesc : AgentDesc
         {
             /// <summary>
@@ -198,6 +225,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Id = npc.ID;
                 TotalHealth = npc.GetHealth(log.CombatData);
+                Type = 5;
             }
         }
 
