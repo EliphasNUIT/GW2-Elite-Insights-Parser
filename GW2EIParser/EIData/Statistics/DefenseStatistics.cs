@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Models
 {
@@ -13,39 +14,19 @@ namespace GW2EIParser.Models
     /// </summary>
     public static class DefenseStatistics
     {
-
-        public class FinalDefense
-        {
-            public long DamageTaken { get; set; }
-            public int BlockedCount { get; set; }
-            public int EvadedCount { get; set; }
-            public int InvulnedCount { get; set; }
-            public int DamageInvulned { get; set; }
-            public int DamageBarrier { get; set; }
-            public int InterruptedCount { get; set; }
-        }
-
-        public class FinalDefenseAll : FinalDefense
-        {
-            public int DodgeCount { get; set; }
-            public int DownCount { get; set; }
-            public int DownDuration { get; set; }
-            public int DeadCount { get; set; }
-            public int DeadDuration { get; set; }
-            public int DcCount { get; set; }
-            public int DcDuration { get; set; }
-        }
-
-
-
-        private static void FillFinalDefenses(FinalDefense finalDefenses, AbstractSingleActor actor, ParsedLog log, long start, long end, AbstractSingleActor target)
+        private static void FillFinalDefenses(JsonDefense finalDefenses, AbstractSingleActor actor, ParsedLog log, long start, long end, AbstractSingleActor target)
         {
 
             List<AbstractDamageEvent> damageLogs = actor.GetDamageTakenLogs(target, log, start, end);
             foreach (AbstractDamageEvent de in damageLogs)
             {
-                finalDefenses.DamageTaken += de.Damage;
-                finalDefenses.DamageBarrier += de.ShieldDamage;
+                finalDefenses.TakenDamage += de.Damage;
+                finalDefenses.TakenCount++;
+                if (de.ShieldDamage > 0)
+                {
+                    finalDefenses.BarrierDamage += de.ShieldDamage;
+                    finalDefenses.BarrierCount++;
+                }
                 if (de.IsBlocked)
                 {
                     finalDefenses.BlockedCount++;
@@ -61,21 +42,21 @@ namespace GW2EIParser.Models
                 if (de.IsAbsorbed)
                 {
                     finalDefenses.InvulnedCount++;
-                    finalDefenses.DamageInvulned += de.Damage;
+                    finalDefenses.InvulDamage += de.Damage;
                 }
             }
         }
 
-        public static List<FinalDefenseAll> GetFinalDefenses(AbstractSingleActor actor, ParsedLog log)
+        public static List<JsonDefenseAll> GetFinalDefenses(AbstractSingleActor actor, ParsedLog log)
         {
             var dead = new List<(long start, long end)>();
             var down = new List<(long start, long end)>();
             var dc = new List<(long start, long end)>();
             actor.AgentItem.GetAgentStatus(dead, down, dc, log);
-            var res = new List<FinalDefenseAll>();
+            var res = new List<JsonDefenseAll>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                var final = new FinalDefenseAll();
+                var final = new JsonDefenseAll();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;
@@ -93,12 +74,12 @@ namespace GW2EIParser.Models
             return res;
         }
 
-        public static List<FinalDefense> GetFinalDefenses(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target)
+        public static List<JsonDefense> GetFinalDefenses(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target)
         {
-            var res = new List<FinalDefense>();
+            var res = new List<JsonDefense>();
             foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
-                var final = new FinalDefenseAll();
+                var final = new JsonDefense();
                 res.Add(final);
                 long start = phase.Start;
                 long end = phase.End;

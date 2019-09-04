@@ -5,6 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Models
 {
@@ -13,21 +14,6 @@ namespace GW2EIParser.Models
     /// </summary>
     public static class SupportStatistics
     {
-
-        public class FinalSupport
-        {
-            public long CondiCleanse { get; set; }
-            public double CondiCleanseTime { get; set; }
-            public long BoonStrips { get; set; }
-            public double BoonStripsTime { get; set; }
-        }
-
-        public class FinalSupportAll : FinalSupport
-        {
-            public long Resurrects { get; set; }
-            public double ResurrectTime { get; set; }
-        }
-
 
         private static long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
@@ -130,7 +116,7 @@ namespace GW2EIParser.Models
             return reses;
         }
 
-        private static void FillFinalSupport(FinalSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static void FillFinalSupport(JsonSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
 
             long[] cleanseArray = GetCleanses(log, phase, target, buffsPerId);
@@ -141,13 +127,13 @@ namespace GW2EIParser.Models
             finalSupport.BoonStripsTime = boonStrips[1] / 1000.0;
         }
 
-        public static List<FinalSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        public static List<JsonSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
-            var res = new List<FinalSupportAll>();
+            var res = new List<JsonSupportAll>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                var final = new FinalSupportAll();
+                var final = new JsonSupportAll();
                 res.Add(final);
                 PhaseData phase = phases[phaseIndex];
 
@@ -158,13 +144,13 @@ namespace GW2EIParser.Models
             }
             return res;
         }
-        public static List<FinalSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        public static List<JsonSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
         {
-            var res = new List<FinalSupport>();
+            var res = new List<JsonSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
-                var final = new FinalSupport();
+                var final = new JsonSupport();
                 res.Add(final);
                 PhaseData phase = phases[phaseIndex];
                 FillFinalSupport(final, log, phase, target, buffsPerId);

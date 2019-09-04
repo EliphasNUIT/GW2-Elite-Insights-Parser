@@ -4,10 +4,6 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
-using static GW2EIParser.Models.DefenseStatistics;
-using static GW2EIParser.Models.DPSStatistics;
-using static GW2EIParser.Models.GameplayStatistics;
-using static GW2EIParser.Models.SupportStatistics;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -21,7 +17,11 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Total damage taken
             /// </summary>
-            public long DamageTaken { get; set; }
+            public long TakenDamage { get; set; }
+            /// <summary>
+            /// Number of hits taken
+            /// </summary>
+            public long TakenCount { get; set; }
             /// <summary>
             /// Number of blocks
             /// </summary>
@@ -37,26 +37,19 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Damage negated by invul
             /// </summary>
-            public int DamageInvulned { get; set; }
+            public int InvulDamage { get; set; }
             /// <summary>
             /// Damage done against barrier
             /// </summary>
-            public int DamageBarrier { get; set; }
+            public int BarrierDamage { get; set; }
+            /// <summary>
+            /// Number of hits done against barrier
+            /// </summary>
+            public int BarrierCount { get; set; }
             /// <summary>
             /// Number of time interrupted
             /// </summary>
             public int InterruptedCount { get; set; }
-
-            public JsonDefense(FinalDefense defenses)
-            {
-                DamageTaken = defenses.DamageTaken;
-                BlockedCount = defenses.BlockedCount;
-                EvadedCount = defenses.EvadedCount;
-                InvulnedCount = defenses.InvulnedCount;
-                DamageInvulned = defenses.DamageInvulned;
-                DamageBarrier = defenses.DamageBarrier;
-                InterruptedCount = defenses.InterruptedCount;
-            }
         }
 
         /// <summary>
@@ -95,17 +88,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// Time passed in disconnected state
             /// </summary>
             public int DcDuration { get; set; }
-
-            public JsonDefenseAll(FinalDefenseAll defenses) : base(defenses)
-            {
-                DodgeCount = defenses.DodgeCount;
-                DownCount = defenses.DownCount;
-                DownDuration = defenses.DownDuration;
-                DeadCount = defenses.DeadCount;
-                DeadDuration = defenses.DeadDuration;
-                DcCount = defenses.DcCount;
-                DcDuration = defenses.DcDuration;
-            }
         }
         /// <summary>
         /// DPS stats
@@ -161,23 +143,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int ActorPowerDamage { get; set; }
 
-            public JsonDPS(FinalDPS stats)
-            {
-                Dps = stats.Dps;
-                Damage = stats.Damage;
-                CondiDps = stats.CondiDps;
-                CondiDamage = stats.CondiDamage;
-                PowerDps = stats.PowerDps;
-                PowerDamage = stats.PowerDamage;
-
-                ActorDps = stats.ActorDps != stats.Dps ? stats.ActorDps : 0;
-                ActorDamage = stats.ActorDamage != stats.Damage ? stats.ActorDamage : 0;
-                ActorCondiDps = stats.ActorCondiDps != stats.CondiDps ? stats.ActorCondiDps : 0;
-                ActorCondiDamage = stats.ActorCondiDamage != stats.CondiDamage ? stats.ActorCondiDamage : 0;
-                ActorPowerDps = stats.ActorPowerDps != stats.PowerDps ? stats.ActorPowerDps : 0;
-                ActorPowerDamage = stats.ActorPowerDamage != stats.PowerDamage ? stats.ActorPowerDamage : 0;
-            }
-
         }
 
         /// <summary>
@@ -185,6 +150,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class JsonGameplay
         {
+            /// <summary>
+            /// Number of damage hit
+            /// </summary>
+            public int DamageCount { get; set; }
             /// <summary>
             /// Number of direct damage hit
             /// </summary>
@@ -196,19 +165,19 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Number of crit
             /// </summary>
-            public int CriticalRate { get; set; }
+            public int CriticalCount { get; set; }
             /// <summary>
             /// Total critical damage
             /// </summary>
-            public int CriticalDmg { get; set; }
+            public int CriticalDamage { get; set; }
             /// <summary>
             /// Number of hits while flanking
             /// </summary>
-            public int FlankingRate { get; set; }
+            public int FlankingCount { get; set; }
             /// <summary>
             /// Number of glanced hits
             /// </summary>
-            public int GlanceRate { get; set; }
+            public int GlanceCount { get; set; }
             /// <summary>
             /// Number of missed hits
             /// </summary>
@@ -221,32 +190,14 @@ namespace GW2EIParser.Builders.JsonModels
             /// Number of hits against invulnerable targets
             /// </summary>
             public int Invulned { get; set; }
-
-            public JsonGameplay(FinalGameplay stats)
-            {
-                DirectDamageCount = stats.DirectDamageCount;
-                CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalCount;
-                CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingCount;
-                GlanceRate = stats.GlanceCount;
-                Missed = stats.Missed;
-                Interrupts = stats.Interrupts;
-                Invulned = stats.Invulned;
-            }
-
-            public JsonGameplay(FinalGameplayAll stats)
-            {
-                DirectDamageCount = stats.DirectDamageCount;
-                CritableDirectDamageCount = stats.CritableDirectDamageCount;
-                CriticalRate = stats.CriticalCount;
-                CriticalDmg = stats.CriticalDmg;
-                FlankingRate = stats.FlankingCount;
-                GlanceRate = stats.GlanceCount;
-                Missed = stats.Missed;
-                Interrupts = stats.Interrupts;
-                Invulned = stats.Invulned;
-            }
+            /// <summary>
+            /// Damage done against barrier
+            /// </summary>
+            public int BarrierDamage { get; set; }
+            /// <summary>
+            /// Number of hits against barrier
+            /// </summary>
+            public int BarrierCount { get; set; }
         }
 
         public class JsonGameplayAll : JsonGameplay
@@ -287,19 +238,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// Number of time a weapon swap happened
             /// </summary>
             public int SwapCount { get; set; }
-
-            public JsonGameplayAll(FinalGameplayAll stats) : base(stats)
-            {
-                Wasted = stats.Wasted;
-                TimeWasted = stats.TimeWasted;
-                Saved = stats.Saved;
-                TimeSaved = stats.TimeSaved;
-                AvgBoons = stats.AvgBoons;
-                AvgActiveBoons = stats.AvgActiveBoons;
-                AvgConditions = stats.AvgConditions;
-                AvgActiveConditions = stats.AvgActiveConditions;
-                SwapCount = stats.SwapCount;
-            }
         }
 
         /// <summary>
@@ -323,14 +261,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// Total time of boons removed
             /// </summary>
             public double BoonStripsTime { get; set; }
-
-            public JsonSupport(FinalSupport stats)
-            {
-                CondiCleanse = stats.CondiCleanse;
-                CondiCleanseTime = stats.CondiCleanseTime;
-                BoonStrips = stats.BoonStrips;
-                BoonStripsTime = stats.BoonStripsTime;
-            }
         }
 
         /// <summary>
@@ -346,12 +276,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// Time passed on ressurecting
             /// </summary>
             public double ResurrectTime { get; set; }
-
-            public JsonSupportAll(FinalSupportAll stats) : base(stats)
-            {
-                Resurrects = stats.Resurrects;
-                ResurrectTime = stats.ResurrectTime;
-            }
         }
 
 
@@ -554,20 +478,20 @@ namespace GW2EIParser.Builders.JsonModels
 
         public JsonStatistics(ParsedLog log, AbstractSingleActor actor, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies, Dictionary<string, Desc> description)
         {
-            DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
-            GameplayAll = actor.GetStats(log).Select(x => new JsonGameplayAll(x)).ToList();
-            DefenseAll = actor.GetDefenses(log).Select(x => new JsonDefenseAll(x)).ToList();
-            SupportAll = actor.GetSupport(log).Select(x => new JsonSupportAll(x)).ToList();
+            DpsAll = actor.GetDPS(log);
+            GameplayAll = actor.GetStats(log);
+            DefenseAll = actor.GetDefenses(log);
+            SupportAll = actor.GetSupport(log);
             (Buffs,BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
             foreach (AbstractSingleActor target in targets)
             {
-                DpsTargets.Add(actor.GetDPS(log, target).Select(x => new JsonDPS(x)).ToList());
-                GameplayTargets.Add(actor.GetStats(log, target).Select(x => new JsonGameplay(x)).ToList());
-                DefenseTarget.Add(actor.GetDefenses(log, target).Select(x => new JsonDefense(x)).ToList());
+                DpsTargets.Add(actor.GetDPS(log, target));
+                GameplayTargets.Add(actor.GetStats(log, target));
+                DefenseTarget.Add(actor.GetDefenses(log, target));
             }
             foreach (AbstractSingleActor target in allies)
             {
-                SupportTarget.Add(actor.GetSupport(log, target).Select(x => new JsonSupport(x)).ToList());
+                SupportTarget.Add(actor.GetSupport(log, target));
             }
             if (targets.Any())
             {

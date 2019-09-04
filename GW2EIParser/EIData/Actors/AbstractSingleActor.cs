@@ -5,6 +5,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.EIData.Buff;
 using static GW2EIParser.Models.DefenseStatistics;
 using static GW2EIParser.Models.DPSStatistics;
@@ -21,14 +22,14 @@ namespace GW2EIParser.EIData
         private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
         private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // Statistics
-        private readonly Dictionary<AbstractSingleActor, List<FinalDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<FinalDPS>>();
-        private List<FinalDPS> _dpsAll;
-        private readonly Dictionary<AbstractSingleActor, List<FinalGameplay>> _statsTarget = new Dictionary<AbstractSingleActor, List<FinalGameplay>>();
-        private List<FinalGameplayAll> _statsAll;
-        private readonly Dictionary<AbstractSingleActor, List<FinalDefense>> _defensesTarget = new Dictionary<AbstractSingleActor, List<FinalDefense>>();
-        private List<FinalDefenseAll> _defensesAll;
-        private readonly Dictionary<AbstractSingleActor, List<FinalSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<FinalSupport>>();
-        private List<FinalSupportAll> _support;
+        private readonly Dictionary<AbstractSingleActor, List<JsonDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<JsonDPS>>();
+        private List<JsonDPS> _dpsAll;
+        private readonly Dictionary<AbstractSingleActor, List<JsonGameplay>> _statsTarget = new Dictionary<AbstractSingleActor, List<JsonGameplay>>();
+        private List<JsonGameplayAll> _statsAll;
+        private readonly Dictionary<AbstractSingleActor, List<JsonDefense>> _defensesTarget = new Dictionary<AbstractSingleActor, List<JsonDefense>>();
+        private List<JsonDefenseAll> _defensesAll;
+        private readonly Dictionary<AbstractSingleActor, List<JsonSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<JsonSupport>>();
+        private List<JsonSupportAll> _support;
         private Dictionary<long, List<AbstractBuffEvent>> _buffsPerId;
         //status
         private List<(long start, long end)> _deads;
@@ -347,7 +348,7 @@ namespace GW2EIParser.EIData
         }
         // DPS
 
-        public List<FinalDPS> GetDPS(ParsedLog log)
+        public List<JsonDPS> GetDPS(ParsedLog log)
         {
             if (_dpsAll == null)
             {
@@ -356,7 +357,7 @@ namespace GW2EIParser.EIData
             return _dpsAll;
         }
 
-        public List<FinalDPS> GetDPS(ParsedLog log, AbstractSingleActor target)
+        public List<JsonDPS> GetDPS(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -369,7 +370,7 @@ namespace GW2EIParser.EIData
             return _dpsTarget[target];
         }
         // Stats
-        public List<FinalGameplayAll> GetStats(ParsedLog log)
+        public List<JsonGameplayAll> GetStats(ParsedLog log)
         {
             if (_statsAll == null)
             {
@@ -378,7 +379,7 @@ namespace GW2EIParser.EIData
             return _statsAll;
         }
 
-        public List<FinalGameplay> GetStats(ParsedLog log, AbstractSingleActor target)
+        public List<JsonGameplay> GetStats(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -391,7 +392,7 @@ namespace GW2EIParser.EIData
             return _statsTarget[target];
         }
         // Defenses
-        public List<FinalDefenseAll> GetDefenses(ParsedLog log)
+        public List<JsonDefenseAll> GetDefenses(ParsedLog log)
         {
             if (_defensesAll == null)
             {
@@ -400,7 +401,7 @@ namespace GW2EIParser.EIData
             return _defensesAll;
         }
 
-        public List<FinalDefense> GetDefenses(ParsedLog log, AbstractSingleActor target)
+        public List<JsonDefense> GetDefenses(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {
@@ -413,7 +414,7 @@ namespace GW2EIParser.EIData
             return _defensesTarget[target];
         }
         // Support
-        public List<FinalSupportAll> GetSupport(ParsedLog log)
+        public List<JsonSupportAll> GetSupport(ParsedLog log)
         {
             if (_support == null)
             {
@@ -425,7 +426,7 @@ namespace GW2EIParser.EIData
             }
             return _support;
         }
-        public List<FinalSupport> GetSupport(ParsedLog log, AbstractSingleActor target)
+        public List<JsonSupport> GetSupport(ParsedLog log, AbstractSingleActor target)
         {
             if (target == null)
             {

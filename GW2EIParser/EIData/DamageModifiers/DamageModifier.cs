@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.EIData.Player;
 using static GW2EIParser.Models.DPSStatistics;
 
@@ -96,7 +97,7 @@ namespace GW2EIParser.EIData
 
         public int GetTotalDamage(Player p, ParsedLog log, NPC t, int phaseIndex)
         {
-            FinalDPS damageData = p.GetDPS(log, t)[phaseIndex];
+            JsonDPS damageData = p.GetDPS(log, t)[phaseIndex];
             switch (_compareType)
             {
                 case DamageType.All:
