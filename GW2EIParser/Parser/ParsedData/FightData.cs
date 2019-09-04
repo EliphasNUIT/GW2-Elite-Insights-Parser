@@ -179,7 +179,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public List<AbstractSingleActor> GetMainTargets(ParsedLog log)
         {
-            if (_phases.Count == 0)
+            if (_phases == null)
             {
                 _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
             }
