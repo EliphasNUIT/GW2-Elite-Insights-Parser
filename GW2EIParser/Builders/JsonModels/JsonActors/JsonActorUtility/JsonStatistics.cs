@@ -368,7 +368,7 @@ namespace GW2EIParser.Builders.JsonModels
             public Dictionary<string, double> UnknownExtended { get; } = new Dictionary<string, double>();
             public double Presence { get; set; }
 
-            public JsonBuffs(Buff buff, Dictionary<AgentItem, BuffDistributionItem> dict, Dictionary<long, long> presence, Dictionary<string, Desc> description)
+            public JsonBuffs(Buff buff, ParsedLog log, Dictionary<AgentItem, BuffDistributionItem> dict, Dictionary<long, long> presence, Dictionary<string, Desc> description)
             {
                 double multiplier = 100.0;
                 if (buff.Type == Buff.BuffType.Intensity)
@@ -382,12 +382,20 @@ namespace GW2EIParser.Builders.JsonModels
                 Uptime = multiplier * dict.Sum(x => x.Value.Generation);
                 foreach (AgentItem ag in dict.Keys)
                 {
-                    string uniqueID = ag.UniqueID;
-                    // TODO: think of something for here
-                    if (!description.ContainsKey(uniqueID))
+                    // Players are always in description
+                    // Find actor will return null if agent is not present in the known agent pool
+                    if (ag.Type != AgentItem.AgentType.Player && log.FindActor(ag, false, false) == null)
                     {
-
+                        // special case for WvW
+                        string descID = ag.Type == AgentItem.AgentType.EnemyPlayer ? ag.UniqueID : "npc" + ag.ID;
+                        if (!description.ContainsKey(descID))
+                        {
+                            // create a dummy npc for the description
+                            var dummyNPC = new NPC(ag, false);
+                            description[descID] = new NPCDesc(dummyNPC, log);
+                        }
                     }
+                    string uniqueID = ag.UniqueID;
                     BuffDistributionItem item = dict[ag];
                     if (item.Generation > 0)
                     {
@@ -444,7 +452,7 @@ namespace GW2EIParser.Builders.JsonModels
                         buffStates[id] = bgm.GetStatesList();
                         buffStackStates[id] = bgm.GetStackStatusList();
                     }
-                    var jsonBuff = new JsonBuffs(buff, dict, buffPresence, description);
+                    var jsonBuff = new JsonBuffs(buff, log, dict, buffPresence, description);
                     buffDict.Add(id, jsonBuff);
                 }
 
