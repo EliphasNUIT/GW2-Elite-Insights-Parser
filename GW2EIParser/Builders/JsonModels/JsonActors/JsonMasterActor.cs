@@ -19,7 +19,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonMinions"/>
         public List<JsonMinions> Minions { get; set; }
 
-        protected JsonMasterActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, actor, description, targets, allies)
+        protected JsonMasterActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies) : base(log, actor, description, targets, allies)
         {
             // Minions
             Minions = actor.GetMinions(log).Select(x => new JsonMinions(log, x.Value, description, targets, allies)).ToList();

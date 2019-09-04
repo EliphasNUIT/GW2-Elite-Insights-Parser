@@ -54,23 +54,36 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        private void FillCombatReplayArray(IEnumerable<AbstractSingleActor> actors, ParsedLog log, CombatReplayMap map, List<JsonAbstractSingleActorCombatReplay> toFill)
+        private void FillCombatReplayArray(AbstractSingleActor actor, ParsedLog log, CombatReplayMap map, List<JsonAbstractSingleActorCombatReplay> toFill)
+        {
+            if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
+            {
+                return;
+            }
+            toFill.Add(actor.GetCombatReplayJSON(map, log));
+            foreach (GenericDecoration dec in actor.GetCombatReplayActors(log))
+            {
+                Decorations.Add(dec.GetCombatReplayJSON(map, log));
+            }
+            foreach (Minions minions in actor.GetMinions(log).Values)
+            {
+                FillCombatReplayArray(minions.MinionList, log, map, Minions);
+            }
+        }
+
+        private void FillCombatReplayArray(List<NPC> actors, ParsedLog log, CombatReplayMap map, List<JsonAbstractSingleActorCombatReplay> toFill)
         {
             foreach (AbstractSingleActor actor in actors)
             {
-                if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
-                {
-                    continue;
-                }
-                toFill.Add(actor.GetCombatReplayJSON(map, log));
-                foreach (GenericDecoration dec in actor.GetCombatReplayActors(log))
-                {
-                    Decorations.Add(dec.GetCombatReplayJSON(map, log));
-                }
-                foreach (Minions minions in actor.GetMinions(log).Values)
-                {
-                    FillCombatReplayArray(minions.MinionList, log, map, Minions);
-                }
+                FillCombatReplayArray(actor, log, map, toFill);
+            }
+        }
+
+        private void FillCombatReplayArray(List<Player> actors, ParsedLog log, CombatReplayMap map, List<JsonAbstractSingleActorCombatReplay> toFill)
+        {
+            foreach (AbstractSingleActor actor in actors)
+            {
+                FillCombatReplayArray(actor, log, map, toFill);
             }
         }
 

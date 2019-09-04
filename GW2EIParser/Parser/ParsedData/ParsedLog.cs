@@ -54,6 +54,7 @@ namespace GW2EIParser.Parser
             Buffs = new BuffsContainer(LogData.GW2Version);
             DamageModifiers = new DamageModifiersContainer(LogData.GW2Version);
             MechanicData = FightData.Logic.GetMechanicData();
+            combatItems.Clear();
         }
 
         private void AddToDictionary(AbstractSingleActor actor)

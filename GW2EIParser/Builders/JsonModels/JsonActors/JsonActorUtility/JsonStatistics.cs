@@ -552,7 +552,7 @@ namespace GW2EIParser.Builders.JsonModels
         public Dictionary<string, List<int>> BuffStates { get; set; }
         public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
 
-        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies, Dictionary<string, Desc> description)
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies, Dictionary<string, Desc> description)
         {
             DpsAll = actor.GetDPS(log).Select(x => new JsonDPS(x)).ToList();
             GameplayAll = actor.GetStats(log).Select(x => new JsonGameplayAll(x)).ToList();

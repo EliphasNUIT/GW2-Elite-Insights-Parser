@@ -146,7 +146,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public List<JsonDamageItem> DamageTakenEvents { get; set; }
 
-        public JsonDamageDistData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets)
+        public JsonDamageDistData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, List<AbstractSingleActor> targets)
         {
             List<PhaseData> phases = log.FightData.GetPhases(log);
             TotalDamageDists = new List<List<JsonDamageDist>>();

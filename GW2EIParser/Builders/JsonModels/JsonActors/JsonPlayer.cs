@@ -31,7 +31,7 @@ namespace GW2EIParser.Builders.JsonModels
         public List<JsonConsumable> Consumables { get; set; }
 
 
-        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, player, description, targets, allies)
+        public JsonPlayer(ParsedLog log, Player player, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies) : base(log, player, description, targets, allies)
         {
             // meta data
             Weapons = player.GetWeaponsArray(log).Select(w => w ?? "").ToList();

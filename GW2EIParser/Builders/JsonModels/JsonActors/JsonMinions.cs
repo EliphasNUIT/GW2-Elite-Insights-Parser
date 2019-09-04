@@ -13,7 +13,7 @@ namespace GW2EIParser.Builders.JsonModels
     public class JsonMinions : JsonActor
     {
         public List<JsonNPC> MinionList { get; set; }
-        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
+        public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies)
         {
             MinionList = minions.MinionList.Select(x => new JsonNPC(log, x, description, targets, allies)).ToList();
             if (MinionList.Count == 0)

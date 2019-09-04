@@ -53,7 +53,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<long> ActiveTimes { get; set; }
 
-        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies)
+        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies)
         {
             // # of Boons and Conditions States
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))

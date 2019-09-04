@@ -43,13 +43,16 @@ namespace GW2EIParser.Parser
             {
                 if (ProgramHelper.IsCompressedFormat(evtc))
                 {
-                    using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
+                    using var arch = new ZipArchive(fs);
                     if (arch.Entries.Count != 1)
                     {
                         throw new InvalidDataException("Invalid Archive");
                     }
                     using Stream data = arch.Entries[0].Open();
-                    ParseLog(row, data);
+                    using var ms = new MemoryStream();
+                    data.CopyTo(ms);
+                    ms.Position = 0;
+                    ParseLog(row, ms);
                 }
                 else
                 {
@@ -382,16 +385,9 @@ namespace GW2EIParser.Parser
         {
             // 64 bytes: each combat
             byte[] data = new byte[64];
-            using var ms = new MemoryStream(data, writable: false);
-            using BinaryReader reader = CreateReader(ms);
-            while (true)
+            using BinaryReader reader = CreateReader(stream);
+            while (reader.BaseStream.Length != reader.BaseStream.Position)
             {
-                if (!TryRead(stream, data))
-                {
-                    break;
-                }
-
-                ms.Seek(0, SeekOrigin.Begin);
                 CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
                 if (!IsValid(combatItem))
                 {

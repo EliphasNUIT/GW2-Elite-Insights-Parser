@@ -22,7 +22,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<double[]> HealthPercents { get; set; }
 
-        public JsonNPC(ParsedLog log, NPC npc, Dictionary<string, Desc> description, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies) : base(log, npc, description, targets, allies)
+        public JsonNPC(ParsedLog log, NPC npc, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies) : base(log, npc, description, targets, allies)
         {
             HpLeft = 0.0;
             List<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
