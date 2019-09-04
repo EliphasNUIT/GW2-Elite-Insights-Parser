@@ -224,6 +224,7 @@ namespace GW2EIParser
                 {
                     CompressFile(outputFile, msr);
                 }
+                str.Dispose();
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
             if (Properties.Settings.Default.SaveOutXML)
@@ -252,6 +253,7 @@ namespace GW2EIParser
                 {
                     CompressFile(outputFile, msr);
                 }
+                str.Dispose();
             }
             rowData.BgWorker.ThrowIfCanceled(rowData);
             rowData.BgWorker.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
