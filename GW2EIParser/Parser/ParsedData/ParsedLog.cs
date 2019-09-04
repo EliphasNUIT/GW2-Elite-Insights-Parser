@@ -89,7 +89,7 @@ namespace GW2EIParser.Parser
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers)
+        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers, bool throwOnFail = true)
         {
             if (a == null || a == GeneralHelper.UnknownAgent || a.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
@@ -100,7 +100,14 @@ namespace GW2EIParser.Parser
             {
                 return actor;
             }
-            throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+            if (throwOnFail)
+            {
+                throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
