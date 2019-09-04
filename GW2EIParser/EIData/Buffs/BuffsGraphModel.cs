@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.EIData
 {
@@ -21,7 +22,7 @@ namespace GW2EIParser.EIData
             Boon = boon;
             _sourceBasedBoonChart = boonChartWithSource;
             ValueBasedBoonChart = segments;
-            // needed for is present, stack and condi/boon graphs
+            // needed for fast is present, stack and condi/boon graphs
             FuseSegments();
         }
 
@@ -97,22 +98,22 @@ namespace GW2EIParser.EIData
             return res.Count > 0 ? res : null;
         }
 
-        public List<object> GetStackStatusList()
+        public List<JsonBuffStackStatus> GetStackStatusList()
         {
             if (ValueBasedBoonChart.Count == 0)
             {
                 return null;
             }
-            var res = new List<object>();
+            var res = new List<JsonBuffStackStatus>();
             foreach (BuffSimulationItem item in _sourceBasedBoonChart)
             {
-                var subArray = new List<object>
+                var stackStatus = new JsonBuffStackStatus
                 {
-                    item.Start,
-                    item.Duration
+                    Start = item.Start,
+                    Duration = item.Duration,
+                    Sources = item.GetStackStatusList()
                 };
-                subArray.Add(item.GetStackStatusList());
-                res.Add(subArray);
+                res.Add(stackStatus);
             }
             return res.Count > 0 ? res : null;
         }

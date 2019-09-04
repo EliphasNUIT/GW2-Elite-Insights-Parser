@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIParser.Parser.ParsedData;
+using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.EIData
 {
@@ -32,7 +33,7 @@ namespace GW2EIParser.EIData
 
         public abstract int GetTickingStacksCount();
 
-        public abstract List<object> GetStackStatusList();
+        public abstract List<JsonBuffStackStatus.JsonBuffStackStatusItem> GetStackStatusList();
 
     }
 }

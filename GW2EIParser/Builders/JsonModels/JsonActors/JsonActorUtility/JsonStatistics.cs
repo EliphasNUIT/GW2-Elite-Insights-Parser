@@ -424,12 +424,41 @@ namespace GW2EIParser.Builders.JsonModels
                 }
             }
         }
+        /// <summary>
+        /// Represents a stack status item for buffs
+        /// </summary>
+        public class JsonBuffStackStatus
+        {
+            public class JsonBuffStackStatusItem
+            {
+                /// <summary>
+                /// Unique id of the source
+                /// </summary>
+                public string SourceId { get; set; }
+                /// <summary>
+                /// Duration of the item, if missing that means duration == <seealso cref="JsonBuffStackStatus.Duration"/>
+                /// </summary>
+                public long Duration { get; set; }
+            }
+            /// <summary>
+            /// Start time of the stack
+            /// </summary>
+            public long Start { get; set; }
+            /// <summary>
+            /// Duration of the stack
+            /// </summary>
+            public long Duration { get; set; }
+            /// <summary>
+            /// Sources of the stack
+            /// </summary>
+            public List<JsonBuffStackStatusItem> Sources { get; set; } 
+        }
 
-        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<object>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
             var buffs = new List<Dictionary<string, JsonBuffs>>();
             var buffStates = new Dictionary<string, List<int>>();
-            var buffStackStates = new Dictionary<string, List<object>>();
+            var buffStackStates = new Dictionary<string, List<JsonBuffStackStatus>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
             {
@@ -521,7 +550,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
         public Dictionary<string, List<int>> BuffStates { get; set; }
-        public Dictionary<string, List<object>> BuffStackStates { get; set; }
+        public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
 
         public JsonStatistics(ParsedLog log, AbstractSingleActor actor, IEnumerable<AbstractSingleActor> targets, IEnumerable<AbstractSingleActor> allies, Dictionary<string, Desc> description)
         {
