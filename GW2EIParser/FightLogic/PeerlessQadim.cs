@@ -119,7 +119,7 @@ namespace GW2EIParser.Logic
                 }
             }
             // rush to pylon
-            phaseEnds.AddRange(log.CombatData.GetCastDataById(56616).Select(x => x.Time).ToList());
+            phaseEnds.AddRange(log.CombatData.GetCastDataById(56616).Select(x => x.Time));
             phaseEnds.Add(log.FightData.FightDuration);
             // tp to middle after pylon destruction
             phaseStarts.AddRange(log.CombatData.GetCastDataById(56375).Select(x => x.Time + x.ActualDuration));

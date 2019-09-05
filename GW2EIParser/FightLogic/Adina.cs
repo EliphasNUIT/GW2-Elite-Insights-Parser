@@ -39,8 +39,8 @@ namespace GW2EIParser.Logic
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
                 var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
-                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
-                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).Select(x => x.LogTime).ToList();
+                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).ToList();
+                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).ToList();
                 var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.EvtcStateChange.Position || x.IsStateChange == ParseEnum.EvtcStateChange.Rotation || x.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)).ToList();
                 CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Position);
                 ushort id = (ushort)HandOfErosion;
@@ -57,11 +57,11 @@ namespace GW2EIParser.Logic
                 }
                 for (int i = 0; i < attackOn.Count; i++)
                 {
-                    long start = attackOn[i];
+                    long start = attackOn[i].LogTime;
                     long end = final;
                     if (i <= attackOff.Count - 1)
                     {
-                        end = attackOff[i];
+                        end = attackOff[i].LogTime;
                     }
                     AgentItem extra = agentData.AddCustomAgent(start, end, AgentItem.AgentType.NPC, hand.Name, hand.Prof, id, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     foreach (CombatItem c in combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= extra.FirstAwareLogTime && x.LogTime <= extra.LastAwareLogTime))
