@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
@@ -95,6 +96,15 @@ namespace GW2EIParser.Builders.JsonModels
             public List<JsonBuffStackStatusItem> Sources { get; set; }
         }
 
+        public class JsonBuffRemoveItem
+        {
+            public string UniqueID { get; set; }
+            [DefaultValue(null)]
+            public long Time { get; set; }
+            public long RemovedDuration { get; set; }
+            public int RemovedStacks { get; set; }
+        }
+
         public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
             var buffs = new List<Dictionary<string, JsonBuffs>>();
@@ -135,6 +145,8 @@ namespace GW2EIParser.Builders.JsonModels
         public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
         public Dictionary<string, List<int>> BuffStates { get; set; }
         public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
+
+        public Dictionary<string, List<JsonBuffRemoveItem>> BuffRemoveStats { get; set; }
 
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
