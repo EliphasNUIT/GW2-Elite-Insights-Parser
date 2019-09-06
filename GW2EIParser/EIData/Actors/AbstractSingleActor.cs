@@ -30,7 +30,7 @@ namespace GW2EIParser.EIData
         private List<JsonDefenseAll> _defensesAll;
         private readonly Dictionary<AbstractSingleActor, List<JsonSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<JsonSupport>>();
         private List<JsonSupportAll> _support;
-        private Dictionary<long, List<AbstractBuffEvent>> _buffsPerId;
+        private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllByID;
         //status
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
@@ -414,15 +414,21 @@ namespace GW2EIParser.EIData
             return _defensesTarget[target];
         }
         // Support
+
+        public Dictionary<long, List<BuffRemoveAllEvent>> GetBuffRemoveAllByID(ParsedLog log)
+        {
+            if (_buffRemoveAllByID == null)
+            {
+                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            return _buffRemoveAllByID;
+        }
+
         public List<JsonSupportAll> GetSupport(ParsedLog log)
         {
             if (_support == null)
             {
-                if (_buffsPerId == null)
-                {
-                    _buffsPerId = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-                }
-                _support = GetFinalSupport(this, log, _buffsPerId);
+                _support = GetFinalSupport(this, log, GetBuffRemoveAllByID(log));
             }
             return _support;
         }
@@ -434,11 +440,7 @@ namespace GW2EIParser.EIData
             }
             if (!_supportTarget.ContainsKey(target))
             {
-                if (_buffsPerId == null)
-                {
-                    _buffsPerId = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-                }
-                _supportTarget[target] = GetFinalSupport(log, target, _buffsPerId);
+                _supportTarget[target] = GetFinalSupport(log, target, GetBuffRemoveAllByID(log));
             }
             return _supportTarget[target];
         }

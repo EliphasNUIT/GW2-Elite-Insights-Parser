@@ -74,7 +74,7 @@ namespace GW2EIParser.Builders.JsonModels
             // Damage dist
             DamageDistributionData = new JsonDamageDistData(log, actor, description);
             // Stats
-            Statistics = new JsonStatistics(log, actor, description);
+            Statistics = new JsonStatistics(log, actor);
             // Buff
             BuffData = new JsonBuffData(log, actor, description);
             //

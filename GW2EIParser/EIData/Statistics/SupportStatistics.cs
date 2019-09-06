@@ -15,7 +15,7 @@ namespace GW2EIParser.Models
     public static class SupportStatistics
     {
 
-        private static long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetCleanses(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             if (target == null)
             {
@@ -24,33 +24,33 @@ namespace GW2EIParser.Models
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
+                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
                 {
-                    foreach (AbstractBuffEvent bf in list)
+                    foreach (BuffRemoveAllEvent bf in list)
                     {
-                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
+                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End)
                         {
                             cleanse[0]++;
-                            cleanse[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
+                            cleanse[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
                         }
                     }
                 }
             }
             return cleanse;
         }
-        private static long[] GetCleanses(ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetCleanses(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             long[] cleanse = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
+                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
                 {
-                    foreach (AbstractBuffEvent bf in list)
+                    foreach (BuffRemoveAllEvent bf in list)
                     {
-                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
+                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End)
                         {
                             cleanse[0]++;
-                            cleanse[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
+                            cleanse[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
                         }
                     }
                 }
@@ -58,26 +58,26 @@ namespace GW2EIParser.Models
             return cleanse;
         }
 
-        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
+                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
                 {
-                    foreach (AbstractBuffEvent bf in list)
+                    foreach (BuffRemoveAllEvent bf in list)
                     {
-                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
+                        if (bf.To != GeneralHelper.UnknownAgent && bf.Time >= phase.Start && bf.Time <= phase.End)
                         {
                             strips[0]++;
-                            strips[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
+                            strips[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
                         }
                     }
                 }
             }
             return strips;
         }
-        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             if (target == null)
             {
@@ -86,14 +86,14 @@ namespace GW2EIParser.Models
             long[] strips = { 0, 0 };
             foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
             {
-                if (buffsPerId.TryGetValue(id, out List<AbstractBuffEvent> list))
+                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
                 {
-                    foreach (AbstractBuffEvent bf in list)
+                    foreach (BuffRemoveAllEvent bf in list)
                     {
-                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End && bf is BuffRemoveAllEvent bra)
+                        if (bf.To == target.AgentItem && bf.Time >= phase.Start && bf.Time <= phase.End)
                         {
                             strips[0]++;
-                            strips[1] += Math.Max(bra.RemovedDuration, log.FightData.FightDuration);
+                            strips[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
                         }
                     }
                 }
@@ -116,7 +116,7 @@ namespace GW2EIParser.Models
             return reses;
         }
 
-        private static void FillFinalSupport(JsonSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        private static void FillFinalSupport(JsonSupport finalSupport, ParsedLog log, PhaseData phase, AbstractSingleActor target, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
 
             long[] cleanseArray = GetCleanses(log, phase, target, buffsPerId);
@@ -127,7 +127,7 @@ namespace GW2EIParser.Models
             finalSupport.BoonStripsTime = boonStrips[1] / 1000.0;
         }
 
-        public static List<JsonSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        public static List<JsonSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             var res = new List<JsonSupportAll>();
             List<PhaseData> phases = log.FightData.GetPhases(log);
@@ -144,7 +144,7 @@ namespace GW2EIParser.Models
             }
             return res;
         }
-        public static List<JsonSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target, Dictionary<long, List<AbstractBuffEvent>> buffsPerId)
+        public static List<JsonSupport> GetFinalSupport(ParsedLog log, AbstractSingleActor target, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             var res = new List<JsonSupport>();
             List<PhaseData> phases = log.FightData.GetPhases(log);

@@ -302,7 +302,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDPS"/>
         public List<JsonDPS> DpsAll { get; set; }
 
-        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor)
         {
             DpsAll = actor.GetDPS(log);
             GameplayAll = actor.GetStats(log);

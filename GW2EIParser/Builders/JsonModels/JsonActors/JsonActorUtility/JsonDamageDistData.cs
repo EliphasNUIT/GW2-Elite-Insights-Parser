@@ -12,7 +12,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonDamageDistData
     {
-        public class JsonDamageItem
+        public abstract class JsonDamageItem
         {
             private const long Condi = 1;
             private const long IsOverNinety = 1 << 1;
@@ -34,7 +34,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// ID of the relevant agent, destination for damage done, source for damage taken
             /// </summary>
-            public string AgentID { get; set; }
 
             public long Time { get; set; }
 
@@ -43,7 +42,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public long EncodedBooleans { get; set; }
 
-            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description, bool taken)
+            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log)
             {
                 if (evt is NonDirectDamageEvent)
                 {
@@ -53,7 +52,6 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     Id = "s" + evt.SkillId;
                 }
-                AgentID = GetNPCID(taken ? evt.From : evt.To, log, description);
                 Time = evt.Time;
                 Damage = evt.Damage;
                 ShieldDamage = evt.ShieldDamage;
@@ -121,6 +119,27 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
+        public class JsonDamageItemDone : JsonDamageItem
+        {
+
+            public string DestinationID { get; set; }
+            public JsonDamageItemDone(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
+            {
+                DestinationID = GetNPCID(evt.To, log, description);
+            }
+        }
+
+        public class JsonDamageItemTaken : JsonDamageItem
+        {
+
+            public string SourceID { get; set; }
+
+            public JsonDamageItemTaken(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
+            {
+                SourceID = GetNPCID(evt.From, log, description);
+            }
+        }
+
 
         /// <summary>
         /// Total Damage distribution array \n
@@ -135,9 +154,9 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDamageDist"/>
         public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
 
-        public List<JsonDamageItem> DamageEvents { get; set; }
+        public List<JsonDamageItemDone> DamageEvents { get; set; }
 
-        public List<JsonDamageItem> DamageTakenEvents { get; set; }
+        public List<JsonDamageItemTaken> DamageTakenEvents { get; set; }
 
         public JsonDamageDistData(ParsedLog log, AbstractActor actor, Dictionary<string, Desc> description)
         {
@@ -150,8 +169,8 @@ namespace GW2EIParser.Builders.JsonModels
                 TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, description));
             }
             //
-            DamageEvents = actor.GetJustActorDamageLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log, description, false)).ToList();
-            DamageTakenEvents = actor.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log, description, true)).ToList();
+            DamageEvents = actor.GetJustActorDamageLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItemDone(x, log, description)).ToList();
+            DamageTakenEvents = actor.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItemTaken(x, log, description)).ToList();
         }
     }
 }
