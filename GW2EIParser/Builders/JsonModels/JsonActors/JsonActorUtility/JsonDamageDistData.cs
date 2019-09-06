@@ -31,6 +31,10 @@ namespace GW2EIParser.Builders.JsonModels
             private const long IsEvaded = 1 << 14;
 
             public string Id { get; set; }
+            /// <summary>
+            /// ID of the relevant agent, destination for damage done, source for damage taken
+            /// </summary>
+            public string AgentID { get; set; }
 
             public long Time { get; set; }
 
@@ -39,7 +43,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public long EncodedBooleans { get; set; }
 
-            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log)
+            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description, bool taken)
             {
                 if (evt is NonDirectDamageEvent)
                 {
@@ -49,6 +53,7 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     Id = "s" + evt.SkillId;
                 }
+                AgentID = GetNPCID(taken? evt.From : evt.To, log, description);
                 Time = evt.Time;
                 Damage = evt.Damage;
                 ShieldDamage = evt.ShieldDamage;
@@ -145,8 +150,8 @@ namespace GW2EIParser.Builders.JsonModels
                 TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, description));
             }
             //
-            DamageEvents = actor.GetJustActorDamageLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log)).ToList();
-            DamageTakenEvents = actor.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log)).ToList();
+            DamageEvents = actor.GetJustActorDamageLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log, description, false)).ToList();
+            DamageTakenEvents = actor.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItem(x, log, description, true)).ToList();
         }
     }
 }

@@ -303,20 +303,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Uptime = multiplier * dict.Sum(x => x.Value.Generation);
                 foreach (AgentItem ag in dict.Keys)
                 {
-                    // Players are always in description
-                    // Find actor will return null if agent is not present in the known agent pool
-                    if (ag.Type != AgentItem.AgentType.Player && log.FindActor(ag, false, false) == null)
-                    {
-                        // special case for WvW
-                        string descID = ag.Type == AgentItem.AgentType.EnemyPlayer ? ag.UniqueID : "npc" + ag.ID;
-                        if (!description.ContainsKey(descID))
-                        {
-                            // create a dummy npc for the description
-                            var dummyNPC = new NPC(ag, false);
-                            description[descID] = new NPCDesc(dummyNPC, log);
-                        }
-                    }
-                    string uniqueID = ag.UniqueID;
+                    string uniqueID = GetNPCID(ag, log, description);
                     BuffDistributionItem item = dict[ag];
                     if (item.Generation > 0)
                     {
