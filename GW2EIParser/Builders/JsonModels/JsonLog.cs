@@ -14,7 +14,6 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonLog
     {
-
         public class Desc
         {
             /// <summary>
@@ -329,7 +328,7 @@ namespace GW2EIParser.Builders.JsonModels
                 if (!description.ContainsKey(descID))
                 {
                     // create a dummy npc for the description
-                    var dummyNPC = new NPC(ag, false, false);
+                    var dummyNPC = new NPC(ag, false);
                     description[descID] = new NPCDesc(dummyNPC, log);
                 }
             }

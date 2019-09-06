@@ -28,6 +28,24 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         /// <seealso cref="JsonStatistics"/>
         public JsonStatistics Statistics { get; set; }
+        /// <summary>
+        /// Damage distribution data
+        /// </summary>
+        /// <seealso cref="JsonDamageDistData"/>
+        public JsonDamageDistData DamageDistributionData { get; set; }
+        /// <summary>
+        /// Rotation data
+        /// </summary>
+        /// <seealso cref="JsonRotation"/>
+        public List<JsonRotation> Rotation { get; set; }
+        /// <summary>
+        /// Unique ID representing the actor
+        /// </summary>
+        public string UniqueID { get; set; }
+        /// <summary>
+        /// Unique ID representing the description of the actor
+        /// </summary>
+        public string DescriptionID { get; set; }
 
         /// <summary>
         /// List of time during which the actor was active (not dead and not dc) \n
