@@ -1,4 +1,5 @@
-﻿using GW2EIParser.EIData;
+﻿using System.Collections.Generic;
+using GW2EIParser.EIData;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -9,5 +10,23 @@ namespace GW2EIParser.Builders.JsonModels
     /// <seealso cref="JsonNPC"/>
     public abstract class JsonActor
     {
+        /// <summary>
+        /// Damage distribution data
+        /// </summary>
+        /// <seealso cref="JsonDamageDistData"/>
+        public JsonDamageDistData DamageDistributionData { get; set; }
+        /// <summary>
+        /// Rotation data
+        /// </summary>
+        /// <seealso cref="JsonRotation"/>
+        public List<JsonRotation> Rotation { get; set; }
+        /// <summary>
+        /// Unique ID representing the actor
+        /// </summary>
+        public string UniqueID { get; set; }
+        /// <summary>
+        /// Unique ID representing the description of the actor
+        /// </summary>
+        public string DescriptionID { get; set; }
     }
 }
