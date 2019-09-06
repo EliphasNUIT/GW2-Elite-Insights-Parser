@@ -44,6 +44,8 @@ namespace GW2EIParser.EIData
 
         public abstract List<AbstractDamageEvent> GetDamageTakenLogs(AbstractActor target, ParsedLog log, long start, long end);
 
+        public abstract List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end);
+
         // Cast logs
         public abstract List<AbstractCastEvent> GetCastLogs(ParsedLog log, long start, long end);
 

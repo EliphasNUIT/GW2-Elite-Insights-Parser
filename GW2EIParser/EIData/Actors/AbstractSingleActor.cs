@@ -114,7 +114,7 @@ namespace GW2EIParser.EIData
             }
             return DamageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
-        public List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        public override List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
         {
             return GetDamageLogs(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }

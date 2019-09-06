@@ -75,5 +75,9 @@ namespace GW2EIParser.EIData
             return _castLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
+        public override List<AbstractDamageEvent> GetJustActorDamageLogs(AbstractActor target, ParsedLog log, long start, long end)
+        {
+            return GetDamageLogs(target, log, start, end);
+        }
     }
 }
