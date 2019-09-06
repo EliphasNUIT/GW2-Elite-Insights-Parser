@@ -25,11 +25,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Index of targets tracked during the phase
-        /// </summary>
-        /// <seealso cref="JsonLog.Enemies"/>
-        public List<int> Targets { get; set; }
-        /// <summary>
         /// Index of sub phases
         /// </summary>
         /// <seealso cref="JsonLog.Phases"/>
@@ -40,11 +35,6 @@ namespace GW2EIParser.Builders.JsonModels
             Start = phase.Start;
             End = phase.End;
             Name = phase.Name;
-            Targets = new List<int>();
-            foreach (NPC tar in phase.Targets)
-            {
-                Targets.Add(log.FightData.Logic.NPCs.IndexOf(tar));
-            }
             List<PhaseData> phases = log.FightData.GetPhases(log);
             for (int j = 1; j < phases.Count; j++)
             {

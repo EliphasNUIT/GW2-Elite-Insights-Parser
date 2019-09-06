@@ -19,6 +19,10 @@ namespace GW2EIParser.Builders.JsonModels
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
         public List<double[]> HealthPercents { get; set; }
+        /// <summary>
+        /// Indicates a main target of the fight
+        /// </summary>
+        public bool MainTarget { get; set; }
 
         public JsonNPC(ParsedLog log, NPC npc, Dictionary<string, Desc> description) : base(log, npc, description)
         {
@@ -41,6 +45,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 description.Add(DescriptionID, new NPCDesc(npc, log));
             }
+            MainTarget = log.FightData.GetMainTargets(log).Contains(npc);
         }
     }
 }
