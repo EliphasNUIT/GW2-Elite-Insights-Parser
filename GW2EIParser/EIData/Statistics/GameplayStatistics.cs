@@ -17,14 +17,7 @@ namespace GW2EIParser.Models
 
         private static void FillFinalGameplay(List<AbstractDamageEvent> dls, JsonGameplay final)
         {
-            var nonCritable = new HashSet<long>
-                    {
-                        9292,
-                        5492,
-                        13014,
-                        30770,
-                        52370
-                    };
+            
             // (x - 1) / x
             foreach (AbstractDamageEvent dl in dls)
             {
@@ -66,7 +59,7 @@ namespace GW2EIParser.Models
                         final.BarrierCount++;
                     }
                     final.DirectDamageCount++;
-                    if (!nonCritable.Contains(dl.SkillId))
+                    if (dl.Skill.CanCrit)
                     {
                         final.CritableDirectDamageCount++;
                     }

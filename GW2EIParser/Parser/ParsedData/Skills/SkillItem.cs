@@ -18,10 +18,10 @@ namespace GW2EIParser.Parser.ParsedData
         public const long AliveId = -6;
         public const long RespawnId = -7;
 
-        private const int _firstLandSet = 4;
-        private const int _secondLandSet = 5;
-        private const int _firstWaterSet = 0;
-        private const int _secondWaterSet = 1;
+        private const int FirstLandSet = 4;
+        private const int SecondLandSet = 5;
+        private const int FirstWaterSet = 0;
+        private const int SecondWaterSet = 1;
 
         static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
@@ -75,8 +75,16 @@ namespace GW2EIParser.Parser.ParsedData
             {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
+        static readonly HashSet<long> NonCritable = new HashSet<long>
+                    {
+                        9292,
+                        5492,
+                        13014,
+                        30770,
+                        52370
+                    };
 
-        private const string _defaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
+        private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
         // Fields
         public long ID { get; private set; }
@@ -86,6 +94,7 @@ namespace GW2EIParser.Parser.ParsedData
         public string Icon { get; private set; }
         private WeaponDescriptor _weaponDescriptor;
         private readonly GW2APISkill _apiSkill;
+        public bool CanCrit { get; private set; }
 
         // Constructor
 
@@ -99,7 +108,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         public static bool IsWeaponSet(int swapped)
         {
-            return swapped == _firstLandSet || swapped == _secondLandSet || swapped == _firstWaterSet || swapped == _secondWaterSet;
+            return swapped == FirstLandSet || swapped == SecondLandSet || swapped == FirstWaterSet || swapped == SecondWaterSet;
         }
 
         public int FindWeaponSlot(List<int> swaps)
@@ -112,25 +121,25 @@ namespace GW2EIParser.Parser.ParsedData
                 if (_weaponDescriptor.IsLand)
                 {
                     // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                    if (firstSwap != _firstLandSet && firstSwap != _secondLandSet)
+                    if (firstSwap != FirstLandSet && firstSwap != SecondLandSet)
                     {
-                        swapped = swaps.Exists(x => x == _firstLandSet || x == _secondLandSet) ? swaps.First(x => x == _firstLandSet || x == _secondLandSet) : _firstLandSet;
+                        swapped = swaps.Exists(x => x == FirstLandSet || x == SecondLandSet) ? swaps.First(x => x == FirstLandSet || x == SecondLandSet) : FirstLandSet;
                     }
                     else
                     {
-                        swapped = firstSwap == _firstLandSet ? _secondLandSet : _firstLandSet;
+                        swapped = firstSwap == FirstLandSet ? SecondLandSet : FirstLandSet;
                     }
                 }
                 else
                 {
                     // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                    if (firstSwap != _firstWaterSet && firstSwap != _secondWaterSet)
+                    if (firstSwap != FirstWaterSet && firstSwap != SecondWaterSet)
                     {
-                        swapped = swaps.Exists(x => x == _firstWaterSet || x == _firstWaterSet) ? swaps.First(x => x == _firstWaterSet || x == _secondWaterSet) : _firstWaterSet;
+                        swapped = swaps.Exists(x => x == FirstWaterSet || x == FirstWaterSet) ? swaps.First(x => x == FirstWaterSet || x == SecondWaterSet) : FirstWaterSet;
                     }
                     else
                     {
-                        swapped = firstSwap == _firstWaterSet ? _secondWaterSet : _firstWaterSet;
+                        swapped = firstSwap == FirstWaterSet ? SecondWaterSet : FirstWaterSet;
                     }
                 }
             }
@@ -143,7 +152,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new InvalidOperationException("Invalid count in weapons array");
             }
-            int id = swapped == _firstLandSet ? 0 : swapped == _secondLandSet ? 2 : swapped == _firstWaterSet ? 4 : swapped == _secondWaterSet ? 6 : -1;
+            int id = swapped == FirstLandSet ? 0 : swapped == SecondLandSet ? 2 : swapped == FirstWaterSet ? 4 : swapped == SecondWaterSet ? 6 : -1;
             if (_weaponDescriptor == null || id == -1 || !swapCheck)
             {
                 return false;
@@ -171,6 +180,7 @@ namespace GW2EIParser.Parser.ParsedData
 
         private void CompleteItem()
         {
+            CanCrit = !NonCritable.Contains(ID);
             if (_apiSkill == null && _overrideNames.TryGetValue(ID, out string name))
             {
                 Name = name;
@@ -195,7 +205,7 @@ namespace GW2EIParser.Parser.ParsedData
             }
             else
             {
-                Icon = _apiSkill != null ? _apiSkill.Icon : _defaultIcon;
+                Icon = _apiSkill != null ? _apiSkill.Icon : DefaultIcon;
             }
             if (_apiSkill != null && _apiSkill.Type == "Weapon" && _apiSkill.WeaponType != "None" && _apiSkill.Professions.Count > 0 && (_apiSkill.Categories == null || (_apiSkill.Categories.Count == 1 && (_apiSkill.Categories[0] == "Phantasm" || _apiSkill.Categories[0] == "DualWield"))))
             {
