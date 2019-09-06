@@ -37,6 +37,7 @@
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.lblCustomSaveLoc = new System.Windows.Forms.Label();
             this.btnResetSkillList = new System.Windows.Forms.Button();
+            this.btnResetTraitList = new System.Windows.Forms.Button();
             this.btnResetSpecList = new System.Windows.Forms.Button();
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
@@ -75,8 +76,9 @@
             this.chkCompressRaw = new System.Windows.Forms.CheckBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.resetSkillLabel = new System.Windows.Forms.Label();
+            this.resetSpecLabel = new System.Windows.Forms.Label();
+            this.resetTraitLabel = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.dumpButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
@@ -147,6 +149,16 @@
             this.lblCustomSaveLoc.Size = new System.Drawing.Size(98, 13);
             this.lblCustomSaveLoc.TabIndex = 17;
             this.lblCustomSaveLoc.Text = "Other output folder:";
+            // 
+            // btnResetTraitList
+            // 
+            this.btnResetTraitList.Location = new System.Drawing.Point(24, 126);
+            this.btnResetTraitList.Name = "btnResetTraitList";
+            this.btnResetTraitList.Size = new System.Drawing.Size(144, 23);
+            this.btnResetTraitList.TabIndex = 24;
+            this.btnResetTraitList.Text = "Reset Trait List ";
+            this.btnResetTraitList.UseVisualStyleBackColor = true;
+            this.btnResetTraitList.Click += new System.EventHandler(this.ResetTraitListClick);
             // 
             // btnResetSkillList
             // 
@@ -582,9 +594,11 @@
             // 
             // tabPage6
             // 
-            this.tabPage5.Controls.Add(this.label2);
-            this.tabPage5.Controls.Add(this.label1);
+            this.tabPage5.Controls.Add(this.resetSkillLabel);
+            this.tabPage5.Controls.Add(this.resetTraitLabel);
+            this.tabPage5.Controls.Add(this.resetSpecLabel);
             this.tabPage5.Controls.Add(this.btnResetSpecList);
+            this.tabPage5.Controls.Add(this.btnResetTraitList);
             this.tabPage5.Controls.Add(this.btnResetSkillList);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage6";
@@ -593,23 +607,32 @@
             this.tabPage5.Text = "Maintenance";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // resetTraitLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 180);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(294, 13);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "Resets the local skill list and loads all skills from the GW2 API";
+            this.resetTraitLabel.AutoSize = true;
+            this.resetTraitLabel.Location = new System.Drawing.Point(24, 102);
+            this.resetTraitLabel.Name = "resetTraitLabel";
+            this.resetTraitLabel.Size = new System.Drawing.Size(294, 13);
+            this.resetTraitLabel.TabIndex = 28;
+            this.resetTraitLabel.Text = "Resets the local trait list and loads all trait from the GW2 API";
             // 
-            // label1
+            // resetSkillLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(306, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Resets the local spec list and loads all specs from the GW2 API";
+            this.resetSkillLabel.AutoSize = true;
+            this.resetSkillLabel.Location = new System.Drawing.Point(24, 180);
+            this.resetSkillLabel.Name = "resetSkillLabel";
+            this.resetSkillLabel.Size = new System.Drawing.Size(294, 13);
+            this.resetSkillLabel.TabIndex = 27;
+            this.resetSkillLabel.Text = "Resets the local skill list and loads all skills from the GW2 API";
+            // 
+            // resetSpecLabel
+            // 
+            this.resetSpecLabel.AutoSize = true;
+            this.resetSpecLabel.Location = new System.Drawing.Point(24, 24);
+            this.resetSpecLabel.Name = "resetSpecLabel";
+            this.resetSpecLabel.Size = new System.Drawing.Size(306, 13);
+            this.resetSpecLabel.TabIndex = 26;
+            this.resetSpecLabel.Text = "Resets the local spec list and loads all specs from the GW2 API";
             // 
             // cmdClose
             // 
@@ -700,6 +723,7 @@
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label lblCustomSaveLoc;
         private System.Windows.Forms.Button btnResetSkillList;
+        private System.Windows.Forms.Button btnResetTraitList;
         private System.Windows.Forms.Button btnResetSpecList;
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkShowEstimates;
@@ -727,8 +751,9 @@
         private System.Windows.Forms.RadioButton radioThemeLight;
         private System.Windows.Forms.RadioButton radioThemeDark;
         private System.Windows.Forms.Panel panelHtml;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label resetSkillLabel;
+        private System.Windows.Forms.Label resetTraitLabel;
+        private System.Windows.Forms.Label resetSpecLabel;
         private System.Windows.Forms.PictureBox imgTheme;
         private System.Windows.Forms.CheckBox chkB_SkipFailedTries;
         private System.Windows.Forms.CheckBox chkAutoAdd;

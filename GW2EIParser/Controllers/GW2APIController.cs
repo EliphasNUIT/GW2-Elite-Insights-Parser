@@ -26,7 +26,21 @@ namespace GW2EIParser.Controllers
             }
             return;
         }
+        //----------------------------------------------------------------------------- SKILLS
 
+        private class SkillList
+        {
+            public SkillList() { Items = new List<GW2APISkill>(); }
+            public List<GW2APISkill> Items { get; set; }
+        }
+
+        private static SkillList _listOfSkills = new SkillList();
+
+        public static GW2APISkill GetSkill(long id)
+        {
+            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
+            return skill;
+        }
         private static List<GW2APISkill> GetListGW2APISkills()
         {
             var skill_L = new List<GW2APISkill>();
@@ -135,21 +149,22 @@ namespace GW2EIParser.Controllers
             }
             return;
         }
-
-        public class SkillList
+        //----------------------------------------------------------------------------- SPECS
+        private class SpecList
         {
-            public SkillList() { Items = new List<GW2APISkill>(); }
-            public List<GW2APISkill> Items { get; set; }
+            public SpecList() { Items = new List<GW2APISpec>(); }
+
+            public List<GW2APISpec> Items { get; set; }
         }
 
-        private static SkillList _listOfSkills = new SkillList();
+        private static SpecList _listofSpecs = new SpecList();
 
-        public static GW2APISkill GetSkill(long id)
+        public static GW2APISpec GetSpec(int id)
         {
-            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
-            return skill;
+            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
+
+            return spec;
         }
-        //-----------------------------------------------------------------------------
         private static GW2APISpec GetGW2APISpec(string path)
         {
             GW2APISpec spec = null;
@@ -343,20 +358,128 @@ namespace GW2EIParser.Controllers
             throw new InvalidDataException("Unknown profession");
         }
 
-        public class SpecList
-        {
-            public SpecList() { Items = new List<GW2APISpec>(); }
+        //----------------------------------------------------------------------------- TRAITS
 
-            public List<GW2APISpec> Items { get; set; }
+        private class TraitList
+        {
+            public TraitList() { Items = new List<GW2APITrait>(); }
+            public List<GW2APITrait> Items { get; set; }
         }
 
-        private static SpecList _listofSpecs = new SpecList();
+        private static TraitList _listOfTraits = new TraitList();
 
-        public static GW2APISpec GetSpec(int id)
+        public static GW2APITrait GetTrait(long id)
         {
-            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
+            GW2APITrait trait = GetTraitList().Items.FirstOrDefault(x => x.Id == id);
+            return trait;
+        }
+        private static List<GW2APITrait> GetListGW2APITraits()
+        {
+            var trait_L = new List<GW2APITrait>();
+            bool maxPageSizeReached = false;
+            int page = 0;
+            int pagesize = 200;
+            while (!maxPageSizeReached)
+            {
+                string path = "/v2/traits?page=" + page + "&page_size=" + pagesize;
+                HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = response.Content.ReadAsStringAsync().Result;
+                    GW2APITrait[] responseArray = JsonConvert.DeserializeObject<GW2APITrait[]>(data, new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver()
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy()
+                        }
+                    });
+                    trait_L.AddRange(responseArray);
+                }
+                else
+                {
+                    maxPageSizeReached = true;
+                }
+                page++;
+            }
 
-            return spec;
+            return trait_L;
+        }
+        private static TraitList GetTraitList()
+        {
+            if (_listOfTraits.Items.Count == 0)
+            {
+                SetTraitList();
+            }
+            return _listOfTraits;
+        }
+        public static List<int> WriteTraitListToFile()
+        {
+            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            + "/Content/TraitList.json", FileMode.Create);
+
+            fcreate.Close();
+
+
+            Console.WriteLine("Getting API");
+            //Get list from API
+            GetAPIClient();
+
+            _listOfTraits = new TraitList();
+            HttpResponseMessage response = APIClient.GetAsync(new Uri("/v2/traits", UriKind.Relative)).Result;
+            var failedList = new List<int>();
+            if (response.IsSuccessStatusCode)
+            {
+                // Get Skill ID list           
+                _listOfTraits.Items.AddRange(GetListGW2APITraits());
+                var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            + "/Content/TraitList.json");
+                var serializer = new JsonSerializer
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Newtonsoft.Json.Formatting.None,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    ContractResolver = new DefaultContractResolver()
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    }
+                };
+                serializer.Serialize(writer, _listOfTraits.Items);
+                writer.Close();
+
+            }
+            return failedList;
+        }
+        private static void SetTraitList()
+        {
+
+            if (_listOfTraits.Items.Count == 0)
+            {
+                string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                + "/Content/TraitList.json";
+                if (File.Exists(path))
+                {
+                    if (new FileInfo(path).Length != 0)
+                    {
+                        Console.WriteLine("Reading Traitlist");
+                        using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+                        + "/Content/TraitList.json");
+                        var serializer = new JsonSerializer()
+                        {
+                            ContractResolver = new DefaultContractResolver()
+                            {
+                                NamingStrategy = new CamelCaseNamingStrategy()
+                            }
+                        };
+                        _listOfTraits.Items = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
+                        reader.Close();
+                    }
+                }
+                if (_listOfTraits.Items.Count == 0)
+                {
+                    WriteTraitListToFile();
+                }
+            }
+            return;
         }
     }
 }
