@@ -12,6 +12,8 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonMinions : JsonActor
     {
+        private const bool SimpleMinions = false;
+
         public List<JsonNPC> MinionList { get; set; }
         public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, Desc> description)
         {
@@ -19,18 +21,20 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 return;
             }
-            MinionList = minions.MinionList.Select(x => new JsonNPC(log, x, description)).ToList();
-            if (MinionList.Count == 0)
+            if  (!SimpleMinions)
             {
-                MinionList = null;
+                MinionList = minions.MinionList.Select(x => new JsonNPC(log, x, description)).ToList();
             }
-            UniqueID = minions.AgentItem.UniqueID;
-            DescriptionID = "npc" + minions.ID;
-            DamageDistributionData = new JsonDamageDistData(log, minions, description) ;
-            Rotation = JsonRotation.BuildRotation(minions.GetCastLogs(log, 0, log.FightData.FightDuration), description);
-            if (!description.ContainsKey(DescriptionID))
+            else
             {
-                description.Add(DescriptionID, new NPCDesc(minions.MinionList.FirstOrDefault(), log));
+                UniqueID = minions.AgentItem.UniqueID;
+                DescriptionID = "npc" + minions.ID;
+                DamageDistributionData = new JsonDamageDistData(log, minions, description);
+                Rotation = JsonRotation.BuildRotation(minions.GetCastLogs(log, 0, log.FightData.FightDuration), description);
+                if (!description.ContainsKey(DescriptionID))
+                {
+                    description.Add(DescriptionID, new NPCDesc(minions.MinionList.FirstOrDefault(), log));
+                }
             }
         }
     }
