@@ -311,6 +311,25 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonCombatReplay"/>
         public JsonCombatReplay CombatReplayData { get; set; }
 
+        public static string GetNPCID(AgentItem ag, ParsedLog log, Dictionary<string, Desc> description)
+        {
+            string res = ag.UniqueID;
+            // Players are always in description
+            string descID = ag.Type == AgentItem.AgentType.EnemyPlayer ? res : "npc" + ag.ID;
+            // Find actor will return null if agent is not present in the known agent pool
+            if (log.FindActor(ag, true, false) == null)
+            {
+                res = descID;
+                // special case for WvW
+                if (!description.ContainsKey(descID))
+                {
+                    // create a dummy npc for the description
+                    var dummyNPC = new NPC(ag, false, false);
+                    description[descID] = new NPCDesc(dummyNPC, log);
+                }
+            }
+            return res;
+        }
 
         public JsonLog(ParsedLog log, string[] uploadLink)
         {
