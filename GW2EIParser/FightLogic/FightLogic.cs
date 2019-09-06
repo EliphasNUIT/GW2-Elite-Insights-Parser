@@ -138,12 +138,12 @@ namespace GW2EIParser.Logic
                     }
                     if (!ids.Contains(a.MasterAgent.ID))
                     {
-                        var masterNPC = new NPC(a.MasterAgent, friendly);
+                        var masterNPC = new NPC(a.MasterAgent, friendly, false);
                         NPCs.Add(masterNPC);
                     }
                     continue;
                 }
-                var target = new NPC(a, friendly);
+                var target = new NPC(a, friendly, false);
                 NPCs.Add(target);
             }
         }

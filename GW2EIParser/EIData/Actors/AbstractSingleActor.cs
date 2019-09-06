@@ -41,6 +41,7 @@ namespace GW2EIParser.EIData
         protected CombatReplay CombatReplay { get; set; }
         // Friendly
         public bool Friendly { get; protected set; }
+        public bool IsMinion { get; protected set; }
 
         public string Icon { get; }
 
@@ -456,11 +457,11 @@ namespace GW2EIParser.EIData
                     long id = agent.ID;
                     if (auxMinions.TryGetValue(id, out Minions values))
                     {
-                        values.AddMinion(new NPC(agent, Friendly));
+                        values.AddMinion(new NPC(agent, Friendly, true));
                     }
                     else
                     {
-                        auxMinions[id] = new Minions(new NPC(agent, Friendly));
+                        auxMinions[id] = new Minions(new NPC(agent, Friendly, true));
                     }
                 }
                 foreach (KeyValuePair<long, Minions> pair in auxMinions)

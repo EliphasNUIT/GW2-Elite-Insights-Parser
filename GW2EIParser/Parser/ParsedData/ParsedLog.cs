@@ -90,25 +90,29 @@ namespace GW2EIParser.Parser
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers, bool throwOnFail = true)
+        public AbstractSingleActor FindActor(AgentItem a, bool searchPlayers, bool throwOnFail = true, bool searchMinions = true)
         {
             if (a == null || a == GeneralHelper.UnknownAgent || a.Type == AgentItem.AgentType.EnemyPlayer || (!searchPlayers && a.Type == AgentItem.AgentType.Player))
             {
                 return null;
             }
             InitActorDictionaries();
-            if (_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
+            if (!_agentToActorDictionary.TryGetValue(a, out AbstractSingleActor actor))
             {
-                return actor;
+                if (throwOnFail)
+                {
+                    throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
+                }
+                else
+                {
+                    return null;
+                }
             }
-            if (throwOnFail)
-            {
-                throw new InvalidOperationException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
-            }
-            else
+            if (!searchMinions && actor.IsMinion)
             {
                 return null;
             }
+            return actor;          
         }
     }
 }

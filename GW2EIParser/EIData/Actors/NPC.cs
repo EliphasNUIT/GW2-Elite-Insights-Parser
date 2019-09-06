@@ -12,9 +12,10 @@ namespace GW2EIParser.EIData
     {
         private int _health = -1;
         // Constructors
-        public NPC(AgentItem agent, bool friendly) : base(agent)
+        public NPC(AgentItem agent, bool friendly, bool isMinion) : base(agent)
         {
             Friendly = friendly;
+            IsMinion = isMinion;
         }
 
         public void OverrideName(string name)
