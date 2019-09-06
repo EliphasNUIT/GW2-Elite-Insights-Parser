@@ -43,12 +43,17 @@ namespace GW2EIParser.Builders.JsonModels
                 AutoAttack = item.AA;
                 Icon = item.Icon;
                 Type = 0;
+                CanCrit = item.CanCrit;
             }
 
             /// <summary>
             /// If the skill is an auto attack
             /// </summary>
             public bool AutoAttack { get; set; }
+            /// <summary>
+            /// If the skill is can do a critical hit
+            /// </summary>
+            public bool CanCrit { get; set; }
         }
 
         /// <summary>
