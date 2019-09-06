@@ -62,9 +62,6 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public int DodgeCount { get; set; }
             /// <summary>
-            /// Number of time an incoming attack was negated by invul
-            /// </summary>
-            /// <summary>
             /// Number of time downed
             /// </summary>
             public int DownCount { get; set; }
@@ -423,12 +420,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonGameplayAll"/>
         public List<JsonGameplayAll> GameplayAll { get; set; }
 
-        /// <summary>
-        /// Stats against targets  \n
-        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonGameplay"/>
-        public List<List<JsonGameplay>> GameplayTargets { get; set; } = new List<List<JsonGameplay>>();
 
         /// <summary>
         /// Defensive stats \n
@@ -438,25 +429,11 @@ namespace GW2EIParser.Builders.JsonModels
         public List<JsonDefenseAll> DefenseAll { get; set; }
 
         /// <summary>
-        /// Defensive stats against targets\n
-        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonDefenseAll"/>
-        public List<List<JsonDefense>> DefenseTarget { get; set; } = new List<List<JsonDefense>>();
-
-        /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonSupport"/>
         public List<JsonSupportAll> SupportAll { get; set; }
-
-        /// <summary>
-        /// Support stats against targets\n
-        /// Length == # of allies for <see cref="JsonLog.Friendlies"/> or # of targets for <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonSupport"/>
-        public List<List<JsonSupport>> SupportTarget { get; set; } = new List<List<JsonSupport>>();
 
         /// <summary>
         /// Array of Total DPS stats \n
@@ -465,44 +442,17 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonDPS"/>
         public List<JsonDPS> DpsAll { get; set; }
 
-        /// <summary>
-        /// Array of Total DPS stats \n
-        /// Length == # of targets for <see cref="JsonLog.Friendlies"/> or # of players <see cref="JsonLog.Enemies"/> and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="JsonDPS"/>
-        public List<List<JsonDPS>> DpsTargets { get; set; } = new List<List<JsonDPS>>();
-
         public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
         public Dictionary<string, List<int>> BuffStates { get; set; }
         public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
 
-        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies, Dictionary<string, Desc> description)
+        public JsonStatistics(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
             DpsAll = actor.GetDPS(log);
             GameplayAll = actor.GetStats(log);
             DefenseAll = actor.GetDefenses(log);
             SupportAll = actor.GetSupport(log);
             (Buffs,BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
-            foreach (AbstractSingleActor target in targets)
-            {
-                DpsTargets.Add(actor.GetDPS(log, target));
-                GameplayTargets.Add(actor.GetStats(log, target));
-                DefenseTarget.Add(actor.GetDefenses(log, target));
-            }
-            foreach (AbstractSingleActor target in allies)
-            {
-                SupportTarget.Add(actor.GetSupport(log, target));
-            }
-            if (targets.Any())
-            {
-                DpsTargets = null;
-                GameplayTargets = null;
-                DefenseTarget = null;
-            }
-            if (allies.Any())
-            {
-                SupportTarget = null;
-            }
         }
 
     }

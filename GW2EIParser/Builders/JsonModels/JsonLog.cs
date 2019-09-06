@@ -334,25 +334,11 @@ namespace GW2EIParser.Builders.JsonModels
             Descriptions["condition"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" };
             Descriptions["concentration"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" };
             Descriptions["healingPower"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/8/81/Healing_Power.png" };
-            // Players
-            var friendlies = new List<AbstractSingleActor>();
-            var enemies = new List<AbstractSingleActor>();
-            foreach (NPC npc in log.FightData.Logic.NPCs)
-            {
-                if (npc.Friendly)
-                {
-                    friendlies.Add(npc);
-                }
-                else
-                {
-                    enemies.Add(npc);
-                }
-            }
             // Friendlies
             Friendlies = new List<JsonActor>();
             foreach (Player p in log.PlayerList)
             {
-                Friendlies.Add(new JsonPlayer(log, p, Descriptions, enemies, friendlies));
+                Friendlies.Add(new JsonPlayer(log, p, Descriptions));
             }
             // Targets
             Enemies = new List<JsonActor>();
@@ -360,11 +346,11 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 if (tar.Friendly)
                 {
-                    Friendlies.Add(new JsonNPC(log, tar, Descriptions, enemies, friendlies));
+                    Friendlies.Add(new JsonNPC(log, tar, Descriptions));
                 }
                 else
                 {
-                    Enemies.Add(new JsonNPC(log, tar, Descriptions, friendlies, enemies));
+                    Enemies.Add(new JsonNPC(log, tar, Descriptions));
                 }
             }
             //

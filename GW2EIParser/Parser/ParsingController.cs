@@ -89,7 +89,7 @@ namespace GW2EIParser.Parser
             return new BinaryReader(stream, new System.Text.UTF8Encoding(), leaveOpen: true);
         }
 
-        private static bool TryRead(Stream stream, byte[] data)
+        /*private static bool TryRead(Stream stream, byte[] data)
         {
             int offset = 0;
             int count = data.Length;
@@ -104,7 +104,7 @@ namespace GW2EIParser.Parser
                 count -= bytesRead;
             }
             return true;
-        }
+        }*/
 
         //sub Parse methods
         /// <summary>

@@ -53,7 +53,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<long> ActiveTimes { get; set; }
 
-        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description, List<AbstractSingleActor> targets, List<AbstractSingleActor> allies)
+        protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
             // # of Boons and Conditions States
             if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))
@@ -67,9 +67,9 @@ namespace GW2EIParser.Builders.JsonModels
             // Rotation
             Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), description);
             // Damage dist
-            DamageDistributionData = new JsonDamageDistData(log, actor, description, targets);
+            DamageDistributionData = new JsonDamageDistData(log, actor, description);
             // Stats
-            Statistics = new JsonStatistics(log, actor, targets, allies, description);
+            Statistics = new JsonStatistics(log, actor, description);
             //
             UniqueID = actor.AgentItem.UniqueID;
             //
