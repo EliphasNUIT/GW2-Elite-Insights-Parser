@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+using static GW2EIParser.Builders.JsonModels.JsonBuffData;
 
 namespace GW2EIParser.EIData
 {

@@ -29,6 +29,11 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonStatistics"/>
         public JsonStatistics Statistics { get; set; }
         /// <summary>
+        /// Buff data
+        /// </summary>
+        /// <seealso cref="JsonBuffData"/>
+        public JsonBuffData BuffData { get; set; }
+        /// <summary>
         /// Damage distribution data
         /// </summary>
         /// <seealso cref="JsonDamageDistData"/>
@@ -70,6 +75,8 @@ namespace GW2EIParser.Builders.JsonModels
             DamageDistributionData = new JsonDamageDistData(log, actor, description);
             // Stats
             Statistics = new JsonStatistics(log, actor, description);
+            // Buff
+            BuffData = new JsonBuffData(log, actor, description);
             //
             UniqueID = actor.AgentItem.UniqueID;
             //

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIParser.EIData;
-
-namespace GW2EIParser.Builders.JsonModels
+﻿namespace GW2EIParser.Builders.JsonModels
 {
     /// <summary>
     /// Base class for Players and Targets

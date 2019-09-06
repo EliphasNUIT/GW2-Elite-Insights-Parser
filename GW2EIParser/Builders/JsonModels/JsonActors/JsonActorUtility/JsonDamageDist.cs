@@ -86,7 +86,7 @@ namespace GW2EIParser.Builders.JsonModels
                 }
                 ShieldDamage += dl.ShieldDamage;
             }
-            Id = (isIndirectDamage ? "b" : "s" ) + skill.ID;
+            Id = (isIndirectDamage ? "b" : "s") + skill.ID;
             if (isIndirectDamage)
             {
                 if (!description.ContainsKey(Id))

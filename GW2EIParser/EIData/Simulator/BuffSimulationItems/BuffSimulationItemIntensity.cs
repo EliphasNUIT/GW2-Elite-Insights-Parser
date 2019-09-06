@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+using static GW2EIParser.Builders.JsonModels.JsonBuffData;
 using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData
@@ -49,7 +48,8 @@ namespace GW2EIParser.EIData
             var res = new List<JsonBuffStackStatus.JsonBuffStackStatusItem>();
             foreach (BuffSimulationItemDuration item in _stacks)
             {
-                res.Add(new JsonBuffStackStatus.JsonBuffStackStatusItem {
+                res.Add(new JsonBuffStackStatus.JsonBuffStackStatusItem
+                {
                     SourceId = item.Src.UniqueID
                 });
             }

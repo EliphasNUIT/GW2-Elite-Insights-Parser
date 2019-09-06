@@ -53,7 +53,7 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     Id = "s" + evt.SkillId;
                 }
-                AgentID = GetNPCID(taken? evt.From : evt.To, log, description);
+                AgentID = GetNPCID(taken ? evt.From : evt.To, log, description);
                 Time = evt.Time;
                 Damage = evt.Damage;
                 ShieldDamage = evt.ShieldDamage;

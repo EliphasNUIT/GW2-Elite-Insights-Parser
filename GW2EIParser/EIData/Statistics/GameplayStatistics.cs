@@ -17,7 +17,7 @@ namespace GW2EIParser.Models
 
         private static void FillFinalGameplay(List<AbstractDamageEvent> dls, JsonGameplay final)
         {
-            
+
             // (x - 1) / x
             foreach (AbstractDamageEvent dl in dls)
             {

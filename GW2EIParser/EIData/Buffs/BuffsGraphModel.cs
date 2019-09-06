@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+using static GW2EIParser.Builders.JsonModels.JsonBuffData;
 
 namespace GW2EIParser.EIData
 {
@@ -90,7 +88,7 @@ namespace GW2EIParser.EIData
                 return null;
             }
             var res = new List<int>();
-            foreach(BuffSegment item in ValueBasedBoonChart)
+            foreach (BuffSegment item in ValueBasedBoonChart)
             {
                 res.Add((int)item.Start);
                 res.Add(item.Value);

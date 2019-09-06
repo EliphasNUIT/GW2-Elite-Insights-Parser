@@ -108,7 +108,7 @@ namespace GW2EIParser.Parser
                     return null;
                 }
             }
-            return actor;          
+            return actor;
         }
     }
 }
