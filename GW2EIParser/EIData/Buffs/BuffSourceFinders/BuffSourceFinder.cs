@@ -74,7 +74,7 @@ namespace GW2EIParser.EIData
             int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
             if (essenceOfSpeedCheck == 1)
             {
-                // unknown or self
+                // self
                 return dst;
             }
             if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
@@ -83,8 +83,8 @@ namespace GW2EIParser.EIData
                 if (cls.Count == 1)
                 {
                     AbstractCastEvent item = cls.First();
-                    // Imbued Melodies check
-                    if (CouldBeImbuedMelodies(item.Caster, time, extension, log))
+                    // Imbued Melodies or essence of speed check
+                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
                         return GeneralHelper.UnknownAgent;
                     }
