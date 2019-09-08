@@ -132,7 +132,7 @@ namespace GW2EIParser.EIData
                 wasted.Add(new JsonBuffWasteItem(item, log, description));
             }
             _wastedChart.Clear();
-            return (overstack, wasted);
+            return (overstack.Any() ? overstack : null, wasted.Any() ? wasted : null);
         }
 
     }
