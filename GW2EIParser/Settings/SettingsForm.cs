@@ -33,7 +33,6 @@ namespace GW2EIParser.Setting
             chkDefaultOutputLoc.Checked = Properties.Settings.Default.SaveAtOut;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
-            chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
             chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
@@ -42,16 +41,13 @@ namespace GW2EIParser.Setting
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
-            chkOutputXml.Checked = Properties.Settings.Default.SaveOutXML;
-            chkIndentXML.Checked = Properties.Settings.Default.IndentXML;
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
-            UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
             chkB_SkipFailedTries.Checked = Properties.Settings.Default.SkipFailedTries;
             chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
             chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
             chkAddPoVProf.Checked = Properties.Settings.Default.AddPoVProf;
-            chkCompressRaw.Checked = Properties.Settings.Default.CompressRaw;
+            chkCompressJson.Checked = Properties.Settings.Default.CompressJson;
             chkAddDuration.Checked = Properties.Settings.Default.AddDuration;
             chkAnonymous.Checked = Properties.Settings.Default.Anonymous;
 
@@ -59,7 +55,6 @@ namespace GW2EIParser.Setting
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
@@ -119,12 +114,6 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
         }
-
-        private void ShowEstimatesCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.ShowEstimates = chkShowEstimates.Checked;
-        }
-
         private void ChkOneAtATimeCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseOneAtATime = chkOneAtATime.Checked;
@@ -145,11 +134,6 @@ namespace GW2EIParser.Setting
             Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
         }
 
-        private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
-        }
-
         private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
@@ -165,20 +149,9 @@ namespace GW2EIParser.Setting
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
         }
 
-        private void OutputXMLCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.SaveOutXML = chkOutputXml.Checked;
-            panelXML.Enabled = Properties.Settings.Default.SaveOutXML;
-        }
-
         private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
-        }
-
-        private void ChkIndentXMLCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.IndentXML = chkIndentXML.Checked;
         }
 
         private void ChkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
@@ -255,7 +228,7 @@ namespace GW2EIParser.Setting
         }
         private void ChkCompressRaw_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.CompressRaw = chkCompressRaw.Checked;
+            Properties.Settings.Default.CompressJson = chkCompressJson.Checked;
         }
 
         private void ChkAddDuration_CheckedChanged(object sender, EventArgs e)

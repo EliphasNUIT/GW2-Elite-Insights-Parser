@@ -123,8 +123,7 @@ namespace GW2EIParser.Controllers
             //Upload Process
             Task<string> DREITask = null;
             Task<string> DRRHTask = null;
-            Task<string> RaidarTask = null;
-            string[] uploadresult = new string[3] { "", "", "" };
+            string[] uploadresult = new string[2] { "", ""};
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);
@@ -150,20 +149,6 @@ namespace GW2EIParser.Controllers
                 else
                 {
                     uploadresult[1] = "Failed to Define Upload Task";
-                }
-            }
-            row.BgWorker.ThrowIfCanceled(row);
-            if (Properties.Settings.Default.UploadToRaidar)
-            {
-                row.BgWorker.UpdateProgress(row, " 40% - Uploading to Raidar...", 40);
-                RaidarTask = Task.Run(() => UploadRaidar(fInfo));
-                if (RaidarTask != null)
-                {
-                    uploadresult[2] = RaidarTask.Result;
-                }
-                else
-                {
-                    uploadresult[2] = "Failed to Define Upload Task";
                 }
             }
             row.BgWorker.ThrowIfCanceled(row);

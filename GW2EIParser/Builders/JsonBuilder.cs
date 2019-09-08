@@ -8,12 +8,12 @@ using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
-    public class RawFormatBuilder
+    public class JsonBuilder
     {
         public JsonLog JsonLog { get; }
         //
 
-        public RawFormatBuilder(ParsedLog log, string[] uploadString)
+        public JsonBuilder(ParsedLog log, string[] uploadString)
         {
             JsonLog = new JsonLog(log, uploadString);
         }
@@ -34,7 +34,7 @@ namespace GW2EIParser.Builders
             writer.Close();
         }
 
-        public void CreateXML(StreamWriter sw)
+        /*public void CreateXML(StreamWriter sw)
         {
             var contractResolver = new DefaultContractResolver
             {
@@ -60,6 +60,6 @@ namespace GW2EIParser.Builders
 
             xml.WriteTo(xmlTextWriter);
             xmlTextWriter.Close();
-        }
+        }*/
     }
 }

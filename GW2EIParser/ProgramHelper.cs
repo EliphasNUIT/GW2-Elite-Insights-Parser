@@ -29,7 +29,7 @@ namespace GW2EIParser
 
         private static bool HasFormat()
         {
-            return Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutXML || Properties.Settings.Default.SaveOutJSON;
+            return Properties.Settings.Default.SaveOutHTML || Properties.Settings.Default.SaveOutJSON;
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace GW2EIParser
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             rowData.BgWorker.ThrowIfCanceled(rowData);
-            var jsonBuilder = new RawFormatBuilder(log, uploadresult);
+            var jsonBuilder = new JsonBuilder(log, uploadresult);
             if (Properties.Settings.Default.SaveOutHTML)
             {
                 string outputFile = Path.Combine(
@@ -208,7 +208,7 @@ namespace GW2EIParser
                 if (rowData.LogLocation != null) { splitString = ","; }
                 rowData.LogLocation += splitString + saveDirectory.FullName;
                 Stream str;
-                if (Properties.Settings.Default.CompressRaw)
+                if (Properties.Settings.Default.CompressJson)
                 {
                     str = new MemoryStream();
                 }
@@ -219,35 +219,6 @@ namespace GW2EIParser
                 using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
                 {
                     jsonBuilder.CreateJSON(sw);
-                }
-                if (str is MemoryStream msr)
-                {
-                    CompressFile(outputFile, msr);
-                }
-                str.Dispose();
-            }
-            rowData.BgWorker.ThrowIfCanceled(rowData);
-            if (Properties.Settings.Default.SaveOutXML)
-            {
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}.xml"
-                );
-                string splitString = "";
-                if (rowData.LogLocation != null) { splitString = ","; }
-                rowData.LogLocation += splitString + saveDirectory.FullName;
-                Stream str;
-                if (Properties.Settings.Default.CompressRaw)
-                {
-                    str = new MemoryStream();
-                }
-                else
-                {
-                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
-                }
-                using (var sw = new StreamWriter(str, GeneralHelper.NoBOMEncodingUTF8))
-                {
-                    jsonBuilder.CreateXML(sw);
                 }
                 if (str is MemoryStream msr)
                 {

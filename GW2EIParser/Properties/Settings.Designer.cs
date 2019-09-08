@@ -61,18 +61,6 @@ namespace GW2EIParser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ShowEstimates {
-            get {
-                return ((bool)(this["ShowEstimates"]));
-            }
-            set {
-                this["ShowEstimates"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ParseOneAtATime {
             get {
@@ -146,18 +134,6 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UploadToRaidar {
-            get {
-                return ((bool)(this["UploadToRaidar"]));
-            }
-            set {
-                this["UploadToRaidar"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SaveOutJSON {
             get {
                 return ((bool)(this["SaveOutJSON"]));
@@ -170,36 +146,12 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveOutXML {
-            get {
-                return ((bool)(this["SaveOutXML"]));
-            }
-            set {
-                this["SaveOutXML"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IndentJSON {
             get {
                 return ((bool)(this["IndentJSON"]));
             }
             set {
                 this["IndentJSON"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IndentXML {
-            get {
-                return ((bool)(this["IndentXML"]));
-            }
-            set {
-                this["IndentXML"] = value;
             }
         }
         
@@ -314,12 +266,12 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool CompressRaw {
+        public bool CompressJson {
             get {
-                return ((bool)(this["CompressRaw"]));
+                return ((bool)(this["CompressJson"]));
             }
             set {
-                this["CompressRaw"] = value;
+                this["CompressJson"] = value;
             }
         }
     }
