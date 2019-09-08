@@ -7,7 +7,7 @@ namespace GW2EIParser.EIData
     public abstract class AbstractBuffSimulationItem
     {
 
-        protected static Dictionary<AgentItem, BuffDistributionItem> GetDistrib(BuffDistributionDictionary distribs, long boonid)
+        /*protected static Dictionary<AgentItem, BuffDistributionItem> GetDistrib(BuffDistributionDictionary distribs, long boonid)
         {
             if (!distribs.TryGetValue(boonid, out Dictionary<AgentItem, BuffDistributionItem> distrib))
             {
@@ -17,6 +17,6 @@ namespace GW2EIParser.EIData
             return distrib;
         }
 
-        public abstract void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log);
+        public abstract void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log);*/
     }
 }

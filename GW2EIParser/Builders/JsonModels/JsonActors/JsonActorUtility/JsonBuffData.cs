@@ -13,7 +13,7 @@ namespace GW2EIParser.Builders.JsonModels
     {
 
         // Buffs
-        public class JsonBuffs
+        /*public class JsonBuffs
         {
             public double Uptime { get; set; }
             public Dictionary<string, double> Generation { get; } = new Dictionary<string, double>();
@@ -66,7 +66,7 @@ namespace GW2EIParser.Builders.JsonModels
                     }
                 }
             }
-        }
+        }*/
         /// <summary>
         /// Represents a stack status item for buffs
         /// </summary>
@@ -114,48 +114,65 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
-            var buffs = new List<Dictionary<string, JsonBuffs>>();
+            //var buffs = new List<Dictionary<string, JsonBuffs>>();
             var buffStates = new Dictionary<string, List<int>>();
             var buffStackStates = new Dictionary<string, List<JsonBuffStackStatus>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
-            for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
+            /*for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
             {
                 BuffDistributionDictionary buffDistribution = actor.GetBuffDistribution(log, i);
                 Dictionary<long, long> buffPresence = actor.GetBuffPresence(log, i);
                 var buffDict = new Dictionary<string, JsonBuffs>();
+*/
+            foreach (long buffID in buffGraphs.Keys)
+            {
+                Buff buff = log.Buffs.BuffsByIds[buffID];
+                //Dictionary<AgentItem, BuffDistributionItem> dict = buffDistribution[buffID];
 
-                foreach (long buffID in buffDistribution.Keys)
+                string id = "b" + buffID;
+                if (!description.ContainsKey(id))
                 {
-                    Buff buff = log.Buffs.BuffsByIds[buffID];
-                    Dictionary<AgentItem, BuffDistributionItem> dict = buffDistribution[buffID];
-
-                    string id = "b" + buffID;
-                    if (!description.ContainsKey(id))
+                    description[id] = new BuffDesc(buff);
+                }
+                if (!buffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
+                {
+                    buffStates[id] = bgm.GetStatesList();
+                    if (bgm.IsSourceBased)
                     {
-                        description[id] = new BuffDesc(buff);
-                    }
-                    if (!buffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
-                    {
-                        buffStates[id] = bgm.GetStatesList();
                         buffStackStates[id] = bgm.GetStackStatusList();
                     }
-                    var jsonBuff = new JsonBuffs(buff, log, dict, buffPresence, description);
-                    buffDict.Add(id, jsonBuff);
                 }
-
-                buffs.Add(buffDict);
+                /*var jsonBuff = new JsonBuffs(buff, log, dict, buffPresence, description);
+                buffDict.Add(id, jsonBuff);
             }
 
-            return (buffs, buffStates, buffStackStates);
+            buffs.Add(buffDict);*/
+            }
+
+            return (/*buffs, */buffStates, buffStackStates);
         }
 
-        public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
+        //public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
+        /// <summary>
+        /// Dictionary per buff that contains an array of int that represents the number of buff status \n
+        /// Value[2*i] will be the time, value[2*i+1] will be the number of buff present from value[2*i] to value[2*(i+1)] \n
+        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
+        /// </summary>
         public Dictionary<string, List<int>> BuffStates { get; set; }
-        public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
 
+        /// <summary>
+        /// Dictionary per buff that contains an array of <see cref="JsonBuffStackStatus"/>
+        /// </summary>
+        public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
+        /// <summary>
+        /// Dictionary per boon that contains an array of <see cref="JsonBuffRemoveItem"/>
+        /// </summary>
         public Dictionary<string, List<JsonBuffRemoveItem>> BoonRemoveStatus { get; set; }
+        /// <summary>
+        /// Dictionary per condition that contains an array of <see cref="JsonBuffRemoveItem"/>
+        /// </summary>
         public Dictionary<string, List<JsonBuffRemoveItem>> ConditionRemoveStatus { get; set; }
 
         private static void SetBuffRemoveItems(List<Buff> buffsToUse, Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls, Dictionary<string, List<JsonBuffRemoveItem>> toFill, ParsedLog log, Dictionary<string, Desc> description)
@@ -176,7 +193,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
-            (Buffs, BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
+            (/*Buffs, */BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
             Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls = actor.GetBuffRemoveAllByID(log);
             //
             ConditionRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();

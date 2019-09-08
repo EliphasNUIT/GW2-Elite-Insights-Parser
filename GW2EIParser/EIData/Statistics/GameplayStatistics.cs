@@ -106,7 +106,7 @@ namespace GW2EIParser.Models
                 final.TimeSaved = Math.Round(final.TimeSaved / 1000.0, GeneralHelper.TimeDigit);
                 final.TimeWasted = Math.Round(final.TimeWasted / 1000.0, GeneralHelper.TimeDigit);
 
-                double avgBoons = 0;
+                /*double avgBoons = 0;
                 foreach (long duration in actor.GetBuffPresence(log, i).Where(x => log.Buffs.BuffsByIds[x.Key].Nature == Buff.BuffNature.Boon).Select(x => x.Value))
                 {
                     avgBoons += duration;
@@ -122,6 +122,7 @@ namespace GW2EIParser.Models
                 }
                 final.AvgConditions = Math.Round(avgCondis / phase.DurationInMS, GeneralHelper.BoonDigit);
                 final.AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, GeneralHelper.BoonDigit) : 0.0;
+                */
             }
             return res;
         }

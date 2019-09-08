@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData;
 using static GW2EIParser.EIData.BuffSimulator;
@@ -10,14 +9,14 @@ namespace GW2EIParser.EIData
     public class BuffSimulationItemDuration : BuffSimulationItem
     {
         public AgentItem Src { get; }
-        private readonly AgentItem _seedSrc;
-        private readonly bool _isExtension;
+        public AgentItem SeedSrc { get; }
+        public bool IsExtension { get; }
 
         public BuffSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
             Src = other.Src;
-            _seedSrc = other.SeedSrc;
-            _isExtension = other.IsExtension;
+            SeedSrc = other.SeedSrc;
+            IsExtension = other.IsExtension;
         }
 
         public override void OverrideEnd(long end)
@@ -30,7 +29,7 @@ namespace GW2EIParser.EIData
             return 1;
         }
 
-        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        /*public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             long cDur = GetClampedDuration(start, end);
@@ -89,7 +88,7 @@ namespace GW2EIParser.EIData
                         0, 0, cDur, 0, 0));
                 }
             }
-        }
+        }*/
 
         public override List<JsonBuffStackStatus.JsonBuffStackStatusItem> GetStackStatusList()
         {

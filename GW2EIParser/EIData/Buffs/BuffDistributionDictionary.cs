@@ -2,7 +2,7 @@
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
-{
+{/*
     public class BuffDistributionItem
     {
         public long Generation { get; set; }
@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
 
     public class BuffDistributionDictionary : Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>
     {
-        /*
+        
         public bool HasSrc(long boonid, AgentItem src)
         {
             return ContainsKey(boonid) && this[boonid].ContainsKey(src);
@@ -93,6 +93,6 @@ namespace GW2EIParser.EIData
             }
             return this[boonid][src].Extended;
         }
-        */
-    }
+        
+    }*/
 }

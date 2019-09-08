@@ -12,18 +12,6 @@ namespace GW2EIParser.Builders.JsonModels
     public abstract class JsonSingleActor : JsonActor
     {
         /// <summary>
-        /// Array of int that represents the number of conditions status \n
-        /// Value[2*i] will be the time, value[2*i+1] will be the number of conditions present from value[2*i] to value[2*(i+1)] \n
-        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
-        /// </summary>
-        public List<int> ConditionsStates { get; }
-        /// <summary>
-        /// Array of int that represents the number of boons status \n
-        /// Value[2*i] will be the time, value[2*i+1] will be the number of boons present from value[2*i] to value[2*(i+1)] \n
-        /// If i corresponds to the last element that means the status did not change for the remainder of the fight
-        /// </summary>
-        public List<int> BoonsStates { get; }
-        /// <summary>
         /// Buff data
         /// </summary>
         /// <seealso cref="JsonBuffData"/>
@@ -55,15 +43,6 @@ namespace GW2EIParser.Builders.JsonModels
 
         protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
-            // # of Boons and Conditions States
-            if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfBoonsID, out BuffsGraphModel bgmBoon))
-            {
-                BoonsStates = bgmBoon.GetStatesList();
-            }
-            if (actor.GetBuffGraphs(log).TryGetValue(ProfHelper.NumberOfConditionsID, out BuffsGraphModel bgmCondition))
-            {
-                ConditionsStates = bgmCondition.GetStatesList();
-            }
             // Rotation
             Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), description);
             // Damage dist

@@ -9,6 +9,7 @@ namespace GW2EIParser.EIData
         public Buff Boon { get; }
         public List<BuffSegment> ValueBasedBoonChart { get; private set; } = new List<BuffSegment>();
         private readonly List<BuffSimulationItem> _sourceBasedBoonChart;
+        public bool IsSourceBased => _sourceBasedBoonChart != null;
 
         // Constructor
         public BuffsGraphModel(Buff boon)
@@ -98,7 +99,7 @@ namespace GW2EIParser.EIData
 
         public List<JsonBuffStackStatus> GetStackStatusList()
         {
-            if (ValueBasedBoonChart.Count == 0)
+            if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
             {
                 return null;
             }

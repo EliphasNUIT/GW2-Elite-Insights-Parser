@@ -11,7 +11,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        /*public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
             AgentItem agent = Src;
@@ -26,6 +26,6 @@ namespace GW2EIParser.EIData
                     0,
                     0, GetValue(start, end), 0, 0, 0));
             }
-        }
+        }*/
     }
 }

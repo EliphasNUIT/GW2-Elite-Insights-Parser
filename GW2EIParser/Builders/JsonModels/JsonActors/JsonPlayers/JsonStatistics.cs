@@ -216,19 +216,19 @@ namespace GW2EIParser.Builders.JsonModels
             /// <summary>
             /// Average amount of boons
             /// </summary>
-            public double AvgBoons { get; set; }
+            //public double AvgBoons { get; set; }
             /// <summary>
             /// Average amount of boons over active time
             /// </summary>
-            public double AvgActiveBoons { get; set; }
+            //public double AvgActiveBoons { get; set; }
             /// <summary>
             /// Average amount of conditions
             /// </summary>
-            public double AvgConditions { get; set; }
+            //public double AvgConditions { get; set; }
             /// <summary>
             /// Average amount of conditions over active time
             /// </summary>
-            public double AvgActiveConditions { get; set; }
+            //public double AvgActiveConditions { get; set; }
             /// <summary>
             /// Number of time a weapon swap happened
             /// </summary>
