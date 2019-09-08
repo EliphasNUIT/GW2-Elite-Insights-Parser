@@ -68,7 +68,7 @@
             // btnParse
             // 
             this.btnParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnParse.Location = new System.Drawing.Point(525, 307);
+            this.btnParse.Location = new System.Drawing.Point(380, 246);
             this.btnParse.Name = "btnParse";
             this.btnParse.Size = new System.Drawing.Size(154, 23);
             this.btnParse.TabIndex = 10;
@@ -79,7 +79,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(525, 333);
+            this.btnCancel.Location = new System.Drawing.Point(380, 272);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 11;
@@ -90,7 +90,7 @@
             // btnSettings
             // 
             this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSettings.Location = new System.Drawing.Point(16, 331);
+            this.btnSettings.Location = new System.Drawing.Point(16, 270);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(75, 23);
             this.btnSettings.TabIndex = 15;
@@ -101,7 +101,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(604, 333);
+            this.btnClear.Location = new System.Drawing.Point(459, 272);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 16;
@@ -120,16 +120,17 @@
             this.dgvFiles.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.locationDataGridViewTextBoxColumn,
-            this.statusDataGridViewTextBoxColumn,
-            this.ButtonState});
+                this.locationDataGridViewTextBoxColumn,
+                this.statusDataGridViewTextBoxColumn,
+                this.ButtonState
+            });
             this.dgvFiles.DataSource = this.gridRowBindingSource;
             this.dgvFiles.GridColor = System.Drawing.SystemColors.Control;
             this.dgvFiles.Location = new System.Drawing.Point(16, 46);
             this.dgvFiles.MultiSelect = false;
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
-            this.dgvFiles.Size = new System.Drawing.Size(663, 255);
+            this.dgvFiles.Size = new System.Drawing.Size(518, 194);
             this.dgvFiles.TabIndex = 17;
             this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentClick);
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
@@ -154,7 +155,7 @@
             // 
             this.VersionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(16, 357);
+            this.VersionLabel.Location = new System.Drawing.Point(16, 296);
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(29, 13);
             this.VersionLabel.TabIndex = 17;
@@ -165,9 +166,9 @@
             this.labWatchingDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labWatchingDir.AutoEllipsis = true;
-            this.labWatchingDir.Location = new System.Drawing.Point(16, 312);
+            this.labWatchingDir.Location = new System.Drawing.Point(16, 251);
             this.labWatchingDir.Name = "labWatchingDir";
-            this.labWatchingDir.Size = new System.Drawing.Size(504, 13);
+            this.labWatchingDir.Size = new System.Drawing.Size(359, 13);
             this.labWatchingDir.TabIndex = 18;
             this.labWatchingDir.Text = "Watching log dir";
             // 
@@ -196,7 +197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
-            this.ClientSize = new System.Drawing.Size(696, 375);
+            this.ClientSize = new System.Drawing.Size(551, 314);
             this.Controls.Add(this.labWatchingDir);
             this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.VersionLabel);

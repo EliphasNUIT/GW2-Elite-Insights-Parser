@@ -55,6 +55,7 @@ namespace GW2EIParser.Setting
 
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
             panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
+            btnFolderSelect.Enabled = !Properties.Settings.Default.SaveAtOut;
         }
 
         private void SettingsFormLoad(object sender, EventArgs e)
@@ -66,6 +67,7 @@ namespace GW2EIParser.Setting
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveAtOut = chkDefaultOutputLoc.Checked;
+            btnFolderSelect.Enabled = !Properties.Settings.Default.SaveAtOut;
         }
 
         private void BtnFolderSelectClick(object sender, EventArgs e)
@@ -109,7 +111,7 @@ namespace GW2EIParser.Setting
             MessageBox.Show("Spec List has been redone");
         }
 
-        private void OuputCheckedChanged(object sender, EventArgs e)
+        private void OuputHTMLCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
             panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;

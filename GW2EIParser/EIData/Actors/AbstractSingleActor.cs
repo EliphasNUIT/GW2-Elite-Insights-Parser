@@ -350,7 +350,7 @@ namespace GW2EIParser.EIData
         {
             if (_buffRemoveAllByID == null)
             {
-                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.Where(x => x.IsBoonSimulatorCompliant(log.FightData.FightDuration)).ToList());
+                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.Where(y => y.IsBoonSimulatorCompliant(log.FightData.FightDuration)).ToList());
             }
             return _buffRemoveAllByID;
         }

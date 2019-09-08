@@ -3,6 +3,8 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>GuildWars2EliteInsights</AssemblyName>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <!--Hack to make designer work, the project won't compile because of preview features-->
+    <!--<TargetFramework>net472</TargetFramework>-->
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <Install>true</Install>
