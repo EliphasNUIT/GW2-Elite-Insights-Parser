@@ -4,6 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
+using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -103,6 +104,14 @@ namespace GW2EIParser.Builders.JsonModels
             public long Time { get; set; }
             public long RemovedDuration { get; set; }
             public int RemovedStacks { get; set; }
+
+            public JsonBuffRemoveItem(BuffRemoveAllEvent brae, ParsedLog log, Dictionary<string, Desc> description)
+            {
+                UniqueID = GetNPCID(brae.To, log, description);
+                Time = brae.Time;
+                RemovedDuration = brae.RemovedDuration;
+                RemovedStacks = brae.RemovedStacks;
+            }
         }
 
         public static (List<Dictionary<string, JsonBuffs>>, Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
@@ -146,11 +155,45 @@ namespace GW2EIParser.Builders.JsonModels
         public Dictionary<string, List<int>> BuffStates { get; set; }
         public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
 
-        public Dictionary<string, List<JsonBuffRemoveItem>> BuffRemoveStats { get; set; }
+        public Dictionary<string, List<JsonBuffRemoveItem>> BoonRemoveStatus { get; set; }
+        public Dictionary<string, List<JsonBuffRemoveItem>> ConditionRemoveStatus { get; set; }
+
+        private static void SetBuffRemoveItems(List<Buff> buffsToUse, Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls, Dictionary<string, List<JsonBuffRemoveItem>> toFill, ParsedLog log, Dictionary<string, Desc> description)
+        {
+            foreach (Buff buffToUse in buffsToUse)
+            {
+                if (buffRemoveAlls.TryGetValue(buffToUse.ID, out List<BuffRemoveAllEvent> buffRemoves))
+                {
+                    var id = "b" + buffToUse.ID;
+                    if (!description.ContainsKey(id))
+                    {
+                        description[id] = new BuffDesc(buffToUse);
+                    }
+                    toFill[id] = buffRemoves.Select(x => new JsonBuffRemoveItem(x, log, description)).ToList();
+                }
+            }
+        }
 
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
             (Buffs, BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
+            Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls = actor.GetBuffRemoveAllByID(log);
+            //
+            ConditionRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
+            List<Buff> conditions = log.Buffs.BuffsByNature[Buff.BuffNature.Condition];
+            SetBuffRemoveItems(conditions, buffRemoveAlls, ConditionRemoveStatus, log, description);
+            if (!ConditionRemoveStatus.Any())
+            {
+                ConditionRemoveStatus = null;
+            }
+            //
+            BoonRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
+            List<Buff> boons = log.Buffs.BuffsByNature[Buff.BuffNature.Condition];
+            SetBuffRemoveItems(boons, buffRemoveAlls, BoonRemoveStatus, log, description);
+            if (!BoonRemoveStatus.Any())
+            {
+                ConditionRemoveStatus = null;
+            }
         }
 
     }
