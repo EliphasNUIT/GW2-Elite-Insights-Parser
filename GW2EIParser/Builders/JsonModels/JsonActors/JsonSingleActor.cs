@@ -24,11 +24,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<int> BoonsStates { get; }
         /// <summary>
-        /// Statistics data
-        /// </summary>
-        /// <seealso cref="JsonStatistics"/>
-        public JsonStatistics Statistics { get; set; }
-        /// <summary>
         /// Buff data
         /// </summary>
         /// <seealso cref="JsonBuffData"/>
@@ -73,8 +68,6 @@ namespace GW2EIParser.Builders.JsonModels
             Rotation = JsonRotation.BuildRotation(actor.GetCastLogs(log, 0, log.FightData.FightDuration), description);
             // Damage dist
             DamageDistributionData = new JsonDamageDistData(log, actor, description);
-            // Stats
-            Statistics = new JsonStatistics(log, actor);
             // Buff
             BuffData = new JsonBuffData(log, actor, description);
             //
