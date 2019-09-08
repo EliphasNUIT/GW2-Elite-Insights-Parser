@@ -4,19 +4,19 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
     {
-        private readonly int _removedStacks;
+        public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
         public BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _lastRemovedDuration = evtcItem.BuffDmg;
-            _removedStacks = evtcItem.Result;
+            RemovedStacks = evtcItem.Result;
         }
 
         public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
         {
             _lastRemovedDuration = lastRemovedDuration;
-            _removedStacks = removedStacks;
+            RemovedStacks = removedStacks;
         }
 
         public override bool IsBoonSimulatorCompliant(long fightEnd)

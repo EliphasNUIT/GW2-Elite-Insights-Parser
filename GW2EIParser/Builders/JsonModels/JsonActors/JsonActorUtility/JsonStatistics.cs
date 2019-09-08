@@ -248,6 +248,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// Total time of condition removed
             /// </summary>
             public double CondiCleanseTime { get; set; }
+            public long CondiCleanseStackCount { get; set; }
             /// <summary>
             /// Number of time a boon was removed
             /// </summary>
@@ -256,6 +257,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// Total time of boons removed
             /// </summary>
             public double BoonStripsTime { get; set; }
+            public long BoonStripStackCount { get; set; }
         }
 
         /// <summary>

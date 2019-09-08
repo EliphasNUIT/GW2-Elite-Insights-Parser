@@ -21,7 +21,7 @@ namespace GW2EIParser.Models
             {
                 return GetCleanses(log, phase, buffsPerId);
             }
-            long[] cleanse = { 0, 0 };
+            long[] cleanse = { 0, 0, 0 };
             foreach (Buff condition in log.Buffs.BuffsByNature[Buff.BuffNature.Condition])
             {
                 if (buffsPerId.TryGetValue(condition.ID, out List<BuffRemoveAllEvent> list))
@@ -32,6 +32,7 @@ namespace GW2EIParser.Models
                         {
                             cleanse[0]++;
                             cleanse[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
+                            cleanse[2] += bf.RemovedStacks;
                         }
                     }
                 }
@@ -40,7 +41,7 @@ namespace GW2EIParser.Models
         }
         private static long[] GetCleanses(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
-            long[] cleanse = { 0, 0 };
+            long[] cleanse = { 0, 0, 0 };
             foreach (Buff condition in log.Buffs.BuffsByNature[Buff.BuffNature.Condition])
             {
                 if (buffsPerId.TryGetValue(condition.ID, out List<BuffRemoveAllEvent> list))
@@ -51,6 +52,7 @@ namespace GW2EIParser.Models
                         {
                             cleanse[0]++;
                             cleanse[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
+                            cleanse[2] += bf.RemovedStacks;
                         }
                     }
                 }
@@ -60,7 +62,7 @@ namespace GW2EIParser.Models
 
         private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
-            long[] strips = { 0, 0 };
+            long[] strips = { 0, 0, 0 };
             foreach (Buff boon in log.Buffs.BuffsByNature[Buff.BuffNature.Boon])
             {
                 if (buffsPerId.TryGetValue(boon.ID, out List<BuffRemoveAllEvent> list))
@@ -71,6 +73,7 @@ namespace GW2EIParser.Models
                         {
                             strips[0]++;
                             strips[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
+                            strips[2] += bf.RemovedStacks;
                         }
                     }
                 }
@@ -83,7 +86,7 @@ namespace GW2EIParser.Models
             {
                 return GetBoonStrips(log, phase, buffsPerId);
             }
-            long[] strips = { 0, 0 };
+            long[] strips = { 0, 0, 0 };
             foreach (Buff boon in log.Buffs.BuffsByNature[Buff.BuffNature.Boon])
             {
                 if (buffsPerId.TryGetValue(boon.ID, out List<BuffRemoveAllEvent> list))
@@ -94,6 +97,7 @@ namespace GW2EIParser.Models
                         {
                             strips[0]++;
                             strips[1] += Math.Max(bf.RemovedDuration, log.FightData.FightDuration);
+                            strips[2] += bf.RemovedStacks;
                         }
                     }
                 }
@@ -123,8 +127,10 @@ namespace GW2EIParser.Models
             long[] boonStrips = GetBoonStrips(log, phase, target, buffsPerId);
             finalSupport.CondiCleanse = cleanseArray[0];
             finalSupport.CondiCleanseTime = cleanseArray[1] / 1000.0;
+            finalSupport.CondiCleanseStackCount = cleanseArray[2];
             finalSupport.BoonStrips = boonStrips[0];
             finalSupport.BoonStripsTime = boonStrips[1] / 1000.0;
+            finalSupport.BoonStripStackCount = boonStrips[2];
         }
 
         public static List<JsonSupportAll> GetFinalSupport(AbstractSingleActor actor, ParsedLog log, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
