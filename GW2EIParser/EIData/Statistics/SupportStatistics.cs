@@ -22,9 +22,9 @@ namespace GW2EIParser.Models
                 return GetCleanses(log, phase, buffsPerId);
             }
             long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
+            foreach (Buff condition in log.Buffs.BuffsByNature[Buff.BuffNature.Condition])
             {
-                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
+                if (buffsPerId.TryGetValue(condition.ID, out List<BuffRemoveAllEvent> list))
                 {
                     foreach (BuffRemoveAllEvent bf in list)
                     {
@@ -41,9 +41,9 @@ namespace GW2EIParser.Models
         private static long[] GetCleanses(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             long[] cleanse = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Condition].Select(x => x.ID))
+            foreach (Buff condition in log.Buffs.BuffsByNature[Buff.BuffNature.Condition])
             {
-                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
+                if (buffsPerId.TryGetValue(condition.ID, out List<BuffRemoveAllEvent> list))
                 {
                     foreach (BuffRemoveAllEvent bf in list)
                     {
@@ -61,9 +61,9 @@ namespace GW2EIParser.Models
         private static long[] GetBoonStrips(ParsedLog log, PhaseData phase, Dictionary<long, List<BuffRemoveAllEvent>> buffsPerId)
         {
             long[] strips = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
+            foreach (Buff boon in log.Buffs.BuffsByNature[Buff.BuffNature.Boon])
             {
-                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
+                if (buffsPerId.TryGetValue(boon.ID, out List<BuffRemoveAllEvent> list))
                 {
                     foreach (BuffRemoveAllEvent bf in list)
                     {
@@ -84,9 +84,9 @@ namespace GW2EIParser.Models
                 return GetBoonStrips(log, phase, buffsPerId);
             }
             long[] strips = { 0, 0 };
-            foreach (long id in log.Buffs.BuffsByNature[Buff.BuffNature.Boon].Select(x => x.ID))
+            foreach (Buff boon in log.Buffs.BuffsByNature[Buff.BuffNature.Boon])
             {
-                if (buffsPerId.TryGetValue(id, out List<BuffRemoveAllEvent> list))
+                if (buffsPerId.TryGetValue(boon.ID, out List<BuffRemoveAllEvent> list))
                 {
                     foreach (BuffRemoveAllEvent bf in list)
                     {
