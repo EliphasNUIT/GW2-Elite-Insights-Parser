@@ -49,11 +49,11 @@ namespace GW2EIParser.EIData
             return -1;
         }
 
-        private bool CouldBeImbuedMelodies(AbstractCastEvent item, long time, long extension, ParsedLog log)
+        private bool CouldBeImbuedMelodies(AgentItem agent, long time, long extension, ParsedLog log)
         {
             if (extension == ImbuedMelodies && log.PlayerListBySpec.TryGetValue("Tempest", out List<Player> tempests))
             {
-                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < GeneralHelper.ServerDelayConstant && x.By != item.Caster).Select(x => x.By));
+                var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(5684).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < GeneralHelper.ServerDelayConstant && x.By != agent).Select(x => x.By));
                 foreach (Player tempest in tempests)
                 {
                     if (magAuraApplications.Contains(tempest.AgentItem))
@@ -72,10 +72,10 @@ namespace GW2EIParser.EIData
                 return dst;
             }
             int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, extension, log);
-            if (essenceOfSpeedCheck != -1)
+            if (essenceOfSpeedCheck == 1)
             {
                 // unknown or self
-                return essenceOfSpeedCheck == 0 ? GeneralHelper.UnknownAgent : dst;
+                return dst;
             }
             if (DurationToIDs.TryGetValue(extension, out HashSet<long> idsToCheck))
             {
@@ -84,11 +84,19 @@ namespace GW2EIParser.EIData
                 {
                     AbstractCastEvent item = cls.First();
                     // Imbued Melodies check
-                    if (CouldBeImbuedMelodies(item, time, extension, log))
+                    if (CouldBeImbuedMelodies(item.Caster, time, extension, log))
                     {
                         return GeneralHelper.UnknownAgent;
                     }
                     return item.Caster;
+                }
+                else if (essenceOfSpeedCheck == 0)
+                {
+                    if (CouldBeImbuedMelodies(dst, time, extension, log))
+                    {
+                        return GeneralHelper.UnknownAgent;
+                    }
+                    return dst;
                 }
             }
             return GeneralHelper.UnknownAgent;
