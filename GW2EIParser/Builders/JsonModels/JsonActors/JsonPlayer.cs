@@ -32,7 +32,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// Statistics data
         /// </summary>
         /// <seealso cref="JsonStatistics"/>
-        public JsonStatistics Statistics { get; set; }
+        //public JsonStatistics Statistics { get; set; }
 
 
         public JsonPlayer(ParsedLog log, Player player, Dictionary<string, Desc> description) : base(log, player, description)
@@ -52,7 +52,7 @@ namespace GW2EIParser.Builders.JsonModels
             // Consumables
             Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), description);
             // Stats
-            Statistics = new JsonStatistics(log, player);
+            //Statistics = new JsonStatistics(log, player);
             //
             DescriptionID = UniqueID;
             //

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Models
 {
     /// <summary>
     /// Passes statistical information about dps logs
     /// </summary>
-    public static class DPSStatistics
+    /*public static class DPSStatistics
     {
         public static List<JsonDPS> GetFinalDPS(AbstractSingleActor actor, ParsedLog log, AbstractSingleActor target)
         {
@@ -46,5 +46,5 @@ namespace GW2EIParser.Models
             return res;
         }
 
-    }
+    }*/
 }

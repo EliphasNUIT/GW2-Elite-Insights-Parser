@@ -5,12 +5,12 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Builders.JsonModels.JsonCombatReplayActors;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.EIData.Buff;
-using static GW2EIParser.Models.DefenseStatistics;
+/*using static GW2EIParser.Models.DefenseStatistics;
 using static GW2EIParser.Models.DPSStatistics;
 using static GW2EIParser.Models.GameplayStatistics;
-using static GW2EIParser.Models.SupportStatistics;
+using static GW2EIParser.Models.SupportStatistics;*/
 
 namespace GW2EIParser.EIData
 {
@@ -22,14 +22,14 @@ namespace GW2EIParser.EIData
         //private readonly List<BuffDistributionDictionary> _boonDistribution = new List<BuffDistributionDictionary>();
         //private readonly List<Dictionary<long, long>> _buffPresence = new List<Dictionary<long, long>>();
         // Statistics
-        private readonly Dictionary<AbstractSingleActor, List<JsonDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<JsonDPS>>();
+        /*private readonly Dictionary<AbstractSingleActor, List<JsonDPS>> _dpsTarget = new Dictionary<AbstractSingleActor, List<JsonDPS>>();
         private List<JsonDPS> _dpsAll;
         private readonly Dictionary<AbstractSingleActor, List<JsonGameplay>> _statsTarget = new Dictionary<AbstractSingleActor, List<JsonGameplay>>();
         private List<JsonGameplayAll> _statsAll;
         private readonly Dictionary<AbstractSingleActor, List<JsonDefense>> _defensesTarget = new Dictionary<AbstractSingleActor, List<JsonDefense>>();
         private List<JsonDefenseAll> _defensesAll;
         private readonly Dictionary<AbstractSingleActor, List<JsonSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<JsonSupport>>();
-        private List<JsonSupportAll> _support;
+        private List<JsonSupportAll> _support;*/
         private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllByID;
         //status
         private List<(long start, long end)> _deads;
@@ -346,9 +346,18 @@ namespace GW2EIParser.EIData
             _buffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             _buffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
         }
+        public Dictionary<long, List<BuffRemoveAllEvent>> GetBuffRemoveAllByID(ParsedLog log)
+        {
+            if (_buffRemoveAllByID == null)
+            {
+                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.Where(x => x.IsBoonSimulatorCompliant(log.FightData.FightDuration)).ToList());
+            }
+            return _buffRemoveAllByID;
+        }
+
         // DPS
 
-        public List<JsonDPS> GetDPS(ParsedLog log)
+        /*public List<JsonDPS> GetDPS(ParsedLog log)
         {
             if (_dpsAll == null)
             {
@@ -415,15 +424,6 @@ namespace GW2EIParser.EIData
         }
         // Support
 
-        public Dictionary<long, List<BuffRemoveAllEvent>> GetBuffRemoveAllByID(ParsedLog log)
-        {
-            if (_buffRemoveAllByID == null)
-            {
-                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.Where(x => x.IsBoonSimulatorCompliant(log.FightData.FightDuration)).ToList());
-            }
-            return _buffRemoveAllByID;
-        }
-
         public List<JsonSupportAll> GetSupport(ParsedLog log)
         {
             if (_support == null)
@@ -443,7 +443,7 @@ namespace GW2EIParser.EIData
                 _supportTarget[target] = GetFinalSupport(log, target, GetBuffRemoveAllByID(log));
             }
             return _supportTarget[target];
-        }
+        }*/
 
         // Minions
         public Dictionary<long, Minions> GetMinions(ParsedLog log)

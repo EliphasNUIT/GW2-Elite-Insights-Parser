@@ -2,7 +2,7 @@
 using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
@@ -96,15 +96,16 @@ namespace GW2EIParser.EIData
 
         public int GetTotalDamage(Player p, ParsedLog log, NPC t, int phaseIndex)
         {
-            JsonDPS damageData = p.GetDPS(log, t)[phaseIndex];
+            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
+            List<AbstractDamageEvent> damageData = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustActorDamageLogs(t, log, phase.Start, phase.End);
             switch (_compareType)
             {
                 case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
+                    return damageData.Sum(x => x.Damage);
                 case DamageType.Condition:
-                    return _dmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
+                    return damageData.Sum(x => x.IsCondi(log) ? x.Damage : 0);
                 case DamageType.Power:
-                    return _dmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
+                    return damageData.Sum(x => !x.IsCondi(log) ? x.Damage : 0);
                 default:
                     break;
             }

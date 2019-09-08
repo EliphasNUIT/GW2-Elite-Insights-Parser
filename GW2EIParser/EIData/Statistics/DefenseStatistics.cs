@@ -5,14 +5,14 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Builders.JsonModels.JsonStatistics;
+//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.Models
 {
     /// <summary>
     /// Passes statistical information about dps logs
     /// </summary>
-    public static class DefenseStatistics
+    /*public static class DefenseStatistics
     {
         private static void FillFinalDefenses(JsonDefense finalDefenses, AbstractSingleActor actor, ParsedLog log, long start, long end, AbstractSingleActor target)
         {
@@ -87,5 +87,5 @@ namespace GW2EIParser.Models
             }
             return res;
         }
-    }
+    }*/
 }

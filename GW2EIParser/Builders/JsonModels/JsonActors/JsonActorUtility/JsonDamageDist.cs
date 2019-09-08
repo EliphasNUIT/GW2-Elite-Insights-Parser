@@ -11,7 +11,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class corresponding a damage distribution
     /// </summary>
-    public class JsonDamageDist
+    /*public class JsonDamageDist
     {
         /// <summary>
         /// Total damage done
@@ -128,5 +128,5 @@ namespace GW2EIParser.Builders.JsonModels
             }
             return damageDist;
         }
-    }
+    }*/
 }

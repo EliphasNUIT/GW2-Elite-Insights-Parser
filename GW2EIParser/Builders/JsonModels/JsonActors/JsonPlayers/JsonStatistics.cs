@@ -5,7 +5,7 @@ using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
 {
-    public class JsonStatistics
+    /*public class JsonStatistics
     {
         /// <summary>
         /// Defensive stats 
@@ -312,5 +312,5 @@ namespace GW2EIParser.Builders.JsonModels
             SupportAll = actor.GetSupport(log);
         }
 
-    }
+    }*/
 }

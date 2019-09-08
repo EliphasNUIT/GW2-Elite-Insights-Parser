@@ -31,9 +31,6 @@ namespace GW2EIParser.Builders.JsonModels
             private const long IsEvaded = 1 << 14;
 
             public string Id { get; set; }
-            /// <summary>
-            /// ID of the relevant agent, destination for damage done, source for damage taken
-            /// </summary>
 
             public long Time { get; set; }
 
@@ -146,13 +143,13 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<List<JsonDamageDist>> TotalDamageDists { get; set; }
+        //public List<List<JsonDamageDist>> TotalDamageDists { get; set; }
         /// <summary>
         /// Damage taken array
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
-        public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
+        //public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
 
         public List<JsonDamageItemDone> DamageEvents { get; set; }
 
@@ -160,14 +157,14 @@ namespace GW2EIParser.Builders.JsonModels
 
         public JsonDamageDistData(ParsedLog log, AbstractActor actor, Dictionary<string, Desc> description)
         {
-            List<PhaseData> phases = log.FightData.GetPhases(log);
+            /*List<PhaseData> phases = log.FightData.GetPhases(log);
             TotalDamageDists = new List<List<JsonDamageDist>>();
             TotalDamageTakenDists = new List<List<JsonDamageDist>>();
             foreach (PhaseData phase in phases)
             {
                 TotalDamageDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetJustActorDamageLogs(null, log, phase.Start, phase.End), log, description));
                 TotalDamageTakenDists.Add(JsonDamageDist.BuildJsonDamageDists(actor.GetDamageTakenLogs(null, log, phase.Start, phase.End), log, description));
-            }
+            }*/
             //
             DamageEvents = actor.GetJustActorDamageLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItemDone(x, log, description)).ToList();
             DamageTakenEvents = actor.GetDamageTakenLogs(null, log, 0, log.FightData.FightDuration).Select(x => new JsonDamageItemTaken(x, log, description)).ToList();
