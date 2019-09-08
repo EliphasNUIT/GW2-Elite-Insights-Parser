@@ -9,7 +9,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Base class single actors
     /// </summary>
-    public abstract class JsonSingleActor : JsonActor
+    public abstract class JsonSingleActor
     {
         /// <summary>
         /// Buff data

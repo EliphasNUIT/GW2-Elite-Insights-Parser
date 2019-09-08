@@ -279,12 +279,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// The list of enemies
         /// </summary>
         /// <seealso cref="JsonActor"/>
-        public List<JsonActor> Enemies { get; set; }
+        public List<JsonSingleActor> Enemies { get; set; }
         /// <summary>
         /// The list of friendlies
         /// </summary>
         /// <seealso cref="JsonActor"/>
-        public List<JsonActor> Friendlies { get; set; }
+        public List<JsonSingleActor> Friendlies { get; set; }
         /// <summary>
         /// The list of phases
         /// </summary>
@@ -358,13 +358,13 @@ namespace GW2EIParser.Builders.JsonModels
             Descriptions["concentration"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" };
             Descriptions["healingPower"] = new IconDesc { Icon = "https://wiki.guildwars2.com/images/8/81/Healing_Power.png" };
             // Friendlies
-            Friendlies = new List<JsonActor>();
+            Friendlies = new List<JsonSingleActor>();
             foreach (Player p in log.PlayerList)
             {
                 Friendlies.Add(new JsonPlayer(log, p, Descriptions));
             }
             // Targets
-            Enemies = new List<JsonActor>();
+            Enemies = new List<JsonSingleActor>();
             foreach (NPC tar in log.FightData.Logic.NPCs)
             {
                 if (tar.Friendly)

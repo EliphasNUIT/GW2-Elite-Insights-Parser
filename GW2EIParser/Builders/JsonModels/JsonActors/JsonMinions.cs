@@ -9,7 +9,7 @@ namespace GW2EIParser.Builders.JsonModels
     /// <summary>
     /// Class corresponding to the regrouping of the same type of minions
     /// </summary>
-    public class JsonMinions : JsonActor
+    public class JsonMinions
     {
         public List<JsonNPC> MinionList { get; set; }
         public JsonMinions(ParsedLog log, Minions minions, Dictionary<string, Desc> description)
