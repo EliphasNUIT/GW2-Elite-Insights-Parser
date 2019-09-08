@@ -157,7 +157,7 @@ namespace GW2EIParser.EIData
         private static readonly List<Buff> _commons = new List<Buff>
         {
                 new Buff("Stealth", 13017, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
-                new Buff("Revealed", 890, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
+                new Buff("Revealed", 890, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Buff("Superspeed", 5974, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 new Buff("Determined (762)", 762, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Determined (788)", 788, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -169,7 +169,7 @@ namespace GW2EIParser.EIData
                 new Buff("Invulnerability (801)", 801, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Buff("Stun", 872, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/9/97/Stun.png"),
                 new Buff("Daze", 833, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/7/79/Daze.png"),
-                new Buff("Exposed", 48209, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
+                new Buff("Exposed", 48209, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/f/f4/Exposed_%28effect%29.png"),
                 //Auras
                 new Buff("Chaos Aura", 10332, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/1b/Chaos_Armor.png"),
                 new Buff("Fire Aura", 5677, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/1/18/Fire_Shield.png"),
