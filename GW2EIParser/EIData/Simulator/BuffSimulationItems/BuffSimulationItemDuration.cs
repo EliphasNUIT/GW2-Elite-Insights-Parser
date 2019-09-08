@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.EIData.BuffSimulator;
 
 namespace GW2EIParser.EIData
@@ -90,7 +92,7 @@ namespace GW2EIParser.EIData
             }
         }*/
 
-        public override List<JsonBuffStackStatus.JsonBuffStackStatusItem> GetStackStatusList()
+        public override List<object> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
             throw new InvalidOperationException();
         }

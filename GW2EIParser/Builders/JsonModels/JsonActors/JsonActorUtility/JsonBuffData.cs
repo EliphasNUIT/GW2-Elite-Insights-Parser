@@ -72,29 +72,18 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class JsonBuffStackStatus
         {
-            public class JsonBuffStackStatusItem
+            List<object[]> StackData { get; set; }
+            List<List<object>> StackStatus { get; set; }
+            public JsonBuffStackStatus(List<BuffSimulationItem> sourceBasedBoonChart, ParsedLog log, Dictionary<string, Desc> description)
             {
-                /// <summary>
-                /// Unique id of the source
-                /// </summary>
-                public string SourceId { get; set; }
-                /// <summary>
-                /// Duration of the item, if missing that means duration == <seealso cref="JsonBuffStackStatus.Duration"/>
-                /// </summary>
-                public long Duration { get; set; }
+                StackData = new List<object[]>();
+                StackStatus = new List<List<object>>();
+                foreach (BuffSimulationItem item in sourceBasedBoonChart)
+                {
+                    StackData.Add(new object[2] { item.Start, item.Duration });
+                    StackStatus.Add(item.GetStackStatusList(log, description));
+                }
             }
-            /// <summary>
-            /// Start time of the stack
-            /// </summary>
-            public long Start { get; set; }
-            /// <summary>
-            /// Duration of the stack
-            /// </summary>
-            public long Duration { get; set; }
-            /// <summary>
-            /// Sources of the stack
-            /// </summary>
-            public List<JsonBuffStackStatusItem> Sources { get; set; }
         }
 
         public class JsonBuffRemoveItem
@@ -114,11 +103,28 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, List<JsonBuffStackStatus>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public class JsonBuffWasteItem
+        {
+            public string UniqueID { get; set; }
+            [DefaultValue(null)]
+            public long Time { get; set; }
+            public long WastedDuration { get; set; }
+
+            public JsonBuffWasteItem(AbstractBuffSimulationItemWasted item, ParsedLog log, Dictionary<string, Desc> description)
+            {
+                UniqueID = GetActorID(item.Src, log, description);
+                Time = item.Time;
+                WastedDuration = item.Waste;
+            }
+        }
+
+        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, JsonBuffStackStatus>, Dictionary<string, List<JsonBuffWasteItem>>, Dictionary<string, List<JsonBuffWasteItem>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
             //var buffs = new List<Dictionary<string, JsonBuffs>>();
             var buffStates = new Dictionary<string, List<int>>();
-            var buffStackStates = new Dictionary<string, List<JsonBuffStackStatus>>();
+            var buffStackStates = new Dictionary<string, JsonBuffStackStatus>();
+            var buffWastedStates = new Dictionary<string, List<JsonBuffWasteItem>>();
+            var buffOverstackStates = new Dictionary<string, List<JsonBuffWasteItem>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             /*for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
             {
@@ -141,7 +147,8 @@ namespace GW2EIParser.Builders.JsonModels
                     buffStates[id] = bgm.GetStatesList();
                     if (bgm.IsSourceBased)
                     {
-                        buffStackStates[id] = bgm.GetStackStatusList();
+                        buffStackStates[id] = bgm.GetStackStatusList(log, description);
+                        (buffOverstackStates[id], buffWastedStates[id]) = bgm.GetWasteStatusList(log, description);
                     }
                 }
                 /*var jsonBuff = new JsonBuffs(buff, log, dict, buffPresence, description);
@@ -151,7 +158,7 @@ namespace GW2EIParser.Builders.JsonModels
             buffs.Add(buffDict);*/
             }
 
-            return (/*buffs, */buffStates, buffStackStates);
+            return (/*buffs, */buffStates, buffStackStates, buffOverstackStates, buffWastedStates);
         }
 
         //public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
@@ -163,9 +170,9 @@ namespace GW2EIParser.Builders.JsonModels
         public Dictionary<string, List<int>> BuffStates { get; set; }
 
         /// <summary>
-        /// Dictionary per buff that contains an array of <see cref="JsonBuffStackStatus"/>
+        /// Dictionary per buff that contains <see cref="JsonBuffStackStatus"/>/>
         /// </summary>
-        public Dictionary<string, List<JsonBuffStackStatus>> BuffStackStates { get; set; }
+        public Dictionary<string, JsonBuffStackStatus> BuffStackStates { get; set; }
         /// <summary>
         /// Dictionary per boon that contains an array of <see cref="JsonBuffRemoveItem"/>
         /// </summary>
@@ -174,6 +181,9 @@ namespace GW2EIParser.Builders.JsonModels
         /// Dictionary per condition that contains an array of <see cref="JsonBuffRemoveItem"/>
         /// </summary>
         public Dictionary<string, List<JsonBuffRemoveItem>> ConditionRemoveStatus { get; set; }
+
+        public Dictionary<string, List<JsonBuffWasteItem>> BuffWasteStates { get; set; }
+        public Dictionary<string, List<JsonBuffWasteItem>> BuffOverstackStates { get; set; }
 
         private static void SetBuffRemoveItems(List<Buff> buffsToUse, Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls, Dictionary<string, List<JsonBuffRemoveItem>> toFill, ParsedLog log, Dictionary<string, Desc> description)
         {
@@ -193,7 +203,7 @@ namespace GW2EIParser.Builders.JsonModels
 
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
-            (/*Buffs, */BuffStates, BuffStackStates) = GetJsonBuffs(actor, log, description);
+            (/*Buffs, */BuffStates, BuffStackStates, BuffOverstackStates, BuffWasteStates) = GetJsonBuffs(actor, log, description);
             Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls = actor.GetBuffRemoveAllByID(log);
             //
             ConditionRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();

@@ -273,9 +273,9 @@ namespace GW2EIParser.EIData
                         graphSegments.Add(new BuffSegment(0, dur, 0));
                     }
                     // Wasted and Overstack
-                    var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
+                    /*var extraSimulations = new List<AbstractBuffSimulationItem>(simulator.OverstackSimulationResult);
                     extraSimulations.AddRange(simulator.WasteSimulationResult);
-                    /*foreach (AbstractBuffSimulationItem simul in extraSimulations)
+                    foreach (AbstractBuffSimulationItem simul in extraSimulations)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
@@ -283,7 +283,7 @@ namespace GW2EIParser.EIData
                             simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }*/
-                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation);
+                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation, simulator.OverstackSimulationResult, simulator.WasteSimulationResult);
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {

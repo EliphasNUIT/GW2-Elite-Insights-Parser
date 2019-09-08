@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.EIData
 {
@@ -9,6 +11,8 @@ namespace GW2EIParser.EIData
         public Buff Boon { get; }
         public List<BuffSegment> ValueBasedBoonChart { get; private set; } = new List<BuffSegment>();
         private readonly List<BuffSimulationItem> _sourceBasedBoonChart;
+        private readonly List<BuffSimulationItemOverstack> _overstackChart;
+        private readonly List<BuffSimulationItemWasted> _wastedChart;
         public bool IsSourceBased => _sourceBasedBoonChart != null;
 
         // Constructor
@@ -16,11 +20,13 @@ namespace GW2EIParser.EIData
         {
             Boon = boon;
         }
-        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, List<BuffSimulationItem> boonChartWithSource)
+        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, List<BuffSimulationItem> boonChartWithSource, List<BuffSimulationItemOverstack> overstackChart, List<BuffSimulationItemWasted> wastedChart)
         {
             Boon = boon;
             _sourceBasedBoonChart = boonChartWithSource;
             ValueBasedBoonChart = segments;
+            _overstackChart = overstackChart;
+            _wastedChart = wastedChart;
             // needed for fast is present, stack and condi/boon graphs
             FuseSegments();
         }
@@ -97,24 +103,36 @@ namespace GW2EIParser.EIData
             return res.Count > 0 ? res : null;
         }
 
-        public List<JsonBuffStackStatus> GetStackStatusList()
+        public JsonBuffStackStatus GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
             if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
             {
                 return null;
             }
-            var res = new List<JsonBuffStackStatus>();
-            foreach (BuffSimulationItem item in _sourceBasedBoonChart)
+            var res = new JsonBuffStackStatus(_sourceBasedBoonChart, log, description);
+            _sourceBasedBoonChart.Clear();
+            return res;
+        }
+
+        public (List<JsonBuffWasteItem>, List<JsonBuffWasteItem>) GetWasteStatusList(ParsedLog log, Dictionary<string, Desc> description)
+        {
+            if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
             {
-                var stackStatus = new JsonBuffStackStatus
-                {
-                    Start = item.Start,
-                    Duration = item.Duration,
-                    Sources = item.GetStackStatusList()
-                };
-                res.Add(stackStatus);
+                return (null, null);
             }
-            return res.Count > 0 ? res : null;
+            var overstack = new List<JsonBuffWasteItem>();
+            var wasted = new List<JsonBuffWasteItem>();
+            foreach (BuffSimulationItemOverstack item in _overstackChart)
+            {
+                overstack.Add(new JsonBuffWasteItem(item, log, description));
+            }
+            _overstackChart.Clear();
+            foreach (BuffSimulationItemWasted item in _wastedChart)
+            {
+                wasted.Add(new JsonBuffWasteItem(item, log, description));
+            }
+            _wastedChart.Clear();
+            return (overstack, wasted);
         }
 
     }

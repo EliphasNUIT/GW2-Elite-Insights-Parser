@@ -4,20 +4,20 @@ namespace GW2EIParser.EIData
 {
     public abstract class AbstractBuffSimulationItemWasted : AbstractBuffSimulationItem
     {
-        protected AgentItem Src { get; }
-        private readonly long _waste;
-        protected long Time { get; }
+        public AgentItem Src { get; }
+        public long Waste { get; }
+        public long Time { get; }
 
         protected AbstractBuffSimulationItemWasted(AgentItem src, long waste, long time)
         {
             Src = src;
-            _waste = waste;
+            Waste = waste;
             Time = time;
         }
 
         protected long GetValue(long start, long end)
         {
-            return (start <= Time && Time <= end) ? _waste : 0;
+            return (start <= Time && Time <= end) ? Waste : 0;
         }
     }
 }
