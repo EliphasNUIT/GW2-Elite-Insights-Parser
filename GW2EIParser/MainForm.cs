@@ -61,6 +61,7 @@ namespace GW2EIParser
                 gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
                 gridRowBindingSource.Add(gRow);
+                gridRowBindingSource.ResetBindings(true);
 
                 if (Properties.Settings.Default.AutoParse)
                 {
@@ -185,6 +186,7 @@ namespace GW2EIParser
                     if (row.State == RowState.ClearOnComplete)
                     {
                         gridRowBindingSource.Remove(row);
+                        gridRowBindingSource.ResetBindings(true);
                     }
                     else
                     {
@@ -203,6 +205,7 @@ namespace GW2EIParser
                 if (row.State == RowState.ClearOnComplete)
                 {
                     gridRowBindingSource.Remove(row);
+                    gridRowBindingSource.ResetBindings(true);
                 }
                 else
                 {
@@ -310,6 +313,7 @@ namespace GW2EIParser
                 else
                 {
                     gridRowBindingSource.RemoveAt(i);
+                    gridRowBindingSource.ResetBindings(true);
                 }
             }
         }
