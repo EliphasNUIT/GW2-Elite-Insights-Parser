@@ -20,16 +20,11 @@ namespace GW2EIParser.Builders
 
         public void CreateJSON(StreamWriter sw)
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
-
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = GeneralHelper.ContractResolver
             };
             var writer = new JsonTextWriter(sw)
             {

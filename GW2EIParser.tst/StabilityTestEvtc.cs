@@ -71,15 +71,11 @@ namespace LuckParser.tst
 
             using FileStream fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
             using StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
-            DefaultContractResolver contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
 
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver
+                ContractResolver = GeneralHelper.ContractResolver
             };
             JsonTextWriter writer = new JsonTextWriter(sw)
             {

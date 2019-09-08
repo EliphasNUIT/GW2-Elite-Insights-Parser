@@ -106,10 +106,7 @@ namespace GW2EIParser.Controllers
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Newtonsoft.Json.Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = new DefaultContractResolver()
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    }
+                    ContractResolver = GeneralHelper.ContractResolver
                 };
                 serializer.Serialize(writer, _listOfSkills.Items);
                 writer.Close();
@@ -133,10 +130,7 @@ namespace GW2EIParser.Controllers
                         + "/Content/SkillList.json");
                         var serializer = new JsonSerializer()
                         {
-                            ContractResolver = new DefaultContractResolver()
-                            {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
+                            ContractResolver = GeneralHelper.ContractResolver
                         };
                         _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
                         reader.Close();
@@ -231,10 +225,7 @@ namespace GW2EIParser.Controllers
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Newtonsoft.Json.Formatting.None,
-                    ContractResolver = new DefaultContractResolver()
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    }
+                    ContractResolver = GeneralHelper.ContractResolver
                 };
                 serializer.Serialize(writer, _listofSpecs.Items);
                 writer.Close();
@@ -259,10 +250,7 @@ namespace GW2EIParser.Controllers
                         + "/Content/SpecList.json");
                         var serializer = new JsonSerializer()
                         {
-                            ContractResolver = new DefaultContractResolver()
-                            {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
+                            ContractResolver = GeneralHelper.ContractResolver
                         };
                         _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
                         reader.Close();
@@ -438,10 +426,7 @@ namespace GW2EIParser.Controllers
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Newtonsoft.Json.Formatting.None,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = new DefaultContractResolver()
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    }
+                    ContractResolver = GeneralHelper.ContractResolver
                 };
                 serializer.Serialize(writer, _listOfTraits.Items);
                 writer.Close();
@@ -465,10 +450,7 @@ namespace GW2EIParser.Controllers
                         + "/Content/TraitList.json");
                         var serializer = new JsonSerializer()
                         {
-                            ContractResolver = new DefaultContractResolver()
-                            {
-                                NamingStrategy = new CamelCaseNamingStrategy()
-                            }
+                            ContractResolver = GeneralHelper.ContractResolver
                         };
                         _listOfTraits.Items = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
                         reader.Close();
