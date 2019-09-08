@@ -106,7 +106,7 @@ namespace GW2EIParser.Builders.JsonModels
             public string Description { get; set; }
             /// <summary>
             /// False if the modifier is multiplicative \n
-            /// If true then the correspond <see cref="JsonBuffDamageModifierData.JsonBuffDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
+            /// If true then the correspond <see cref="JsonDamageModifierData.JsonBuffDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
             /// </summary>
             public bool NonMultiplier { get; set; }
         }
