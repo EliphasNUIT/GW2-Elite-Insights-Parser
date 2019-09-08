@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData;
+using static GW2EIParser.Builders.JsonModels.JsonBuffData.JsonBuffStackStatus;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.EIData
@@ -34,7 +35,7 @@ namespace GW2EIParser.EIData
 
         public abstract int GetTickingStacksCount();
 
-        public abstract List<object> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description);
+        public abstract List<JsonBuffStackStatusSources> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description);
 
     }
 }

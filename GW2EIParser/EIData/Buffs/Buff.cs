@@ -754,9 +754,9 @@ namespace GW2EIParser.EIData
                 new Buff("Powerful Potion of Ice Brood Slaying",9861, BuffSource.Item, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
                 // Fractals 
-                new Buff("Fractal Mobility", 33024, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
-                new Buff("Fractal Defensive", 32134, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
-                new Buff("Fractal Offensive", 32473, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.ForceOverride,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+                new Buff("Fractal Mobility", 33024, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
+                new Buff("Fractal Defensive", 32134, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
+                new Buff("Fractal Offensive", 32473, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
         };
 
         public static List<List<Buff>> AllBoons = new List<List<Buff>>()

@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIParser.Parser;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData;
+using static GW2EIParser.Builders.JsonModels.JsonBuffData.JsonBuffStackStatus;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.EIData.BuffSimulator;
 
@@ -44,15 +45,15 @@ namespace GW2EIParser.EIData
         }*/
 
 
-        public override List<object> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
+        public override List<JsonBuffStackStatusSources> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            var res = new List<object>();
+            var res = new List<JsonBuffStackStatusSources>();
             foreach (BuffSimulationItemDuration item in _stacks)
             {
-                var subRes = new List<object>() { GetActorID(item.Src, log, description)};
+                var subRes = new JsonBuffStackStatusSources { Src = GetActorID(item.Src, log, description)};
                 if (item.IsExtension)
                 {
-                    subRes.Add(GetActorID(item.SeedSrc, log, description));
+                    subRes.SeedSrc = GetActorID(item.SeedSrc, log, description);
                 }
                 res.Add(subRes);
             }

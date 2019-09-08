@@ -72,15 +72,29 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class JsonBuffStackStatus
         {
-            List<object[]> StackData { get; set; }
-            List<List<object>> StackStatus { get; set; }
+            public class JsonBuffStackStatusData
+            {
+                [DefaultValue(null)]
+                public long Start { get; set; }
+                public long Duration { get; set; }
+            }
+
+            public class JsonBuffStackStatusSources
+            {
+                public string Src { get; set; }
+                public long Duration { get; set; }
+                public string SeedSrc { get; set; }
+            }
+
+            List<JsonBuffStackStatusData> StackData { get; set; }
+            List<List<JsonBuffStackStatusSources>> StackStatus { get; set; }
             public JsonBuffStackStatus(List<BuffSimulationItem> sourceBasedBoonChart, ParsedLog log, Dictionary<string, Desc> description)
             {
-                StackData = new List<object[]>();
-                StackStatus = new List<List<object>>();
+                StackData = new List<JsonBuffStackStatusData>();
+                StackStatus = new List<List<JsonBuffStackStatusSources>>();
                 foreach (BuffSimulationItem item in sourceBasedBoonChart)
                 {
-                    StackData.Add(new object[2] { item.Start, item.Duration });
+                    StackData.Add(new JsonBuffStackStatusData { Start = item.Start, Duration = item.Duration });
                     StackStatus.Add(item.GetStackStatusList(log, description));
                 }
             }
