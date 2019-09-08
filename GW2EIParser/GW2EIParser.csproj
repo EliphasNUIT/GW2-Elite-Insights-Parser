@@ -50,8 +50,8 @@
     <CodeAnalysisRuleSet>GW2EIParserRuleset.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
     <CodeAnalysisRuleSet>GW2EIParserRuleset.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
