@@ -125,7 +125,7 @@ namespace GW2EIParser.Builders.JsonModels
             public string DestinationID { get; set; }
             public JsonDamageItemDone(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
             {
-                DestinationID = GetNPCID(evt.To, log, description);
+                DestinationID = GetActorID(evt.To, log, description);
             }
         }
 
@@ -136,7 +136,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public JsonDamageItemTaken(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
             {
-                SourceID = GetNPCID(evt.From, log, description);
+                SourceID = GetActorID(evt.From, log, description);
             }
         }
 

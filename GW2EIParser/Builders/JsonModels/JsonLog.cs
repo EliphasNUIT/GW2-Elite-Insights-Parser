@@ -315,7 +315,7 @@ namespace GW2EIParser.Builders.JsonModels
         /// <seealso cref="JsonCombatReplay"/>
         public JsonCombatReplay CombatReplayData { get; set; }
 
-        public static string GetNPCID(AgentItem ag, ParsedLog log, Dictionary<string, Desc> description)
+        public static string GetActorID(AgentItem ag, ParsedLog log, Dictionary<string, Desc> description)
         {
             string res = ag.UniqueID;
             // Players are always in description

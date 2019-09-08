@@ -38,7 +38,7 @@ namespace GW2EIParser.Builders.JsonModels
                 Uptime = multiplier * dict.Sum(x => x.Value.Generation);
                 foreach (AgentItem ag in dict.Keys)
                 {
-                    string uniqueID = GetNPCID(ag, log, description);
+                    string uniqueID = GetActorID(ag, log, description);
                     BuffDistributionItem item = dict[ag];
                     if (item.Generation > 0)
                     {
@@ -107,7 +107,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public JsonBuffRemoveItem(BuffRemoveAllEvent brae, ParsedLog log, Dictionary<string, Desc> description)
             {
-                UniqueID = GetNPCID(brae.To, log, description);
+                UniqueID = GetActorID(brae.To, log, description);
                 Time = brae.Time;
                 RemovedDuration = brae.RemovedDuration;
                 RemovedStacks = brae.RemovedStacks;
