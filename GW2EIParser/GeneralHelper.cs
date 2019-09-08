@@ -18,6 +18,8 @@ namespace GW2EIParser
         public static readonly int BoonDigit = 3;
         public static readonly int TimeDigit = 3;
 
+        public static readonly long ServerDelayConstant = 10;
+
         public static readonly AgentItem UnknownAgent = new AgentItem();
         // use this for "null" in AbstractActor dictionaries
         public static readonly NPC NullActor = new NPC(UnknownAgent, false);

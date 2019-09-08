@@ -19,7 +19,7 @@ namespace GW2EIParser.EIData
                 return false;
             }
             BoonStackItem stack = stacks[0];
-            if (stack.TotalBoonDuration() < stackItem.TotalBoonDuration() + 15)
+            if (stack.TotalBoonDuration() <= stackItem.TotalBoonDuration() + GeneralHelper.ServerDelayConstant)
             {
                 wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
                 if (stack.Extensions.Count > 0)
