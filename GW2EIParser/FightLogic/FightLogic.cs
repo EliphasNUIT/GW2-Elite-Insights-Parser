@@ -115,6 +115,11 @@ namespace GW2EIParser.Logic
             }
         }
 
+        /// <summary>
+        /// This method returns the ids of npcs to be regrouped under a single entity
+        /// Override this in fights where an entity disapears for some reason (Deimos, Artsariiv,...)
+        /// </summary>
+        /// <returns></returns>
         protected abstract HashSet<ushort> GetUniqueTargetIDs();
 
         protected void ComputeFightNPCs(AgentData agentData, List<CombatItem> combatItems)
