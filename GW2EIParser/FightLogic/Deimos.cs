@@ -63,6 +63,33 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override List<ushort> GetFightNPCsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
+                (ushort)Thief,
+                (ushort)Drunkard,
+                (ushort)Gambler,
+                (ushort)Saul,
+                (ushort)GamblerClones,
+                (ushort)GamblerReal,
+                (ushort)Greed,
+                (ushort)Pride,
+                (ushort)Oil,
+                (ushort)Tear,
+                (ushort)Hands
+            };
+        }
+
+        protected override HashSet<ushort> GetFriendlyNPCsIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)Saul,
+            };
+        }
+
         private void SetUniqueID(AgentItem target, HashSet<ulong> gadgetAgents, AgentData agentData, List<CombatItem> combatData)
         {
             // get unique id for the fusion
@@ -330,33 +357,6 @@ namespace GW2EIParser.Logic
             phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
-        }
-
-        protected override List<ushort> GetFightNPCsIDs()
-        {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
-                (ushort)Thief,
-                (ushort)Drunkard,
-                (ushort)Gambler,
-                (ushort)Saul,
-                (ushort)GamblerClones,
-                (ushort)GamblerReal,
-                (ushort)Greed,
-                (ushort)Pride,
-                (ushort)Oil,
-                (ushort)Tear,
-                (ushort)Hands
-            };
-        }
-
-        protected override HashSet<ushort> GetFriendlyNPCsIDs()
-        {
-            return new HashSet<ushort>
-            {
-                (ushort)Saul,
-            };
         }
 
         public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)

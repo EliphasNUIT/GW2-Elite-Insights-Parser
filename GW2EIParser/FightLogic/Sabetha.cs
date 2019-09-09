@@ -136,6 +136,20 @@ namespace GW2EIParser.Logic
                 (ushort)Kernan,
                 (ushort)Knuckles,
                 (ushort)Karde,
+                (ushort)BanditSapper,
+                (ushort)BanditThug,
+                (ushort)BanditArsonist
+            };
+        }
+
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.EvtcNPCIDs.Sabetha,
+                (ushort)Kernan,
+                (ushort)Karde,
+                (ushort)Knuckles,
             };
         }
 
@@ -235,20 +249,6 @@ namespace GW2EIParser.Logic
                     replay.Actors.Add(new CircleDecoration(true, sapperStart + 5000, 180, (sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)", new AgentConnector(p)));
                 }
             }
-        }
-
-        protected override HashSet<ushort> GetUniqueTargetIDs()
-        {
-            return new HashSet<ushort>
-            {
-                (ushort)ParseEnum.EvtcNPCIDs.Sabetha,
-                (ushort)Kernan,
-                (ushort)Karde,
-                (ushort)Knuckles,
-                (ushort)BanditSapper,
-                (ushort)BanditThug,
-                (ushort)BanditArsonist
-            };
         }
     }
 }

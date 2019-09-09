@@ -52,6 +52,15 @@ namespace GW2EIParser.Logic
             };
         }
 
+        protected override HashSet<ushort> GetUniqueTargetIDs()
+        {
+            return new HashSet<ushort>
+            {
+                (ushort)ParseEnum.EvtcNPCIDs.Kenut,
+                (ushort)ParseEnum.EvtcNPCIDs.Nikare
+            };
+        }
+
         protected override List<ushort> GetSuccessCheckIds()
         {
             return GetFightNPCsIDs();
@@ -102,15 +111,6 @@ namespace GW2EIParser.Logic
                 phase.Targets.Add(target);
             }
             return targetPhases;
-        }
-
-        protected override HashSet<ushort> GetUniqueTargetIDs()
-        {
-            return new HashSet<ushort>
-            {
-                (ushort)ParseEnum.EvtcNPCIDs.Kenut,
-                (ushort)ParseEnum.EvtcNPCIDs.Nikare
-            };
         }
 
         private void FallBackPhases(NPC target, List<PhaseData> phases, ParsedLog log, bool firstPhaseAt0)

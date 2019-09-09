@@ -106,6 +106,8 @@ namespace GW2EIParser.Logic
                 (ushort)ParseEnum.EvtcNPCIDs.Qadim,
                 (ushort)AncientInvokedHydra,
                 (ushort)ApocalypseBringer,
+                (ushort)IcebornHydra,
+                (ushort)IceElemental,
                 (ushort)WyvernMatriarch,
                 (ushort)WyvernPatriarch,
                 (ushort)Zommoros
