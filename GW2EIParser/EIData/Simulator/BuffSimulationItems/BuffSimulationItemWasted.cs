@@ -8,16 +8,14 @@ namespace GW2EIParser.EIData
         public long Waste { get; }
         public long Time { get; }
 
-        public BuffSimulationItemWasted(AgentItem src, long waste, long time)
+        public long ID { get; }
+
+        public BuffSimulationItemWasted(AgentItem src, long waste, long time, long id)
         {
             Src = src;
             Waste = waste;
             Time = time;
-        }
-
-        protected long GetValue(long start, long end)
-        {
-            return (start <= Time && Time <= end) ? Waste : 0;
+            ID = id;
         }
     }
 }

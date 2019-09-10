@@ -84,6 +84,18 @@ namespace GW2EIParser.Builders.JsonModels
                 public string Src { get; set; }
                 public long Duration { get; set; }
                 public string SeedSrc { get; set; }
+                public long ID { get; set; }
+
+                public JsonBuffStackStatusSources(BuffSimulationItemDuration item, ParsedLog log, Dictionary<string, Desc> description)
+                {
+                    Src = GetActorID(item.Src, log, description);
+                    if (item.IsExtension)
+                    {
+                        SeedSrc = GetActorID(item.SeedSrc, log, description);
+                    }
+                    Duration = item.Duration;
+                    ID = item.ID;
+                }
             }
 
             List<JsonBuffStackStatusData> StackData { get; set; }
@@ -123,22 +135,32 @@ namespace GW2EIParser.Builders.JsonModels
             [DefaultValue(null)]
             public long Time { get; set; }
             public long WastedDuration { get; set; }
+            public long ID { get; set; }
 
             public JsonBuffWasteItem(BuffSimulationItemWasted item, ParsedLog log, Dictionary<string, Desc> description)
             {
                 UniqueID = GetActorID(item.Src, log, description);
                 Time = item.Time;
                 WastedDuration = item.Waste;
+                ID = item.ID;
             }
         }
 
-        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, JsonBuffStackStatus>, Dictionary<string, List<JsonBuffWasteItem>>, Dictionary<string, List<JsonBuffWasteItem>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public class JsonBuffOverstackItem : JsonBuffWasteItem
+        {
+            public JsonBuffOverstackItem(BuffSimulationItemOverstack item, ParsedLog log, Dictionary<string, Desc> description) : base(item, log, description)
+            {
+                ID = 0;
+            }
+        }
+
+        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, JsonBuffStackStatus>, Dictionary<string, List<JsonBuffOverstackItem>>, Dictionary<string, List<JsonBuffWasteItem>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
         {
             //var buffs = new List<Dictionary<string, JsonBuffs>>();
             var buffStates = new Dictionary<string, List<int>>();
             var buffStackStates = new Dictionary<string, JsonBuffStackStatus>();
             var buffWastedStates = new Dictionary<string, List<JsonBuffWasteItem>>();
-            var buffOverstackStates = new Dictionary<string, List<JsonBuffWasteItem>>();
+            var buffOverstackStates = new Dictionary<string, List<JsonBuffOverstackItem>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             /*for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
             {
@@ -197,7 +219,7 @@ namespace GW2EIParser.Builders.JsonModels
         public Dictionary<string, List<JsonBuffRemoveItem>> ConditionRemoveStatus { get; set; }
 
         public Dictionary<string, List<JsonBuffWasteItem>> BuffWasteStates { get; set; }
-        public Dictionary<string, List<JsonBuffWasteItem>> BuffOverstackStates { get; set; }
+        public Dictionary<string, List<JsonBuffOverstackItem>> BuffOverstackStates { get; set; }
 
         private static void SetBuffRemoveItems(List<Buff> buffsToUse, Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls, Dictionary<string, List<JsonBuffRemoveItem>> toFill, ParsedLog log, Dictionary<string, Desc> description)
         {

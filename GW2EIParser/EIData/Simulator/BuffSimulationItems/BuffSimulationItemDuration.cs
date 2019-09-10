@@ -14,12 +14,14 @@ namespace GW2EIParser.EIData
         public AgentItem Src { get; }
         public AgentItem SeedSrc { get; }
         public bool IsExtension { get; }
+        public long ID { get; private set; }
 
         public BuffSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
             Src = other.Src;
             SeedSrc = other.SeedSrc;
             IsExtension = other.IsExtension;
+            ID = other.ID;
         }
 
         public override void OverrideEnd(long end)

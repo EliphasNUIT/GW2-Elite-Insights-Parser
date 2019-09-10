@@ -27,12 +27,12 @@ namespace GW2EIParser.EIData
                 stacks.Insert(0, first);
                 return false;
             }
-            wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start));
+            wastes.Add(new BuffSimulationItemWasted(minItem.Src, minItem.BoonDuration, minItem.Start, minItem.ID));
             if (minItem.Extensions.Count > 0)
             {
                 foreach ((AgentItem src, long value) in minItem.Extensions)
                 {
-                    wastes.Add(new BuffSimulationItemWasted(src, value, minItem.Start));
+                    wastes.Add(new BuffSimulationItemWasted(src, value, minItem.Start, minItem.ID));
                 }
             }
             stacks[stacks.IndexOf(minItem)] = stackItem;

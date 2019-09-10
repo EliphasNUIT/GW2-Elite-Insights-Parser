@@ -24,22 +24,13 @@ namespace GW2EIParser.EIData
 
         public override List<JsonBuffStackStatusSources> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            var res = new List<JsonBuffStackStatusSources>();
-            var running = new JsonBuffStackStatusSources { Src = GetActorID(Src, log, description) };
-            if (IsExtension)
+            var res = new List<JsonBuffStackStatusSources>
             {
-                running.SeedSrc = GetActorID(SeedSrc, log, description);
-            }
-            res.Add(running);
+                new JsonBuffStackStatusSources(this, log, description)
+            };
             foreach (BuffSimulationItemDuration item in _queue)
             {
-                var subRes = new JsonBuffStackStatusSources {Src = GetActorID(item.Src, log, description) };
-                if (item.IsExtension)
-                {
-                    subRes.SeedSrc = GetActorID(item.SeedSrc, log, description);
-                }
-                subRes.Duration = Duration;
-                res.Add(subRes);
+                res.Add(new JsonBuffStackStatusSources(item, log, description));
             }
             return res;
         }

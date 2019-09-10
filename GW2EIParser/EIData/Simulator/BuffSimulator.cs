@@ -9,6 +9,7 @@ namespace GW2EIParser.EIData
 {
     public abstract class BuffSimulator
     {
+        private long _id = 0;
 
         public class BoonStackItem
         {
@@ -18,19 +19,23 @@ namespace GW2EIParser.EIData
             public AgentItem SeedSrc { get; }
             public bool IsExtension { get; }
 
+            public long ID { get; }
+
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension)
+            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, long id, bool isExtension)
             {
                 Start = start;
                 SeedSrc = seedSrc;
                 BoonDuration = boonDuration;
                 Src = src;
                 IsExtension = isExtension;
+                ID = id;
             }
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src)
+            public BoonStackItem(long start, long boonDuration, AgentItem src, long id)
             {
+                ID = id;
                 Start = start;
                 SeedSrc = src;
                 BoonDuration = boonDuration;
@@ -40,6 +45,7 @@ namespace GW2EIParser.EIData
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
+                ID = other.ID;
                 Start = other.Start + startShift;
                 BoonDuration = other.BoonDuration - durationShift;
                 Src = other.Src;
@@ -75,7 +81,7 @@ namespace GW2EIParser.EIData
         // Fields
         protected List<BoonStackItem> BoonStack { get; }
         public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
-        public List<BuffSimulationItemWasted> OverstackSimulationResult { get; } = new List<BuffSimulationItemWasted>();
+        public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
         public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
         protected int Capacity { get; }
         private readonly ParsedLog _log;
@@ -138,7 +144,7 @@ namespace GW2EIParser.EIData
 
         public void Add(long boonDuration, AgentItem src, long start)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, src);
+            var toAdd = new BoonStackItem(start, boonDuration, src, ++_id);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -151,14 +157,14 @@ namespace GW2EIParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemWasted(src, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, boonDuration, start));
                 }
             }
         }
 
         protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc, isExtension);
+            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc,_id++, isExtension);
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -179,7 +185,7 @@ namespace GW2EIParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemWasted(srcinstid, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(srcinstid, boonDuration, start));
                 }
             }
         }
@@ -199,12 +205,12 @@ namespace GW2EIParser.EIData
                 case ParseEnum.EvtcBuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                        WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.ID));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
-                                WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start));
+                                WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start, stackItem.ID));
                             }
                         }
                     }
@@ -216,12 +222,12 @@ namespace GW2EIParser.EIData
                         BoonStackItem stackItem = BoonStack[i];
                         if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
                         {
-                            WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start));
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.BoonDuration, start, stackItem.ID));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
-                                    WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start));
+                                    WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, start, stackItem.ID));
                                 }
                             }
                             BoonStack.RemoveAt(i);

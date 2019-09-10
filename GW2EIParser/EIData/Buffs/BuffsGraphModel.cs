@@ -11,7 +11,7 @@ namespace GW2EIParser.EIData
         public Buff Boon { get; }
         public List<BuffSegment> ValueBasedBoonChart { get; private set; } = new List<BuffSegment>();
         private readonly List<BuffSimulationItem> _sourceBasedBoonChart;
-        private readonly List<BuffSimulationItemWasted> _overstackChart;
+        private readonly List<BuffSimulationItemOverstack> _overstackChart;
         private readonly List<BuffSimulationItemWasted> _wastedChart;
         public bool IsSourceBased => _sourceBasedBoonChart != null;
 
@@ -20,7 +20,7 @@ namespace GW2EIParser.EIData
         {
             Boon = boon;
         }
-        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, List<BuffSimulationItem> boonChartWithSource, List<BuffSimulationItemWasted> overstackChart, List<BuffSimulationItemWasted> wastedChart)
+        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, List<BuffSimulationItem> boonChartWithSource, List<BuffSimulationItemOverstack> overstackChart, List<BuffSimulationItemWasted> wastedChart)
         {
             Boon = boon;
             _sourceBasedBoonChart = boonChartWithSource;
@@ -114,17 +114,17 @@ namespace GW2EIParser.EIData
             return res;
         }
 
-        public (List<JsonBuffWasteItem>, List<JsonBuffWasteItem>) GetWasteStatusList(ParsedLog log, Dictionary<string, Desc> description)
+        public (List<JsonBuffOverstackItem>, List<JsonBuffWasteItem>) GetWasteStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
             if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
             {
                 return (null, null);
             }
-            var overstack = new List<JsonBuffWasteItem>();
+            var overstack = new List<JsonBuffOverstackItem>();
             var wasted = new List<JsonBuffWasteItem>();
-            foreach (BuffSimulationItemWasted item in _overstackChart)
+            foreach (BuffSimulationItemOverstack item in _overstackChart)
             {
-                overstack.Add(new JsonBuffWasteItem(item, log, description));
+                overstack.Add(new JsonBuffOverstackItem(item, log, description));
             }
             _overstackChart.Clear();
             foreach (BuffSimulationItemWasted item in _wastedChart)

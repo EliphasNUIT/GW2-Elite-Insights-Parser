@@ -19,18 +19,6 @@ namespace GW2EIParser.EIData
             Duration = duration;
         }
 
-        public long GetClampedDuration(long start, long end)
-        {
-            if (end > 0 && end - start > 0)
-            {
-                long startoffset = Math.Max(Math.Min(Duration, start - Start), 0);
-                long itemEnd = Start + Duration;
-                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end), 0);
-                return Duration - startoffset - endOffset;
-            }
-            return 0;
-        }
-
         public abstract void OverrideEnd(long end);
 
         public abstract int GetTickingStacksCount();

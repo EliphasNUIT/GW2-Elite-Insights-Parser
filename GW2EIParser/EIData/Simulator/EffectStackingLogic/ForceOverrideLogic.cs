@@ -19,12 +19,12 @@ namespace GW2EIParser.EIData
                 return false;
             }
             BoonStackItem stack = stacks[0];
-            wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start));
+            wastes.Add(new BuffSimulationItemWasted(stack.Src, stack.BoonDuration, stack.Start, stack.ID));
             if (stack.Extensions.Count > 0)
             {
                 foreach ((AgentItem src, long value) in stack.Extensions)
                 {
-                    wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start));
+                    wastes.Add(new BuffSimulationItemWasted(src, value, stack.Start, stack.ID));
                 }
             }
             stacks[0] = stackItem;
