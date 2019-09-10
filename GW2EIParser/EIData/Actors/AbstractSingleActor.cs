@@ -30,7 +30,6 @@ namespace GW2EIParser.EIData
         private List<JsonDefenseAll> _defensesAll;
         private readonly Dictionary<AbstractSingleActor, List<JsonSupport>> _supportTarget = new Dictionary<AbstractSingleActor, List<JsonSupport>>();
         private List<JsonSupportAll> _support;*/
-        private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllByID;
         //status
         private List<(long start, long end)> _deads;
         private List<(long start, long end)> _downs;
@@ -283,7 +282,7 @@ namespace GW2EIParser.EIData
                             simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }*/
-                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation, simulator.OverstackSimulationResult, simulator.WasteSimulationResult);
+                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation, simulator.OverstackSimulationResult, simulator.OverrideSimulationResult, simulator.RemovalSimulationResult);
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {
@@ -345,14 +344,6 @@ namespace GW2EIParser.EIData
             }
             _buffPoints[ProfHelper.NumberOfBoonsID] = boonPresenceGraph;
             _buffPoints[ProfHelper.NumberOfConditionsID] = condiPresenceGraph;
-        }
-        public Dictionary<long, List<BuffRemoveAllEvent>> GetBuffRemoveAllByID(ParsedLog log)
-        {
-            if (_buffRemoveAllByID == null)
-            {
-                _buffRemoveAllByID = log.CombatData.GetBuffDataBySrcNoExt(AgentItem).OfType<BuffRemoveAllEvent>().GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.Where(y => y.IsBoonSimulatorCompliant(log.FightData.FightDuration)).ToList());
-            }
-            return _buffRemoveAllByID;
         }
 
         // DPS

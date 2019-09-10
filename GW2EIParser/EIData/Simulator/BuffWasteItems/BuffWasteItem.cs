@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.EIData
 {
-    public class BuffSimulationItemWasted
+    public abstract class BuffWasteItem
     {
         public AgentItem Src { get; }
         public long Waste { get; }
@@ -10,7 +10,7 @@ namespace GW2EIParser.EIData
 
         public long ID { get; }
 
-        public BuffSimulationItemWasted(AgentItem src, long waste, long time, long id)
+        protected BuffWasteItem(AgentItem src, long waste, long time, long id)
         {
             Src = src;
             Waste = waste;

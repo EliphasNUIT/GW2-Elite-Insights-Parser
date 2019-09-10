@@ -112,34 +112,17 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        public class JsonBuffRemoveItem
+        public abstract class JsonBuffWasteItem
         {
-            public string UniqueID { get; set; }
-            [DefaultValue(null)]
-            public long Time { get; set; }
-            public long RemovedDuration { get; set; }
-            public int RemovedStacks { get; set; }
-
-            public JsonBuffRemoveItem(BuffRemoveAllEvent brae, ParsedLog log, Dictionary<string, Desc> description)
-            {
-                UniqueID = GetActorID(brae.To, log, description);
-                Time = brae.Time;
-                RemovedDuration = brae.RemovedDuration;
-                RemovedStacks = brae.RemovedStacks;
-            }
-        }
-
-        public class JsonBuffWasteItem
-        {
-            public string UniqueID { get; set; }
+            public string SrcID { get; set; }
             [DefaultValue(null)]
             public long Time { get; set; }
             public long WastedDuration { get; set; }
             public long ID { get; set; }
 
-            public JsonBuffWasteItem(BuffSimulationItemWasted item, ParsedLog log, Dictionary<string, Desc> description)
+            protected JsonBuffWasteItem(BuffWasteItem item, ParsedLog log, Dictionary<string, Desc> description)
             {
-                UniqueID = GetActorID(item.Src, log, description);
+                SrcID = GetActorID(item.Src, log, description);
                 Time = item.Time;
                 WastedDuration = item.Waste;
                 ID = item.ID;
@@ -148,53 +131,28 @@ namespace GW2EIParser.Builders.JsonModels
 
         public class JsonBuffOverstackItem : JsonBuffWasteItem
         {
-            public JsonBuffOverstackItem(BuffSimulationItemOverstack item, ParsedLog log, Dictionary<string, Desc> description) : base(item, log, description)
+            public JsonBuffOverstackItem(BuffOverstackItem item, ParsedLog log, Dictionary<string, Desc> description) : base(item, log, description)
             {
                 ID = 0;
             }
         }
 
-        public static (/*List<Dictionary<string, JsonBuffs>>,*/ Dictionary<string, List<int>>, Dictionary<string, JsonBuffStackStatus>, Dictionary<string, List<JsonBuffOverstackItem>>, Dictionary<string, List<JsonBuffWasteItem>>) GetJsonBuffs(AbstractSingleActor actor, ParsedLog log, Dictionary<string, Desc> description)
+        public class JsonBuffOverrideItem : JsonBuffWasteItem
         {
-            //var buffs = new List<Dictionary<string, JsonBuffs>>();
-            var buffStates = new Dictionary<string, List<int>>();
-            var buffStackStates = new Dictionary<string, JsonBuffStackStatus>();
-            var buffWastedStates = new Dictionary<string, List<JsonBuffWasteItem>>();
-            var buffOverstackStates = new Dictionary<string, List<JsonBuffOverstackItem>>();
-            Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
-            /*for (int i = 0; i < log.FightData.GetPhases(log).Count; i++)
+            public string CauseID { get; }
+            public JsonBuffOverrideItem(BuffOverrideItem item, ParsedLog log, Dictionary<string, Desc> description) : base(item, log, description)
             {
-                BuffDistributionDictionary buffDistribution = actor.GetBuffDistribution(log, i);
-                Dictionary<long, long> buffPresence = actor.GetBuffPresence(log, i);
-                var buffDict = new Dictionary<string, JsonBuffs>();
-*/
-            foreach (long buffID in buffGraphs.Keys)
+                CauseID = GetActorID(item.By, log, description);
+            }
+        }
+
+        public class JsonBuffRemoveItem : JsonBuffWasteItem
+        {
+            public string RemoveSrcID { get; }
+            public JsonBuffRemoveItem(BuffRemoveItem item, ParsedLog log, Dictionary<string, Desc> description) : base(item, log, description)
             {
-                Buff buff = log.Buffs.BuffsByIds[buffID];
-                //Dictionary<AgentItem, BuffDistributionItem> dict = buffDistribution[buffID];
-
-                string id = "b" + buffID;
-                if (!description.ContainsKey(id))
-                {
-                    description[id] = new BuffDesc(buff);
-                }
-                if (!buffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
-                {
-                    buffStates[id] = bgm.GetStatesList();
-                    if (bgm.IsSourceBased)
-                    {
-                        buffStackStates[id] = bgm.GetStackStatusList(log, description);
-                        (buffOverstackStates[id], buffWastedStates[id]) = bgm.GetWasteStatusList(log, description);
-                    }
-                }
-                /*var jsonBuff = new JsonBuffs(buff, log, dict, buffPresence, description);
-                buffDict.Add(id, jsonBuff);
+                RemoveSrcID = GetActorID(item.By, log, description);
             }
-
-            buffs.Add(buffDict);*/
-            }
-
-            return (/*buffs, */buffStates, buffStackStates, buffOverstackStates, buffWastedStates);
         }
 
         //public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
@@ -210,52 +168,39 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public Dictionary<string, JsonBuffStackStatus> BuffStackStates { get; set; }
         /// <summary>
-        /// Dictionary per boon that contains an array of <see cref="JsonBuffRemoveItem"/>
+        /// Dictionary per buff that contains an array of <see cref="JsonBuffRemoveItem"/>
         /// </summary>
-        public Dictionary<string, List<JsonBuffRemoveItem>> BoonRemoveStatus { get; set; }
-        /// <summary>
-        /// Dictionary per condition that contains an array of <see cref="JsonBuffRemoveItem"/>
-        /// </summary>
-        public Dictionary<string, List<JsonBuffRemoveItem>> ConditionRemoveStatus { get; set; }
+        public Dictionary<string, List<JsonBuffRemoveItem>> BuffRemoveStatus { get; set; }
 
-        public Dictionary<string, List<JsonBuffWasteItem>> BuffWasteStates { get; set; }
+        public Dictionary<string, List<JsonBuffOverrideItem>> BuffOverrideStates { get; set; }
         public Dictionary<string, List<JsonBuffOverstackItem>> BuffOverstackStates { get; set; }
-
-        private static void SetBuffRemoveItems(List<Buff> buffsToUse, Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls, Dictionary<string, List<JsonBuffRemoveItem>> toFill, ParsedLog log, Dictionary<string, Desc> description)
-        {
-            foreach (Buff buffToUse in buffsToUse)
-            {
-                if (buffRemoveAlls.TryGetValue(buffToUse.ID, out List<BuffRemoveAllEvent> buffRemoves))
-                {
-                    var id = "b" + buffToUse.ID;
-                    if (!description.ContainsKey(id))
-                    {
-                        description[id] = new BuffDesc(buffToUse);
-                    }
-                    toFill[id] = buffRemoves.Select(x => new JsonBuffRemoveItem(x, log, description)).ToList();
-                }
-            }
-        }
 
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
-            (/*Buffs, */BuffStates, BuffStackStates, BuffOverstackStates, BuffWasteStates) = GetJsonBuffs(actor, log, description);
-            Dictionary<long, List<BuffRemoveAllEvent>> buffRemoveAlls = actor.GetBuffRemoveAllByID(log);
-            //
-            ConditionRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
-            List<Buff> conditions = log.Buffs.BuffsByNature[Buff.BuffNature.Condition];
-            SetBuffRemoveItems(conditions, buffRemoveAlls, ConditionRemoveStatus, log, description);
-            if (!ConditionRemoveStatus.Any())
+            BuffStates = new Dictionary<string, List<int>>();
+            BuffStackStates = new Dictionary<string, JsonBuffStackStatus>();
+            BuffOverrideStates = new Dictionary<string, List<JsonBuffOverrideItem>>();
+            BuffRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
+            BuffOverstackStates = new Dictionary<string, List<JsonBuffOverstackItem>>();
+            Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+            foreach (long buffID in buffGraphs.Keys)
             {
-                ConditionRemoveStatus = null;
-            }
-            //
-            BoonRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
-            List<Buff> boons = log.Buffs.BuffsByNature[Buff.BuffNature.Condition];
-            SetBuffRemoveItems(boons, buffRemoveAlls, BoonRemoveStatus, log, description);
-            if (!BoonRemoveStatus.Any())
-            {
-                ConditionRemoveStatus = null;
+                Buff buff = log.Buffs.BuffsByIds[buffID];
+
+                string id = "b" + buffID;
+                if (!description.ContainsKey(id))
+                {
+                    description[id] = new BuffDesc(buff);
+                }
+                if (!BuffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
+                {
+                    BuffStates[id] = bgm.GetStatesList();
+                    if (bgm.IsSourceBased)
+                    {
+                        BuffStackStates[id] = bgm.GetStackStatusList(log, description);
+                        (BuffOverstackStates[id], BuffOverrideStates[id], BuffRemoveStatus[id]) = bgm.GetWasteStatusList(log, description);
+                    }
+                }
             }
         }
 
