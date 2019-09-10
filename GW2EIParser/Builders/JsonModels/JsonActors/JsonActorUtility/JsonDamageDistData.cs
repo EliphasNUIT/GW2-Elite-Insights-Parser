@@ -137,20 +137,6 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-
-        /// <summary>
-        /// Total Damage distribution array \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonDamageDist"/>
-        //public List<List<JsonDamageDist>> TotalDamageDists { get; set; }
-        /// <summary>
-        /// Damage taken array
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="JsonDamageDist"/>
-        //public List<List<JsonDamageDist>> TotalDamageTakenDists { get; set; }
-
         public List<JsonDamageItemDone> DamageEvents { get; set; }
 
         public List<JsonDamageItemTaken> DamageTakenEvents { get; set; }
