@@ -8,7 +8,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public long BuffID => BuffSkill.ID;
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
-        public AgentItem ByMinion { get; protected set; }
+        public AgentItem ByMaster { get; protected set; }
         public AgentItem To { get; protected set; }
 
         public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)

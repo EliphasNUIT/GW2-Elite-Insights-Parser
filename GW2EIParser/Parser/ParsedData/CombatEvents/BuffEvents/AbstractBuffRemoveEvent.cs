@@ -7,8 +7,8 @@
         public AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
             RemovedDuration = evtcItem.Value;
-            By = agentData.GetAgentByInstID(evtcItem.DstMasterInstid > 0 ? evtcItem.DstMasterInstid : evtcItem.DstInstid, evtcItem.LogTime);
-            ByMinion = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime) : null;
+            By = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            ByMaster = evtcItem.DstMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.DstMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
         }
 
