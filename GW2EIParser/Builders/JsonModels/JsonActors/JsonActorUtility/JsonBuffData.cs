@@ -124,7 +124,7 @@ namespace GW2EIParser.Builders.JsonModels
             public long Time { get; set; }
             public long WastedDuration { get; set; }
 
-            public JsonBuffWasteItem(AbstractBuffSimulationItemWasted item, ParsedLog log, Dictionary<string, Desc> description)
+            public JsonBuffWasteItem(BuffSimulationItemWasted item, ParsedLog log, Dictionary<string, Desc> description)
             {
                 UniqueID = GetActorID(item.Src, log, description);
                 Time = item.Time;

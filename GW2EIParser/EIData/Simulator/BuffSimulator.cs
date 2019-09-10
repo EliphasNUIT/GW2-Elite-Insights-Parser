@@ -75,7 +75,7 @@ namespace GW2EIParser.EIData
         // Fields
         protected List<BoonStackItem> BoonStack { get; }
         public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
-        public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
+        public List<BuffSimulationItemWasted> OverstackSimulationResult { get; } = new List<BuffSimulationItemWasted>();
         public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
         protected int Capacity { get; }
         private readonly ParsedLog _log;
@@ -151,7 +151,7 @@ namespace GW2EIParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(src, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemWasted(src, boonDuration, start));
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace GW2EIParser.EIData
                 bool found = _logic.StackEffect(_log, toAdd, BoonStack, WasteSimulationResult);
                 if (!found)
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(srcinstid, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffSimulationItemWasted(srcinstid, boonDuration, start));
                 }
             }
         }

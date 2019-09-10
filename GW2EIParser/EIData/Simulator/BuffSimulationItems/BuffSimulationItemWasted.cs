@@ -1,31 +1,23 @@
-﻿using System.Collections.Generic;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
+﻿using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
 {
-    public class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
+    public class BuffSimulationItemWasted : AbstractBuffSimulationItem
     {
+        public AgentItem Src { get; }
+        public long Waste { get; }
+        public long Time { get; }
 
-        public BuffSimulationItemWasted(AgentItem src, long waste, long time) : base(src, waste, time)
+        public BuffSimulationItemWasted(AgentItem src, long waste, long time)
         {
+            Src = src;
+            Waste = waste;
+            Time = time;
         }
 
-        /*public override void SetBoonDistributionItem(BuffDistributionDictionary distribs, long start, long end, long boonid, ParsedLog log)
+        protected long GetValue(long start, long end)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distrib = GetDistrib(distribs, boonid);
-            AgentItem agent = Src;
-            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
-            {
-                toModify.Wasted += GetValue(start, end);
-                distrib[agent] = toModify;
-            }
-            else
-            {
-                distrib.Add(agent, new BuffDistributionItem(
-                    0,
-                    0, GetValue(start, end), 0, 0, 0));
-            }
-        }*/
+            return (start <= Time && Time <= end) ? Waste : 0;
+        }
     }
 }
