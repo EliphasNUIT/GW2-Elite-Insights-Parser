@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.EIData
 {
-    public class BuffSimulationItemWasted : AbstractBuffSimulationItem
+    public class BuffSimulationItemWasted
     {
         public AgentItem Src { get; }
         public long Waste { get; }

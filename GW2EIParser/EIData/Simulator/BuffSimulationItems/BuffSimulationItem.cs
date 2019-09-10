@@ -7,7 +7,7 @@ using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class BuffSimulationItem : AbstractBuffSimulationItem
+    public abstract class BuffSimulationItem
     {
         public long Duration { get; protected set; }
         public long Start { get; protected set; }
