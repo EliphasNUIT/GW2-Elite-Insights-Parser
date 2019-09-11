@@ -86,14 +86,14 @@ namespace GW2EIParser.Builders.JsonModels
                 public string SeedSrc { get; set; }
                 public long ID { get; set; }
 
-                public JsonBuffStackStatusSources(BuffSimulationItemDuration item, ParsedLog log, Dictionary<string, Desc> description)
+                public JsonBuffStackStatusSources(BuffSimulationItemDuration item, ParsedLog log, Dictionary<string, Desc> description, bool noDuration)
                 {
                     Src = GetActorID(item.Src, log, description);
                     if (item.IsExtension)
                     {
                         SeedSrc = GetActorID(item.SeedSrc, log, description);
                     }
-                    Duration = item.Duration;
+                    Duration = noDuration ? 0 : item.Duration;
                     ID = item.ID;
                 }
             }
@@ -175,6 +175,17 @@ namespace GW2EIParser.Builders.JsonModels
         public Dictionary<string, List<JsonBuffOverrideItem>> BuffOverrideStates { get; set; }
         public Dictionary<string, List<JsonBuffOverstackItem>> BuffOverstackStates { get; set; }
 
+        private static void RemoveNullsFromDictionary<T>(Dictionary<string, List<T>> dict)
+        {
+            var nullkeys = dict.Where(pair => pair.Value == null)
+                       .Select(pair => pair.Key)
+                       .ToList();
+            foreach (string key in nullkeys)
+            {
+                dict.Remove(key);
+            }
+        }
+
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
             BuffStates = new Dictionary<string, List<int>>();
@@ -202,6 +213,10 @@ namespace GW2EIParser.Builders.JsonModels
                     }
                 }
             }
+            //
+            RemoveNullsFromDictionary(BuffOverstackStates);
+            RemoveNullsFromDictionary(BuffOverrideStates);
+            RemoveNullsFromDictionary(BuffRemoveStatus);
         }
 
     }
