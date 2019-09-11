@@ -14,22 +14,6 @@ namespace GW2EIParser.Builders.JsonModels
     {
         public abstract class JsonDamageItem
         {
-            private const long Condi = 1;
-            private const long IsOverNinety = 1 << 1;
-            private const long AgainstUnderFifty = 1 << 2;
-            private const long IsMoving = 1 << 3;
-            private const long IsFlanking = 1 << 4;
-            private const long HasHit = 1 << 5;
-            private const long HasCrit = 1 << 6;
-            private const long HasGlanced = 1 << 7;
-            private const long IsBlind = 1 << 8;
-            private const long IsAbsorbed = 1 << 9;
-            private const long HasInterrupted = 1 << 10;
-            private const long HasDowned = 1 << 11;
-            private const long HasKilled = 1 << 12;
-            private const long IsBlocked = 1 << 13;
-            private const long IsEvaded = 1 << 14;
-
             public string Id { get; set; }
 
             public long Time { get; set; }
@@ -55,63 +39,63 @@ namespace GW2EIParser.Builders.JsonModels
                 EncodedBooleans = 0;
                 if (evt.IsCondi(log))
                 {
-                    EncodedBooleans |= Condi;
+                    EncodedBooleans |= AbstractDamageEvent.ECondi;
                 }
                 if (evt.IsOverNinety)
                 {
-                    EncodedBooleans |= IsOverNinety;
+                    EncodedBooleans |= AbstractDamageEvent.EIsOverNinety;
                 }
                 if (evt.AgainstUnderFifty)
                 {
-                    EncodedBooleans |= AgainstUnderFifty;
+                    EncodedBooleans |= AbstractDamageEvent.EAgainstUnderFifty;
                 }
                 if (evt.IsMoving)
                 {
-                    EncodedBooleans |= IsMoving;
+                    EncodedBooleans |= AbstractDamageEvent.EIsMoving;
                 }
                 if (evt.IsFlanking)
                 {
-                    EncodedBooleans |= IsFlanking;
+                    EncodedBooleans |= AbstractDamageEvent.EIsFlanking;
                 }
                 if (evt.HasHit)
                 {
-                    EncodedBooleans |= HasHit;
+                    EncodedBooleans |= AbstractDamageEvent.EHasHit;
                 }
                 if (evt.HasCrit)
                 {
-                    EncodedBooleans |= HasCrit;
+                    EncodedBooleans |= AbstractDamageEvent.EHasCrit;
                 }
                 if (evt.HasGlanced)
                 {
-                    EncodedBooleans |= HasGlanced;
+                    EncodedBooleans |= AbstractDamageEvent.EHasGlanced;
                 }
                 if (evt.IsBlind)
                 {
-                    EncodedBooleans |= IsBlind;
+                    EncodedBooleans |= AbstractDamageEvent.EIsBlind;
                 }
                 if (evt.IsAbsorbed)
                 {
-                    EncodedBooleans |= IsAbsorbed;
+                    EncodedBooleans |= AbstractDamageEvent.EIsAbsorbed;
                 }
                 if (evt.HasInterrupted)
                 {
-                    EncodedBooleans |= HasInterrupted;
+                    EncodedBooleans |= AbstractDamageEvent.EHasInterrupted;
                 }
                 if (evt.HasDowned)
                 {
-                    EncodedBooleans |= HasDowned;
+                    EncodedBooleans |= AbstractDamageEvent.EHasDowned;
                 }
                 if (evt.HasKilled)
                 {
-                    EncodedBooleans |= HasKilled;
+                    EncodedBooleans |= AbstractDamageEvent.EHasKilled;
                 }
                 if (evt.IsBlocked)
                 {
-                    EncodedBooleans |= IsBlocked;
+                    EncodedBooleans |= AbstractDamageEvent.EIsBlocked;
                 }
                 if (evt.IsEvaded)
                 {
-                    EncodedBooleans |= IsEvaded;
+                    EncodedBooleans |= AbstractDamageEvent.EIsEvaded;
                 }
             }
         }

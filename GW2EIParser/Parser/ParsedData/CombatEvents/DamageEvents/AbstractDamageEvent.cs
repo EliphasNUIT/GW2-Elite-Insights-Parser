@@ -2,6 +2,23 @@
 {
     public abstract class AbstractDamageEvent : AbstractCombatEvent
     {
+        // boolean encoding
+        public static long ECondi = 1;
+        public static long EIsOverNinety = 1 << 1;
+        public static long EAgainstUnderFifty = 1 << 2;
+        public static long EIsMoving = 1 << 3;
+        public static long EIsFlanking = 1 << 4;
+        public static long EHasHit = 1 << 5;
+        public static long EHasCrit = 1 << 6;
+        public static long EHasGlanced = 1 << 7;
+        public static long EIsBlind = 1 << 8;
+        public static long EIsAbsorbed = 1 << 9;
+        public static long EHasInterrupted = 1 << 10;
+        public static long EHasDowned = 1 << 11;
+        public static long EHasKilled = 1 << 12;
+        public static long EIsBlocked = 1 << 13;
+        public static long EIsEvaded = 1 << 14;
+        //
         public AgentItem From { get; }
         public AgentItem MasterFrom { get; }
         public AgentItem To { get; }
