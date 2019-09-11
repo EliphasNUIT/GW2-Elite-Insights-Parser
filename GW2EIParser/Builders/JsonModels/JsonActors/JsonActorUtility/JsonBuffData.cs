@@ -98,8 +98,8 @@ namespace GW2EIParser.Builders.JsonModels
                 }
             }
 
-            List<JsonBuffStackStatusData> StackData { get; set; }
-            List<List<JsonBuffStackStatusSources>> StackStatus { get; set; }
+            public List<JsonBuffStackStatusData> StackData { get; set; }
+            public List<List<JsonBuffStackStatusSources>> StackStatus { get; set; }
             public JsonBuffStackStatus(List<BuffSimulationItem> sourceBasedBoonChart, ParsedLog log, Dictionary<string, Desc> description)
             {
                 StackData = new List<JsonBuffStackStatusData>();
