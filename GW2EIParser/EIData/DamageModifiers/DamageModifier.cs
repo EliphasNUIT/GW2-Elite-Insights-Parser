@@ -7,10 +7,10 @@ using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class DamageModifier
+    public class DamageModifier
     {
         public enum DamageType { All, Power, Condition };
-        public enum DamageSource { All, NoPets };
+        public enum DamageSource { All, NoPets, PetsOnly };
         public enum ModifierSource
         {
             CommonBuff,
@@ -26,113 +26,28 @@ namespace GW2EIParser.EIData
             Engineer, Scrapper, Holosmith
         };
 
-        private readonly DamageType _compareType;
         private readonly DamageType _srcType;
         private readonly DamageSource _dmgSrc;
         protected double GainPerStack { get; }
-        protected GainComputer GainComputer { get; }
         public ulong MinBuild { get; } = ulong.MaxValue;
         public ulong MaxBuild { get; } = ulong.MinValue;
-        public bool Multiplier => GainComputer.Multiplier;
         public ModifierSource Src { get; }
         public string Icon { get; protected set; }
         public string Name { get; protected set; }
-        public string Tooltip { get; protected set; }
-        public delegate bool DamageLogChecker(AbstractDamageEvent dl);
-        protected DamageLogChecker DLChecker { get; set; }
+        public string Description { get; protected set; }
 
-        protected DamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ModifierSource src, string icon, GainComputer gainComputer, DamageLogChecker dlChecker, ulong minBuild, ulong maxBuild)
+        public DamageModifier(string name, string description, DamageSource damageSource, double gainPerStack, DamageType srctype, ModifierSource src, string icon, ulong minBuild, ulong maxBuild)
         {
-            Tooltip = tooltip;
+            Description = description;
             Name = name;
             _dmgSrc = damageSource;
             GainPerStack = gainPerStack;
-            _compareType = compareType;
             _srcType = srctype;
             Src = src;
             Icon = icon;
-            GainComputer = gainComputer;
-            DLChecker = dlChecker;
             MaxBuild = maxBuild;
             MinBuild = minBuild;
-            switch (_dmgSrc)
-            {
-                case DamageSource.All:
-                    Tooltip += "<br>Actor + Minions";
-                    break;
-                case DamageSource.NoPets:
-                    Tooltip += "<br>No Minions";
-                    break;
-            }
-            switch (_srcType)
-            {
-                case DamageType.All:
-                    Tooltip += "<br>All Damage type";
-                    break;
-                case DamageType.Power:
-                    Tooltip += "<br>Power Damage only";
-                    break;
-                case DamageType.Condition:
-                    Tooltip += "<br>Condition Damage only";
-                    break;
-            }
-            switch (_compareType)
-            {
-                case DamageType.All:
-                    Tooltip += "<br>Compared against All Damage";
-                    break;
-                case DamageType.Power:
-                    Tooltip += "<br>Compared against Power Damage";
-                    break;
-                case DamageType.Condition:
-                    Tooltip += "<br>Compared against Condition Damage";
-                    break;
-            }
-            if (!Multiplier)
-            {
-                Tooltip += "<br>Non multiplier";
-            }
         }
-
-        public int GetTotalDamage(Player p, ParsedLog log, NPC t, int phaseIndex)
-        {
-            PhaseData phase = log.FightData.GetPhases(log)[phaseIndex];
-            List<AbstractDamageEvent> damageData = _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustActorDamageLogs(t, log, phase.Start, phase.End);
-            switch (_compareType)
-            {
-                case DamageType.All:
-                    return damageData.Sum(x => x.Damage);
-                case DamageType.Condition:
-                    return damageData.Sum(x => x.IsCondi(log) ? x.Damage : 0);
-                case DamageType.Power:
-                    return damageData.Sum(x => !x.IsCondi(log) ? x.Damage : 0);
-                default:
-                    break;
-            }
-            return 0;
-        }
-
-        public List<AbstractDamageEvent> GetDamageLogs(Player p, ParsedLog log, NPC t, PhaseData phase)
-        {
-            switch (_srcType)
-            {
-                case DamageType.All:
-                    return _dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustActorDamageLogs(t, log, phase.Start, phase.End);
-                case DamageType.Condition:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustActorDamageLogs(t, log, phase.Start, phase.End)).Where(x => x.IsCondi(log)).ToList();
-                case DamageType.Power:
-                default:
-                    return (_dmgSrc == DamageSource.All ? p.GetDamageLogs(t, log, phase.Start, phase.End) : p.GetJustActorDamageLogs(t, log, phase.Start, phase.End)).Where(x => !x.IsCondi(log)).ToList();
-            }
-        }
-
-        public abstract void ComputeDamageModifier(Dictionary<string, List<DamageModifierData>> data, Dictionary<NPC, Dictionary<string, List<DamageModifierData>>> dataTarget, Player p, ParsedLog log);
-
-        protected static GainComputer ByPresence = new GainComputerByPresence();
-        protected static GainComputer ByPresenceNonMulti = new GainComputerNonMultiplier();
-        protected static GainComputer BySkill = new GainComputerBySkill();
-        protected static GainComputer ByStack = new GainComputerByStack();
-        protected static GainComputer ByAbsence = new GainComputerByAbsence();
 
         private static readonly List<DamageModifier> _gearDamageModifiers = new List<DamageModifier>
         {

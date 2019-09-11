@@ -96,19 +96,13 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Name = item.Name;
                 Icon = item.Icon;
-                Description = item.Tooltip;
-                NonMultiplier = !item.Multiplier;
+                Description = item.Description;
                 Type = 2;
             }
             /// <summary>
             /// Description of the damage modifier
             /// </summary>
             public string Description { get; set; }
-            /// <summary>
-            /// False if the modifier is multiplicative \n
-            /// If true then the correspond <see cref="JsonDamageModifierData.JsonBuffDamageModifierItem.DamageGain"/> are damage done under the effect. One will have to deduce the gain manualy depending on your gear.
-            /// </summary>
-            public bool NonMultiplier { get; set; }
         }
 
         /// <summary>
