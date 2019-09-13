@@ -338,7 +338,7 @@ namespace GW2EIParser.EIData
             {
                 return;
             }
-            var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
+            /*var damageMods = new List<DamageModifier>(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.ItemBuff]);
             damageMods.AddRange(log.DamageModifiers.DamageModifiersPerSource[DamageModifier.ModifierSource.CommonBuff]);
             damageMods.AddRange(log.DamageModifiers.GetModifiersPerProf(Prof));
             foreach (DamageModifier mod in damageMods)
@@ -349,7 +349,7 @@ namespace GW2EIParser.EIData
             foreach (NPC tar in _damageModifiersTargets.Keys)
             {
                 _presentDamageModifiers.UnionWith(_damageModifiersTargets[tar].Keys);
-            }
+            }*/
         }
         // Combat Replay
         protected override void InitAdditionalCombatReplayData(ParsedLog log)

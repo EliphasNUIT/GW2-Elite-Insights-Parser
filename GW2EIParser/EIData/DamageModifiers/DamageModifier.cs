@@ -26,7 +26,7 @@ namespace GW2EIParser.EIData
             Build = (minBuild, maxBuild);
         }
 
-        private static readonly List<DamageModifier> _gearDamageModifiers = new List<DamageModifier>
+        /*private static readonly List<DamageModifier> _gearDamageModifiers = new List<DamageModifier>
         {
             new DamageLogDamageModifier("Scholar Rune", "5% over 90% HP", DamageSource.NoPets, 5.0, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsOverNinety, 93543, ulong.MaxValue ),
             new DamageLogDamageModifier("Scholar Rune", "10% over 90% HP", DamageSource.NoPets, 10.0, DamageType.Power, ModifierSource.ItemBuff,"https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png", x => x.IsOverNinety, 0, 93543 ),
@@ -185,6 +185,6 @@ namespace GW2EIParser.EIData
             _mesmerDamageModifiers,
             _necromancerDamageModifiers,
             _elementalistDamageModifiers
-        };
+        };*/
     }
 }
