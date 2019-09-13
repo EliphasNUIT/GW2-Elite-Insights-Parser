@@ -30,7 +30,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             _addedActive = asActive;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff;
         }

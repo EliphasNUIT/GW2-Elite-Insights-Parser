@@ -8,7 +8,7 @@
         public int Value { get; private set; }
         public int BuffDmg { get; }
         public uint OverstackValue { get; }
-        public long SkillID { get; }
+        public long SkillID { get; private set; }
         public ushort SrcInstid { get; private set; }
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
@@ -100,6 +100,11 @@
         {
             SrcInstid = instid;
             SrcAgent = agent;
+        }
+
+        public void OverrideSkillID(long skillID)
+        {
+            SkillID = skillID;
         }
 
         public void OverrideSrcValues(ulong agent, ushort instid, ushort masterInstid)

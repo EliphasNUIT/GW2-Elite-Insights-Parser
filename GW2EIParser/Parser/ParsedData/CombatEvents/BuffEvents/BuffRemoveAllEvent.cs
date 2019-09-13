@@ -19,7 +19,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             RemovedStacks = removedStacks;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd)
+        public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff &&
                 !(RemovedDuration <= 50 && RemovedDuration != 0 && _lastRemovedDuration <= 50 && _lastRemovedDuration != 0) && // low value all stack remove that can mess up with the simulator if server delay

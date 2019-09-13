@@ -171,7 +171,7 @@ namespace GW2EIParser.EIData
                     }
                     buffMap.Add(log.Buffs.BuffsByIds[buffId]);
                 }
-                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration))
+                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration, log.CombatData.HasStackIDs))
                 {
                     continue;
                 }
