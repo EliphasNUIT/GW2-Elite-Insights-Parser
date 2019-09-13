@@ -117,14 +117,14 @@ namespace GW2EIParser.Builders.JsonModels
             public string SrcID { get; set; }
             [DefaultValue(null)]
             public long Time { get; set; }
-            public long WastedDuration { get; set; }
+            public long Wasted { get; set; }
             public long ID { get; set; }
 
             protected JsonBuffWasteItem(BuffWasteItem item, ParsedLog log, Dictionary<string, Desc> description)
             {
                 SrcID = GetActorID(item.Src, log, description);
                 Time = item.Time;
-                WastedDuration = item.Waste;
+                Wasted = item.Waste;
                 ID = item.ID;
             }
         }
@@ -155,6 +155,23 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
+        public class JsonCreationItem
+        {
+            public string SrcID { get; set; }
+            [DefaultValue(null)]
+            public long Time { get; set; }
+            public long Added { get; set; }
+            public long ID { get; set; }
+
+            public JsonCreationItem(BuffCreationItem item, ParsedLog log, Dictionary<string, Desc> description)
+            {
+                SrcID = GetActorID(item.Src, log, description);
+                Time = item.Time;
+                Added = item.Added;
+                ID = item.ID;
+            }
+        }
+
         //public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
         /// <summary>
         /// Dictionary per buff that contains an array of int that represents the number of buff status \n
@@ -174,6 +191,8 @@ namespace GW2EIParser.Builders.JsonModels
 
         public Dictionary<string, List<JsonBuffOverrideItem>> BuffOverrideStates { get; set; }
         public Dictionary<string, List<JsonBuffOverstackItem>> BuffOverstackStates { get; set; }
+        public Dictionary<string, List<JsonCreationItem>> BuffAddedStates { get; set; }
+        public Dictionary<string, List<JsonCreationItem>> BuffExtendedStates { get; set; }
 
         private static void RemoveNullsFromDictionary<T>(Dictionary<string, List<T>> dict)
         {
@@ -210,6 +229,7 @@ namespace GW2EIParser.Builders.JsonModels
                     {
                         BuffStackStates[id] = bgm.GetStackStatusList(log, description);
                         (BuffOverstackStates[id], BuffOverrideStates[id], BuffRemoveStatus[id]) = bgm.GetWasteStatusList(log, description);
+                        (BuffAddedStates[id], BuffExtendedStates[id]) = bgm.GetCreationStatusList(log, description);
                     }
                 }
             }
@@ -217,6 +237,8 @@ namespace GW2EIParser.Builders.JsonModels
             RemoveNullsFromDictionary(BuffOverstackStates);
             RemoveNullsFromDictionary(BuffOverrideStates);
             RemoveNullsFromDictionary(BuffRemoveStatus);
+            RemoveNullsFromDictionary(BuffAddedStates);
+            RemoveNullsFromDictionary(BuffExtendedStates);
         }
 
     }

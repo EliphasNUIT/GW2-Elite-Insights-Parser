@@ -278,7 +278,7 @@ namespace GW2EIParser.EIData
                             simul.SetBoonDistributionItem(_boonDistribution[i], phase.Start, phase.End, boonid, log);
                         }
                     }*/
-                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator.GenerationSimulation, simulator.OverstackSimulationResult, simulator.OverrideSimulationResult, simulator.RemovalSimulationResult);
+                    _buffPoints[boonid] = new BuffsGraphModel(buff, graphSegments, simulator);
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {

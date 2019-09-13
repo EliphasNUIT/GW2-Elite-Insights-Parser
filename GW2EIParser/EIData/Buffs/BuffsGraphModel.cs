@@ -10,25 +10,19 @@ namespace GW2EIParser.EIData
     {
         public Buff Boon { get; }
         public List<BuffSegment> ValueBasedBoonChart { get; private set; } = new List<BuffSegment>();
-        private readonly List<BuffSimulationItem> _sourceBasedBoonChart;
-        private readonly List<BuffOverstackItem> _overstackChart;
-        private readonly List<BuffOverrideItem> _overrideChart;
-        private readonly List<BuffRemoveItem> _removalChart;
-        public bool IsSourceBased => _sourceBasedBoonChart != null;
+        private readonly AbstractBuffSimulator _simulator;
+        public bool IsSourceBased => _simulator != null;
 
         // Constructor
         public BuffsGraphModel(Buff boon)
         {
             Boon = boon;
         }
-        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, List<BuffSimulationItem> boonChartWithSource, List<BuffOverstackItem> overstackChart, List<BuffOverrideItem> overrideChart, List<BuffRemoveItem> removalChart)
+        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, AbstractBuffSimulator simulator)
         {
             Boon = boon;
-            _sourceBasedBoonChart = boonChartWithSource;
+            _simulator = simulator;
             ValueBasedBoonChart = segments;
-            _overstackChart = overstackChart;
-            _overrideChart = overrideChart;
-            _removalChart = removalChart;
             // needed for fast is present, stack and condi/boon graphs
             FuseSegments();
         }
@@ -107,40 +101,61 @@ namespace GW2EIParser.EIData
 
         public JsonBuffStackStatus GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
+            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
             {
                 return null;
             }
-            var res = new JsonBuffStackStatus(_sourceBasedBoonChart, log, description);
-            _sourceBasedBoonChart.Clear();
+            var res = new JsonBuffStackStatus(_simulator.GenerationSimulation, log, description);
+            _simulator.GenerationSimulation.Clear();
             return res;
         }
 
         public (List<JsonBuffOverstackItem>, List<JsonBuffOverrideItem>, List<JsonBuffRemoveItem>) GetWasteStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            if (ValueBasedBoonChart.Count == 0 || _sourceBasedBoonChart == null)
+            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
             {
                 return (null, null, null);
             }
             var overstack = new List<JsonBuffOverstackItem>();
             var overriden = new List<JsonBuffOverrideItem>();
             var removed = new List<JsonBuffRemoveItem>();
-            foreach (BuffOverstackItem item in _overstackChart)
+            foreach (BuffOverstackItem item in _simulator.OverstackSimulationResult)
             {
                 overstack.Add(new JsonBuffOverstackItem(item, log, description));
             }
-            _overstackChart.Clear();
-            foreach (BuffOverrideItem item in _overrideChart)
+            _simulator.OverstackSimulationResult.Clear();
+            foreach (BuffOverrideItem item in _simulator.OverrideSimulationResult)
             {
                 overriden.Add(new JsonBuffOverrideItem(item, log, description));
             }
-            _overrideChart.Clear();
-            foreach (BuffRemoveItem item in _removalChart)
+            _simulator.OverrideSimulationResult.Clear();
+            foreach (BuffRemoveItem item in _simulator.RemovalSimulationResult)
             {
                 removed.Add(new JsonBuffRemoveItem(item, log, description));
             }
-            _removalChart.Clear();
+            _simulator.RemovalSimulationResult.Clear();
             return (overstack.Any() ? overstack : null, overriden.Any() ? overriden : null, removed.Any() ? removed : null);
+        }
+
+        public (List<JsonCreationItem>, List<JsonCreationItem>) GetCreationStatusList(ParsedLog log, Dictionary<string, Desc> description)
+        {
+            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
+            {
+                return (null, null);
+            }
+            var added = new List<JsonCreationItem>();
+            var extended = new List<JsonCreationItem>();
+            foreach (BuffCreationItem item in _simulator.AddedSimulationResult)
+            {
+                added.Add(new JsonCreationItem(item, log, description));
+            }
+            _simulator.AddedSimulationResult.Clear();
+            foreach (BuffCreationItem item in _simulator.ExtendedSimulationResult)
+            {
+                extended.Add(new JsonCreationItem(item, log, description));
+            }
+            _simulator.ExtendedSimulationResult.Clear();
+            return (added.Any() ? added : null, extended.Any() ? extended : null);
         }
 
     }
