@@ -26,13 +26,15 @@
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
 
+        public uint Pad { get; }
+
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, ParseEnum.EvtcIFF iff, byte isBuff,
                byte result, ParseEnum.EvtcActivation isActivation,
                ParseEnum.EvtcBuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.EvtcStateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle)
+               ParseEnum.EvtcStateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
             LogTime = time;
             SrcAgent = srcAgent;
@@ -57,6 +59,7 @@
             IsFlanking = isFlanking;
             IsShields = isShields;
             IsOffcycle = isOffcycle;
+            Pad = pad;
         }
 
         public CombatItem(CombatItem c)
@@ -84,6 +87,7 @@
             IsFlanking = c.IsFlanking;
             IsShields = c.IsShields;
             IsOffcycle = c.IsOffcycle;
+            Pad = c.Pad;
         }
 
 

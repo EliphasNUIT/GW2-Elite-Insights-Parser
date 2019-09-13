@@ -7,6 +7,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public bool Initial { get; }
         public int AppliedDuration { get; }
 
+        private readonly uint _buffInstance;
+        private readonly bool _addedActive;
+
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
             Initial = evtcItem.IsStateChange == ParseEnum.EvtcStateChange.BuffInitial;
@@ -14,6 +17,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             By = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
             ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            _buffInstance = evtcItem.Pad;
+            _addedActive = evtcItem.IsShields > 0;
         }
 
         public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill) : base(buffSkill, time)

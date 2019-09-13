@@ -5,9 +5,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
         private readonly ParseEnum.EvtcIFF _iff;
+
+        private readonly uint _buffInstance;
         public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _iff = evtcItem.IFF;
+            _buffInstance = evtcItem.Pad;
         }
 
         public override bool IsBoonSimulatorCompliant(long fightEnd)
