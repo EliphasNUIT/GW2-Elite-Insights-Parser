@@ -5,12 +5,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     {
         private readonly ParseEnum.EvtcIFF _iff;
-
-        public uint BuffInstance { get; }
         public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _iff = evtcItem.IFF;
-            BuffInstance = evtcItem.Pad;
         }
 
         public BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ParseEnum.EvtcIFF iff) : base(by, to, time, removedDuration, buffSkill)

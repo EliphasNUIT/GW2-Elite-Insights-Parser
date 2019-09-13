@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData, bool hasStackID)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
@@ -63,7 +63,7 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
                         if (ba != null)
                         {
-                            res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 1, int.MaxValue));
+                            res.Add(new BuffRemoveAllEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill, 1, int.MaxValue, sglRemoval.BuffInstance));
                             res.Add(new BuffRemoveManualEvent(sglRemoval.By, pair.Key, ba.Time - 1, int.MaxValue, ba.BuffSkill));
                         }
                     }

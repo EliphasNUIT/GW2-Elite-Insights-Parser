@@ -13,7 +13,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff && hasStackIDs;
+            return BuffID != ProfHelper.NoBuff && hasStackIDs && BuffInstance != 0;
         }
 
         public override void TryFindSrc(ParsedLog log)

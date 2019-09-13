@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData, bool hasStackID)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
             if (mainTarget == null)
@@ -61,10 +61,10 @@ namespace GW2EIParser.Logic
             var res = new List<AbstractBuffEvent>();
             if (_specialSplitLogTime != 0 && buffsById.TryGetValue(762, out List<AbstractBuffEvent> list))
             {
-                BuffApplyEvent invulApply = list.OfType<BuffApplyEvent>().LastOrDefault(x => x.Time < _specialSplitLogTime && x.To == mainTarget.AgentItem);
+                BuffApplyEvent invulApply = list.OfType<BuffApplyEvent>().LastOrDefault(x => x.Time < _specialSplitLogTime - offset && x.To == mainTarget.AgentItem);
                 if (invulApply != null)
                 {
-                    res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
+                    res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue, invulApply.BuffInstance));
                     res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
                     res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), invulApply.BuffInstance , ParseEnum.EvtcIFF.Unknown));
 

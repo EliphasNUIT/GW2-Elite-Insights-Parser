@@ -123,7 +123,7 @@ namespace GW2EIParser.Logic
             }
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData, bool hasStackID)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
             NPC target = NPCs.Find(x => x.ID == TriggerID);
             if (target == null)
@@ -140,25 +140,17 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                         if (removal == null)
                         {
-                            res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + 10000, 0, skillData.Get(38224), 0, 0));
-                            res.Add(new BuffRemoveManualEvent(target.AgentItem, target.AgentItem, ba.Time + 10000, 0, skillData.Get(38224)));
-                            res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + 10000, 0, skillData.Get(38224), ba.BuffInstance, ParseEnum.EvtcIFF.Unknown));
+                            res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0, ba.BuffInstance));
+                            res.Add(new BuffRemoveManualEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
+                            res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), ba.BuffInstance, ParseEnum.EvtcIFF.Unknown));
                         }
                     }
-                    else if (!hasStackID && bfe is BuffRemoveAllEvent)
+                    else if (bfe is BuffRemoveAllEvent bra)
                     {
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), 0, true));
-                        }
-                    }
-                    else if (hasStackID && bfe is BuffRemoveSingleEvent brs)
-                    {
-                        AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
-                        if (apply == null)
-                        {
-                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), brs.BuffInstance, true));
+                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), bra.BuffInstance, true));
                         }
                     }
                 }

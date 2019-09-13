@@ -13,10 +13,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             RemovedStacks = evtcItem.Result;
         }
 
-        public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration) : base(by, to, time, removedDuration, buffSkill)
+        public BuffRemoveAllEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, int removedStacks, int lastRemovedDuration, uint id) : base(by, to, time, removedDuration, buffSkill)
         {
             _lastRemovedDuration = lastRemovedDuration;
             RemovedStacks = removedStacks;
+            BuffInstance = id;
         }
 
         public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)

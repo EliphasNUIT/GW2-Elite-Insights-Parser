@@ -167,7 +167,7 @@ namespace GW2EIParser.EIData
                 {
                     res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, a, pair.Key, int.MaxValue, skillData.Get(prevID), prevInstanceId, ParseEnum.EvtcIFF.Unknown));                  
                     res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1, prevInstanceId));
                 }
                 prevInstanceId = curInstanceID;
                 prevID = curID;
