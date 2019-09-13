@@ -212,7 +212,8 @@ namespace GW2EIParser.Builders
 
         private string BuildEIJs(string path)
         {
-            var orderedScripts = new List<string>()
+            return "";
+            /*var orderedScripts = new List<string>()
             {
             };
             string scriptContent = orderedScripts[0];
@@ -244,16 +245,16 @@ namespace GW2EIParser.Builders
             else
             {
                 return "<script>\r\n" + scriptContent + "\r\n</script>";
-            }
+            }*/
         }
 
         private string BuildCRLinkJs(string path)
         {
-            if (!_cr)
-            {
+            //if (!_cr)
+            //{
                 return "";
-            }
-            var orderedScripts = new List<string>()
+            //}
+            /*var orderedScripts = new List<string>()
             {
             };
             string scriptContent = orderedScripts[0];
@@ -285,7 +286,7 @@ namespace GW2EIParser.Builders
             else
             {
                 return "<script>\r\n" + scriptContent + "\r\n</script>";
-            }
+            }*/
         }
 
         private static string ToJson(object value)
