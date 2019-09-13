@@ -70,11 +70,11 @@ namespace GW2EIParser.Builders
 
         private string BuildCombatReplayScript(string path)
         {
-            if (!_cr)
-            {
+            //if (!_cr)
+            //{
                 return "";
-            }
-            string scriptContent = Properties.Resources.combatreplay_js;
+            //}
+            /*string scriptContent = Properties.Resources.combatreplay_js;
             if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
 #if DEBUG
@@ -98,7 +98,7 @@ namespace GW2EIParser.Builders
             else
             {
                 return "<script>\r\n" + scriptContent + "\r\n</script>";
-            }
+            }*/
         }
 
         private static string BuildTemplates(string script)
@@ -106,7 +106,7 @@ namespace GW2EIParser.Builders
             string tmplScript = script;
             var templates = new Dictionary<string, string>()
             {
-                {"${tmplBuffStats}",Properties.Resources.tmplBuffStats },
+                /*{"${tmplBuffStats}",Properties.Resources.tmplBuffStats },
                 {"${tmplBuffStatsTarget}",Properties.Resources.tmplBuffStatsTarget },
                 {"${tmplBuffTable}",Properties.Resources.tmplBuffTable },
                 {"${tmplDamageDistPlayer}",Properties.Resources.tmplDamageDistPlayer },
@@ -139,7 +139,7 @@ namespace GW2EIParser.Builders
                 {"${tmplPlayerTabGraph}",Properties.Resources.tmplPlayerTabGraph },
                 {"${tmplRotationLegend}",Properties.Resources.tmplRotationLegend },
                 {"${tmplTargetTabGraph}",Properties.Resources.tmplTargetTabGraph },
-                {"${tmplTargetData}",Properties.Resources.tmplTargetData },
+                {"${tmplTargetData}",Properties.Resources.tmplTargetData },*/
             };
             foreach (KeyValuePair<string, string> entry in templates)
             {
@@ -157,7 +157,7 @@ namespace GW2EIParser.Builders
             string tmplScript = script;
             var CRtemplates = new Dictionary<string, string>()
                 {
-                    {"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
+                    /*{"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
                     {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
                     {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
                     {"${tmplCombatReplayActorBuffStats}", Properties.Resources.tmplCombatReplayActorBuffStats },
@@ -171,7 +171,7 @@ namespace GW2EIParser.Builders
                     {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
                     {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
                     {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
-                    {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },
+                    {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },*/
                 };
             foreach (KeyValuePair<string, string> entry in CRtemplates)
             {
@@ -182,7 +182,8 @@ namespace GW2EIParser.Builders
 
         private string BuildCss(string path)
         {
-            string scriptContent = Properties.Resources.ei_css;
+            return "";
+            /*string scriptContent = Properties.Resources.ei_css;
 
             if (Properties.Settings.Default.HtmlExternalScripts && path != null)
             {
@@ -206,25 +207,13 @@ namespace GW2EIParser.Builders
             else
             {
                 return "<style type=\"text/css\">\r\n" + scriptContent + "\r\n</style>";
-            }
+            }*/
         }
 
         private string BuildEIJs(string path)
         {
             var orderedScripts = new List<string>()
             {
-                Properties.Resources.globalJS,
-                Properties.Resources.commonsJS,
-                Properties.Resources.headerJS,
-                Properties.Resources.layoutJS,
-                Properties.Resources.generalStatsJS,
-                Properties.Resources.damageModifierStatsJS,
-                Properties.Resources.buffStatsJS,
-                Properties.Resources.graphsJS,
-                Properties.Resources.mechanicsJS,
-                Properties.Resources.targetStatsJS,
-                Properties.Resources.playerStatsJS,
-                Properties.Resources.ei_js
             };
             string scriptContent = orderedScripts[0];
             for (int i = 1; i < orderedScripts.Count; i++)
@@ -266,8 +255,6 @@ namespace GW2EIParser.Builders
             }
             var orderedScripts = new List<string>()
             {
-                Properties.Resources.combatReplayStatsUI,
-                Properties.Resources.combatReplayStatsJS,
             };
             string scriptContent = orderedScripts[0];
             for (int i = 1; i < orderedScripts.Count; i++)
