@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 
@@ -33,7 +34,7 @@ namespace GW2EIParser.EIData
             { EarthMajor, new HashSet<long> { EarthFire, EarthWater, EarthAir, EarthDual}},
         };
 
-        private static long TranslateWeaverAttunement(List<AbstractBuffEvent> buffApplies)
+        private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
         {
             // check if more than 3 ids are present
             if (buffApplies.Select(x => x.BuffID).Distinct().Count() > 3)
@@ -147,10 +148,12 @@ namespace GW2EIParser.EIData
                 }
             }
             long prevID = 0;
+            uint prevInstanceId = 0;
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {
-                var applies = pair.Value.Where(x => x is BuffApplyEvent).ToList();
+                var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
                 long curID = TranslateWeaverAttunement(applies);
+                uint curInstanceID = applies.First().BuffInstance;
                 foreach (AbstractBuffEvent c in pair.Value)
                 {
                     c.Invalidate(skillData);
@@ -159,12 +162,14 @@ namespace GW2EIParser.EIData
                 {
                     continue;
                 }
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID)));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
                 if (prevID != 0)
                 {
+                    res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, a, pair.Key, int.MaxValue, skillData.Get(prevID), prevInstanceId, ParseEnum.EvtcIFF.Unknown));                  
                     res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
                     res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1));
                 }
+                prevInstanceId = curInstanceID;
                 prevID = curID;
             }
             return res;

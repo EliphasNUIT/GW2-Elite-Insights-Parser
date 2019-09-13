@@ -7,10 +7,8 @@ using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
-    public abstract class BuffSimulator
+    public abstract class AbstractBuffSimulator
     {
-        private long _id = 0;
-
         public class BoonStackItem
         {
             public long Start { get; private set; }
@@ -84,17 +82,14 @@ namespace GW2EIParser.EIData
         public List<BuffOverstackItem> OverstackSimulationResult { get; } = new List<BuffOverstackItem>();
         public List<BuffOverrideItem> OverrideSimulationResult { get; } = new List<BuffOverrideItem>();
         public List<BuffRemoveItem> RemovalSimulationResult { get; } = new List<BuffRemoveItem>();
-        protected int Capacity { get; }
-        private readonly ParsedLog _log;
-        private readonly StackingLogic _logic;
+
+        protected ParsedLog Log { get; }
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic)
+        protected AbstractBuffSimulator(ParsedLog log)
         {
-            Capacity = capacity;
-            BoonStack = new List<BoonStackItem>(capacity);
-            _log = log;
-            _logic = logic;
+            BoonStack = new List<BoonStackItem>();
+            Log = log;
         }
 
 
@@ -143,105 +138,10 @@ namespace GW2EIParser.EIData
 
         protected abstract void Update(long timePassed);
 
-        public void Add(long boonDuration, AgentItem src, long start)
-        {
-            var toAdd = new BoonStackItem(start, boonDuration, src, ++_id);
-            // Find empty slot
-            if (BoonStack.Count < Capacity)
-            {
-                BoonStack.Add(toAdd);
-                _logic.Sort(_log, BoonStack);
-            }
-            // Replace lowest value
-            else
-            {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverrideSimulationResult);
-                if (!found)
-                {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
-                }
-            }
-        }
+        public abstract void Add(long boonDuration, AgentItem src, long start, uint id, bool addedActive);
 
-        protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
-        {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc,_id++, isExtension);
-            // Find empty slot
-            if (BoonStack.Count < Capacity)
-            {
-                if (atFirst)
-                {
-                    BoonStack.Insert(0, toAdd);
-                }
-                else
-                {
+        public abstract void Remove(AgentItem by, long boonDuration, long start, ParseEnum.EvtcBuffRemove removeType, uint id);
 
-                    BoonStack.Add(toAdd);
-                }
-                _logic.Sort(_log, BoonStack);
-            }
-            // Replace lowest value
-            else
-            {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverrideSimulationResult);
-                if (!found)
-                {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(srcinstid, boonDuration, start));
-                }
-            }
-        }
-
-        public void Remove(AgentItem by, long boonDuration, long start, ParseEnum.EvtcBuffRemove removeType)
-        {
-            if (GenerationSimulation.Count > 0)
-            {
-                BuffSimulationItem last = GenerationSimulation.Last();
-                if (last.End > start)
-                {
-                    last.OverrideEnd(start);
-                }
-            }
-            switch (removeType)
-            {
-                case ParseEnum.EvtcBuffRemove.All:
-                    foreach (BoonStackItem stackItem in BoonStack)
-                    {
-                        RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
-                        if (stackItem.Extensions.Count > 0)
-                        {
-                            foreach ((AgentItem src, long value) in stackItem.Extensions)
-                            {
-                                RemovalSimulationResult.Add(new BuffRemoveItem(src, by, value, start, stackItem.ID));
-                            }
-                        }
-                    }
-                    BoonStack.Clear();
-                    break;
-                case ParseEnum.EvtcBuffRemove.Single:
-                    for (int i = 0; i < BoonStack.Count; i++)
-                    {
-                        BoonStackItem stackItem = BoonStack[i];
-                        if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
-                        {
-                            RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
-                            if (stackItem.Extensions.Count > 0)
-                            {
-                                foreach ((AgentItem src, long value) in stackItem.Extensions)
-                                {
-                                    RemovalSimulationResult.Add(new BuffRemoveItem(src, by, value, start, stackItem.ID));
-                                }
-                            }
-                            BoonStack.RemoveAt(i);
-                            break;
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            _logic.Sort(_log, BoonStack);
-        }
-
-        public abstract void Extend(long extension, long oldValue, AgentItem src, long start);
+        public abstract void Extend(long extension, long oldValue, AgentItem src, long start, uint id);
     }
 }

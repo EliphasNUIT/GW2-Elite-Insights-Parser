@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
             };
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData, bool hasStackID)
         {
             var res = new List<AbstractBuffEvent>();
             if (buffsById.TryGetValue(56118, out List<AbstractBuffEvent> list))
@@ -57,8 +57,8 @@ namespace GW2EIParser.Logic
                 var sappingSurgeByDst = list.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in sappingSurgeByDst.Where(x => x.Value.Exists(y => y is BuffRemoveSingleEvent)))
                 {
-                    var sglRemovals = pair.Value.Where(x => x is BuffRemoveSingleEvent).ToList();
-                    foreach (AbstractBuffEvent sglRemoval in sglRemovals)
+                    var sglRemovals = pair.Value.OfType<BuffRemoveSingleEvent>().ToList();
+                    foreach (BuffRemoveSingleEvent sglRemoval in sglRemovals)
                     {
                         AbstractBuffEvent ba = pair.Value.LastOrDefault(x => x is BuffApplyEvent && Math.Abs(x.Time - sglRemoval.Time) < 5);
                         if (ba != null)

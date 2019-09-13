@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.EIData.BuffSimulator;
+using static GW2EIParser.EIData.AbstractBuffSimulator;
 
 namespace GW2EIParser.EIData
 {

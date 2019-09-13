@@ -38,7 +38,7 @@ namespace GW2EIParser.Parser.ParsedData
                     ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), skillData);
                 }
             }
-            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData));
+            toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(_boonDataByDst, _boonData, fightData.FightStartLogTime, skillData, HasStackIDs));
             var buffIDsToSort = new HashSet<long>();
             var dstAgentsToSort = new HashSet<AgentItem>();
             foreach (AbstractBuffEvent bf in toAdd)
@@ -197,7 +197,8 @@ namespace GW2EIParser.Parser.ParsedData
         public CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, List<Player> players)
         {
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
-            HasStackIDs = allCombatItems.Exists(x => x.IsStateChange == ParseEnum.EvtcStateChange.StackActive || x.IsStateChange == ParseEnum.EvtcStateChange.StackReset);
+            var stackResetAndActives = allCombatItems.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.StackActive || x.IsStateChange == ParseEnum.EvtcStateChange.StackReset).ToList();
+            HasStackIDs = stackResetAndActives.Any();
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.None && x.IsActivation == ParseEnum.EvtcActivation.None && x.IsBuffRemove == ParseEnum.EvtcBuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>

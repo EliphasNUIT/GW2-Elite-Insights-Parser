@@ -6,11 +6,17 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         private readonly ParseEnum.EvtcIFF _iff;
 
-        private readonly uint _buffInstance;
+        public uint BuffInstance { get; }
         public BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             _iff = evtcItem.IFF;
-            _buffInstance = evtcItem.Pad;
+            BuffInstance = evtcItem.Pad;
+        }
+
+        public BuffRemoveSingleEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, uint id, ParseEnum.EvtcIFF iff) : base(by, to, time, removedDuration, buffSkill)
+        {
+            _iff = iff;
+            BuffInstance = id;
         }
 
         public override bool IsBoonSimulatorCompliant(long fightEnd)
@@ -21,9 +27,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.EvtcBuffRemove.Single);
+            simulator.Remove(By, RemovedDuration, Time, ParseEnum.EvtcBuffRemove.Single, BuffInstance);
         }
     }
 }

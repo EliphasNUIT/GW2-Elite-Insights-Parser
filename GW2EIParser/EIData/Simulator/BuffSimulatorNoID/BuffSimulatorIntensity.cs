@@ -14,7 +14,7 @@ namespace GW2EIParser.EIData
         {
         }
 
-        public override void Extend(long extension, long oldValue, AgentItem src, long start)
+        public override void Extend(long extension, long oldValue, AgentItem src, long start, uint id)
         {
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
@@ -33,7 +33,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start);
+                    Add(oldValue + extension, src, start, 0, true);
                 }
             }
         }

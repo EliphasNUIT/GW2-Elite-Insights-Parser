@@ -26,9 +26,9 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
 
-        public override void UpdateSimulator(BuffSimulator simulator)
+        public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.EvtcBuffRemove.All);
+            simulator.Remove(By, RemovedDuration, Time, ParseEnum.EvtcBuffRemove.All, 0);
         }
     }
 }

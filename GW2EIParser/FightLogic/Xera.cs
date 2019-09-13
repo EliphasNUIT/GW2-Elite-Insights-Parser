@@ -51,7 +51,7 @@ namespace GW2EIParser.Logic
                             (1920, 12160, 2944, 14464));
         }
 
-        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
+        public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData, bool hasStackID)
         {
             NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
             if (mainTarget == null)
@@ -59,10 +59,16 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             var res = new List<AbstractBuffEvent>();
-            if (_specialSplitLogTime != 0)
+            if (_specialSplitLogTime != 0 && buffsById.TryGetValue(762, out List<AbstractBuffEvent> list))
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
+                BuffApplyEvent invulApply = list.OfType<BuffApplyEvent>().LastOrDefault(x => x.Time < _specialSplitLogTime && x.To == mainTarget.AgentItem);
+                if (invulApply != null)
+                {
+                    res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
+                    res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
+                    res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), invulApply.BuffInstance , ParseEnum.EvtcIFF.Unknown));
+
+                }
             }
             return res;
         }
