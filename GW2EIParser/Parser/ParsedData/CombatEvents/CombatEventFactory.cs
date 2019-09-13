@@ -144,6 +144,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             var res = new List<AbstractBuffEvent>();
             var dict = new Dictionary<uint, SkillItem>();
+            var stackResetsToRecheck = new List<CombatItem>();
             foreach (CombatItem c in buffEvents)
             {
                 switch (c.IsStateChange)
@@ -151,8 +152,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                     case ParseEnum.EvtcStateChange.StackActive:
                         if (c.SkillID == 0)
                         {
-                            SkillItem buffSkill = dict[(uint)c.DstAgent];
-                            c.OverrideSkillID(buffSkill.ID);
+                            if (!dict.TryGetValue((uint)c.DstAgent, out SkillItem skill))
+                            {
+                                stackResetsToRecheck.Add(c);
+                                continue;
+                            }
+                            c.OverrideSkillID(skill.ID);
                         }
                         res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
                         break;
@@ -172,6 +177,17 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                     var toAdd = new BuffApplyEvent(c, agentData, skillData, offset);
                                     res.Add(toAdd);
                                     dict[toAdd.BuffInstance] = toAdd.BuffSkill;
+                                    var toRemove = new HashSet<CombatItem>();
+                                    foreach(CombatItem item in stackResetsToRecheck)
+                                    {
+                                        if (dict.TryGetValue((uint)item.DstAgent, out SkillItem skill))
+                                        {
+                                            item.OverrideSkillID(skill.ID);
+                                            res.Add(new BuffStackResetEvent(item, agentData, skillData, offset));
+                                            toRemove.Add(item);
+                                        }
+                                    }
+                                    stackResetsToRecheck.RemoveAll(x => toRemove.Contains(x));
                                 }
                                 break;
                             case ParseEnum.EvtcBuffRemove.Single:

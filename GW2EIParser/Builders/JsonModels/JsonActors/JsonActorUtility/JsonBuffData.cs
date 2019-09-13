@@ -212,6 +212,8 @@ namespace GW2EIParser.Builders.JsonModels
             BuffOverrideStates = new Dictionary<string, List<JsonBuffOverrideItem>>();
             BuffRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
             BuffOverstackStates = new Dictionary<string, List<JsonBuffOverstackItem>>();
+            BuffAddedStates = new Dictionary<string, List<JsonCreationItem>>();
+            BuffExtendedStates = new Dictionary<string, List<JsonCreationItem>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             foreach (long buffID in buffGraphs.Keys)
             {
