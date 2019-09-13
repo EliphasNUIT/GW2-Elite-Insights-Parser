@@ -28,26 +28,33 @@ namespace GW2EIParser.EIData
         public override void Add(long boonDuration, AgentItem src, long start, uint id, bool addedAsActive)
         {
             var toAdd = new BoonStackItem(start, boonDuration, src, ++_id);
+            bool addToCreationList = false;
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
                 BoonStack.Add(toAdd);
                 _logic.Sort(Log, BoonStack);
+                addToCreationList = true;
             }
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
-                if (!found)
+                addToCreationList = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
+                if (!addToCreationList)
                 {
                     OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
                 }
             }
+            if (addToCreationList)
+            {
+                AddedSimulationResult.Add(new BuffCreationItem(src, boonDuration, start, toAdd.ID));
+            }
         }
 
-        protected void Add(long boonDuration, AgentItem srcinstid, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
+        protected void Add(long boonDuration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, seedSrc,_id++, isExtension);
+            var toAdd = new BoonStackItem(start, boonDuration, src, seedSrc,_id++, isExtension);
+            bool addToCreationList = false;
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -61,15 +68,20 @@ namespace GW2EIParser.EIData
                     BoonStack.Add(toAdd);
                 }
                 _logic.Sort(Log, BoonStack);
+                addToCreationList = true;
             }
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
-                if (!found)
+                addToCreationList = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
+                if (!addToCreationList)
                 {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(srcinstid, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
                 }
+            }
+            if (addToCreationList)
+            {
+                AddedSimulationResult.Add(new BuffCreationItem(src, boonDuration, start, toAdd.ID));
             }
         }
 

@@ -17,6 +17,7 @@ namespace GW2EIParser.EIData
             if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
             {
                 BoonStack[0].Extend(extension, src);
+                ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, start, BoonStack[0].ID));
             }
             else
             {

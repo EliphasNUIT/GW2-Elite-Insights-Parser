@@ -83,6 +83,9 @@ namespace GW2EIParser.EIData
         public List<BuffOverrideItem> OverrideSimulationResult { get; } = new List<BuffOverrideItem>();
         public List<BuffRemoveItem> RemovalSimulationResult { get; } = new List<BuffRemoveItem>();
 
+        public List<BuffCreationItem> AddedSimulationResult { get; } = new List<BuffCreationItem>();
+        public List<BuffCreationItem> ExtendedSimulationResult { get; } = new List<BuffCreationItem>();
+
         protected ParsedLog Log { get; }
 
         // Constructor

@@ -22,6 +22,7 @@ namespace GW2EIParser.EIData
                 if (minItem != null)
                 {
                     minItem.Extend(extension, src);
+                    ExtendedSimulationResult.Add(new BuffCreationItem(src, extension, start, minItem.ID));
                 }
             }
             else
