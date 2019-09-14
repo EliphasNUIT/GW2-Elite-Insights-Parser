@@ -133,5 +133,15 @@ namespace GW2EIParser.EIData
             }
             _logic.Sort(Log, BoonStack);
         }
+
+
+        public override void Activate(uint id)
+        {
+
+        }
+        public override void Reset(uint id, long toDuration)
+        {
+
+        }
     }
 }
