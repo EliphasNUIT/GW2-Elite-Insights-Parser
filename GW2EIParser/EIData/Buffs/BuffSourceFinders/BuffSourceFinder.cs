@@ -32,7 +32,7 @@ namespace GW2EIParser.EIData
                     _extensionSkills.AddRange(p.GetCastLogs(log, 0, log.FightData.FightDuration).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.Interrupted));
                 }
             }
-            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time - GeneralHelper.ServerDelayConstant <= time && time <= x.Time + x.ActualDuration + GeneralHelper.ServerDelayConstant).ToList();
+            return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.Time + x.ActualDuration + GeneralHelper.ServerDelayConstant).ToList();
         }
         // Spec specific checks
         private int CouldBeEssenceOfSpeed(AgentItem dst, long extension, ParsedLog log)
