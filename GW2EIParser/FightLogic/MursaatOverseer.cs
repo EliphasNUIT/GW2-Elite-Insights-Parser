@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -42,7 +42,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer,
+                (ushort)ParseEnum.NPCIDs.MursaatOverseer,
                 (ushort)Jade
             };
         }
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.MursaatOverseer);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -139,7 +139,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.MursaatOverseer, 25e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.MursaatOverseer, 25e6);
         }
     }
 }

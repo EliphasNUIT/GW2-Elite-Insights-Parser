@@ -257,7 +257,7 @@ namespace GW2EIParser.Parser
             ParseHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
-            ParseEnum.EvtcIFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -266,10 +266,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.EvtcBuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -281,7 +281,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.EvtcStateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();
@@ -335,7 +335,7 @@ namespace GW2EIParser.Parser
             ushort dstmasterInstid = reader.ReadUInt16();
 
             // 1 byte: iff
-            ParseEnum.EvtcIFF iff = ParseEnum.GetIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             byte buff = reader.ReadByte();
@@ -344,10 +344,10 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.EvtcBuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             byte isNinety = reader.ReadByte();
@@ -359,7 +359,7 @@ namespace GW2EIParser.Parser
             byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.EvtcStateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
+            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             byte isFlanking = reader.ReadByte();
@@ -405,13 +405,13 @@ namespace GW2EIParser.Parser
         /// <returns>true if the combat item is valid</returns>
         private static bool IsValid(CombatItem combatItem)
         {
-            if (combatItem.IsStateChange == ParseEnum.EvtcStateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            if (combatItem.IsStateChange == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
             {
                 // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
                 // If it is more than 200% health ignore this record
                 return false;
             }
-            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.EvtcIFF.Unknown)
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
             {
                 return false;
             }
@@ -430,7 +430,7 @@ namespace GW2EIParser.Parser
                     {
                         if (agent.InstID == 0)
                         {
-                            agent.InstID = c.IsStateChange != ParseEnum.EvtcStateChange.None ? c.SrcInstid : (ushort)0;
+                            agent.InstID = c.IsStateChange != ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
                             if (agent.FirstAwareLogTime == 0)
                             {
                                 agent.FirstAwareLogTime = c.LogTime;
@@ -446,7 +446,7 @@ namespace GW2EIParser.Parser
                     }
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
-                if (c.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
+                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
                 {
                     foreach (AgentItem agent in agentList)
                     {

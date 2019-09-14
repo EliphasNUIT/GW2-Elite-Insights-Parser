@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -49,7 +49,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Skorvald);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Skorvald);
             if (target == null)
             {
                 throw new InvalidOperationException("Target for CM detection not found");
@@ -61,7 +61,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Skorvald,
+                (ushort)ParseEnum.NPCIDs.Skorvald,
                 (ushort)FluxAnomaly4,
                 (ushort)FluxAnomaly3,
                 (ushort)FluxAnomaly2,

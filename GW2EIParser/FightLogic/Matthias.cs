@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Matthias);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Matthias);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -115,7 +115,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Matthias,
+                (ushort)ParseEnum.NPCIDs.Matthias,
                 (ushort)Storm,
                 (ushort)Spirit,
                 (ushort)Spirit2,
@@ -131,7 +131,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Matthias:
+                case (ushort)ParseEnum.NPCIDs.Matthias:
                     var humanShield = cls.Where(x => x.SkillId == 34468).ToList();
                     var humanShieldRemoval = log.CombatData.GetBuffData(34518).Where(x => x is BuffRemoveAllEvent).Select(x => (int)x.Time).Distinct().ToList();
                     for (int i = 0; i < humanShield.Count; i++)

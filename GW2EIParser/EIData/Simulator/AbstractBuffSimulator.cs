@@ -145,7 +145,7 @@ namespace GW2EIParser.EIData
 
         public abstract void Add(long boonDuration, AgentItem src, long start, uint id, bool addedActive);
 
-        public abstract void Remove(AgentItem by, long boonDuration, long start, ParseEnum.EvtcBuffRemove removeType, uint id);
+        public abstract void Remove(AgentItem by, long boonDuration, long start, ParseEnum.BuffRemove removeType, uint id);
 
         public abstract void Extend(long extension, long oldValue, AgentItem src, long start, uint id);
 

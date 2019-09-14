@@ -7,7 +7,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using Newtonsoft.Json.Serialization;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser
 {
@@ -161,89 +161,89 @@ namespace GW2EIParser
         {
             switch (ParseEnum.GetNPCIDS(id))
             {
-                case ParseEnum.EvtcNPCIDs.WorldVersusWorld:
+                case ParseEnum.NPCIDs.WorldVersusWorld:
                     return "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
-                case ParseEnum.EvtcNPCIDs.ValeGuardian:
+                case ParseEnum.NPCIDs.ValeGuardian:
                     return "https://i.imgur.com/MIpP5pK.png";
-                case ParseEnum.EvtcNPCIDs.Gorseval:
+                case ParseEnum.NPCIDs.Gorseval:
                     return "https://i.imgur.com/5hmMq12.png";
-                case ParseEnum.EvtcNPCIDs.Sabetha:
+                case ParseEnum.NPCIDs.Sabetha:
                     return "https://i.imgur.com/UqbFp9S.png";
-                case ParseEnum.EvtcNPCIDs.Slothasor:
+                case ParseEnum.NPCIDs.Slothasor:
                     return "https://i.imgur.com/h1xH3ER.png";
-                case ParseEnum.EvtcNPCIDs.Berg:
+                case ParseEnum.NPCIDs.Berg:
                     return "https://i.imgur.com/tLMXqL7.png";
-                case ParseEnum.EvtcNPCIDs.Narella:
+                case ParseEnum.NPCIDs.Narella:
                     return "https://i.imgur.com/FwMCoR0.png";
-                case ParseEnum.EvtcNPCIDs.Zane:
+                case ParseEnum.NPCIDs.Zane:
                     return "https://i.imgur.com/tkPWMST.png";
-                case ParseEnum.EvtcNPCIDs.Matthias:
+                case ParseEnum.NPCIDs.Matthias:
                     return "https://i.imgur.com/3uMMmTS.png";
-                case ParseEnum.EvtcNPCIDs.KeepConstruct:
+                case ParseEnum.NPCIDs.KeepConstruct:
                     return "https://i.imgur.com/Kq0kL07.png";
-                case ParseEnum.EvtcNPCIDs.Xera:
+                case ParseEnum.NPCIDs.Xera:
                     return "https://i.imgur.com/lYwJEyV.png";
-                case ParseEnum.EvtcNPCIDs.Cairn:
+                case ParseEnum.NPCIDs.Cairn:
                     return "https://i.imgur.com/gQY37Tf.png";
-                case ParseEnum.EvtcNPCIDs.MursaatOverseer:
+                case ParseEnum.NPCIDs.MursaatOverseer:
                     return "https://i.imgur.com/5LNiw4Y.png";
-                case ParseEnum.EvtcNPCIDs.Samarog:
+                case ParseEnum.NPCIDs.Samarog:
                     return "https://i.imgur.com/MPQhKfM.png";
-                case ParseEnum.EvtcNPCIDs.Deimos:
+                case ParseEnum.NPCIDs.Deimos:
                     return "https://i.imgur.com/mWfxBaO.png";
-                case ParseEnum.EvtcNPCIDs.SoullessHorror:
-                case ParseEnum.EvtcNPCIDs.Desmina:
+                case ParseEnum.NPCIDs.SoullessHorror:
+                case ParseEnum.NPCIDs.Desmina:
                     return "https://i.imgur.com/jAiRplg.png";
-                case ParseEnum.EvtcNPCIDs.BrokenKing:
+                case ParseEnum.NPCIDs.BrokenKing:
                     return "https://i.imgur.com/FNgUmvL.png";
-                case ParseEnum.EvtcNPCIDs.SoulEater:
+                case ParseEnum.NPCIDs.SoulEater:
                     return "https://i.imgur.com/Sd6Az8M.png";
-                case ParseEnum.EvtcNPCIDs.EyeOfFate:
-                case ParseEnum.EvtcNPCIDs.EyeOfJudgement:
+                case ParseEnum.NPCIDs.EyeOfFate:
+                case ParseEnum.NPCIDs.EyeOfJudgement:
                     return "https://i.imgur.com/kAgdoa5.png";
-                case ParseEnum.EvtcNPCIDs.Dhuum:
+                case ParseEnum.NPCIDs.Dhuum:
                     return "https://i.imgur.com/RKaDon5.png";
-                case ParseEnum.EvtcNPCIDs.ConjuredAmalgamate:
+                case ParseEnum.NPCIDs.ConjuredAmalgamate:
                     return "https://i.imgur.com/C23rYTl.png";
-                case ParseEnum.EvtcNPCIDs.CALeftArm:
+                case ParseEnum.NPCIDs.CALeftArm:
                     return "https://i.imgur.com/qrkQvEY.png";
-                case ParseEnum.EvtcNPCIDs.CARightArm:
+                case ParseEnum.NPCIDs.CARightArm:
                     return "https://i.imgur.com/MVwjtH7.png";
-                case ParseEnum.EvtcNPCIDs.Kenut:
+                case ParseEnum.NPCIDs.Kenut:
                     return "https://i.imgur.com/6yq45Cc.png";
-                case ParseEnum.EvtcNPCIDs.Nikare:
+                case ParseEnum.NPCIDs.Nikare:
                     return "https://i.imgur.com/TLykcrJ.png";
-                case ParseEnum.EvtcNPCIDs.Qadim:
+                case ParseEnum.NPCIDs.Qadim:
                     return "https://i.imgur.com/IfoHTHT.png";
-                case ParseEnum.EvtcNPCIDs.Freezie:
+                case ParseEnum.NPCIDs.Freezie:
                     return "https://wiki.guildwars2.com/images/d/d9/Mini_Freezie.png";
-                case ParseEnum.EvtcNPCIDs.Adina:
+                case ParseEnum.NPCIDs.Adina:
                     return "https://i.imgur.com/or3m1yb.png";
-                case ParseEnum.EvtcNPCIDs.Sabir:
+                case ParseEnum.NPCIDs.Sabir:
                     return "https://i.imgur.com/Q4WUXqw.png";
-                case ParseEnum.EvtcNPCIDs.PeerlessQadim:
+                case ParseEnum.NPCIDs.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
-                case ParseEnum.EvtcNPCIDs.MAMA:
+                case ParseEnum.NPCIDs.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
-                case ParseEnum.EvtcNPCIDs.Siax:
+                case ParseEnum.NPCIDs.Siax:
                     return "https://i.imgur.com/5C60cQb.png";
-                case ParseEnum.EvtcNPCIDs.Ensolyss:
+                case ParseEnum.NPCIDs.Ensolyss:
                     return "https://i.imgur.com/GUTNuyP.png";
-                case ParseEnum.EvtcNPCIDs.Skorvald:
+                case ParseEnum.NPCIDs.Skorvald:
                     return "https://i.imgur.com/IOPAHRE.png";
-                case ParseEnum.EvtcNPCIDs.Artsariiv:
+                case ParseEnum.NPCIDs.Artsariiv:
                     return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
-                case ParseEnum.EvtcNPCIDs.Arkk:
+                case ParseEnum.NPCIDs.Arkk:
                     return "https://i.imgur.com/u6vv8cW.png";
-                case ParseEnum.EvtcNPCIDs.LGolem:
+                case ParseEnum.NPCIDs.LGolem:
                     return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
-                case ParseEnum.EvtcNPCIDs.AvgGolem:
+                case ParseEnum.NPCIDs.AvgGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case ParseEnum.EvtcNPCIDs.StdGolem:
+                case ParseEnum.NPCIDs.StdGolem:
                     return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-                case ParseEnum.EvtcNPCIDs.MassiveGolem:
+                case ParseEnum.NPCIDs.MassiveGolem:
                     return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
-                case ParseEnum.EvtcNPCIDs.MedGolem:
+                case ParseEnum.NPCIDs.MedGolem:
                     return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
 
                 case Spirit:

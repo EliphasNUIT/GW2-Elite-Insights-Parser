@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -56,7 +56,7 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
+                (ushort)ParseEnum.NPCIDs.Deimos,
                 (ushort)Thief,
                 (ushort)Drunkard,
                 (ushort)Gambler,
@@ -67,7 +67,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Deimos,
+                (ushort)ParseEnum.NPCIDs.Deimos,
                 (ushort)Thief,
                 (ushort)Drunkard,
                 (ushort)Gambler,
@@ -107,7 +107,7 @@ namespace GW2EIParser.Logic
             };
             foreach (CombatItem c in combatData)
             {
-                if (gadgetAgents.Contains(c.SrcAgent) && c.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)
+                if (gadgetAgents.Contains(c.SrcAgent) && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)
                 {
                     continue;
                 }
@@ -142,7 +142,7 @@ namespace GW2EIParser.Logic
                         {
                             res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0, ba.BuffInstance));
                             res.Add(new BuffRemoveManualEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
-                            res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), ba.BuffInstance, ParseEnum.EvtcIFF.Unknown));
+                            res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), ba.BuffInstance, ParseEnum.IFF.Unknown));
                         }
                     }
                     else if (bfe is BuffRemoveAllEvent bra)
@@ -205,7 +205,7 @@ namespace GW2EIParser.Logic
                     string[] names = targetAgent.Name.Split('-');
                     if (ushort.TryParse(names[2], out ushort masterInstid))
                     {
-                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.EvtcIFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.EvtcStateChange.None && x.IsBuffRemove == ParseEnum.EvtcBuffRemove.None &&
+                        CombatItem structDeimosDamageEvent = combatData.FirstOrDefault(x => x.LogTime >= firstAware && x.IFF == ParseEnum.IFF.Foe && x.DstInstid == masterInstid && x.IsStateChange == ParseEnum.StateChange.None && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                 ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
                                 (x.IsBuff == 0 && x.Value >= 0)));
                         if (structDeimosDamageEvent != null)
@@ -231,19 +231,19 @@ namespace GW2EIParser.Logic
         {
             ComputeFightNPCs(agentData, combatData);
             // Find target
-            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
+            NPC target = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Deimos);
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.EvtcStateChange.EnterCombat && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
             if (enterCombat != null)
             {
                 fightData.OverrideStart(enterCombat.LogTime);
             }
             // Remove deimos despawn events as they are useless and mess with combat replay
-            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.EvtcStateChange.Despawn && x.SrcAgent == target.Agent);
+            combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
             // invul correction
             CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
             if (invulApp != null)
@@ -251,7 +251,7 @@ namespace GW2EIParser.Logic
                 invulApp.OverrideValue((int)(target.LastAwareLogTime - invulApp.LogTime));
             }
             // Deimos gadgets
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.LogTime > combatData.First().LogTime && x.DstAgent > 0);
+            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.LogTime > combatData.First().LogTime && x.DstAgent > 0);
             var gadgetAgents = new HashSet<ulong>();
             long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
             // legacy method
@@ -283,7 +283,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Deimos);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Deimos);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -367,7 +367,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Deimos:
+                case (ushort)ParseEnum.NPCIDs.Deimos:
                     var mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
                     foreach (AbstractCastEvent c in mindCrush)
                     {
@@ -466,7 +466,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 40e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Deimos, 40e6);
         }
     }
 }

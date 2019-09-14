@@ -13,15 +13,15 @@
         public ushort DstInstid { get; private set; }
         public ushort SrcMasterInstid { get; private set; }
         public ushort DstMasterInstid { get; private set; }
-        public ParseEnum.EvtcIFF IFF { get; }
+        public ParseEnum.IFF IFF { get; }
         public byte IsBuff { get; }
         public byte Result { get; }
-        public ParseEnum.EvtcActivation IsActivation { get; }
-        public ParseEnum.EvtcBuffRemove IsBuffRemove { get; }
+        public ParseEnum.Activation IsActivation { get; }
+        public ParseEnum.BuffRemove IsBuffRemove { get; }
         public byte IsNinety { get; }
         public byte IsFifty { get; }
         public byte IsMoving { get; }
-        public ParseEnum.EvtcStateChange IsStateChange { get; }
+        public ParseEnum.StateChange IsStateChange { get; }
         public byte IsFlanking { get; }
         public byte IsShields { get; }
         public byte IsOffcycle { get; }
@@ -31,10 +31,10 @@
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
-               ushort dstMasterInstid, ParseEnum.EvtcIFF iff, byte isBuff,
-               byte result, ParseEnum.EvtcActivation isActivation,
-               ParseEnum.EvtcBuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
-               ParseEnum.EvtcStateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
+               ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff,
+               byte result, ParseEnum.Activation isActivation,
+               ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
+               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields, byte isOffcycle, uint pad)
         {
             LogTime = time;
             SrcAgent = srcAgent;

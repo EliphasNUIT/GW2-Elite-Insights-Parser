@@ -2,7 +2,7 @@
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -39,7 +39,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Artsariiv,
+                (ushort)ParseEnum.NPCIDs.Artsariiv,
                 (ushort)TemporalAnomaly,
                 (ushort)Spark,
                 (ushort)Artsariiv1,

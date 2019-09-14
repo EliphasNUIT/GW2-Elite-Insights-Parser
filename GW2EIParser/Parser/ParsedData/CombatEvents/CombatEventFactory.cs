@@ -14,13 +14,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                 AbstractMovementEvent evt = null;
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.EvtcStateChange.Velocity:
+                    case ParseEnum.StateChange.Velocity:
                         evt = new VelocityEvent(c, agentData, offset);
                         break;
-                    case ParseEnum.EvtcStateChange.Rotation:
+                    case ParseEnum.StateChange.Rotation:
                         evt = new RotationEvent(c, agentData, offset);
                         break;
-                    case ParseEnum.EvtcStateChange.Position:
+                    case ParseEnum.StateChange.Position:
                         evt = new PositionEvent(c, agentData, offset);
                         break;
                     default:
@@ -50,79 +50,79 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.EvtcStateChange.EnterCombat:
+                    case ParseEnum.StateChange.EnterCombat:
                         var enterCombatEvt = new EnterCombatEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.EnterCombatEvents, enterCombatEvt.Src, enterCombatEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.ExitCombat:
+                    case ParseEnum.StateChange.ExitCombat:
                         var exitCombatEvt = new ExitCombatEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.ExitCombatEvents, exitCombatEvt.Src, exitCombatEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.ChangeUp:
+                    case ParseEnum.StateChange.ChangeUp:
                         var aliveEvt = new AliveEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.AliveEvents, aliveEvt.Src, aliveEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.ChangeDead:
+                    case ParseEnum.StateChange.ChangeDead:
                         var deadEvt = new DeadEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DeadEvents, deadEvt.Src, deadEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.ChangeDown:
+                    case ParseEnum.StateChange.ChangeDown:
                         var downEvt = new DownEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DownEvents, downEvt.Src, downEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.Spawn:
+                    case ParseEnum.StateChange.Spawn:
                         var spawnEvt = new SpawnEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.SpawnEvents, spawnEvt.Src, spawnEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.Despawn:
+                    case ParseEnum.StateChange.Despawn:
                         var despawnEvt = new DespawnEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.DespawnEvents, despawnEvt.Src, despawnEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.HealthUpdate:
+                    case ParseEnum.StateChange.HealthUpdate:
                         var healthEvt = new HealthUpdateEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.LogStart:
+                    case ParseEnum.StateChange.LogStart:
                         metaDataEvents.LogStartEvents.Add(new LogStartEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.LogEnd:
+                    case ParseEnum.StateChange.LogEnd:
                         metaDataEvents.LogEndEvents.Add(new LogEndEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.MaxHealthUpdate:
+                    case ParseEnum.StateChange.MaxHealthUpdate:
                         var maxHealthEvt = new MaxHealthUpdateEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.PointOfView:
+                    case ParseEnum.StateChange.PointOfView:
                         metaDataEvents.PointOfViewEvents.Add(new PointOfViewEvent(c, agentData, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.Language:
+                    case ParseEnum.StateChange.Language:
                         metaDataEvents.LanguageEvents.Add(new LanguageEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.GWBuild:
+                    case ParseEnum.StateChange.GWBuild:
                         metaDataEvents.BuildEvents.Add(new BuildEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.ShardId:
+                    case ParseEnum.StateChange.ShardId:
                         metaDataEvents.ShardEvents.Add(new ShardEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.Reward:
+                    case ParseEnum.StateChange.Reward:
                         metaDataEvents.RewardEvents.Add(new RewardEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.TeamChange:
+                    case ParseEnum.StateChange.TeamChange:
                         var tcEvt = new TeamChangeEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.AttackTarget:
+                    case ParseEnum.StateChange.AttackTarget:
                         var aTEvt = new AttackTargetEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.Targetable:
+                    case ParseEnum.StateChange.Targetable:
                         var tarEvt = new TargetableEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
                         break;
-                    case ParseEnum.EvtcStateChange.MapID:
+                    case ParseEnum.StateChange.MapID:
                         metaDataEvents.MapIDEvents.Add(new MapIDEvent(c, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.Guild:
+                    case ParseEnum.StateChange.Guild:
                         var gEvt = new GuildEvent(c, agentData, offset);
                         GeneralHelper.Add(statusEvents.GuildEvents, gEvt.Src, gEvt);
                         break;
@@ -149,7 +149,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 switch (c.IsStateChange)
                 {
-                    case ParseEnum.EvtcStateChange.StackActive:
+                    case ParseEnum.StateChange.StackActive:
                         if (c.SkillID == 0)
                         {
                             if (!dict.TryGetValue((uint)c.DstAgent, out SkillItem skill))
@@ -161,13 +161,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         }
                         res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
                         break;
-                    case ParseEnum.EvtcStateChange.StackReset:
+                    case ParseEnum.StateChange.StackReset:
                         res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
                         break;
                     default:
                         switch (c.IsBuffRemove)
                         {
-                            case ParseEnum.EvtcBuffRemove.None:
+                            case ParseEnum.BuffRemove.None:
                                 if (c.IsOffcycle > 0)
                                 {
                                     res.Add(new BuffExtensionEvent(c, agentData, skillData, offset));
@@ -190,13 +190,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                     stackResetsToRecheck.RemoveAll(x => toRemove.Contains(x));
                                 }
                                 break;
-                            case ParseEnum.EvtcBuffRemove.Single:
+                            case ParseEnum.BuffRemove.Single:
                                 res.Add(new BuffRemoveSingleEvent(c, agentData, skillData, offset));
                                 break;
-                            case ParseEnum.EvtcBuffRemove.All:
+                            case ParseEnum.BuffRemove.All:
                                 res.Add(new BuffRemoveAllEvent(c, agentData, skillData, offset));
                                 break;
-                            case ParseEnum.EvtcBuffRemove.Manual:
+                            case ParseEnum.BuffRemove.Manual:
                                 res.Add(new BuffRemoveManualEvent(c, agentData, skillData, offset));
                                 break;
                         }

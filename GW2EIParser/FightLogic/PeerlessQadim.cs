@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>()
             {
-                (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim,
+                (ushort)ParseEnum.NPCIDs.PeerlessQadim,
                 (ushort)Pylon1,
                 (ushort)Pylon2,
                 (ushort)EntropicDistortion,
@@ -75,7 +75,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.PeerlessQadim);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -155,7 +155,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim:
+                case (ushort)ParseEnum.NPCIDs.PeerlessQadim:
                     var cataCycle = cls.Where(x => x.SkillId == 56329).ToList();
 
                     foreach (AbstractCastEvent c in cataCycle)
@@ -178,7 +178,7 @@ namespace GW2EIParser.Logic
                     {
                         if (c is BuffApplyEvent)
                         {
-                            NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
+                            NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.PeerlessQadim);
                             surgeStart = (int)c.Time;
                             source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                         }
@@ -259,7 +259,7 @@ namespace GW2EIParser.Logic
             {
                 if (c is BuffApplyEvent)
                 {
-                    NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim);
+                    NPC qadim = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.PeerlessQadim);
                     surgeStart = (int)c.Time;
                     source = (AbstractSingleActor)log.PlayerList.FirstOrDefault(x => x.AgentItem == c.By) ?? qadim;
                 }
@@ -297,7 +297,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.PeerlessQadim, 48e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.PeerlessQadim, 48e6);
         }
     }
 }

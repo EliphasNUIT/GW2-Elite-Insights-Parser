@@ -44,16 +44,16 @@ namespace GW2EIParser.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.EvtcStateChange.None && c.IFF == ParseEnum.EvtcIFF.Foe && c.IsActivation == ParseEnum.EvtcActivation.None && c.IsBuffRemove == ParseEnum.EvtcBuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
                 }
             }
-            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.PointOfView);
+            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
                 // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.EvtcStateChange.EnterCombat);
+                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
                     fightData.OverrideStart(enterCombat.LogTime);

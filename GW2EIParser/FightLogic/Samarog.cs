@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Samarog);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Samarog);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Samarog,
+                (ushort)ParseEnum.NPCIDs.Samarog,
                 (ushort)Rigom,
                 (ushort)Guldhem,
             };
@@ -108,7 +108,7 @@ namespace GW2EIParser.Logic
             // TODO: facing information (shock wave)
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Samarog:
+                case (ushort)ParseEnum.NPCIDs.Samarog:
                     List<AbstractBuffEvent> brutalize = GetFilteredList(log.CombatData, 38226, target, true);
                     int brutStart = 0;
                     foreach (AbstractBuffEvent c in brutalize)
@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 30e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Deimos, 30e6);
         }
     }
 }

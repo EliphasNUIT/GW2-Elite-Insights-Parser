@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -60,7 +60,7 @@ namespace GW2EIParser.Logic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Desmina);
+                NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Desmina);
                 if (desmina == null)
                 {
                     throw new InvalidOperationException("Main target of the fight not found");
@@ -93,14 +93,14 @@ namespace GW2EIParser.Logic
             bool sortCombatList = false;
             foreach (AgentItem riverOfSoul in riverOfSouls)
             {
-                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
+                CombatItem firstMovement = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Velocity && x.SrcInstid == riverOfSoul.InstID && x.LogTime <= riverOfSoul.LastAwareLogTime);
                 if (firstMovement != null)
                 {
                     // update start
                     riverOfSoul.FirstAwareLogTime = firstMovement.LogTime - 10;
                     foreach (CombatItem c in combatData)
                     {
-                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.EvtcStateChange.Position || c.IsStateChange == ParseEnum.EvtcStateChange.Rotation))
+                        if (c.SrcInstid == riverOfSoul.InstID && c.LogTime < riverOfSoul.FirstAwareLogTime && (c.IsStateChange == ParseEnum.StateChange.Position || c.IsStateChange == ParseEnum.StateChange.Rotation))
                         {
                             sortCombatList = true;
                             c.OverrideTime(riverOfSoul.FirstAwareLogTime);
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
 
         public override void ComputeNPCCombatReplayActors(NPC npc, ParsedLog log, CombatReplay replay)
         {
-            NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Desmina);
+            NPC desmina = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Desmina);
             if (desmina == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Cairn:
+                case (ushort)ParseEnum.NPCIDs.Cairn:
                     var swordSweep = cls.Where(x => x.SkillId == 37631).ToList();
                     foreach (AbstractCastEvent c in swordSweep)
                     {

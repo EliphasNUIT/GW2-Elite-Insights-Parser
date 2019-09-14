@@ -12,7 +12,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
-            Initial = evtcItem.IsStateChange == ParseEnum.EvtcStateChange.BuffInitial;
+            Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
             By = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
             ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;

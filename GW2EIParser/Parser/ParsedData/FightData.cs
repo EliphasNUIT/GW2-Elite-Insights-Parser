@@ -41,122 +41,122 @@ namespace GW2EIParser.Parser.ParsedData
             _requirePhases = Properties.Settings.Default.ParsePhases;
             switch (ParseEnum.GetNPCIDS(id))
             {
-                case ParseEnum.EvtcNPCIDs.ValeGuardian:
+                case ParseEnum.NPCIDs.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Gorseval:
+                case ParseEnum.NPCIDs.Gorseval:
                     Logic = new Gorseval(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Sabetha:
+                case ParseEnum.NPCIDs.Sabetha:
                     Logic = new Sabetha(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Slothasor:
+                case ParseEnum.NPCIDs.Slothasor:
                     Logic = new Slothasor(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Zane:
-                case ParseEnum.EvtcNPCIDs.Berg:
-                case ParseEnum.EvtcNPCIDs.Narella:
+                case ParseEnum.NPCIDs.Zane:
+                case ParseEnum.NPCIDs.Berg:
+                case ParseEnum.NPCIDs.Narella:
                     Logic = new BanditTrio(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Matthias:
+                case ParseEnum.NPCIDs.Matthias:
                     Logic = new Matthias(id);
                     break;
                 /*case ParseEnum.TargetIDS.Escort:
                     Logic = new Escort(id, agentData);
                     break;*/
-                case ParseEnum.EvtcNPCIDs.KeepConstruct:
+                case ParseEnum.NPCIDs.KeepConstruct:
                     Logic = new KeepConstruct(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Xera:
+                case ParseEnum.NPCIDs.Xera:
                     Logic = new Xera(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Cairn:
+                case ParseEnum.NPCIDs.Cairn:
                     Logic = new Cairn(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.MursaatOverseer:
+                case ParseEnum.NPCIDs.MursaatOverseer:
                     Logic = new MursaatOverseer(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Samarog:
+                case ParseEnum.NPCIDs.Samarog:
                     Logic = new Samarog(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Deimos:
+                case ParseEnum.NPCIDs.Deimos:
                     Logic = new Deimos(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.SoullessHorror:
+                case ParseEnum.NPCIDs.SoullessHorror:
                     Logic = new SoullessHorror(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Desmina:
+                case ParseEnum.NPCIDs.Desmina:
                     Logic = new River(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.BrokenKing:
+                case ParseEnum.NPCIDs.BrokenKing:
                     Logic = new BrokenKing(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.SoulEater:
+                case ParseEnum.NPCIDs.SoulEater:
                     Logic = new EaterOfSouls(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.EyeOfFate:
-                case ParseEnum.EvtcNPCIDs.EyeOfJudgement:
+                case ParseEnum.NPCIDs.EyeOfFate:
+                case ParseEnum.NPCIDs.EyeOfJudgement:
                     Logic = new DarkMaze(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Dhuum:
+                case ParseEnum.NPCIDs.Dhuum:
                     // some eyes log are registered as Dhuum
-                    if (agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.EyeOfFate).Count > 0 ||
-                        agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.EyeOfJudgement).Count > 0)
+                    if (agentData.GetAgentsByID((ushort)ParseEnum.NPCIDs.EyeOfFate).Count > 0 ||
+                        agentData.GetAgentsByID((ushort)ParseEnum.NPCIDs.EyeOfJudgement).Count > 0)
                     {
-                        ID = (ushort)ParseEnum.EvtcNPCIDs.EyeOfFate;
-                        Logic = new DarkMaze((ushort)ParseEnum.EvtcNPCIDs.EyeOfFate);
+                        ID = (ushort)ParseEnum.NPCIDs.EyeOfFate;
+                        Logic = new DarkMaze((ushort)ParseEnum.NPCIDs.EyeOfFate);
                         break;
                     }
                     Logic = new Dhuum(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.ConjuredAmalgamate:
+                case ParseEnum.NPCIDs.ConjuredAmalgamate:
                     Logic = new ConjuredAmalgamate(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Kenut:
-                case ParseEnum.EvtcNPCIDs.Nikare:
+                case ParseEnum.NPCIDs.Kenut:
+                case ParseEnum.NPCIDs.Nikare:
                     Logic = new TwinLargos(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Qadim:
+                case ParseEnum.NPCIDs.Qadim:
                     Logic = new Qadim(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Freezie:
+                case ParseEnum.NPCIDs.Freezie:
                     Logic = new Freezie(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Adina:
+                case ParseEnum.NPCIDs.Adina:
                     Logic = new Adina(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Sabir:
+                case ParseEnum.NPCIDs.Sabir:
                     Logic = new Sabir(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.PeerlessQadim:
+                case ParseEnum.NPCIDs.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.MAMA:
+                case ParseEnum.NPCIDs.MAMA:
                     Logic = new MAMA(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Siax:
+                case ParseEnum.NPCIDs.Siax:
                     Logic = new Siax(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Ensolyss:
+                case ParseEnum.NPCIDs.Ensolyss:
                     Logic = new Ensolyss(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Skorvald:
+                case ParseEnum.NPCIDs.Skorvald:
                     Logic = new Skorvald(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Artsariiv:
+                case ParseEnum.NPCIDs.Artsariiv:
                     Logic = new Artsariiv(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.Arkk:
+                case ParseEnum.NPCIDs.Arkk:
                     Logic = new Arkk(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.WorldVersusWorld:
+                case ParseEnum.NPCIDs.WorldVersusWorld:
                     Logic = new WvWFight(id);
                     break;
-                case ParseEnum.EvtcNPCIDs.MassiveGolem:
-                case ParseEnum.EvtcNPCIDs.AvgGolem:
-                case ParseEnum.EvtcNPCIDs.LGolem:
-                case ParseEnum.EvtcNPCIDs.MedGolem:
-                case ParseEnum.EvtcNPCIDs.StdGolem:
+                case ParseEnum.NPCIDs.MassiveGolem:
+                case ParseEnum.NPCIDs.AvgGolem:
+                case ParseEnum.NPCIDs.LGolem:
+                case ParseEnum.NPCIDs.MedGolem:
+                case ParseEnum.NPCIDs.StdGolem:
                     Logic = new Golem(id);
                     break;
                 default:

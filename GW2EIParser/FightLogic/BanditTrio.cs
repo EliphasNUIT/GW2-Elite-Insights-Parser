@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -29,7 +29,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Narella
+                (ushort)ParseEnum.NPCIDs.Narella
             };
         }
 
@@ -37,9 +37,9 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Berg,
-                (ushort)ParseEnum.EvtcNPCIDs.Zane,
-                (ushort)ParseEnum.EvtcNPCIDs.Narella,
+                (ushort)ParseEnum.NPCIDs.Berg,
+                (ushort)ParseEnum.NPCIDs.Zane,
+                (ushort)ParseEnum.NPCIDs.Narella,
                 (ushort)BanditSaboteur,
                 (ushort)Warg,
                 (ushort)CagedWarg,
@@ -119,26 +119,26 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Berg,
-                (ushort)ParseEnum.EvtcNPCIDs.Zane,
-                (ushort)ParseEnum.EvtcNPCIDs.Narella
+                (ushort)ParseEnum.NPCIDs.Berg,
+                (ushort)ParseEnum.NPCIDs.Zane,
+                (ushort)ParseEnum.NPCIDs.Narella
             };
         }
 
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC berg = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Berg);
+            NPC berg = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Berg);
             if (berg == null)
             {
                 throw new InvalidOperationException("Berg not found");
             }
-            NPC zane = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Zane);
+            NPC zane = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Zane);
             if (zane == null)
             {
                 throw new InvalidOperationException("Zane");
             }
-            NPC narella = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Narella);
+            NPC narella = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Narella);
             if (narella == null)
             {
                 throw new InvalidOperationException("Narella");
@@ -171,9 +171,9 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Berg:
+                case (ushort)ParseEnum.NPCIDs.Berg:
                     break;
-                case (ushort)ParseEnum.EvtcNPCIDs.Zane:
+                case (ushort)ParseEnum.NPCIDs.Zane:
                     var bulletHail = cls.Where(x => x.SkillId == 34383).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
@@ -195,7 +195,7 @@ namespace GW2EIParser.Logic
                     }
                     break;
 
-                case (ushort)ParseEnum.EvtcNPCIDs.Narella:
+                case (ushort)ParseEnum.NPCIDs.Narella:
                     break;
                 default:
                     break;

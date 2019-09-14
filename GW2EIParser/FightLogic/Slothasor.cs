@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -46,7 +46,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Slothasor,
+                (ushort)ParseEnum.NPCIDs.Slothasor,
                 (ushort)Slubling1,
                 (ushort)Slubling2,
                 (ushort)Slubling3,
@@ -58,7 +58,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Slothasor);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Slothasor);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -96,7 +96,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Slothasor:
+                case (ushort)ParseEnum.NPCIDs.Slothasor:
                     var sleepy = cls.Where(x => x.SkillId == 34515).ToList();
                     foreach (AbstractCastEvent c in sleepy)
                     {

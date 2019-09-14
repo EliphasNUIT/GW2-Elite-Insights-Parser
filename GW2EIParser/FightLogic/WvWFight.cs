@@ -24,7 +24,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.WorldVersusWorld);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.WorldVersusWorld);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -69,9 +69,9 @@ namespace GW2EIParser.Logic
             var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList().First());
             foreach (CombatItem c in combatData)
             {
-                if (c.IsStateChange == ParseEnum.EvtcStateChange.None &&
-                    c.IsActivation == ParseEnum.EvtcActivation.None &&
-                    c.IsBuffRemove == ParseEnum.EvtcBuffRemove.None &&
+                if (c.IsStateChange == ParseEnum.StateChange.None &&
+                    c.IsActivation == ParseEnum.Activation.None &&
+                    c.IsBuffRemove == ParseEnum.BuffRemove.None &&
                     ((c.IsBuff != 0 && c.Value == 0) || (c.IsBuff == 0)))
                 {
                     if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out AgentItem src))

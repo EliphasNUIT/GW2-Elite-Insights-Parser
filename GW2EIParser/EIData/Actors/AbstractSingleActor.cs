@@ -67,7 +67,7 @@ namespace GW2EIParser.EIData
             if (DamageLogs == null)
             {
                 DamageLogs = new List<AbstractDamageEvent>();
-                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ParseEnum.EvtcIFF.Friend));
+                DamageLogs.AddRange(log.CombatData.GetDamageData(AgentItem).Where(x => x.IFF != ParseEnum.IFF.Friend));
                 Dictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
                 {

@@ -9,13 +9,13 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public NonDirectDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, agentData, skillData, offset)
         {
             Damage = evtcItem.BuffDmg;
-            ParseEnum.EvtcConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
+            ParseEnum.ConditionResult result = ParseEnum.GetConditionResult(evtcItem.Result);
 
-            IsAbsorbed = result == ParseEnum.EvtcConditionResult.InvulByBuff ||
-                result == ParseEnum.EvtcConditionResult.InvulByPlayerSkill1 ||
-                result == ParseEnum.EvtcConditionResult.InvulByPlayerSkill2 ||
-                result == ParseEnum.EvtcConditionResult.InvulByPlayerSkill3;
-            HasHit = result == ParseEnum.EvtcConditionResult.ExpectedToHit;
+            IsAbsorbed = result == ParseEnum.ConditionResult.InvulByBuff ||
+                result == ParseEnum.ConditionResult.InvulByPlayerSkill1 ||
+                result == ParseEnum.ConditionResult.InvulByPlayerSkill2 ||
+                result == ParseEnum.ConditionResult.InvulByPlayerSkill3;
+            HasHit = result == ParseEnum.ConditionResult.ExpectedToHit;
             ShieldDamage = evtcItem.IsShields > 0 ? evtcItem.Value : 0;
         }
 

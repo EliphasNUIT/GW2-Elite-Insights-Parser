@@ -83,7 +83,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public override void Remove(AgentItem by, long boonDuration, long start, ParseEnum.EvtcBuffRemove removeType, uint id)
+        public override void Remove(AgentItem by, long boonDuration, long start, ParseEnum.BuffRemove removeType, uint id)
         {
             if (GenerationSimulation.Count > 0)
             {
@@ -95,7 +95,7 @@ namespace GW2EIParser.EIData
             }
             switch (removeType)
             {
-                case ParseEnum.EvtcBuffRemove.All:
+                case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
                         RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
@@ -109,7 +109,7 @@ namespace GW2EIParser.EIData
                     }
                     BoonStack.Clear();
                     break;
-                case ParseEnum.EvtcBuffRemove.Single:
+                case ParseEnum.BuffRemove.Single:
                     for (int i = 0; i < BoonStack.Count; i++)
                     {
                         BoonStackItem stackItem = BoonStack[i];

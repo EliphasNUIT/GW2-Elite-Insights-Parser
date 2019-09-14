@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.ValeGuardian,
+                (ushort)ParseEnum.NPCIDs.ValeGuardian,
                 (ushort)RedGuardian,
                 (ushort)BlueGuardian,
                 (ushort)GreenGuardian,
@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.ValeGuardian);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.ValeGuardian);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -105,7 +105,7 @@ namespace GW2EIParser.Logic
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.ValeGuardian:
+                case (ushort)ParseEnum.NPCIDs.ValeGuardian:
                     var magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
                     foreach (AbstractCastEvent c in magicStorms)
                     {

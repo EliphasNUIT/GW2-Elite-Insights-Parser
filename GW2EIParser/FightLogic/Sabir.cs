@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -34,7 +34,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>()
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Sabir,
+                (ushort)ParseEnum.NPCIDs.Sabir,
                 (ushort)ParalyzingWisp,
                 (ushort)VoltaicWisp,
                 (ushort)SmallKillerTornado,
@@ -52,7 +52,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Sabir);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Sabir);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -128,7 +128,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Deimos, 32e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Deimos, 32e6);
         }
     }
 }

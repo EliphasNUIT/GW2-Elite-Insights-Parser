@@ -47,8 +47,8 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Kenut,
-                (ushort)ParseEnum.EvtcNPCIDs.Nikare
+                (ushort)ParseEnum.NPCIDs.Kenut,
+                (ushort)ParseEnum.NPCIDs.Nikare
             };
         }
 
@@ -56,8 +56,8 @@ namespace GW2EIParser.Logic
         {
             return new HashSet<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Kenut,
-                (ushort)ParseEnum.EvtcNPCIDs.Nikare
+                (ushort)ParseEnum.NPCIDs.Kenut,
+                (ushort)ParseEnum.NPCIDs.Nikare
             };
         }
 
@@ -188,13 +188,13 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC nikare = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Nikare);
+            NPC nikare = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Nikare);
             if (nikare == null)
             {
                 throw new InvalidOperationException("Nikare not found");
             }
             phases[0].Targets.Add(nikare);
-            NPC kenut = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Kenut);
+            NPC kenut = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Kenut);
             if (kenut != null)
             {
                 phases[0].Targets.Add(kenut);
@@ -221,7 +221,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Nikare:
+                case (ushort)ParseEnum.NPCIDs.Nikare:
                     //CC
                     var barrageN = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageN)
@@ -239,7 +239,7 @@ namespace GW2EIParser.Logic
                         replay.Actors.Add(new CircleDecoration(true, end, radius, (start, end), "rgba(255, 255, 0, 0.3)", new AgentConnector(target)));
                     }
                     break;
-                case (ushort)ParseEnum.EvtcNPCIDs.Kenut:
+                case (ushort)ParseEnum.NPCIDs.Kenut:
                     //CC
                     var barrageK = cls.Where(x => x.SkillId == 51977).ToList();
                     foreach (AbstractCastEvent c in barrageK)
@@ -341,7 +341,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Nikare, 18e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Nikare, 18e6);
         }
     }
 }

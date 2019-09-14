@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -111,7 +111,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Dhuum,
+                (ushort)ParseEnum.NPCIDs.Dhuum,
                 (ushort)Echo,
                 (ushort)Enforcer,
                 (ushort)Messenger,
@@ -134,7 +134,7 @@ namespace GW2EIParser.Logic
         {
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -197,7 +197,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Dhuum:
+                case (ushort)ParseEnum.NPCIDs.Dhuum:
                     var deathmark = cls.Where(x => x.SkillId == 48176).ToList();
                     AbstractCastEvent majorSplit = cls.Find(x => x.SkillId == 47396);
                     foreach (AbstractCastEvent c in deathmark)
@@ -327,7 +327,7 @@ namespace GW2EIParser.Logic
         {
             // spirit transform
             var spiritTransform = log.CombatData.GetBuffData(46950).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Dhuum);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Dhuum);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -412,7 +412,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.EvtcNPCIDs.Dhuum, 35e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Dhuum, 35e6);
         }
     }
 }

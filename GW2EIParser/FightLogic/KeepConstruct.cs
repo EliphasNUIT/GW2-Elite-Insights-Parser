@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -50,7 +50,7 @@ namespace GW2EIParser.Logic
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.KeepConstruct);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -183,7 +183,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct,
+                (ushort)ParseEnum.NPCIDs.KeepConstruct,
                 (ushort)Core,
                 (ushort)Jessica,
                 (ushort)Olson,
@@ -209,7 +209,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = npc.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (npc.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.KeepConstruct:
+                case (ushort)ParseEnum.NPCIDs.KeepConstruct:
 
                     List<AbstractBuffEvent> kcOrbCollect = GetFilteredList(log.CombatData, 35025, npc, true);
                     int kcOrbStart = 0, kcOrbEnd = 0;

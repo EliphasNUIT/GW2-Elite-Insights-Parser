@@ -26,7 +26,7 @@
 
         public SkillItem Skill { get; }
         public long SkillId => Skill.ID;
-        public ParseEnum.EvtcIFF IFF { get; }
+        public ParseEnum.IFF IFF { get; }
 
         private int _damage;
         public int Damage { get; protected set; }

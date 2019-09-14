@@ -4,7 +4,7 @@ using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -40,7 +40,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Gorseval);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Gorseval);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -76,7 +76,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Gorseval,
+                (ushort)ParseEnum.NPCIDs.Gorseval,
                 (ushort)ChargedSoul,
                 (ushort)EnragedSpirit,
                 (ushort)AngeredSpirit
@@ -88,7 +88,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Gorseval:
+                case (ushort)ParseEnum.NPCIDs.Gorseval:
                     var blooms = cls.Where(x => x.SkillId == 31616).ToList();
                     foreach (AbstractCastEvent c in blooms)
                     {

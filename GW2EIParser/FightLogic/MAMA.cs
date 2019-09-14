@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -45,7 +45,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.MAMA,
+                (ushort)ParseEnum.NPCIDs.MAMA,
                 (ushort)GreenKnight,
                 (ushort)RedKnight,
                 (ushort)BlueKnight,

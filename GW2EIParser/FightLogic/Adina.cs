@@ -6,7 +6,7 @@ using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
 using static GW2EIParser.Parser.ParseEnum;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -31,18 +31,18 @@ namespace GW2EIParser.Logic
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.AttackTarget).ToList();
+            var attackTargets = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.AttackTarget).ToList();
             long first = combatData.Count > 0 ? combatData.First().LogTime : 0;
             long final = combatData.Count > 0 ? combatData.Last().LogTime : 0;
             foreach (CombatItem at in attackTargets)
             {
                 AgentItem hand = agentData.GetAgent(at.DstAgent, at.LogTime);
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.LogTime);
-                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.EvtcStateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
+                var attackables = combatData.Where(x => x.IsStateChange == ParseEnum.StateChange.Targetable && x.SrcAgent == atAgent.Agent && x.LogTime <= atAgent.LastAwareLogTime && x.LogTime >= atAgent.FirstAwareLogTime).ToList();
                 var attackOn = attackables.Where(x => x.DstAgent == 1 && x.LogTime >= first + 2000).ToList();
                 var attackOff = attackables.Where(x => x.DstAgent == 0 && x.LogTime >= first + 2000).ToList();
-                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.EvtcStateChange.Position || x.IsStateChange == ParseEnum.EvtcStateChange.Rotation || x.IsStateChange == ParseEnum.EvtcStateChange.MaxHealthUpdate)).ToList();
-                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Position);
+                var posFacingHP = combatData.Where(x => x.SrcAgent == hand.Agent && x.LogTime >= hand.FirstAwareLogTime && hand.LastAwareLogTime >= x.LogTime && (x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Rotation || x.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)).ToList();
+                CombatItem pos = posFacingHP.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position);
                 ushort id = (ushort)HandOfErosion;
                 if (pos != null)
                 {
@@ -89,7 +89,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>()
             {
-                (ushort)EvtcNPCIDs.Adina,
+                (ushort)NPCIDs.Adina,
                 (ushort)HandOfErosion,
                 (ushort)HandOfEruption
             };
@@ -98,7 +98,7 @@ namespace GW2EIParser.Logic
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)EvtcNPCIDs.Adina);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)NPCIDs.Adina);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");

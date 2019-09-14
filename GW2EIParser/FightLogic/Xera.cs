@@ -5,7 +5,7 @@ using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.Parser.ParseEnum.EvtcNPCIDs;
+using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
@@ -53,7 +53,7 @@ namespace GW2EIParser.Logic
 
         public override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long offset, SkillData skillData)
         {
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -66,7 +66,7 @@ namespace GW2EIParser.Logic
                 {
                     res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue, invulApply.BuffInstance));
                     res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
-                    res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), invulApply.BuffInstance , ParseEnum.EvtcIFF.Unknown));
+                    res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), invulApply.BuffInstance , ParseEnum.IFF.Unknown));
 
                 }
             }
@@ -78,7 +78,7 @@ namespace GW2EIParser.Logic
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.EvtcNPCIDs.Xera);
+            NPC mainTarget = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.Xera);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
@@ -115,13 +115,13 @@ namespace GW2EIParser.Logic
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // find target
-            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.EvtcNPCIDs.Xera).FirstOrDefault();
+            AgentItem target = agentData.GetAgentsByID((ushort)ParseEnum.NPCIDs.Xera).FirstOrDefault();
             if (target == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.EvtcStateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.OverrideStart(enterCombat.LogTime);
@@ -131,7 +131,7 @@ namespace GW2EIParser.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.EvtcStateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
                     if (move != null)
                     {
                         _specialSplitLogTime = move.LogTime;
@@ -173,7 +173,7 @@ namespace GW2EIParser.Logic
         {
             return new List<ushort>
             {
-                (ushort)ParseEnum.EvtcNPCIDs.Xera,
+                (ushort)ParseEnum.NPCIDs.Xera,
                 (ushort)WhiteMantleSeeker1,
                 (ushort)WhiteMantleSeeker2,
                 (ushort)WhiteMantleKnight1,
@@ -192,7 +192,7 @@ namespace GW2EIParser.Logic
             List<AbstractCastEvent> cls = target.GetCastLogs(log, 0, log.FightData.FightDuration);
             switch (target.ID)
             {
-                case (ushort)ParseEnum.EvtcNPCIDs.Xera:
+                case (ushort)ParseEnum.NPCIDs.Xera:
                     var summon = cls.Where(x => x.SkillId == 34887).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
