@@ -142,7 +142,6 @@ namespace GW2EIParser.Logic
                         {
                             res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0, ba.BuffInstance));
                             res.Add(new BuffRemoveManualEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
-                            res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), ba.BuffInstance, ParseEnum.IFF.Unknown));
                         }
                     }
                     else if (bfe is BuffRemoveAllEvent bra)

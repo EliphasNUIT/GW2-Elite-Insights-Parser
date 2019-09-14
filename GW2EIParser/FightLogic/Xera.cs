@@ -66,7 +66,6 @@ namespace GW2EIParser.Logic
                 {
                     res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue, invulApply.BuffInstance));
                     res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
-                    res.Add(new BuffRemoveSingleEvent(GeneralHelper.UnknownAgent, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), invulApply.BuffInstance , ParseEnum.IFF.Unknown));
 
                 }
             }
