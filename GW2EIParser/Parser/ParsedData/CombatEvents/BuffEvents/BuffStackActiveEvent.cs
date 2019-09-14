@@ -12,7 +12,15 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            
+            simulator.Activate(BuffInstance);
+        }
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            if (abe is BuffStackActiveEvent)
+            {
+                return 0;
+            }
+            return -1;
         }
     }
 }

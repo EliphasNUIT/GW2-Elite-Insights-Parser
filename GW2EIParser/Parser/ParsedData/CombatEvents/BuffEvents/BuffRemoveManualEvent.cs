@@ -1,4 +1,5 @@
-﻿using GW2EIParser.EIData;
+﻿using System;
+using GW2EIParser.EIData;
 
 namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
@@ -19,6 +20,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
+        }
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            throw new InvalidOperationException("Manual removes can't be sorted");
         }
     }
 }

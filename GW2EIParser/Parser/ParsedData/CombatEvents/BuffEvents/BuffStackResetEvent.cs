@@ -13,7 +13,19 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            
+            simulator.Reset(BuffInstance, _resetToDuration);
+        }
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            if (abe is BuffStackActiveEvent)
+            {
+                return 1;
+            }
+            if (abe is BuffStackResetEvent)
+            {
+                return 0;
+            }
+            return -1;
         }
     }
 }

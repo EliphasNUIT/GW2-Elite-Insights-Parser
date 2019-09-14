@@ -43,5 +43,18 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive);
         }
+
+        public override int CompareTo(AbstractBuffEvent abe)
+        {
+            if (abe is BuffApplyEvent)
+            {
+                return 0;
+            }
+            if (abe is AbstractBuffStackEvent)
+            {
+                return 1;
+            }
+            return -1;
+        }
     }
 }
