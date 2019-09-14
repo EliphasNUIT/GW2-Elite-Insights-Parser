@@ -184,7 +184,7 @@ namespace GW2EIParser.EIData
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), int.MaxValue, int.MaxValue, 0));
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), int.MaxValue, int.MaxValue));
                 }
             }
             buffMap.Sort();

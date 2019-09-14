@@ -140,7 +140,7 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent removal = list.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                         if (removal == null)
                         {
-                            res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0, ba.BuffInstance));
+                            res.Add(new BuffRemoveAllEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224), 1, 0));
                             res.Add(new BuffRemoveManualEvent(target.AgentItem, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(38224)));
                         }
                     }
@@ -149,7 +149,7 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), bra.BuffInstance, true));
+                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
                         }
                     }
                 }

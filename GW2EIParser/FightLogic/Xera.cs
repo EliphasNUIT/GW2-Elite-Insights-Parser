@@ -64,7 +64,7 @@ namespace GW2EIParser.Logic
                 BuffApplyEvent invulApply = list.OfType<BuffApplyEvent>().LastOrDefault(x => x.Time < _specialSplitLogTime - offset && x.To == mainTarget.AgentItem);
                 if (invulApply != null)
                 {
-                    res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue, invulApply.BuffInstance));
+                    res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762), 1, int.MaxValue));
                     res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _specialSplitLogTime - offset, int.MaxValue, skillData.Get(762)));
 
                 }

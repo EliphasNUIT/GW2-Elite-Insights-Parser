@@ -148,7 +148,6 @@ namespace GW2EIParser.EIData
                 }
             }
             long prevID = 0;
-            uint prevInstanceId = 0;
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
             {
                 var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
@@ -166,9 +165,8 @@ namespace GW2EIParser.EIData
                 if (prevID != 0)
                 {                 
                     res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1, prevInstanceId));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), int.MaxValue, 1));
                 }
-                prevInstanceId = curInstanceID;
                 prevID = curID;
             }
             return res;
