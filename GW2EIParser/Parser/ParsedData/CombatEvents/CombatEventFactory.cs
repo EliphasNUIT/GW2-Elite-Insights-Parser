@@ -144,7 +144,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             var res = new List<AbstractBuffEvent>();
             var dict = new Dictionary<uint, SkillItem>();
-            var stackResetsToRecheck = new List<CombatItem>();
+            var stackActivesToRecheck = new List<CombatItem>();
             foreach (CombatItem c in buffEvents)
             {
                 switch (c.IsStateChange)
@@ -154,12 +154,12 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                         {
                             if (!dict.TryGetValue((uint)c.DstAgent, out SkillItem skill))
                             {
-                                stackResetsToRecheck.Add(c);
+                                stackActivesToRecheck.Add(c);
                                 continue;
                             }
                             c.OverrideSkillID(skill.ID);
                         }
-                        res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
+                        res.Add(new BuffStackActiveEvent(c, agentData, skillData, offset));
                         break;
                     case ParseEnum.StateChange.StackReset:
                         res.Add(new BuffStackResetEvent(c, agentData, skillData, offset));
@@ -178,16 +178,16 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                     res.Add(toAdd);
                                     dict[toAdd.BuffInstance] = toAdd.BuffSkill;
                                     var toRemove = new HashSet<CombatItem>();
-                                    foreach(CombatItem item in stackResetsToRecheck)
+                                    foreach(CombatItem item in stackActivesToRecheck)
                                     {
                                         if (dict.TryGetValue((uint)item.DstAgent, out SkillItem skill))
                                         {
                                             item.OverrideSkillID(skill.ID);
-                                            res.Add(new BuffStackResetEvent(item, agentData, skillData, offset));
+                                            res.Add(new BuffStackActiveEvent(item, agentData, skillData, offset));
                                             toRemove.Add(item);
                                         }
                                     }
-                                    stackResetsToRecheck.RemoveAll(x => toRemove.Contains(x));
+                                    stackActivesToRecheck.RemoveAll(x => toRemove.Contains(x));
                                 }
                                 break;
                             case ParseEnum.BuffRemove.Single:
