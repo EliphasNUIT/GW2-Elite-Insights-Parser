@@ -35,6 +35,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 return 0;
             }
+            if (abe is BuffRemoveAllEvent)
+            {
+                return -1;
+            }
             return 1;
         }
     }

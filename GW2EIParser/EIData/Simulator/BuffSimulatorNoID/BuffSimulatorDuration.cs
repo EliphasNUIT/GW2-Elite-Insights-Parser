@@ -29,9 +29,12 @@ namespace GW2EIParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BoonStack.Count > 0 && timePassed > 0)
+            if (BoonStack.Count > 0)
             {
-                _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
+                if (timePassed > 0)
+                {
+                    _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
+                }
                 var toAdd = new BuffSimulationItemQueue(BoonStack);
                 if (GenerationSimulation.Count > 0)
                 {
@@ -64,7 +67,10 @@ namespace GW2EIParser.EIData
                     _lastSrcRemove = (BoonStack[0].SeedSrc, BoonStack[0].IsExtension);
                     BoonStack.RemoveAt(0);
                 }
-                Update(leftOver);
+                if (leftOver > 0)
+                {
+                    Update(leftOver);
+                }
             }
         }
     }
