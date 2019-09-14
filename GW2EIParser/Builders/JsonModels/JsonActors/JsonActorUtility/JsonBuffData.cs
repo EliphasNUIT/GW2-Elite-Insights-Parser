@@ -11,62 +11,6 @@ namespace GW2EIParser.Builders.JsonModels
 {
     public class JsonBuffData
     {
-
-        // Buffs
-        /*public class JsonBuffs
-        {
-            public double Uptime { get; set; }
-            public Dictionary<string, double> Generation { get; } = new Dictionary<string, double>();
-            public Dictionary<string, double> Overstack { get; } = new Dictionary<string, double>();
-            public Dictionary<string, double> Wasted { get; } = new Dictionary<string, double>();
-            public Dictionary<string, double> ByExtension { get; } = new Dictionary<string, double>();
-            public Dictionary<string, double> Extended { get; } = new Dictionary<string, double>();
-            public Dictionary<string, double> UnknownExtended { get; } = new Dictionary<string, double>();
-            public double Presence { get; set; }
-
-            public JsonBuffs(Buff buff, ParsedLog log, Dictionary<AgentItem, BuffDistributionItem> dict, Dictionary<long, long> presence, Dictionary<string, Desc> description)
-            {
-                double multiplier = 100.0;
-                if (buff.Type == Buff.BuffType.Intensity)
-                {
-                    multiplier = 1.0;
-                    if (presence.TryGetValue(buff.ID, out long pres) && pres > 0)
-                    {
-                        Presence = 100.0 * pres;
-                    }
-                }
-                Uptime = multiplier * dict.Sum(x => x.Value.Generation);
-                foreach (AgentItem ag in dict.Keys)
-                {
-                    string uniqueID = GetActorID(ag, log, description);
-                    BuffDistributionItem item = dict[ag];
-                    if (item.Generation > 0)
-                    {
-                        Generation[uniqueID] = multiplier * item.Generation;
-                    }
-                    if (item.Overstack > 0)
-                    {
-                        Overstack[uniqueID] = multiplier * item.Overstack;
-                    }
-                    if (item.Wasted > 0)
-                    {
-                        Wasted[uniqueID] = multiplier * item.Wasted;
-                    }
-                    if (item.ByExtension > 0)
-                    {
-                        ByExtension[uniqueID] = multiplier * item.ByExtension;
-                    }
-                    if (item.Extended > 0)
-                    {
-                        Extended[uniqueID] = multiplier * item.Extended;
-                    }
-                    if (item.UnknownExtended > 0)
-                    {
-                        UnknownExtended[uniqueID] = multiplier * item.UnknownExtended;
-                    }
-                }
-            }
-        }*/
         /// <summary>
         /// Represents a stack status item for buffs
         /// </summary>
@@ -172,48 +116,50 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
-        //public List<Dictionary<string, JsonBuffs>> Buffs { get; set; }
-        /// <summary>
-        /// Dictionary per buff that contains an array of int that represents the number of buff status \n
-        /// Value[2*i] will be the time, value[2*i+1] will be the number of buff present from value[2*i] to value[2*(i+1)] \n
-        /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
-        /// </summary>
-        public Dictionary<string, List<int>> BuffStates { get; set; }
 
-        /// <summary>
-        /// Dictionary per buff that contains <see cref="JsonBuffStackStatus"/>/>
-        /// </summary>
-        public Dictionary<string, JsonBuffStackStatus> BuffStackStates { get; set; }
-        /// <summary>
-        /// Dictionary per buff that contains an array of <see cref="JsonBuffRemoveItem"/>
-        /// </summary>
-        public Dictionary<string, List<JsonBuffRemoveItem>> BuffRemoveStatus { get; set; }
-
-        public Dictionary<string, List<JsonBuffOverrideItem>> BuffOverrideStates { get; set; }
-        public Dictionary<string, List<JsonBuffOverstackItem>> BuffOverstackStates { get; set; }
-        public Dictionary<string, List<JsonCreationItem>> BuffAddedStates { get; set; }
-        public Dictionary<string, List<JsonCreationItem>> BuffExtendedStates { get; set; }
-
-        private static void RemoveNullsFromDictionary<T>(Dictionary<string, List<T>> dict)
+        public class JsonBuffDataItem
         {
-            var nullkeys = dict.Where(pair => pair.Value == null)
-                       .Select(pair => pair.Key)
-                       .ToList();
-            foreach (string key in nullkeys)
+
+            /// <summary>
+            /// an array of int that represents the number of buff status \n
+            /// Value[2*i] will be the time, value[2*i+1] will be the number of buff present from value[2*i] to value[2*(i+1)] \n
+            /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
+            /// </summary>
+            public List<int> BuffStates { get; set; }
+
+            /// <summary>
+            /// contains <see cref="JsonBuffStackStatus"/>/>
+            /// </summary>
+            public JsonBuffStackStatus BuffStackStates { get; set; }
+            /// <summary>
+            /// an array of <see cref="JsonBuffRemoveItem"/>
+            /// </summary>
+            public List<JsonBuffRemoveItem> BuffRemoveStatus { get; set; }
+
+            public List<JsonBuffOverrideItem> BuffOverrideStates { get; set; }
+            public List<JsonBuffOverstackItem> BuffOverstackStates { get; set; }
+            public List<JsonCreationItem> BuffAddedStates { get; set; }
+            public List<JsonCreationItem> BuffExtendedStates { get; set; }
+
+            public string ID { get; set; }
+
+            public JsonBuffDataItem(string id, BuffsGraphModel bgm, ParsedLog log, Dictionary<string, Desc> description)
             {
-                dict.Remove(key);
+                ID = id;
+                BuffStates = bgm.GetStatesList();
+                if (bgm.IsSourceBased)
+                {
+                    BuffStackStates = bgm.GetStackStatusList(log, description);
+                    (BuffOverstackStates, BuffOverrideStates, BuffRemoveStatus) = bgm.GetWasteStatusList(log, description);
+                    (BuffAddedStates, BuffExtendedStates) = bgm.GetCreationStatusList(log, description);
+                }
             }
         }
 
+        public List<JsonBuffDataItem> Data { get; } = new List<JsonBuffDataItem>();
+
         public JsonBuffData(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
-            BuffStates = new Dictionary<string, List<int>>();
-            BuffStackStates = new Dictionary<string, JsonBuffStackStatus>();
-            BuffOverrideStates = new Dictionary<string, List<JsonBuffOverrideItem>>();
-            BuffRemoveStatus = new Dictionary<string, List<JsonBuffRemoveItem>>();
-            BuffOverstackStates = new Dictionary<string, List<JsonBuffOverstackItem>>();
-            BuffAddedStates = new Dictionary<string, List<JsonCreationItem>>();
-            BuffExtendedStates = new Dictionary<string, List<JsonCreationItem>>();
             Dictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             foreach (long buffID in buffGraphs.Keys)
             {
@@ -224,23 +170,8 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     description[id] = new BuffDesc(buff);
                 }
-                if (!BuffStates.ContainsKey(id) && buffGraphs.TryGetValue(buffID, out BuffsGraphModel bgm))
-                {
-                    BuffStates[id] = bgm.GetStatesList();
-                    if (bgm.IsSourceBased)
-                    {
-                        BuffStackStates[id] = bgm.GetStackStatusList(log, description);
-                        (BuffOverstackStates[id], BuffOverrideStates[id], BuffRemoveStatus[id]) = bgm.GetWasteStatusList(log, description);
-                        (BuffAddedStates[id], BuffExtendedStates[id]) = bgm.GetCreationStatusList(log, description);
-                    }
-                }
+                Data.Add(new JsonBuffDataItem(id, buffGraphs[buffID], log, description));
             }
-            //
-            RemoveNullsFromDictionary(BuffOverstackStates);
-            RemoveNullsFromDictionary(BuffOverrideStates);
-            RemoveNullsFromDictionary(BuffRemoveStatus);
-            RemoveNullsFromDictionary(BuffAddedStates);
-            RemoveNullsFromDictionary(BuffExtendedStates);
         }
 
     }
