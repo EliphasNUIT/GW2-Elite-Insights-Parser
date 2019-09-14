@@ -1,4 +1,4 @@
-using GW2EIParser;
+﻿using GW2EIParser;
 using GW2EIParser.Builders;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
@@ -7,10 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using LuckParser.Builders;
-using LuckParser.Builders.JsonModels;
-using LuckParser.Parser;
-using Newtonsoft.Json.Linq;
 
 namespace LuckParser.tst
 {
@@ -45,9 +41,9 @@ namespace LuckParser.tst
 
         public static string JsonString(ParsedLog log)
         {
-            using MemoryStream ms = new MemoryStream();
-            using StreamWriter sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            JsonBuilder builder = new JsonBuilder(log, null);
+            using var ms = new MemoryStream();
+            using var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
+            var builder = new JsonBuilder(log, null);
 
             builder.CreateJSON(sw);
             sw.Close();
@@ -57,10 +53,10 @@ namespace LuckParser.tst
 
         public static string HtmlString(ParsedLog log)
         {
-            using MemoryStream ms = new MemoryStream();
-            using StreamWriter sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
-            JsonBuilder builderJson = new JsonBuilder(log, null);
-            HTMLBuilder builder = new HTMLBuilder(builderJson.JsonLog, log);
+            using var ms = new MemoryStream();
+            using var sw = new StreamWriter(ms, GeneralHelper.NoBOMEncodingUTF8);
+            var builderJson = new JsonBuilder(log, null);
+            var builder = new HTMLBuilder(builderJson.JsonLog, log);
 
             builder.CreateHTML(sw, null);
             sw.Close();
@@ -70,7 +66,7 @@ namespace LuckParser.tst
 
         public static JsonLog JsonLog(ParsedLog log)
         {
-            JsonBuilder builder = new JsonBuilder(log, null);
+            var builder = new JsonBuilder(log, null);
             return builder.JsonLog;
         }
 
@@ -155,7 +151,7 @@ namespace LuckParser.tst
         /// <returns>Text string</returns>
         public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
         {
-            StringBuilder returnString = new StringBuilder();
+            var returnString = new StringBuilder();
             for (int index = 0; index < source.Count; index++)
             {
 

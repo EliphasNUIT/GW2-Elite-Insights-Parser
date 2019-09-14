@@ -69,15 +69,15 @@ namespace LuckParser.tst
                 dict[evtcName] = messages[i];
             }
 
-            using FileStream fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
-            using StreamWriter sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
+            using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
+            using var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
 
-            JsonSerializer serializer = new JsonSerializer
+            var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = GeneralHelper.ContractResolver
             };
-            JsonTextWriter writer = new JsonTextWriter(sw)
+            var writer = new JsonTextWriter(sw)
             {
                 Formatting = Formatting.Indented
             };

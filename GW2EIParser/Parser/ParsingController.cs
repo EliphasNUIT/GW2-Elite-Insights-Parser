@@ -266,7 +266,7 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
@@ -344,7 +344,7 @@ namespace GW2EIParser.Parser
             byte result = reader.ReadByte();
 
             // 1 byte: is_activation
-            ParseEnum.EvtcActivation isActivation = ParseEnum.GetEvtcActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());

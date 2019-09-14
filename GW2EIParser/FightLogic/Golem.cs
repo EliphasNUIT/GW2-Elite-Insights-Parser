@@ -44,7 +44,7 @@ namespace GW2EIParser.Logic
             foreach (CombatItem c in combatData)
             {
                 // redirect all attacks to the main golem
-                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.EvtcActivation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.None && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     c.OverrideDstValues(target.Agent, target.InstID);
                 }
