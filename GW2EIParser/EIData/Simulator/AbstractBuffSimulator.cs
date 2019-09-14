@@ -87,12 +87,14 @@ namespace GW2EIParser.EIData
         public List<BuffCreationItem> ExtendedSimulationResult { get; } = new List<BuffCreationItem>();
 
         protected ParsedLog Log { get; }
+        protected int Capacity { get; }
 
         // Constructor
-        protected AbstractBuffSimulator(ParsedLog log)
+        protected AbstractBuffSimulator(ParsedLog log, int capacity)
         {
             BoonStack = new List<BoonStackItem>();
             Log = log;
+            Capacity = capacity;
         }
 
 

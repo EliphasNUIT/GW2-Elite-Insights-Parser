@@ -12,13 +12,11 @@ namespace GW2EIParser.EIData
         private long _id = 0;
 
         // Fields
-        protected int Capacity { get; }
         private readonly StackingLogic _logic;
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log)
+        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log, capacity)
         {
-            Capacity = capacity;
             _logic = logic;
         }
 
@@ -53,7 +51,7 @@ namespace GW2EIParser.EIData
 
         protected void Add(long boonDuration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, src, seedSrc,_id++, isExtension);
+            var toAdd = new BoonStackItem(start, boonDuration, src, seedSrc,++_id, isExtension);
             bool addToCreationList = false;
             // Find empty slot
             if (BoonStack.Count < Capacity)
