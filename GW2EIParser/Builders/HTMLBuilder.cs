@@ -68,7 +68,7 @@ namespace GW2EIParser.Builders
             return;
         }
 
-        private string BuildCombatReplayScript(string path)
+        private static string BuildCombatReplayScript(string path)
         {
             //if (!_cr)
             //{
@@ -180,7 +180,7 @@ namespace GW2EIParser.Builders
             return tmplScript;
         }
 
-        private string BuildCss(string path)
+        private static string BuildCss(string path)
         {
             return "";
             /*string scriptContent = Properties.Resources.ei_css;
@@ -210,7 +210,7 @@ namespace GW2EIParser.Builders
             }*/
         }
 
-        private string BuildEIJs(string path)
+        private static string BuildEIJs(string path)
         {
             return "";
             /*var orderedScripts = new List<string>()
@@ -248,7 +248,7 @@ namespace GW2EIParser.Builders
             }*/
         }
 
-        private string BuildCRLinkJs(string path)
+        private static string BuildCRLinkJs(string path)
         {
             //if (!_cr)
             //{

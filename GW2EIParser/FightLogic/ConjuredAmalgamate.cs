@@ -99,6 +99,8 @@ namespace GW2EIParser.Logic
             if (!fightData.Success)
             {
                 NPC target = NPCs.Find(x => x.ID == TriggerID);
+                NPC leftArm = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.CALeftArm);
+                NPC rightArm = NPCs.Find(x => x.ID == (ushort)ParseEnum.NPCIDs.CARightArm);
                 if (target == null)
                 {
                     throw new InvalidOperationException("Target for success by combat exit not found");
@@ -110,6 +112,22 @@ namespace GW2EIParser.Logic
                 }
                 SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
                 AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                if (rightArm != null)
+                {
+                    AbstractDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    if (lastDamageTakenArm != null)
+                    {
+                        lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
+                    }
+                }
+                if (leftArm != null)
+                {
+                    AbstractDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    if (lastDamageTakenArm != null)
+                    {
+                        lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
+                    }
+                }
                 if (npcSpawn != null && lastDamageTaken != null)
                 {
                     fightData.SetSuccess(true, fightData.ToLogSpace(lastDamageTaken.Time));
