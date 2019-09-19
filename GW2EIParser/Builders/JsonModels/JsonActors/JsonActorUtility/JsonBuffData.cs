@@ -16,13 +16,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class JsonBuffStackStatus
         {
-            public class JsonBuffStackStatusData
-            {
-                [DefaultValue(null)]
-                public long Start { get; set; }
-                public long Duration { get; set; }
-            }
-
             public class JsonBuffStackStatusSources
             {
                 public string Src { get; set; }
