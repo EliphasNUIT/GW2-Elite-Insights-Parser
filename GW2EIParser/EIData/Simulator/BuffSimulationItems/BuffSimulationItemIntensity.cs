@@ -49,7 +49,7 @@ namespace GW2EIParser.EIData
             var res = new List<JsonBuffStackStatusSources>();
             foreach (BuffSimulationItemDuration item in _stacks)
             {
-                res.Add(new JsonBuffStackStatusSources(item, log, description, true));
+                res.Add(new JsonBuffStackStatusSources(item, log, description));
             }
             return res;
         }

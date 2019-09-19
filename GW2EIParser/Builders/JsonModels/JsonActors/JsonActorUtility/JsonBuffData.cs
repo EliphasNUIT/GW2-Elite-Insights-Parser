@@ -30,27 +30,27 @@ namespace GW2EIParser.Builders.JsonModels
                 public string SeedSrc { get; set; }
                 public long ID { get; set; }
 
-                public JsonBuffStackStatusSources(BuffSimulationItemDuration item, ParsedLog log, Dictionary<string, Desc> description, bool noDuration)
+                public JsonBuffStackStatusSources(BuffSimulationItemDuration item, ParsedLog log, Dictionary<string, Desc> description)
                 {
                     Src = GetActorID(item.Src, log, description);
                     if (item.IsExtension)
                     {
                         SeedSrc = GetActorID(item.SeedSrc, log, description);
                     }
-                    Duration = noDuration ? 0 : item.Duration;
+                    Duration = item.Duration;
                     ID = item.ID;
                 }
             }
 
-            public List<JsonBuffStackStatusData> StackData { get; set; }
+            public List<long> StackStarts { get; set; }
             public List<List<JsonBuffStackStatusSources>> StackStatus { get; set; }
             public JsonBuffStackStatus(List<BuffSimulationItem> sourceBasedBoonChart, ParsedLog log, Dictionary<string, Desc> description)
             {
-                StackData = new List<JsonBuffStackStatusData>();
+                StackStarts = new List<long>();
                 StackStatus = new List<List<JsonBuffStackStatusSources>>();
                 foreach (BuffSimulationItem item in sourceBasedBoonChart)
                 {
-                    StackData.Add(new JsonBuffStackStatusData { Start = item.Start, Duration = item.Duration });
+                    StackStarts.Add(item.Start);
                     StackStatus.Add(item.GetStackStatusList(log, description));
                 }
             }
