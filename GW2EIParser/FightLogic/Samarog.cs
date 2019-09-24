@@ -212,7 +212,7 @@ namespace GW2EIParser.Logic
 
         public override int IsCM(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Deimos, 30e6);
+            return HPBasedCM(combatData, (ushort)ParseEnum.NPCIDs.Samarog, 30e6);
         }
     }
 }
