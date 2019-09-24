@@ -291,15 +291,11 @@ namespace GW2EIParser.Builders
 
         private static string ToJson(object value)
         {
-            var contractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
             var settings = new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = contractResolver,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
+                ContractResolver = GeneralHelper.ContractResolver,
+                //DefaultValueHandling = DefaultValueHandling.Ignore,
             };
             return JsonConvert.SerializeObject(value, settings);
         }

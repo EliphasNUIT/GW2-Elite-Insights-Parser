@@ -23,7 +23,7 @@ namespace GW2EIParser.Builders
             var serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
+                //DefaultValueHandling = DefaultValueHandling.Ignore,
                 ContractResolver = GeneralHelper.ContractResolver
             };
             var writer = new JsonTextWriter(sw)
