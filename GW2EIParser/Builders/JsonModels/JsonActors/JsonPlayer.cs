@@ -7,7 +7,7 @@ using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.Builders.JsonModels
 {
-    public class JsonPlayer : JsonMasterActor
+    public class JsonPlayer : JsonSingleActor
     {
         /// <summary>
         /// Weapons of the player \n

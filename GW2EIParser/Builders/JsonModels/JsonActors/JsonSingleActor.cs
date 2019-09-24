@@ -40,6 +40,11 @@ namespace GW2EIParser.Builders.JsonModels
         /// Length == number of phases
         /// </summary>
         public List<long> ActiveTimes { get; set; }
+        /// <summary>
+        /// List of minions, regrouped by type
+        /// </summary>
+        /// <seealso cref="JsonMinions"/>
+        public List<JsonMinions> Minions { get; set; }
 
         protected JsonSingleActor(ParsedLog log, AbstractSingleActor actor, Dictionary<string, Desc> description)
         {
@@ -53,6 +58,12 @@ namespace GW2EIParser.Builders.JsonModels
             UniqueID = actor.AgentItem.UniqueID;
             //
             ActiveTimes = log.FightData.GetPhases(log).Select(x => x.GetActorActiveDuration(actor, log)).ToList();
+            // Minions
+            Minions = actor.GetMinions(log).Select(x => new JsonMinions(log, x.Value, description)).ToList();
+            if (Minions.Count == 0)
+            {
+                Minions = null;
+            }
         }
     }
 }

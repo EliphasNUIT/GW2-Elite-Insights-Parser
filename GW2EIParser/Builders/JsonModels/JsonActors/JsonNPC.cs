@@ -7,7 +7,7 @@ using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
 {
-    public class JsonNPC : JsonMasterActor
+    public class JsonNPC : JsonSingleActor
     {
         /// <summary>
         /// % of health burned
