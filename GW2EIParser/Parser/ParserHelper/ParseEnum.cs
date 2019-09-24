@@ -342,6 +342,8 @@ namespace GW2EIParser.Parser
             EnergyOrb = 21946,
             // Freezie
             FreeziesFrozenHeart = 21328,
+            // Strike Missions
+            IcebroodConstruct = 22154,
             // Fractals
             FractalVindicator = 19684,
             FractalAvenger = 15960,

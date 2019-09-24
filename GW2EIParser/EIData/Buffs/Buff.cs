@@ -156,7 +156,9 @@ namespace GW2EIParser.EIData
 
         private static readonly List<Buff> _commons = new List<Buff>
         {
+                new Buff("Downed", 770, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Downed.png"),
                 new Buff("Stealth", 13017, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
+                new Buff("Hide in Shadows", 10269, BuffSource.Mixed, BuffType.Duration, 5, BuffNature.GraphOnlyBuff, Logic.Queue, "https://wiki.guildwars2.com/images/1/19/Stealth.png"),
                 new Buff("Revealed", 890, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride, "https://wiki.guildwars2.com/images/d/db/Revealed.png"),
                 new Buff("Superspeed", 5974, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 new Buff("Determined (762)", 762, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.GraphOnlyBuff, Logic.Override,"https://wiki.guildwars2.com/images/e/eb/Determined.png"),
@@ -757,6 +759,10 @@ namespace GW2EIParser.EIData
                 new Buff("Fractal Mobility", 33024, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/2/22/Mist_Mobility_Potion.png/40px-Mist_Mobility_Potion.png"),
                 new Buff("Fractal Defensive", 32134, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/e/e6/Mist_Defensive_Potion.png/40px-Mist_Defensive_Potion.png"),
                 new Buff("Fractal Offensive", 32473, BuffSource.Mixed, BuffType.Intensity, 5, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/thumb/8/8d/Mist_Offensive_Potion.png/40px-Mist_Offensive_Potion.png"),
+                // Ascended Food
+                new Buff("Cilantro Lime Sous-Vide Steak", 57244, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/6/65/Cilantro_Lime_Sous-Vide_Steak.png"),
+                new Buff("Peppercorn and Veggie Flatbread", 57382, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/9/9d/Peppercorn_and_Veggie_Flatbread.png"),
+                new Buff("Bowl of Fruit Salad with Mint Garnish", 57100, BuffSource.Mixed, BuffType.Duration, 1, BuffNature.Consumable, Logic.Override,"https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png"),
         };
 
         public static List<List<Buff>> AllBoons = new List<List<Buff>>()

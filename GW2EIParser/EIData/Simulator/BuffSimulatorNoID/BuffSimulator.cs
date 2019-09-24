@@ -26,7 +26,7 @@ namespace GW2EIParser.EIData
         public override void Add(long boonDuration, AgentItem src, long start, uint id, bool addedAsActive)
         {
             var toAdd = new BoonStackItem(start, boonDuration, src, ++_id);
-            bool addToCreationList = false;
+            bool addToCreationList;
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {
@@ -52,7 +52,7 @@ namespace GW2EIParser.EIData
         protected void Add(long boonDuration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
             var toAdd = new BoonStackItem(start, boonDuration, src, seedSrc,++_id, isExtension);
-            bool addToCreationList = false;
+            bool addToCreationList;
             // Find empty slot
             if (BoonStack.Count < Capacity)
             {

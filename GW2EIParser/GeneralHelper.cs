@@ -223,6 +223,8 @@ namespace GW2EIParser
                     return "https://i.imgur.com/Q4WUXqw.png";
                 case ParseEnum.NPCIDs.PeerlessQadim:
                     return "https://i.imgur.com/47uePpb.png";
+                case ParseEnum.NPCIDs.IcebroodConstruct:
+                    return "https://i.imgur.com/dpaZFa5.png";
                 case ParseEnum.NPCIDs.MAMA:
                     return "https://i.imgur.com/1h7HOII.png";
                 case ParseEnum.NPCIDs.Siax:

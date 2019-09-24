@@ -131,6 +131,9 @@ namespace GW2EIParser.Parser.ParsedData
                 case ParseEnum.NPCIDs.PeerlessQadim:
                     Logic = new PeerlessQadim(id);
                     break;
+                case ParseEnum.NPCIDs.IcebroodConstruct:
+                    Logic = new IcebroodConstruct(id);
+                    break;
                 case ParseEnum.NPCIDs.MAMA:
                     Logic = new MAMA(id);
                     break;
