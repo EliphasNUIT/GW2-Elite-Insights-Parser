@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using Newtonsoft.Json.Serialization;
 using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser
@@ -25,10 +24,6 @@ namespace GW2EIParser
         public static readonly NPC NullActor = new NPC(UnknownAgent, false);
 
         public static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
-        public static readonly DefaultContractResolver ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
 
         public static void Add<K, T>(Dictionary<K, List<T>> dict, K key, T evt)
         {

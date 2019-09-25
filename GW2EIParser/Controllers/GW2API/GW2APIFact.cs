@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace GW2EIParser.Controllers.GW2API
 {
@@ -14,20 +14,20 @@ namespace GW2EIParser.Controllers.GW2API
         // 
         public string Status { get; set; }
         public string Description { get; set; }
-        [JsonProperty(PropertyName = "apply_count")]
+        [JsonPropertyName("apply_count")]
         public int ApplyCount { get; set; }
         public float Duration { get; set; }
         //
-        [JsonProperty(PropertyName = "field_type")]
+        [JsonPropertyName("field_type")]
         public string FieldType { get; set; }
         //
-        [JsonProperty(PropertyName = "finisher_type")]
+        [JsonPropertyName("finisher_type")]
         public string FinisherType { get; set; }
         public float Percent { get; set; }
-        [JsonProperty(PropertyName = "hit_count")]
+        [JsonPropertyName("hit_count")]
         //
         public int HitCount { get; set; }
-        [JsonProperty(PropertyName = "dmg_multiplier")]
+        [JsonPropertyName("dmg_multiplier")]
         public float DmgMultiplier { get; set; }
         //
         public int Distance { get; set; }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
-using Newtonsoft.Json;
 
 namespace GW2EIParser.Builders.JsonModels
 {

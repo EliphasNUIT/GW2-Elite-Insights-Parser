@@ -1,14 +1,13 @@
 ﻿using GW2EIParser;
 using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace LuckParser.tst
 {
@@ -72,17 +71,14 @@ namespace LuckParser.tst
             using var fs = new FileStream(logName, FileMode.Create, FileAccess.Write);
             using var sw = new StreamWriter(fs, GeneralHelper.NoBOMEncodingUTF8);
 
-            var serializer = new JsonSerializer
+            var serializer = new JsonSerializerOptions
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = GeneralHelper.ContractResolver
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
             };
-            var writer = new JsonTextWriter(sw)
-            {
-                Formatting = Formatting.Indented
-            };
-            serializer.Serialize(writer, dict);
-            writer.Close();
+            sw.Write(JsonSerializer.Serialize(dict, serializer));
         }
 
         [Test]

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace GW2EIParser.Controllers.GW2API
 {
@@ -13,7 +13,7 @@ namespace GW2EIParser.Controllers.GW2API
         public int Tier { get; set; }
         public string Slot { get; set; }
         public List<GW2APIFact> Facts { get; set; }
-        [JsonProperty(PropertyName = "traited_facts")]
+        [JsonPropertyName("traited_facts")]
         public List<GW2APITraitedFact> TraitedFacts { get; set; }
         public List<GW2APISkill> Skills { get; set; }
     }

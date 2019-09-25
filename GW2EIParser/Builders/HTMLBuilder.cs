@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
@@ -291,13 +290,13 @@ namespace GW2EIParser.Builders
 
         private static string ToJson(object value)
         {
-            var settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerOptions()
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = GeneralHelper.ContractResolver,
-                //DefaultValueHandling = DefaultValueHandling.Ignore,
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
             };
-            return JsonConvert.SerializeObject(value, settings);
+            return JsonSerializer.Serialize(value, settings);
         }
     }
 }

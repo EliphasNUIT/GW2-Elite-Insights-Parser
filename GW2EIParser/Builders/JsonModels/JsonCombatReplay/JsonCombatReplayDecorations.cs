@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace GW2EIParser.Builders.JsonModels
 {
@@ -69,7 +68,7 @@ namespace GW2EIParser.Builders.JsonModels
         public class JsonCombatReplayBackgroundDecoration : JsonCombatReplayGenericDecoration
         {
         }
-        public class PositionConverter : Newtonsoft.Json.JsonConverter
+        /*public class PositionConverter : Newtonsoft.Json.JsonConverter
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
@@ -103,7 +102,7 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 return objectType == typeof((double x, double y, double z, double angle, double opacity, int time));
             }
-        }
+        }*/
 
         public class JsonCombatReplayMovingPlatformDecoration : JsonCombatReplayBackgroundDecoration
         {
@@ -111,7 +110,7 @@ namespace GW2EIParser.Builders.JsonModels
             public int Height { get; set; }
             public int Width { get; set; }
 
-            [Newtonsoft.Json.JsonConverter(typeof(PositionConverter))]
+            //[Newtonsoft.Json.JsonConverter(typeof(PositionConverter))]
             public List<(double x, double y, double z, double angle, double opacity, int time)> Positions { get; set; }
         }
 

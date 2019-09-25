@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using GW2EIParser.Controllers.GW2API;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Controllers
 {
@@ -26,6 +25,14 @@ namespace GW2EIParser.Controllers
             }
             return;
         }
+
+        private static JsonSerializerOptions _options = new JsonSerializerOptions
+        {
+            IgnoreNullValues = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+        };
+
         //----------------------------------------------------------------------------- SKILLS
 
         private class SkillList
@@ -54,13 +61,7 @@ namespace GW2EIParser.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APISkill[] responseArray = JsonConvert.DeserializeObject<GW2APISkill[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = new DefaultContractResolver()
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        }
-                    });
+                    GW2APISkill[] responseArray = JsonSerializer.Deserialize<GW2APISkill[]>(data, _options);
                     skill_L.AddRange(responseArray);
                 }
                 else
@@ -101,14 +102,7 @@ namespace GW2EIParser.Controllers
                 _listOfSkills.Items.AddRange(GetListGW2APISkills());
                 var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SkillList.json");
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = GeneralHelper.ContractResolver
-                };
-                serializer.Serialize(writer, _listOfSkills.Items);
+                writer.Write(JsonSerializer.Serialize(_listOfSkills.Items, _options));
                 writer.Close();
 
             }
@@ -128,11 +122,7 @@ namespace GW2EIParser.Controllers
                         Console.WriteLine("Reading Skilllist");
                         using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SkillList.json");
-                        var serializer = new JsonSerializer()
-                        {
-                            ContractResolver = GeneralHelper.ContractResolver
-                        };
-                        _listOfSkills.Items = (List<GW2APISkill>)serializer.Deserialize(reader, typeof(List<GW2APISkill>));
+                        _listOfSkills.Items = JsonSerializer.Deserialize<List<GW2APISkill>>(reader.ReadToEnd(), _options);
                         reader.Close();
                     }
                 }
@@ -166,7 +156,7 @@ namespace GW2EIParser.Controllers
             HttpResponseMessage response = APIClient.GetAsync(new Uri(path, UriKind.Relative)).Result;
             if (response.IsSuccessStatusCode)
             {
-                spec = JsonConvert.DeserializeObject<GW2APISpec>(response.Content.ReadAsStringAsync().Result);
+                spec = JsonSerializer.Deserialize<GW2APISpec>(response.Content.ReadAsStringAsync().Result, _options);
 
             }
             return spec;
@@ -199,7 +189,7 @@ namespace GW2EIParser.Controllers
             if (response.IsSuccessStatusCode)
             {
                 // Get Skill ID list
-                idArray = JsonConvert.DeserializeObject<int[]>(response.Content.ReadAsStringAsync().Result);
+                idArray = JsonSerializer.Deserialize<int[]>(response.Content.ReadAsStringAsync().Result, _options);
 
                 foreach (int id in idArray)
                 {
@@ -220,14 +210,7 @@ namespace GW2EIParser.Controllers
                 }
                 var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/SpecList.json");
-
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
-                    ContractResolver = GeneralHelper.ContractResolver
-                };
-                serializer.Serialize(writer, _listofSpecs.Items);
+                writer.Write(JsonSerializer.Serialize(_listofSpecs.Items, _options));
                 writer.Close();
 
             }
@@ -248,11 +231,7 @@ namespace GW2EIParser.Controllers
                         Console.WriteLine("Reading SpecList");
                         using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/SpecList.json");
-                        var serializer = new JsonSerializer()
-                        {
-                            ContractResolver = GeneralHelper.ContractResolver
-                        };
-                        _listofSpecs.Items = (List<GW2APISpec>)serializer.Deserialize(reader, typeof(List<GW2APISpec>));
+                        _listofSpecs.Items = JsonSerializer.Deserialize<List<GW2APISpec>>(reader.ReadToEnd(), _options);
                         reader.Close();
                     }
                 }
@@ -374,13 +353,7 @@ namespace GW2EIParser.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string data = response.Content.ReadAsStringAsync().Result;
-                    GW2APITrait[] responseArray = JsonConvert.DeserializeObject<GW2APITrait[]>(data, new JsonSerializerSettings
-                    {
-                        ContractResolver = new DefaultContractResolver()
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        }
-                    });
+                    GW2APITrait[] responseArray = JsonSerializer.Deserialize<GW2APITrait[]>(data, _options);
                     trait_L.AddRange(responseArray);
                 }
                 else
@@ -421,14 +394,7 @@ namespace GW2EIParser.Controllers
                 _listOfTraits.Items.AddRange(GetListGW2APITraits());
                 var writer = new StreamWriter(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
             + "/Content/TraitList.json");
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Formatting = Newtonsoft.Json.Formatting.None,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    ContractResolver = GeneralHelper.ContractResolver
-                };
-                serializer.Serialize(writer, _listOfTraits.Items);
+                writer.Write(JsonSerializer.Serialize(_listOfTraits.Items, _options));
                 writer.Close();
 
             }
@@ -448,11 +414,7 @@ namespace GW2EIParser.Controllers
                         Console.WriteLine("Reading Traitlist");
                         using var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                         + "/Content/TraitList.json");
-                        var serializer = new JsonSerializer()
-                        {
-                            ContractResolver = GeneralHelper.ContractResolver
-                        };
-                        _listOfTraits.Items = (List<GW2APITrait>)serializer.Deserialize(reader, typeof(List<GW2APITrait>));
+                        _listOfTraits.Items = JsonSerializer.Deserialize< List<GW2APITrait>>(reader.ReadToEnd(), _options);
                         reader.Close();
                     }
                 }

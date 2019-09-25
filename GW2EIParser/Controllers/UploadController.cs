@@ -2,10 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Controllers
 {
@@ -54,12 +53,9 @@ namespace GW2EIParser.Controllers
                     int first = stringContents.IndexOf('{');
                     int length = stringContents.LastIndexOf('}') - first + 1;
                     string JSONFormat = stringContents.Substring(first, length);
-                    DPSReportsResponseItem item = JsonConvert.DeserializeObject<DPSReportsResponseItem>(JSONFormat, new JsonSerializerSettings
+                    DPSReportsResponseItem item = JsonSerializer.Deserialize<DPSReportsResponseItem>(JSONFormat, new JsonSerializerOptions
                     {
-                        ContractResolver = new DefaultContractResolver()
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        }
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                     });
                     string logLink = item.Permalink;
                     return logLink;

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace GW2EIParser.Controllers.GW2API
 {
@@ -9,34 +9,34 @@ namespace GW2EIParser.Controllers.GW2API
         public string Name { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
-        [JsonProperty(PropertyName = "chat_link")]
+        [JsonPropertyName("chat_link")]
         public string ChatLink { get; set; }
         public string Type { get; set; }
-        [JsonProperty(PropertyName = "weapon_type")]
+        [JsonPropertyName("weapon_type")]
         public string WeaponType { get; set; }
         public List<string> Professions { get; set; }
         public string Slot { get; set; }
         public List<GW2APIFact> Facts { get; set; }
-        [JsonProperty(PropertyName = "traited_facts")]
+        [JsonPropertyName("traited_facts")]
         public List<GW2APITraitedFact> TraitedFacts { get; set; }
         public List<string> Categories { get; set; }
         public string Attunement { get; set; }
         public int Cost { get; set; }
-        [JsonProperty(PropertyName = "dual_wield")]
+        [JsonPropertyName("dual_wield")]
         public string DualWield { get; set; }
-        [JsonProperty(PropertyName = "flip_skill")]
+        [JsonPropertyName("flip_skill")]
         public int FlipSkill { get; set; }
         public int Initiative { get; set; }
-        [JsonProperty(PropertyName = "next_chain")]
+        [JsonPropertyName("next_chain")]
         public int NextChain { get; set; }
-        [JsonProperty(PropertyName = "prev_chain")]
+        [JsonPropertyName("prev_chain")]
         public int PrevChain { get; set; }
-        [JsonProperty(PropertyName = "transform_skills")]
+        [JsonPropertyName("transform_skills")]
         public List<int> TransformSkills { get; set; }
-        [JsonProperty(PropertyName = "bundle_skills")]
+        [JsonPropertyName("bundle_skills")]
         public List<int> BundleSkills { get; set; }
 
-        [JsonProperty(PropertyName = "toolbelt_skill")]
+        [JsonPropertyName("toolbelt_skill")]
         public int ToolbeltSkill { get; set; }
     }
 

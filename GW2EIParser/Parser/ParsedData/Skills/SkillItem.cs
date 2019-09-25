@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using GW2EIParser.Controllers;
 using GW2EIParser.Controllers.GW2API;
 
@@ -197,7 +198,7 @@ namespace GW2EIParser.Parser.ParsedData
                     {
                         if (fact.Text != null && fact.Text == "Range" && fact.Value != null)
                         {
-                            Range = Convert.ToInt32(fact.Value);
+                            Range = ((JsonElement)fact.Value).GetInt32();
                         }
                     }
                 }

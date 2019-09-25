@@ -434,12 +434,10 @@ namespace GW2EIParser.Parser
                             agent.FirstAwareLogTime = c.LogTime;
                         }
                         agent.LastAwareLogTime = c.LogTime;
-                        break;
                     }
                     else
                     {
                         agent.LastAwareLogTime = c.LogTime;
-                        break;
                     }
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
@@ -453,12 +451,10 @@ namespace GW2EIParser.Parser
                             agent.FirstAwareLogTime = c.LogTime;
                         }
                         agent.LastAwareLogTime = c.LogTime;
-                        break;
                     }
                     else
                     {
                         agent.LastAwareLogTime = c.LogTime;
-                        break;
                     }
                 }
             }

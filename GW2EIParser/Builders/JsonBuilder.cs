@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Xml;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
@@ -20,18 +19,14 @@ namespace GW2EIParser.Builders
 
         public void CreateJSON(StreamWriter sw)
         {
-            var serializer = new JsonSerializer
+            var settings = new JsonSerializerOptions
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                //DefaultValueHandling = DefaultValueHandling.Ignore,
-                ContractResolver = GeneralHelper.ContractResolver
+                IgnoreNullValues = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = Properties.Settings.Default.IndentJSON
             };
-            var writer = new JsonTextWriter(sw)
-            {
-                Formatting = Properties.Settings.Default.IndentJSON ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
-            };
-            serializer.Serialize(writer, JsonLog);
-            writer.Close();
+            sw.Write(JsonSerializer.Serialize(JsonLog, settings));
         }
 
         /*public void CreateXML(StreamWriter sw)
