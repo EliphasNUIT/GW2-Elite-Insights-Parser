@@ -19,14 +19,14 @@ namespace GW2EIParser.Builders.JsonModels
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 var jsonDamageDistData = (JsonDamageItem)value;
-                //writer.WriteStartArray();
+                writer.WriteStartArray();
                 writer.WriteValue(jsonDamageDistData.Id);
                 writer.WriteValue(jsonDamageDistData.AgentID);
                 writer.WriteValue(jsonDamageDistData.Time);
                 writer.WriteValue(jsonDamageDistData.Damage);
                 writer.WriteValue(jsonDamageDistData.ShieldDamage);
                 writer.WriteValue(jsonDamageDistData.EncodedBooleans);
-                //writer.WriteEndArray();
+                writer.WriteEndArray();
             }
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
