@@ -420,51 +420,45 @@ namespace GW2EIParser.Parser
 
         private void CompleteAgents()
         {
-            var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList()); ;
+            var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent); ;
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatItems)
             {
-                if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> agentList))
+                if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem agent))
                 {
-                    foreach (AgentItem agent in agentList)
+                    if (agent.InstID == 0)
                     {
-                        if (agent.InstID == 0)
+                        agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
+                        if (agent.FirstAwareLogTime == 0)
                         {
-                            agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
-                            if (agent.FirstAwareLogTime == 0)
-                            {
-                                agent.FirstAwareLogTime = c.LogTime;
-                            }
-                            agent.LastAwareLogTime = c.LogTime;
-                            break;
+                            agent.FirstAwareLogTime = c.LogTime;
                         }
-                        else if (agent.InstID == c.SrcInstid)
-                        {
-                            agent.LastAwareLogTime = c.LogTime;
-                            break;
-                        }
+                        agent.LastAwareLogTime = c.LogTime;
+                        break;
+                    }
+                    else
+                    {
+                        agent.LastAwareLogTime = c.LogTime;
+                        break;
                     }
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
-                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agentList))
+                if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agent))
                 {
-                    foreach (AgentItem agent in agentList)
+                    if (agent.InstID == 0)
                     {
-                        if (agent.InstID == 0)
+                        agent.InstID = c.DstInstid;
+                        if (agent.FirstAwareLogTime == 0)
                         {
-                            agent.InstID = c.DstInstid;
-                            if (agent.FirstAwareLogTime == 0)
-                            {
-                                agent.FirstAwareLogTime = c.LogTime;
-                            }
-                            agent.LastAwareLogTime = c.LogTime;
-                            break;
+                            agent.FirstAwareLogTime = c.LogTime;
                         }
-                        else if (agent.InstID == c.DstInstid)
-                        {
-                            agent.LastAwareLogTime = c.LogTime;
-                            break;
-                        }
+                        agent.LastAwareLogTime = c.LogTime;
+                        break;
+                    }
+                    else
+                    {
+                        agent.LastAwareLogTime = c.LogTime;
+                        break;
                     }
                 }
             }
@@ -476,14 +470,11 @@ namespace GW2EIParser.Parser
                     AgentItem master = _allAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
                     if (master != null)
                     {
-                        if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> minionList))
+                        if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem minion))
                         {
-                            foreach (AgentItem minion in minionList)
+                            if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
                             {
-                                if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
-                                {
-                                    minion.MasterAgent = master;
-                                }
+                                minion.MasterAgent = master;
                             }
                         }
                     }
