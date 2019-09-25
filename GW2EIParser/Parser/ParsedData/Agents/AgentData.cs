@@ -46,12 +46,6 @@ namespace GW2EIParser.Parser.ParsedData
             return agent;
         }
 
-        public void RemoveAgent(AgentItem agent)
-        {
-            _allAgentsList.Remove(agent);
-            Refresh();
-        }
-
         public AgentItem GetAgent(ulong agentAddress, long logTime)
         {
             if (agentAddress != 0)
@@ -73,18 +67,6 @@ namespace GW2EIParser.Parser.ParsedData
             if (id != 0)
             {
                 if (_allAgentsByID.TryGetValue(id, out List<AgentItem> list))
-                {
-                    return list;
-                }
-            }
-            return new List<AgentItem>();
-        }
-
-        public List<AgentItem> GetAgentByInstID(ushort instid)
-        {
-            if (instid != 0)
-            {
-                if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> list))
                 {
                     return list;
                 }
