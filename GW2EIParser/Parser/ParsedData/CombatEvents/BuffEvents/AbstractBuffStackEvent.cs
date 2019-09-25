@@ -8,7 +8,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
-            To = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.LogTime);
+            To = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
         public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
