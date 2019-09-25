@@ -53,7 +53,7 @@ namespace GW2EIParser.EIData
             {
                 public long ID { get; set; }
                 public bool IndirectDamage { get; set; }
-                public string Src { get; set; }
+                public AgentItem Src { get; set; }
                 public int Damage { get; set; }
                 public int Time { get; set; }
             }
@@ -141,7 +141,7 @@ namespace GW2EIParser.EIData
                             IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                            Src = ag
                         };
                         damage += dl.Damage;
                         recap.ToDown.Add(item);
@@ -162,7 +162,7 @@ namespace GW2EIParser.EIData
                             IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                            Src = ag
                         };
                         recap.ToKill.Add(item);
                     }
@@ -183,7 +183,7 @@ namespace GW2EIParser.EIData
                             IndirectDamage = dl is NonDirectDamageEvent,
                             ID = dl.SkillId,
                             Damage = dl.Damage,
-                            Src = ag != null ? ag.Name.Replace("\u0000", "").Split(':')[0] : ""
+                            Src = ag
                         };
                         damage += dl.Damage;
                         recap.ToKill.Add(item);

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using GW2EIParser.Parser;
+using static GW2EIParser.Builders.JsonModels.JsonLog;
 using static GW2EIParser.EIData.Player;
 using static GW2EIParser.EIData.Player.DeathRecap;
 
@@ -35,10 +37,10 @@ namespace GW2EIParser.Builders.JsonModels
             [DefaultValue(null)]
             public int Time { get; set; }
 
-            public JsonDeathRecapDamageItem(DeathRecapDamageItem item)
+            public JsonDeathRecapDamageItem(DeathRecapDamageItem item, ParsedLog log, Dictionary<string, Desc> description)
             {
                 Id = (item.IndirectDamage ? "b" : "s") + item.ID;
-                Src = item.Src;
+                Src = GetActorID(item.Src, log, description);
                 Damage = item.Damage;
                 Time = item.Time;
             }
@@ -58,11 +60,11 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public List<JsonDeathRecapDamageItem> ToKill { get; set; }
 
-        public JsonDeathRecap(DeathRecap recap)
+        public JsonDeathRecap(DeathRecap recap, ParsedLog log, Dictionary<string, Desc> description)
         {
             DeathTime = recap.DeathTime;
-            ToDown = recap.ToDown?.Select(x => new JsonDeathRecapDamageItem(x)).ToList();
-            ToKill = recap.ToKill?.Select(x => new JsonDeathRecapDamageItem(x)).ToList();
+            ToDown = recap.ToDown?.Select(x => new JsonDeathRecapDamageItem(x, log, description)).ToList();
+            ToKill = recap.ToKill?.Select(x => new JsonDeathRecapDamageItem(x, log, description)).ToList();
         }
 
     }

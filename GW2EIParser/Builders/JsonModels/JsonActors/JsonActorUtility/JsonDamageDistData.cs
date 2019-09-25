@@ -23,15 +23,27 @@ namespace GW2EIParser.Builders.JsonModels
 
             public long EncodedBooleans { get; set; }
 
-            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log)
+            public JsonDamageItem(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description)
             {
                 if (evt is NonDirectDamageEvent)
                 {
                     Id = "b" + evt.SkillId;
+                    if (!description.ContainsKey(Id))
+                    {
+                        if (!log.Buffs.BuffsByIds.TryGetValue(evt.SkillId, out Buff buff))
+                        {
+                            buff = new Buff(evt.Skill.Name, evt.SkillId, evt.Skill.Icon);
+                        }
+                        description[Id] = new BuffDesc(buff);
+                    }
                 }
                 else
                 {
                     Id = "s" + evt.SkillId;
+                    if (!description.ContainsKey(Id))
+                    {
+                        description[Id] = new SkillDesc(evt.Skill);
+                    }
                 }
                 Time = evt.Time;
                 Damage = evt.Damage;
@@ -104,7 +116,7 @@ namespace GW2EIParser.Builders.JsonModels
         {
 
             public string DestinationID { get; set; }
-            public JsonDamageItemDone(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
+            public JsonDamageItemDone(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log, description)
             {
                 DestinationID = GetActorID(evt.To, log, description);
             }
@@ -115,7 +127,7 @@ namespace GW2EIParser.Builders.JsonModels
 
             public string SourceID { get; set; }
 
-            public JsonDamageItemTaken(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log)
+            public JsonDamageItemTaken(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log, description)
             {
                 SourceID = GetActorID(evt.From, log, description);
             }

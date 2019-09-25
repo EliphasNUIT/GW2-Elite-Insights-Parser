@@ -318,7 +318,6 @@ namespace GW2EIParser.Builders.JsonModels
             if (log.FindActor(ag, true, false) == null)
             {
                 res = descID;
-                // special case for WvW
                 if (!description.ContainsKey(descID))
                 {
                     // create a dummy npc for the description
