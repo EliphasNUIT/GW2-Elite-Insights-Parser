@@ -48,7 +48,7 @@ namespace GW2EIParser.Builders.JsonModels
             }
             // Death Recap
             List<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
-            DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x)).ToList();
+            DeathRecaps = deathRecaps?.Select(x => new JsonDeathRecap(x, log, description)).ToList();
             // Consumables
             Consumables = JsonConsumable.BuildConsumables(player.GetConsumablesList(log), description);
             // Stats
