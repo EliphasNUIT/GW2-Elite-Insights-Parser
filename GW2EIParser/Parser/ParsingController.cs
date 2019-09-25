@@ -430,7 +430,7 @@ namespace GW2EIParser.Parser
                     {
                         if (agent.InstID == 0)
                         {
-                            agent.InstID = c.IsStateChange != ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
+                            agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
                             if (agent.FirstAwareLogTime == 0)
                             {
                                 agent.FirstAwareLogTime = c.LogTime;
