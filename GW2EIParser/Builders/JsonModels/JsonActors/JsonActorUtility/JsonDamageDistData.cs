@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using Newtonsoft.Json;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -12,9 +14,41 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonDamageDistData
     {
-        public abstract class JsonDamageItem
+        private class JsonDamageItemConverter : JsonConverter
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                var jsonDamageDistData = (JsonDamageItem)value;
+                //writer.WriteStartArray();
+                writer.WriteValue(jsonDamageDistData.Id);
+                writer.WriteValue(jsonDamageDistData.AgentID);
+                writer.WriteValue(jsonDamageDistData.Time);
+                writer.WriteValue(jsonDamageDistData.Damage);
+                writer.WriteValue(jsonDamageDistData.ShieldDamage);
+                writer.WriteValue(jsonDamageDistData.EncodedBooleans);
+                //writer.WriteEndArray();
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                JsonSerializer serializer)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override bool CanRead => false;
+
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(JsonDamageItem);
+            }
+        }
+
+        [JsonConverter(typeof(JsonDamageItemConverter))]
+        public class JsonDamageItem
         {
             public string Id { get; set; }
+
+            public string AgentID { get; set; }
 
             public long Time { get; set; }
 
@@ -114,22 +148,17 @@ namespace GW2EIParser.Builders.JsonModels
 
         public class JsonDamageItemDone : JsonDamageItem
         {
-
-            public string DestinationID { get; set; }
             public JsonDamageItemDone(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log, description)
             {
-                DestinationID = GetActorID(evt.To, log, description);
+                AgentID = GetActorID(evt.To, log, description);
             }
         }
 
         public class JsonDamageItemTaken : JsonDamageItem
         {
-
-            public string SourceID { get; set; }
-
             public JsonDamageItemTaken(AbstractDamageEvent evt, ParsedLog log, Dictionary<string, Desc> description) : base(evt, log, description)
             {
-                SourceID = GetActorID(evt.From, log, description);
+                AgentID = GetActorID(evt.From, log, description);
             }
         }
 

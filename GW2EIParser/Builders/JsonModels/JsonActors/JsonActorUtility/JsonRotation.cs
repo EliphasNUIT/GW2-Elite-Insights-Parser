@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using Newtonsoft.Json;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
@@ -11,20 +13,46 @@ namespace GW2EIParser.Builders.JsonModels
     /// </summary>
     public class JsonRotation
     {
+        private class JsonRotationItemConverter : JsonConverter
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                var jsonDamageDistData = (JsonRotationItem)value;
+                //writer.WriteStartArray();
+                writer.WriteValue(jsonDamageDistData.CastTime);
+                writer.WriteValue(jsonDamageDistData.Duration);
+                writer.WriteValue(jsonDamageDistData.TimeGained);
+                writer.WriteValue(jsonDamageDistData.Quickness);
+                //writer.WriteEndArray();
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                JsonSerializer serializer)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override bool CanRead => false;
+
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(JsonRotationItem);
+            }
+        }
+
         /// <summary>
         /// Class corresponding to a skill
         /// </summary>
-        public class JsonSkill
+        [JsonConverter(typeof(JsonRotationItemConverter))]
+        public class JsonRotationItem
         {
             /// <summary>
             /// Time at which the skill was cast
             /// </summary>
-            [DefaultValue(null)]
             public int CastTime { get; set; }
             /// <summary>
             /// Duration of the animation
             /// </summary>
-            [DefaultValue(null)]
             public int Duration { get; set; }
             /// <summary>
             /// Gained time from the animation, could be negative, which means time was lost
@@ -35,7 +63,7 @@ namespace GW2EIParser.Builders.JsonModels
             /// </summary>
             public bool Quickness { get; set; }
 
-            public JsonSkill(AbstractCastEvent cl)
+            public JsonRotationItem(AbstractCastEvent cl)
             {
                 int timeGained = 0;
                 if (cl.ReducedAnimation && cl.ActualDuration < cl.ExpectedDuration)
@@ -61,12 +89,12 @@ namespace GW2EIParser.Builders.JsonModels
         /// <summary>
         /// List of casted skills
         /// </summary>
-        /// <seealso cref="JsonSkill"/>
-        public List<JsonSkill> Skills { get; set; }
+        /// <seealso cref="JsonRotationItem"/>
+        public List<JsonRotationItem> Skills { get; set; }
 
         public static List<JsonRotation> BuildRotation(List<AbstractCastEvent> cls, Dictionary<string, Desc> description)
         {
-            var dict = new Dictionary<long, List<JsonSkill>>();
+            var dict = new Dictionary<long, List<JsonRotationItem>>();
             foreach (AbstractCastEvent cl in cls)
             {
                 SkillItem skill = cl.Skill;
@@ -75,21 +103,21 @@ namespace GW2EIParser.Builders.JsonModels
                 {
                     description["s" + cl.SkillId] = new SkillDesc(skill);
                 }
-                var jSkill = new JsonSkill(cl);
-                if (dict.TryGetValue(cl.SkillId, out List<JsonSkill> list))
+                var jSkill = new JsonRotationItem(cl);
+                if (dict.TryGetValue(cl.SkillId, out List<JsonRotationItem> list))
                 {
                     list.Add(jSkill);
                 }
                 else
                 {
-                    dict[cl.SkillId] = new List<JsonSkill>()
+                    dict[cl.SkillId] = new List<JsonRotationItem>()
                     {
                         jSkill
                     };
                 }
             }
             var res = new List<JsonRotation>();
-            foreach (KeyValuePair<long, List<JsonSkill>> pair in dict)
+            foreach (KeyValuePair<long, List<JsonRotationItem>> pair in dict)
             {
                 res.Add(new JsonRotation()
                 {

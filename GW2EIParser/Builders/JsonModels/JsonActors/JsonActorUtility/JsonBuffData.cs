@@ -1,21 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
+using Newtonsoft.Json;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
 {
     public class JsonBuffData
-    {
+    {    
         /// <summary>
         /// Represents a stack status item for buffs
         /// </summary>
         public class JsonBuffStackStatus
         {
+            private class JsonBuffStackStatusSourcesConverter : JsonConverter
+            {
+                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+                {
+                    var jsonDamageDistData = (JsonBuffStackStatusSources)value;
+                    //writer.WriteStartArray();
+                    writer.WriteValue(jsonDamageDistData.Src);
+                    writer.WriteValue(jsonDamageDistData.SeedSrc);
+                    writer.WriteValue(jsonDamageDistData.Duration);
+                    writer.WriteValue(jsonDamageDistData.ID);
+                    //writer.WriteEndArray();
+                }
+
+                public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                    JsonSerializer serializer)
+                {
+                    throw new NotSupportedException();
+                }
+
+                public override bool CanRead => false;
+
+                public override bool CanConvert(Type objectType)
+                {
+                    return objectType == typeof(JsonBuffStackStatusSources);
+                }
+            }
+            [JsonConverter(typeof(JsonBuffStackStatusSourcesConverter))]
             public class JsonBuffStackStatusSources
             {
                 public string Src { get; set; }
@@ -36,6 +65,8 @@ namespace GW2EIParser.Builders.JsonModels
             }
 
             public List<long> StackStarts { get; set; }
+
+
             public List<List<JsonBuffStackStatusSources>> StackStatus { get; set; }
             public JsonBuffStackStatus(List<BuffSimulationItem> sourceBasedBoonChart, ParsedLog log, Dictionary<string, Desc> description)
             {
