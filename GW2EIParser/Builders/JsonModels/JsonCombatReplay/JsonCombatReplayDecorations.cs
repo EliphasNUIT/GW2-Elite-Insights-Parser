@@ -69,7 +69,7 @@ namespace GW2EIParser.Builders.JsonModels
         public class JsonCombatReplayBackgroundDecoration : JsonCombatReplayGenericDecoration
         {
         }
-        public class PositionConverter : Newtonsoft.Json.JsonConverter
+        public class PositionConverter : JsonConverter
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
@@ -111,7 +111,7 @@ namespace GW2EIParser.Builders.JsonModels
             public int Height { get; set; }
             public int Width { get; set; }
 
-            [Newtonsoft.Json.JsonConverter(typeof(PositionConverter))]
+            [JsonConverter(typeof(PositionConverter))]
             public List<(double x, double y, double z, double angle, double opacity, int time)> Positions { get; set; }
         }
 
