@@ -18,33 +18,6 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public class JsonBuffStackStatus
         {
-            private class JsonBuffStackStatusSourcesConverter : JsonConverter
-            {
-                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-                {
-                    var jsonDamageDistData = (JsonBuffStackStatusSources)value;
-                    //writer.WriteStartArray();
-                    writer.WriteValue(jsonDamageDistData.Src);
-                    writer.WriteValue(jsonDamageDistData.SeedSrc);
-                    writer.WriteValue(jsonDamageDistData.Duration);
-                    writer.WriteValue(jsonDamageDistData.ID);
-                    //writer.WriteEndArray();
-                }
-
-                public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                    JsonSerializer serializer)
-                {
-                    throw new NotSupportedException();
-                }
-
-                public override bool CanRead => false;
-
-                public override bool CanConvert(Type objectType)
-                {
-                    return objectType == typeof(JsonBuffStackStatusSources);
-                }
-            }
-            [JsonConverter(typeof(JsonBuffStackStatusSourcesConverter))]
             public class JsonBuffStackStatusSources
             {
                 public string Src { get; set; }
@@ -122,7 +95,7 @@ namespace GW2EIParser.Builders.JsonModels
                 RemoveSrcID = GetActorID(item.By, log, description);
             }
         }
-
+       
         public class JsonCreationItem
         {
             public string SrcID { get; set; }
@@ -140,7 +113,160 @@ namespace GW2EIParser.Builders.JsonModels
             }
         }
 
+        private class JsonBuffDataItemConverter : JsonConverter
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                var jsonBuffData = (JsonBuffDataItem)value;
+                writer.WriteStartObject();
+                {
+                    // ID
+                    writer.WritePropertyName("id");
+                    writer.WriteValue(jsonBuffData.Id);
+                    // BuffStates
+                    if (jsonBuffData.BuffStates != null)
+                    {
+                        writer.WritePropertyName("buffStates");
+                        writer.WriteStartArray();
+                        foreach (int state in jsonBuffData.BuffStates)
+                        {
+                            writer.WriteValue(state);
+                        }
+                        writer.WriteEndArray();
+                    }                  
+                    //Buff Stack States
+                    if (jsonBuffData.BuffStackStates != null)
+                    {
+                        writer.WritePropertyName("buffStackStates");
+                        writer.WriteStartObject();
+                        {
+                            writer.WritePropertyName("stackStarts");
+                            writer.WriteStartArray();
+                            foreach (long state in jsonBuffData.BuffStackStates.StackStarts)
+                            {
+                                writer.WriteValue(state);
+                            }
+                            writer.WriteEndArray();
+                            writer.WritePropertyName("stackStatus");
+                            writer.WriteStartArray();
+                            foreach (List<JsonBuffStackStatus.JsonBuffStackStatusSources> itemList in jsonBuffData.BuffStackStates.StackStatus)
+                            {
+                                writer.WriteStartArray();
+                                foreach (JsonBuffStackStatus.JsonBuffStackStatusSources status in itemList)
+                                {
+                                    //writer.WriteStartArray();
+                                    writer.WriteValue(status.Src);
+                                    writer.WriteValue(status.SeedSrc);
+                                    writer.WriteValue(status.Duration);
+                                    writer.WriteValue(status.ID);
+                                    //writer.WriteEndArray();
+                                }
+                                writer.WriteEndArray();
+                            }
+                            writer.WriteEndArray();
+                        }
+                        writer.WriteEndObject();
+                    }             
+                    // BuffRemoveStatus
+                    if (jsonBuffData.BuffRemoveStatus != null)
+                    {
+                        writer.WritePropertyName("buffRemoveStatus");
+                        writer.WriteStartArray();
+                        foreach (JsonBuffRemoveItem item in jsonBuffData.BuffRemoveStatus)
+                        {
+                            //writer.WriteStartArray();
+                            writer.WriteValue(item.SrcID);
+                            writer.WriteValue(item.Time);
+                            writer.WriteValue(item.Wasted);
+                            writer.WriteValue(item.ID);
+                            writer.WriteValue(item.RemoveSrcID);
+                            //writer.WriteEndArray();
+                        }
+                        writer.WriteEndArray();
+                    }                
+                    // BuffOverrideStates
+                    if (jsonBuffData.BuffOverrideStates != null)
+                    {
+                        writer.WritePropertyName("buffOverrideStates");
+                        writer.WriteStartArray();
+                        foreach (JsonBuffOverrideItem item in jsonBuffData.BuffOverrideStates)
+                        {
+                            //writer.WriteStartArray();
+                            writer.WriteValue(item.SrcID);
+                            writer.WriteValue(item.Time);
+                            writer.WriteValue(item.Wasted);
+                            writer.WriteValue(item.ID);
+                            writer.WriteValue(item.CauseID);
+                            //writer.WriteEndArray();
+                        }
+                        writer.WriteEndArray();
+                    }            
+                    // BuffOverstackStates
+                    if (jsonBuffData.BuffOverstackStates != null)
+                    {
+                        writer.WritePropertyName("buffOverstackStates");
+                        writer.WriteStartArray();
+                        foreach (JsonBuffOverstackItem item in jsonBuffData.BuffOverstackStates)
+                        {
+                            //writer.WriteStartArray();
+                            writer.WriteValue(item.SrcID);
+                            writer.WriteValue(item.Time);
+                            writer.WriteValue(item.Wasted);
+                            writer.WriteValue(item.ID);
+                            //writer.WriteEndArray();
+                        }
+                        writer.WriteEndArray();
+                    }               
+                    // BuffAddedStates
+                    if (jsonBuffData.BuffAddedStates != null)
+                    {
+                        writer.WritePropertyName("buffAddedStates");
+                        writer.WriteStartArray();
+                        foreach (JsonCreationItem item in jsonBuffData.BuffAddedStates)
+                        {
+                            //writer.WriteStartArray();
+                            writer.WriteValue(item.SrcID);
+                            writer.WriteValue(item.Time);
+                            writer.WriteValue(item.Added);
+                            writer.WriteValue(item.ID);
+                            //writer.WriteEndArray();
+                        }
+                        writer.WriteEndArray();
+                    }             
+                    // BuffExtendedStates
+                    if (jsonBuffData.BuffExtendedStates != null)
+                    {
+                        writer.WritePropertyName("buffExtendedStates");
+                        writer.WriteStartArray();
+                        foreach (JsonCreationItem item in jsonBuffData.BuffExtendedStates)
+                        {
+                            //writer.WriteStartArray();
+                            writer.WriteValue(item.SrcID);
+                            writer.WriteValue(item.Time);
+                            writer.WriteValue(item.Added);
+                            writer.WriteValue(item.ID);
+                            //writer.WriteEndArray();
+                        }
+                        writer.WriteEndArray();
+                    }                   
+                }
+                writer.WriteEndObject();
+            }
 
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                JsonSerializer serializer)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override bool CanRead => false;
+
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(JsonBuffDataItem);
+            }
+        }
+        [JsonConverter(typeof(JsonBuffDataItemConverter))]
         public class JsonBuffDataItem
         {
 
@@ -165,11 +291,11 @@ namespace GW2EIParser.Builders.JsonModels
             public List<JsonCreationItem> BuffAddedStates { get; set; }
             public List<JsonCreationItem> BuffExtendedStates { get; set; }
 
-            public string ID { get; set; }
+            public string Id { get; set; }
 
             public JsonBuffDataItem(string id, BuffsGraphModel bgm, ParsedLog log, Dictionary<string, Desc> description)
             {
-                ID = id;
+                Id = id;
                 BuffStates = bgm.GetStatesList();
                 if (bgm.IsSourceBased)
                 {
