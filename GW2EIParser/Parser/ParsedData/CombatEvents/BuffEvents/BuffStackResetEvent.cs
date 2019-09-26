@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {
-            if (abe is BuffStackActiveEvent)
+            if (abe is BuffStackActiveEvent || abe is BuffApplyEvent)
             {
                 return 1;
             }

@@ -175,6 +175,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                 else
                                 {
                                     var toAdd = new BuffApplyEvent(c, agentData, skillData, offset);
+                                    if (toAdd.AddedActive)
+                                    {
+                                        res.Add(new BuffStackActiveEvent(toAdd.To, toAdd.BuffSkill, toAdd.Time, toAdd.BuffInstance));
+                                    }
                                     res.Add(toAdd);
                                     dict[toAdd.BuffInstance] = toAdd.BuffSkill;
                                     var toRemove = new HashSet<CombatItem>();

@@ -4,6 +4,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
     {
+
+        public const int FullRemoval = int.MaxValue;
         public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
@@ -33,6 +35,10 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {
+            if (abe is AbstractBuffStackEvent)
+            {
+                return -1;
+            }
             if (abe is BuffRemoveAllEvent)
             {
                 return 0;

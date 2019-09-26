@@ -10,7 +10,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private uint _overstackDuration;
 
         public uint BuffInstance { get; }
-        private readonly bool _addedActive;
+        public bool AddedActive { get; }
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
@@ -20,17 +20,16 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
             BuffInstance = evtcItem.Pad;
-            _addedActive = evtcItem.IsShields > 0;
+            AddedActive = evtcItem.IsShields > 0;
             _overstackDuration = evtcItem.OverstackValue;
         }
 
-        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool asActive) : base(buffSkill, time)
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id) : base(buffSkill, time)
         {
             AppliedDuration = duration;
             By = by;
             To = to;
             BuffInstance = id;
-            _addedActive = asActive;
         }
 
         public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
@@ -44,7 +43,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive, _overstackDuration);
+            simulator.Add(AppliedDuration, By, Time, BuffInstance, _overstackDuration);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)
@@ -52,10 +51,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             if (abe is BuffApplyEvent && !(abe is BuffExtensionEvent))
             {
                 return 0;
-            }
-            if (abe is AbstractBuffStackEvent)
-            {
-                return 1;
             }
             return -1;
         }

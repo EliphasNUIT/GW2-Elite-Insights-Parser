@@ -10,6 +10,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             BuffInstance = (uint)evtcItem.DstAgent;
         }
 
+        public BuffStackActiveEvent(AgentItem to, SkillItem buffSkill, long time, uint buffInstance) : base(to, buffSkill, time)
+        {
+            BuffInstance = buffInstance;
+        }
+
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
             simulator.Activate(BuffInstance);
@@ -25,7 +30,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 return 0;
             }
-            return -1;
+            return 1;
         }
     }
 }

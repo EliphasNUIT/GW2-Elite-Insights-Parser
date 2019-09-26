@@ -6,9 +6,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
     {
         protected uint BuffInstance {get; set;}
 
-        public AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
+        protected AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
             To = agentData.GetAgent(evtcItem.SrcAgent);
+        }
+
+        protected AbstractBuffStackEvent(AgentItem to, SkillItem buffSkill, long time) : base(buffSkill, time)
+        {
+            To = to;
         }
 
         public override void TryFindSrc(ParsedLog log)

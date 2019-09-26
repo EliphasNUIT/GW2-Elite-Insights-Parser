@@ -149,7 +149,8 @@ namespace GW2EIParser.Logic
                         AbstractBuffEvent apply = list.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                         if (apply == null)
                         {
-                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue, true));
+                            res.Add(new BuffApplyEvent(target.AgentItem, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(38224), uint.MaxValue));
+                            res.Add(new BuffStackActiveEvent(target.AgentItem, skillData.Get(38224), bfe.Time - 1000, uint.MaxValue));
                         }
                     }
                 }

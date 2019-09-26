@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start, 0, true, 0);
+                    Add(oldValue + extension, src, start, 0, 0);
                 }
             }
         }

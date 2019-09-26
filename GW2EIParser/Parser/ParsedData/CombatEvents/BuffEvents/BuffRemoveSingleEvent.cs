@@ -40,7 +40,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             {
                 return 0;
             }
-            if (abe is BuffRemoveAllEvent)
+            if (abe is BuffRemoveAllEvent || abe is AbstractBuffStackEvent)
             {
                 return -1;
             }
