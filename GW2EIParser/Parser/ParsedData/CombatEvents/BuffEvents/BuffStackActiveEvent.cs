@@ -14,6 +14,11 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             simulator.Activate(BuffInstance);
         }
+
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        {
+            return BuffID != ProfHelper.NoBuff && hasStackIDs && BuffInstance != 0;
+        }
         public override int CompareTo(AbstractBuffEvent abe)
         {
             if (abe is BuffStackActiveEvent)

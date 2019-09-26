@@ -11,11 +11,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             To = agentData.GetAgent(evtcItem.SrcAgent);
         }
 
-        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
-        {
-            return BuffID != ProfHelper.NoBuff && hasStackIDs && BuffInstance != 0;
-        }
-
         public override void TryFindSrc(ParsedLog log)
         {
         }
