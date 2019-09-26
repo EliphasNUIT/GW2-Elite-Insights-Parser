@@ -17,13 +17,13 @@ namespace GW2EIParser.Builders.JsonModels
         {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                var jsonDamageDistData = (JsonRotationItem)value;
-                writer.WriteStartArray();
-                writer.WriteValue(jsonDamageDistData.CastTime);
-                writer.WriteValue(jsonDamageDistData.Duration);
-                writer.WriteValue(jsonDamageDistData.TimeGained);
-                writer.WriteValue(jsonDamageDistData.Quickness);
-                writer.WriteEndArray();
+                var jsonRotation = (JsonRotationItem)value;
+                //writer.WriteStartArray();
+                writer.WriteValue(jsonRotation.CastTime);
+                writer.WriteValue(jsonRotation.Duration);
+                writer.WriteValue(jsonRotation.TimeGained);
+                writer.WriteValue(jsonRotation.Quickness);
+                //writer.WriteEndArray();
             }
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
