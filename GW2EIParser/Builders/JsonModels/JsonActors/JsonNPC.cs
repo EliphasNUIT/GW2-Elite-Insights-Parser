@@ -14,11 +14,11 @@ namespace GW2EIParser.Builders.JsonModels
         /// </summary>
         public double HpLeft { get; set; }
         /// <summary>
-        /// Array of double[2] that represents the health status of the target \n
-        /// Value[i][0] will be the time, value[i][1] will be health % \n
+        /// Array of double that represents the health status of the target \n
+        /// Value[2 * i] will be the time, value[2 * i + 1] will be health % \n
         /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
         /// </summary>
-        public List<double[]> HealthPercents { get; set; }
+        public List<double> HealthPercents { get; set; }
         /// <summary>
         /// Indicates a main target of the fight
         /// </summary>
@@ -39,7 +39,16 @@ namespace GW2EIParser.Builders.JsonModels
                     HpLeft = hpUpdates.Last().HPPercent;
                 }
             }
-            HealthPercents = hpUpdates.Select(x => new double[2] { x.Time, x.HPPercent }).ToList();
+            HealthPercents = new List<double>();
+            foreach (HealthUpdateEvent item in hpUpdates)
+            {
+                HealthPercents.Add(item.Time);
+                HealthPercents.Add(item.HPPercent);
+            }
+            if (!HealthPercents.Any())
+            {
+                HealthPercents = null;
+            }
             DescriptionID = "npc" + npc.ID;
             if (!description.ContainsKey(DescriptionID))
             {
