@@ -19,12 +19,14 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             BuffInstance = id;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff &&
-                !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent && !hasStackIDs) && // overstack or natural end removals
-                !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
-                 Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
+            return BuffID != ProfHelper.NoBuff && 
+                    (hasStackIDs || 
+                        (!(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent && !hasStackIDs) && // overstack or natural end removals
+                        !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
+                        Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight));
+
         }
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
