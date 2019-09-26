@@ -33,13 +33,9 @@ namespace GW2EIParser.EIData
             {
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
                 var toAdd = new BuffSimulationItemQueue(BuffStack);
-                if (GenerationSimulation.Count > 0)
+                if (toAdd.End > toAdd.Start + timePassed)
                 {
-                    BuffSimulationItem last = GenerationSimulation.Last();
-                    if (last.End > toAdd.Start)
-                    {
-                        last.OverrideEnd(toAdd.Start);
-                    }
+                    toAdd.OverrideEnd(toAdd.Start + timePassed);
                 }
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = BuffStack[0].BoonDuration - timePassed;

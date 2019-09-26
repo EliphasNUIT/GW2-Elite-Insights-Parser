@@ -47,13 +47,9 @@ namespace GW2EIParser.EIData
             {
                 _lastSrcRemoves.Clear();
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
-                if (GenerationSimulation.Count > 0)
+                if (toAdd.End > toAdd.Start + timePassed)
                 {
-                    BuffSimulationItem last = GenerationSimulation.Last();
-                    if (last.End > toAdd.Start)
-                    {
-                        last.OverrideEnd(toAdd.Start);
-                    }
+                    toAdd.OverrideEnd(toAdd.Start + timePassed);
                 }
                 GenerationSimulation.Add(toAdd);
                 long diff = Math.Min(BuffStack.Min(x => x.BoonDuration), timePassed);
