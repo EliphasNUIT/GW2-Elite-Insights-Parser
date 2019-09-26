@@ -24,9 +24,9 @@ namespace GW2EIParser.EIData
 
         // Abstract Methods
 
-        public override void Add(long boonDuration, AgentItem src, long start, uint id, bool addedAsActive, uint overstackDuration)
+        public override void Add(long duration, AgentItem src, long start, uint id, bool addedAsActive, uint overstackDuration)
         {
-            var toAdd = new BuffStackItem(start, boonDuration, src, ++ID);
+            var toAdd = new BuffStackItem(start, duration, src, ++ID);
             bool addToCreationList;
             // Find empty slot
             if (BuffStack.Count < Capacity)
@@ -41,18 +41,18 @@ namespace GW2EIParser.EIData
                 addToCreationList = _logic.StackEffect(Log, toAdd, BuffStack, OverrideSimulationResult);
                 if (!addToCreationList)
                 {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffOverstackItem(src, duration, start));
                 }
             }
             if (addToCreationList)
             {
-                AddedSimulationResult.Add(new BuffCreationItem(src, boonDuration, start, toAdd.ID));
+                AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
             }
         }
 
-        protected void Add(long boonDuration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
+        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BuffStackItem(start, boonDuration, src, seedSrc,++ID, isExtension);
+            var toAdd = new BuffStackItem(start, duration, src, seedSrc,++ID, isExtension);
             bool addToCreationList;
             // Find empty slot
             if (BuffStack.Count < Capacity)
@@ -75,16 +75,16 @@ namespace GW2EIParser.EIData
                 addToCreationList = _logic.StackEffect(Log, toAdd, BuffStack, OverrideSimulationResult);
                 if (!addToCreationList)
                 {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
+                    OverstackSimulationResult.Add(new BuffOverstackItem(src, duration, start));
                 }
             }
             if (addToCreationList)
             {
-                AddedSimulationResult.Add(new BuffCreationItem(src, boonDuration, start, toAdd.ID));
+                AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
             }
         }
 
-        public override void Remove(AgentItem by, long boonDuration, long start, ParseEnum.BuffRemove removeType, uint id)
+        public override void Remove(AgentItem by, long removedDuration, long start, ParseEnum.BuffRemove removeType, uint id)
         {
             if (GenerationSimulation.Count > 0)
             {
@@ -114,7 +114,7 @@ namespace GW2EIParser.EIData
                     for (int i = 0; i < BuffStack.Count; i++)
                     {
                         BuffStackItem stackItem = BuffStack[i];
-                        if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
+                        if (Math.Abs(removedDuration - stackItem.TotalBoonDuration()) < 10)
                         {
                             RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
                             if (stackItem.Extensions.Count > 0)

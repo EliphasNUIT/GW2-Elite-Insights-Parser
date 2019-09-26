@@ -22,7 +22,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff &&
-                !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent && !hasStackIDs) && // weird single stack remove
+                !(_iff == ParseEnum.IFF.Unknown && By == GeneralHelper.UnknownAgent && !hasStackIDs) && // overstack or natural end removals
                 !(RemovedDuration <= 50 && RemovedDuration != 0 && !hasStackIDs) &&// low value single stack remove that can mess up with the simulator if server delay
                  Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
         }
