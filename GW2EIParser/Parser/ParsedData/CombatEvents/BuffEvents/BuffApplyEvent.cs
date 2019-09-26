@@ -16,9 +16,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            By = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
-            ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            By = agentData.GetAgent(evtcItem.SrcAgent);
+            To = agentData.GetAgent(evtcItem.DstAgent);
             BuffInstance = evtcItem.Pad;
             _addedActive = evtcItem.IsShields > 0;
             _overstackDuration = evtcItem.OverstackValue;

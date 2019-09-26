@@ -163,9 +163,9 @@ namespace GW2EIParser.Builders.JsonModels
             {
                 Name = actor.Character;
                 Icon = actor.Icon;
-                if (actor.AgentItem.MasterAgent != null)
+                if (actor.AgentItem.Master != null)
                 {
-                    MasterID = actor.AgentItem.MasterAgent.UniqueID;
+                    MasterID = actor.AgentItem.Master.UniqueID;
                 }
                 Condition = actor.Condition;
                 Concentration = actor.Concentration;

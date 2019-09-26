@@ -429,16 +429,24 @@ namespace GW2EIParser.Parser
                     if (agent.InstID == 0)
                     {
                         agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.SrcInstid : (ushort)0;
-                        if (agent.FirstAwareLogTime == 0)
-                        {
-                            agent.FirstAwareLogTime = c.LogTime;
-                        }
-                        agent.LastAwareLogTime = c.LogTime;
                     }
-                    else
+                    if (agent.FirstAwareLogTime == 0)
                     {
-                        agent.LastAwareLogTime = c.LogTime;
+                        agent.FirstAwareLogTime = c.LogTime;
                     }
+                    agent.LastAwareLogTime = c.LogTime;
+                }
+                if (agentsLookup.TryGetValue(c.DstAgent, out agent))
+                {
+                    if (agent.InstID == 0)
+                    {
+                        agent.InstID = c.IsStateChange == ParseEnum.StateChange.None ? c.DstInstid : (ushort)0;
+                    }
+                    if (agent.FirstAwareLogTime == 0)
+                    {
+                        agent.FirstAwareLogTime = c.LogTime;
+                    }
+                    agent.LastAwareLogTime = c.LogTime;
                 }
                 // An attack target could appear slightly before its master, this properly updates the time if it happens
                 if (c.IsStateChange == ParseEnum.StateChange.AttackTarget && agentsLookup.TryGetValue(c.DstAgent, out agent))
@@ -446,16 +454,12 @@ namespace GW2EIParser.Parser
                     if (agent.InstID == 0)
                     {
                         agent.InstID = c.DstInstid;
-                        if (agent.FirstAwareLogTime == 0)
-                        {
-                            agent.FirstAwareLogTime = c.LogTime;
-                        }
-                        agent.LastAwareLogTime = c.LogTime;
                     }
-                    else
+                    if (agent.FirstAwareLogTime == 0)
                     {
-                        agent.LastAwareLogTime = c.LogTime;
+                        agent.FirstAwareLogTime = c.LogTime;
                     }
+                    agent.LastAwareLogTime = c.LogTime;
                 }
             }
 
@@ -470,7 +474,7 @@ namespace GW2EIParser.Parser
                         {
                             if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
                             {
-                                minion.MasterAgent = master;
+                                minion.Master = master;
                             }
                         }
                     }
