@@ -479,20 +479,6 @@ namespace GW2EIParser.Parser
                         }
                     }
                 }
-                if (c.DstMasterInstid != 0)
-                {
-                    AgentItem master = _allAgentsList.Find(x => x.InstID == c.DstMasterInstid && x.FirstAwareLogTime <= c.LogTime && c.LogTime <= x.LastAwareLogTime);
-                    if (master != null)
-                    {
-                        if (agentsLookup.TryGetValue(c.SrcAgent, out AgentItem minion))
-                        {
-                            if (minion.FirstAwareLogTime <= c.LogTime && c.LogTime <= minion.LastAwareLogTime)
-                            {
-                                minion.Master = master;
-                            }
-                        }
-                    }
-                }
             }
             _allAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAwareLogTime - x.FirstAwareLogTime >= 0 && x.FirstAwareLogTime != 0 && x.LastAwareLogTime != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.EnemyPlayer));
             _agentData = new AgentData(_allAgentsList);
