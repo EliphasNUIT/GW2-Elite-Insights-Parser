@@ -9,6 +9,8 @@ namespace GW2EIParser.EIData
 {
     public class BuffSimulatorIDDuration : BuffSimulatorID
     {
+        private BuffStackItem _activeStack;
+
         // Constructor
         public BuffSimulatorIDDuration(ParsedLog log) : base(log)
         {
@@ -16,53 +18,62 @@ namespace GW2EIParser.EIData
 
         public override void Activate(uint stackID)
         {
-            BuffStackItem toSwap = BuffStack.Find(x => x.StackID == stackID);
-            if (toSwap == null)
+            BuffStackItem active = BuffStack.Find(x => x.StackID == stackID);
+            _activeStack = active ?? throw new InvalidOperationException("Activate has failed");
+        }
+
+        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
+        {
+            var toAdd = new BuffStackItem(start, duration, src, ++ID, stackID);
+            BuffStack.Add(toAdd);
+            AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
+            if (overstackDuration > 0)
             {
-                throw new InvalidOperationException("Activate has failed");
+                OverrideCandidates.Add((overstackDuration, src));
             }
-            BuffStack.Remove(toSwap);
-            BuffStack.Insert(0, toSwap);
+            if (addedActive)
+            {
+                _activeStack = toAdd;
+            }
         }
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Count > 0 && timePassed > 0)
+            if (BuffStack.Count > 0 && timePassed > 0 && _activeStack != null)
             {
-                var toAdd = new BuffSimulationItemQueue(BuffStack);
+                var toAdd = new BuffSimulationItemQueue(BuffStack, _activeStack);
                 if (toAdd.End > toAdd.Start + timePassed)
                 {
                     toAdd.OverrideEnd(toAdd.Start + timePassed);
                 }
                 GenerationSimulation.Add(toAdd);
-                long timeDiff = BuffStack[0].BoonDuration - timePassed;
+                long timeDiff = _activeStack.BoonDuration - timePassed;
                 long diff;
                 long leftOver = 0;
                 if (timeDiff < 0)
                 {
-                    diff = BuffStack[0].BoonDuration;
+                    diff = _activeStack.BoonDuration;
                     leftOver = timePassed - diff;
                 }
                 else
                 {
                     diff = timePassed;
                 }
-                BuffStack[0] = new BuffStackItemID((BuffStackItemID)BuffStack[0], diff, diff);
-                for (int i = 1; i < BuffStack.Count; i++)
+                BuffStackItem oldActive = _activeStack;
+                _activeStack.Shift(diff,diff);
+                for (int i = 0; i < BuffStack.Count; i++)
                 {
-                    BuffStack[i] = new BuffStackItemID((BuffStackItemID)BuffStack[i], diff, 0);
-                }
-                if (BuffStack[0].BoonDuration > 0)
-                {
-                    Update(leftOver);
-                } 
-                else if (leftOver > 0)
-                {
-                    for (int i = 1; i < BuffStack.Count; i++)
+                    if (BuffStack[i] != oldActive)
                     {
-                        BuffStack[i] = new BuffStackItemID((BuffStackItemID)BuffStack[i], leftOver, 0);
+                        BuffStack[i].Shift(diff, 0);
                     }
                 }
+                // that means the stack was not an extension, extend duration to match time passed
+                if (_activeStack.BoonDuration == 0)
+                {
+                    _activeStack.Shift(0, -leftOver);
+                }
+                Update(leftOver);
             } 
         }
     }

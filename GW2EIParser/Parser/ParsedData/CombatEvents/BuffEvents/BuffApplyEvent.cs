@@ -10,7 +10,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         private uint _overstackDuration;
 
         public uint BuffInstance { get; }
-        public bool AddedActive { get; }
+        private readonly bool _addedActive;
 
         public BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, long offset) : base(evtcItem, skillData, offset)
         {
@@ -20,16 +20,17 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
             To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
             BuffInstance = evtcItem.Pad;
-            AddedActive = evtcItem.IsShields > 0;
+            _addedActive = evtcItem.IsShields > 0;
             _overstackDuration = evtcItem.OverstackValue;
         }
 
-        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id) : base(buffSkill, time)
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool addedActive) : base(buffSkill, time)
         {
             AppliedDuration = duration;
             By = by;
             To = to;
             BuffInstance = id;
+            _addedActive = addedActive;
         }
 
         public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
@@ -43,7 +44,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, By, Time, BuffInstance, _overstackDuration);
+            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive, _overstackDuration);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

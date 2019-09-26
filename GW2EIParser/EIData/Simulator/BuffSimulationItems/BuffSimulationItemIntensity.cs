@@ -15,10 +15,14 @@ namespace GW2EIParser.EIData
         {
             foreach (BuffStackItem stack in stacks)
             {
+                if (stack.BoonDuration <= 0)
+                {
+                    continue;
+                }
                 var bstack = new BuffSimulationItemDuration(stack);
                 _stacks.Add(bstack);
             }
-            Duration = _stacks.Max(x => x.Duration);
+            Duration = _stacks.Any() ? _stacks.Max(x => x.Duration) : 0;
         }
 
         public override void OverrideEnd(long end)

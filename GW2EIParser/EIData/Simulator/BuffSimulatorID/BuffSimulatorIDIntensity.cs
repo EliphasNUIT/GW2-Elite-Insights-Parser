@@ -20,6 +20,17 @@ namespace GW2EIParser.EIData
             //throw new InvalidOperationException("Activate on intensity buff??");
         }
 
+        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, uint overstackDuration)
+        {
+            var toAdd = new BuffStackItem(start, duration, src, ++ID, stackID);
+            BuffStack.Add(toAdd);
+            AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
+            if (overstackDuration > 0)
+            {
+                OverrideCandidates.Add((overstackDuration, src));
+            }
+        }
+
         protected override void Update(long timePassed)
         {
             if (BuffStack.Count > 0 && timePassed > 0)
@@ -35,22 +46,16 @@ namespace GW2EIParser.EIData
                 // Subtract from each
                 for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BuffStackItemID((BuffStackItemID)BuffStack[i], diff, diff);
-                    BuffStack[i] = item;
+                    BuffStack[i].Shift(diff, diff);
                 }
-                if (BuffStack.Any(x => x.BoonDuration == 0) && leftOver > 0)
+                for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    for (int i = BuffStack.Count - 1; i >= 0; i--)
+                    if (BuffStack[i].BoonDuration == 0)
                     {
-                        var item = new BuffStackItemID((BuffStackItemID)BuffStack[i], leftOver, leftOver);
-                        BuffStack[i] = item;
+                        BuffStack[i].Shift(0, -leftOver);
                     }
-                    return;
-                } 
-                else
-                {
-                    Update(leftOver);
                 }
+                Update(leftOver);
             }
         }
     }

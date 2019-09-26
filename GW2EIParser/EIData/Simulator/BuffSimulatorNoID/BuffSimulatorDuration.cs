@@ -50,10 +50,10 @@ namespace GW2EIParser.EIData
                 {
                     diff = timePassed;
                 }
-                BuffStack[0] = new BuffStackItem(BuffStack[0], diff, diff);
+                BuffStack[0].Shift(diff,diff);
                 for (int i = 1; i < BuffStack.Count; i++)
                 {
-                    BuffStack[i] = new BuffStackItem(BuffStack[i], diff, 0);
+                    BuffStack[i].Shift(diff,0);
                 }
                 if (BuffStack[0].BoonDuration == 0)
                 {

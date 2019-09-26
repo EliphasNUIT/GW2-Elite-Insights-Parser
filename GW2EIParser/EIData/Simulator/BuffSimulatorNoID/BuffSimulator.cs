@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
 
         // Abstract Methods
 
-        public override void Add(long duration, AgentItem src, long start, uint id, uint overstackDuration)
+        public override void Add(long duration, AgentItem src, long start, uint id, bool addedActive, uint overstackDuration)
         {
             var toAdd = new BuffStackItem(start, duration, src, ++ID);
             bool addToCreationList;

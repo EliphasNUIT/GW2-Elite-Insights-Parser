@@ -34,7 +34,7 @@ namespace GW2EIParser.EIData
                 }
                 else
                 {
-                    Add(oldValue + extension, src, start, 0, 0);
+                    Add(oldValue + extension, src, start, 0, true, 0);
                 }
             }
         }
@@ -57,11 +57,10 @@ namespace GW2EIParser.EIData
                 // Subtract from each
                 for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BuffStackItem(BuffStack[i], diff, diff);
-                    BuffStack[i] = item;
-                    if (item.BoonDuration == 0)
+                    BuffStack[i].Shift(diff,diff);
+                    if (BuffStack[i].BoonDuration == 0)
                     {
-                        _lastSrcRemoves.Add((item.SeedSrc, item.IsExtension));
+                        _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));
                     }
                 }
                 BuffStack.RemoveAll(x => x.BoonDuration == 0);

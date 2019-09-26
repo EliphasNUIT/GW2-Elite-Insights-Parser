@@ -11,33 +11,9 @@ namespace GW2EIParser.EIData
     {
         protected List<(long duration, AgentItem src)> OverrideCandidates { get; } = new List<(long duration, AgentItem src)>();
 
-        protected class BuffStackItemID : BuffStackItem
-        {
-
-            public BuffStackItemID(long start, long boonDuration, AgentItem src, long id, long stackID) : base(start, boonDuration, src, id)
-            {
-                StackID = stackID;
-            }
-
-            public BuffStackItemID(BuffStackItemID other, long startShift, long durationShift) : base(other, startShift, durationShift)
-            {
-                StackID = other.StackID;
-            }
-        }
         // Constructor
         protected BuffSimulatorID(ParsedLog log) : base(log)
         {
-        }
-
-        public override void Add(long duration, AgentItem src, long start, uint stackID, uint overstackDuration)
-        {
-            var toAdd = new BuffStackItemID(start, duration, src, ++ID, stackID);
-            BuffStack.Add(toAdd);
-            AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
-            if (overstackDuration > 0)
-            {
-                OverrideCandidates.Add((overstackDuration, src));
-            }
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
@@ -66,6 +42,7 @@ namespace GW2EIParser.EIData
                     {
                         if (BuffStack.Count < removedStacks)
                         {
+                            //removedStacks = BuffStack.Count;
                             throw new InvalidOperationException("remove all failed");
                         }
                         // buff cleanse all
@@ -94,6 +71,7 @@ namespace GW2EIParser.EIData
             }
             if (toRemove == null)
             {
+                //return;
                 throw new InvalidOperationException("Remove has failed");
             }
             BuffStack.Remove(toRemove);

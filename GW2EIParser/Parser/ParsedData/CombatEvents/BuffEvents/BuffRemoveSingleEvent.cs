@@ -31,7 +31,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, RemovedDuration, Time, ParseEnum.BuffRemove.Single, BuffInstance);
+            simulator.Remove(By, RemovedDuration, 1, Time, ParseEnum.BuffRemove.Single, BuffInstance);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)

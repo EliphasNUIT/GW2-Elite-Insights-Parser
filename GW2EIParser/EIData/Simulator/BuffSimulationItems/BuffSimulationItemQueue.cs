@@ -21,6 +21,19 @@ namespace GW2EIParser.EIData
             }
         }
 
+        public BuffSimulationItemQueue(List<BuffStackItem> queue, BuffStackItem active) : base(active)
+        {
+            for (int i = 0; i < queue.Count; i++)
+            {
+                if (queue[i] == active ||queue[i].BoonDuration <= 0)
+                {
+                    continue;
+                }
+                var stack = new BuffSimulationItemDuration(queue[i]);
+                _queue.Add(stack);
+            }
+        }
+
         public override List<JsonBuffStackStatusSources> GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
             var res = new List<JsonBuffStackStatusSources>

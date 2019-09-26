@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
             public long BoonDuration { get; private set; }
             public AgentItem Src { get; private set; }
             public AgentItem SeedSrc { get; }
-            public bool IsExtension { get; }
+            public bool IsExtension { get; private set; }
 
             public long ID { get; }
 
@@ -43,15 +43,21 @@ namespace GW2EIParser.EIData
                 IsExtension = false;
             }
 
-            public BuffStackItem(BuffStackItem other, long startShift, long durationShift)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, long id, long stackID)
             {
-                ID = other.ID;
-                Start = other.Start + startShift;
-                BoonDuration = other.BoonDuration - durationShift;
-                Src = other.Src;
-                SeedSrc = other.SeedSrc;
-                Extensions = other.Extensions;
-                IsExtension = other.IsExtension;
+                ID = id;
+                Start = start;
+                SeedSrc = src;
+                BoonDuration = boonDuration;
+                Src = src;
+                IsExtension = false;
+                StackID = stackID;
+            }
+
+            public void Shift(long startShift, long durationShift)
+            {
+                Start += startShift;
+                BoonDuration -= durationShift;
                 if (BoonDuration == 0 && Extensions.Count > 0)
                 {
                     (AgentItem src, long value) = Extensions.First();
@@ -144,7 +150,7 @@ namespace GW2EIParser.EIData
 
         protected abstract void Update(long timePassed);
 
-        public abstract void Add(long duration, AgentItem src, long time, uint stackID, uint overstackDuration);
+        public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive, uint overstackDuration);
 
         public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint stackID);
 

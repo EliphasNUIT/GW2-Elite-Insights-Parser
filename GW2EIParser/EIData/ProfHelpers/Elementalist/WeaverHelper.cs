@@ -161,8 +161,7 @@ namespace GW2EIParser.EIData
                 {
                     continue;
                 }
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID));
-                res.Add(new BuffStackActiveEvent(a, skillData.Get(curID), pair.Key, curInstanceID));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
                 if (prevID != 0)
                 {                 
                     res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
