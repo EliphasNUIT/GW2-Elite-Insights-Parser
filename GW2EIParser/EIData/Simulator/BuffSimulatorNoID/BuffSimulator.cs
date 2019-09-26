@@ -9,35 +9,36 @@ namespace GW2EIParser.EIData
 {
     public abstract class BuffSimulator : AbstractBuffSimulator
     {
-        private long _id = 0;
 
         // Fields
         private readonly StackingLogic _logic;
+        protected int Capacity { get; }
 
         // Constructor
-        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log, capacity)
+        protected BuffSimulator(int capacity, ParsedLog log, StackingLogic logic) : base(log)
         {
+            Capacity = capacity;
             _logic = logic;
         }
 
 
         // Abstract Methods
 
-        public override void Add(long boonDuration, AgentItem src, long start, uint id, bool addedAsActive)
+        public override void Add(long boonDuration, AgentItem src, long start, uint id, bool addedAsActive, uint overstackDuration)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, src, ++_id);
+            var toAdd = new BuffStackItem(start, boonDuration, src, ++ID);
             bool addToCreationList;
             // Find empty slot
-            if (BoonStack.Count < Capacity)
+            if (BuffStack.Count < Capacity)
             {
-                BoonStack.Add(toAdd);
-                _logic.Sort(Log, BoonStack);
+                BuffStack.Add(toAdd);
+                _logic.Sort(Log, BuffStack);
                 addToCreationList = true;
             }
             // Replace lowest value
             else
             {
-                addToCreationList = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
+                addToCreationList = _logic.StackEffect(Log, toAdd, BuffStack, OverrideSimulationResult);
                 if (!addToCreationList)
                 {
                     OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
@@ -51,27 +52,27 @@ namespace GW2EIParser.EIData
 
         protected void Add(long boonDuration, AgentItem src, AgentItem seedSrc, long start, bool atFirst, bool isExtension)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, src, seedSrc,++_id, isExtension);
+            var toAdd = new BuffStackItem(start, boonDuration, src, seedSrc,++ID, isExtension);
             bool addToCreationList;
             // Find empty slot
-            if (BoonStack.Count < Capacity)
+            if (BuffStack.Count < Capacity)
             {
                 if (atFirst)
                 {
-                    BoonStack.Insert(0, toAdd);
+                    BuffStack.Insert(0, toAdd);
                 }
                 else
                 {
 
-                    BoonStack.Add(toAdd);
+                    BuffStack.Add(toAdd);
                 }
-                _logic.Sort(Log, BoonStack);
+                _logic.Sort(Log, BuffStack);
                 addToCreationList = true;
             }
             // Replace lowest value
             else
             {
-                addToCreationList = _logic.StackEffect(Log, toAdd, BoonStack, OverrideSimulationResult);
+                addToCreationList = _logic.StackEffect(Log, toAdd, BuffStack, OverrideSimulationResult);
                 if (!addToCreationList)
                 {
                     OverstackSimulationResult.Add(new BuffOverstackItem(src, boonDuration, start));
@@ -96,7 +97,7 @@ namespace GW2EIParser.EIData
             switch (removeType)
             {
                 case ParseEnum.BuffRemove.All:
-                    foreach (BoonStackItem stackItem in BoonStack)
+                    foreach (BuffStackItem stackItem in BuffStack)
                     {
                         RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
                         if (stackItem.Extensions.Count > 0)
@@ -107,12 +108,12 @@ namespace GW2EIParser.EIData
                             }
                         }
                     }
-                    BoonStack.Clear();
+                    BuffStack.Clear();
                     break;
                 case ParseEnum.BuffRemove.Single:
-                    for (int i = 0; i < BoonStack.Count; i++)
+                    for (int i = 0; i < BuffStack.Count; i++)
                     {
-                        BoonStackItem stackItem = BoonStack[i];
+                        BuffStackItem stackItem = BuffStack[i];
                         if (Math.Abs(boonDuration - stackItem.TotalBoonDuration()) < 10)
                         {
                             RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, start, stackItem.ID));
@@ -123,7 +124,7 @@ namespace GW2EIParser.EIData
                                     RemovalSimulationResult.Add(new BuffRemoveItem(src, by, value, start, stackItem.ID));
                                 }
                             }
-                            BoonStack.RemoveAt(i);
+                            BuffStack.RemoveAt(i);
                             break;
                         }
                     }
@@ -131,7 +132,7 @@ namespace GW2EIParser.EIData
                 default:
                     break;
             }
-            _logic.Sort(Log, BoonStack);
+            _logic.Sort(Log, BuffStack);
         }
 
 

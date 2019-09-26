@@ -16,9 +16,9 @@ namespace GW2EIParser.EIData
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint id)
         {
-            if ((BoonStack.Count > 0 && oldValue > 0) || BoonStack.Count == Capacity)
+            if ((BuffStack.Count > 0 && oldValue > 0) || BuffStack.Count == Capacity)
             {
-                BoonStackItem minItem = BoonStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
+                BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalBoonDuration() - oldValue));
                 if (minItem != null)
                 {
                     minItem.Extend(extension, src);
@@ -43,13 +43,13 @@ namespace GW2EIParser.EIData
 
         protected override void Update(long timePassed)
         {
-            if (BoonStack.Count > 0)
+            if (BuffStack.Count > 0)
             {
                 if (timePassed > 0)
                 {
                     _lastSrcRemoves.Clear();
                 }
-                var toAdd = new BuffSimulationItemIntensity(BoonStack);
+                var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 if (GenerationSimulation.Count > 0)
                 {
                     BuffSimulationItem last = GenerationSimulation.Last();
@@ -59,19 +59,19 @@ namespace GW2EIParser.EIData
                     }
                 }
                 GenerationSimulation.Add(toAdd);
-                long diff = Math.Min(BoonStack.Min(x => x.BoonDuration), timePassed);
+                long diff = Math.Min(BuffStack.Min(x => x.BoonDuration), timePassed);
                 long leftOver = timePassed - diff;
                 // Subtract from each
-                for (int i = BoonStack.Count - 1; i >= 0; i--)
+                for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(BoonStack[i], diff, diff);
-                    BoonStack[i] = item;
+                    var item = new BuffStackItem(BuffStack[i], diff, diff);
+                    BuffStack[i] = item;
                     if (item.BoonDuration == 0)
                     {
                         _lastSrcRemoves.Add((item.SeedSrc, item.IsExtension));
                     }
                 }
-                BoonStack.RemoveAll(x => x.BoonDuration == 0);
+                BuffStack.RemoveAll(x => x.BoonDuration == 0);
                 if (leftOver > 0)
                 {
                     Update(leftOver);

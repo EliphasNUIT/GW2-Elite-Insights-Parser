@@ -7,18 +7,18 @@ namespace GW2EIParser.EIData
 {
     public class ForceOverrideLogic : StackingLogic
     {
-        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BuffStackItem> stacks)
         {
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BuffOverrideItem> overrides)
+        public override bool StackEffect(ParsedLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffOverrideItem> overrides)
         {
             if (stacks.Count == 0)
             {
                 return false;
             }
-            BoonStackItem stack = stacks[0];
+            BuffStackItem stack = stacks[0];
             overrides.Add(new BuffOverrideItem(stack.Src, stackItem.Src, stack.BoonDuration, stack.Start, stack.ID));
             if (stack.Extensions.Count > 0)
             {

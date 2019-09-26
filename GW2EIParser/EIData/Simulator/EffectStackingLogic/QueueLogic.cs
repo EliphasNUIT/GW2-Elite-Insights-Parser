@@ -8,20 +8,20 @@ namespace GW2EIParser.EIData
 {
     public class QueueLogic : StackingLogic
     {
-        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BuffStackItem> stacks)
         {
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BuffOverrideItem> overrides)
+        public override bool StackEffect(ParsedLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffOverrideItem> overrides)
         {
             if (stacks.Count <= 1)
             {
                 throw new InvalidOperationException("Queue logic based must have a >1 capacity");
             }
-            BoonStackItem first = stacks[0];
+            BuffStackItem first = stacks[0];
             stacks.RemoveAt(0);
-            BoonStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
+            BuffStackItem minItem = stacks.MinBy(x => x.TotalBoonDuration());
             if (minItem.TotalBoonDuration() > stackItem.TotalBoonDuration() + GeneralHelper.ServerDelayConstant)
             {
                 stacks.Insert(0, first);
