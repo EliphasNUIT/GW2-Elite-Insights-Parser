@@ -42,10 +42,6 @@ namespace GW2EIParser.EIData
             if (BuffStack.Count > 0 && timePassed > 0 && _activeStack != null)
             {
                 var toAdd = new BuffSimulationItemQueue(BuffStack, _activeStack);
-                if (toAdd.End > toAdd.Start + timePassed)
-                {
-                    toAdd.OverrideEnd(toAdd.Start + timePassed);
-                }
                 GenerationSimulation.Add(toAdd);
                 long timeDiff = _activeStack.BoonDuration - timePassed;
                 long diff;
@@ -58,6 +54,10 @@ namespace GW2EIParser.EIData
                 else
                 {
                     diff = timePassed;
+                }
+                if (toAdd.End > toAdd.Start + diff)
+                {
+                    toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 BuffStackItem oldActive = _activeStack;
                 _activeStack.Shift(diff,diff);
