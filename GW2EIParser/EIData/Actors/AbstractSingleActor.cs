@@ -238,7 +238,7 @@ namespace GW2EIParser.EIData
                     {
                         continue;
                     }
-                    BuffSimulator simulator = buff.CreateSimulator(log);
+                    AbstractBuffSimulator simulator = buff.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);

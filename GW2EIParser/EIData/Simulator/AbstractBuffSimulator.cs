@@ -80,7 +80,7 @@ namespace GW2EIParser.EIData
 
         protected long ID { get; set; } = 0;
         // Fields
-        protected List<BuffStackItem> BuffStack { get; }
+        protected List<BuffStackItem> BuffStack { get; set; }
         public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
         public List<BuffOverstackItem> OverstackSimulationResult { get; } = new List<BuffOverstackItem>();
         public List<BuffOverrideItem> OverrideSimulationResult { get; } = new List<BuffOverrideItem>();
@@ -146,7 +146,7 @@ namespace GW2EIParser.EIData
 
         public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive, uint overstackDuration);
 
-        public abstract void Remove(AgentItem by, long removedDuration, long time, ParseEnum.BuffRemove removeType, uint stackID);
+        public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint stackID);
 
         public abstract void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID);
 

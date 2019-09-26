@@ -29,7 +29,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.BuffRemove.All, 0);
+            simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ParseEnum.BuffRemove.All, 0);
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {

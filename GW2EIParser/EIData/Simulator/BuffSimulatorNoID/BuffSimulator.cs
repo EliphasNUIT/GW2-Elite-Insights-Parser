@@ -24,9 +24,9 @@ namespace GW2EIParser.EIData
 
         // Abstract Methods
 
-        public override void Add(long duration, AgentItem src, long time, uint id, bool addedAsActive, uint overstackDuration)
+        public override void Add(long duration, AgentItem src, long start, uint id, bool addedAsActive, uint overstackDuration)
         {
-            var toAdd = new BuffStackItem(time, duration, src, ++ID);
+            var toAdd = new BuffStackItem(start, duration, src, ++ID);
             bool addToCreationList;
             // Find empty slot
             if (BuffStack.Count < Capacity)
@@ -41,12 +41,12 @@ namespace GW2EIParser.EIData
                 addToCreationList = _logic.StackEffect(Log, toAdd, BuffStack, OverrideSimulationResult);
                 if (!addToCreationList)
                 {
-                    OverstackSimulationResult.Add(new BuffOverstackItem(src, duration, time));
+                    OverstackSimulationResult.Add(new BuffOverstackItem(src, duration, start));
                 }
             }
             if (addToCreationList)
             {
-                AddedSimulationResult.Add(new BuffCreationItem(src, duration, time, toAdd.ID));
+                AddedSimulationResult.Add(new BuffCreationItem(src, duration, start, toAdd.ID));
             }
         }
 
@@ -84,7 +84,7 @@ namespace GW2EIParser.EIData
             }
         }
 
-        public override void Remove(AgentItem by, long removedDuration, long time, ParseEnum.BuffRemove removeType, uint id)
+        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint id)
         {
             if (GenerationSimulation.Count > 0)
             {
