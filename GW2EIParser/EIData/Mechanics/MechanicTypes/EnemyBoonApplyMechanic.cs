@@ -32,7 +32,7 @@ namespace GW2EIParser.EIData
                 AbstractSingleActor amp = null;
                 if (c is BuffApplyEvent ba && Keep(ba, log))
                 {
-                    amp = log.FindActor(ba.To, false);
+                    amp = log.FindActor(ba.To, false, false);
                 }
                 if (amp != null)
                 {
