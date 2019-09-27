@@ -130,7 +130,7 @@ namespace GW2EIParser.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.LogTime >= NPC.FirstAwareLogTime + 500);
                     if (move != null)
                     {
                         _specialSplitLogTime = move.LogTime;
