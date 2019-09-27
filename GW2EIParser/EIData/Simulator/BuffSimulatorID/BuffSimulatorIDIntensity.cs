@@ -37,7 +37,7 @@ namespace GW2EIParser.EIData
             {
                 var toAdd = new BuffSimulationItemIntensity(BuffStack); 
                 GenerationSimulation.Add(toAdd);
-                long diff = Math.Min(BuffStack.Min(x => x.BoonDuration), timePassed);
+                long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
                 long leftOver = timePassed - diff;
                 if (toAdd.End > toAdd.Start + diff)
                 {
@@ -50,7 +50,7 @@ namespace GW2EIParser.EIData
                 }
                 for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    if (BuffStack[i].BoonDuration == 0)
+                    if (BuffStack[i].Duration == 0)
                     {
                         BuffStack[i].Shift(0, -leftOver);
                     }

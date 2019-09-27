@@ -27,7 +27,7 @@ namespace GW2EIParser.EIData
                 stacks.Insert(0, first);
                 return false;
             }
-            overrides.Add(new BuffOverrideItem(minItem.Src, stackItem.Src, minItem.BoonDuration, minItem.Start, minItem.ID));
+            overrides.Add(new BuffOverrideItem(minItem.Src, stackItem.Src, minItem.Duration, minItem.Start, minItem.ID));
             if (minItem.Extensions.Count > 0)
             {
                 foreach ((AgentItem src, long value) in minItem.Extensions)

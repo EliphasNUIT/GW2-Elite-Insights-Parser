@@ -12,7 +12,7 @@ namespace GW2EIParser.EIData
         public class BuffStackItem
         {
             public long Start { get; private set; }
-            public long BoonDuration { get; private set; }
+            public long Duration { get; private set; }
             public AgentItem Src { get; private set; }
             public AgentItem SeedSrc { get; }
             public bool IsExtension { get; private set; }
@@ -27,7 +27,7 @@ namespace GW2EIParser.EIData
             {
                 Start = start;
                 SeedSrc = seedSrc;
-                BoonDuration = boonDuration;
+                Duration = boonDuration;
                 Src = src;
                 IsExtension = isExtension;
                 ID = id;
@@ -38,7 +38,7 @@ namespace GW2EIParser.EIData
                 ID = id;
                 Start = start;
                 SeedSrc = src;
-                BoonDuration = boonDuration;
+                Duration = boonDuration;
                 Src = src;
                 IsExtension = false;
             }
@@ -48,7 +48,7 @@ namespace GW2EIParser.EIData
                 ID = id;
                 Start = start;
                 SeedSrc = src;
-                BoonDuration = boonDuration;
+                Duration = boonDuration;
                 Src = src;
                 IsExtension = false;
                 StackID = stackID;
@@ -57,20 +57,20 @@ namespace GW2EIParser.EIData
             public void Shift(long startShift, long durationShift)
             {
                 Start += startShift;
-                BoonDuration -= durationShift;
-                if (BoonDuration == 0 && Extensions.Count > 0)
+                Duration -= durationShift;
+                if (Duration == 0 && Extensions.Count > 0)
                 {
                     (AgentItem src, long value) = Extensions.First();
                     Extensions.RemoveAt(0);
                     Src = src;
-                    BoonDuration = value;
+                    Duration = value;
                     IsExtension = true;
                 }
             }
 
             public long TotalBoonDuration()
             {
-                long res = BoonDuration;
+                long res = Duration;
                 foreach ((AgentItem src, long value) in Extensions)
                 {
                     res += value;

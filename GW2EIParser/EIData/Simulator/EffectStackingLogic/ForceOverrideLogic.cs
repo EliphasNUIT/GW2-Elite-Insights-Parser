@@ -19,7 +19,7 @@ namespace GW2EIParser.EIData
                 return false;
             }
             BuffStackItem stack = stacks[0];
-            overrides.Add(new BuffOverrideItem(stack.Src, stackItem.Src, stack.BoonDuration, stack.Start, stack.ID));
+            overrides.Add(new BuffOverrideItem(stack.Src, stackItem.Src, stack.Duration, stack.Start, stack.ID));
             if (stack.Extensions.Count > 0)
             {
                 foreach ((AgentItem src, long value) in stack.Extensions)

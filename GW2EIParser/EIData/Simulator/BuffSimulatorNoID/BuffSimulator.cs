@@ -99,7 +99,7 @@ namespace GW2EIParser.EIData
                 case ParseEnum.BuffRemove.All:
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
-                        RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, time, stackItem.ID));
+                        RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.Duration, time, stackItem.ID));
                         if (stackItem.Extensions.Count > 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
@@ -116,7 +116,7 @@ namespace GW2EIParser.EIData
                         BuffStackItem stackItem = BuffStack[i];
                         if (Math.Abs(removedDuration - stackItem.TotalBoonDuration()) < 10)
                         {
-                            RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, time, stackItem.ID));
+                            RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.Duration, time, stackItem.ID));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)

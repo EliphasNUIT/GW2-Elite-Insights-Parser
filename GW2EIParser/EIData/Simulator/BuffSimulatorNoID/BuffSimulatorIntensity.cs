@@ -48,7 +48,7 @@ namespace GW2EIParser.EIData
                 _lastSrcRemoves.Clear();
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);
-                long diff = Math.Min(BuffStack.Min(x => x.BoonDuration), timePassed);
+                long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
                 long leftOver = timePassed - diff;
                 if (toAdd.End > toAdd.Start + diff)
                 {
@@ -58,12 +58,12 @@ namespace GW2EIParser.EIData
                 for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
                     BuffStack[i].Shift(diff,diff);
-                    if (BuffStack[i].BoonDuration == 0)
+                    if (BuffStack[i].Duration == 0)
                     {
                         _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));
                     }
                 }
-                BuffStack.RemoveAll(x => x.BoonDuration == 0);
+                BuffStack.RemoveAll(x => x.Duration == 0);
                 Update(leftOver);
             }
         }

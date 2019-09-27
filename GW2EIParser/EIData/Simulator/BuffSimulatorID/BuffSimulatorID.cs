@@ -49,7 +49,7 @@ namespace GW2EIParser.EIData
                         for (int i = 0; i < removedStacks; i++)
                         {
                             BuffStackItem stackItem = BuffStack[i];
-                            RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.BoonDuration, time, stackItem.ID));
+                            RemovalSimulationResult.Add(new BuffRemoveItem(stackItem.Src, by, stackItem.Duration, time, stackItem.ID));
                             if (stackItem.Extensions.Count > 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
@@ -81,7 +81,7 @@ namespace GW2EIParser.EIData
             {
                 (long duration, AgentItem candSrc) = candidate.Value;
                 OverrideCandidates.Remove(candidate.Value);
-                OverrideSimulationResult.Add(new BuffOverrideItem(toRemove.Src, candSrc, toRemove.BoonDuration, toRemove.Start, toRemove.ID));
+                OverrideSimulationResult.Add(new BuffOverrideItem(toRemove.Src, candSrc, toRemove.Duration, toRemove.Start, toRemove.ID));
                 if (toRemove.Extensions.Count > 0)
                 {
                     foreach ((AgentItem src, long value) in toRemove.Extensions)
@@ -93,7 +93,7 @@ namespace GW2EIParser.EIData
             // Removed due to a cleanse
             else if (removedDuration > 50 && by != GeneralHelper.UnknownAgent)
             {
-                RemovalSimulationResult.Add(new BuffRemoveItem(toRemove.Src, by, toRemove.BoonDuration, time, toRemove.ID));
+                RemovalSimulationResult.Add(new BuffRemoveItem(toRemove.Src, by, toRemove.Duration, time, toRemove.ID));
                 if (toRemove.Extensions.Count > 0)
                 {
                     foreach ((AgentItem src, long value) in toRemove.Extensions)

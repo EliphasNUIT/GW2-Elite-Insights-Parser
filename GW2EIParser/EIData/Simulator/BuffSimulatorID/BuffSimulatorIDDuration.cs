@@ -43,12 +43,12 @@ namespace GW2EIParser.EIData
             {
                 var toAdd = new BuffSimulationItemQueue(BuffStack, _activeStack);
                 GenerationSimulation.Add(toAdd);
-                long timeDiff = _activeStack.BoonDuration - timePassed;
+                long timeDiff = _activeStack.Duration - timePassed;
                 long diff;
                 long leftOver = 0;
                 if (timeDiff < 0)
                 {
-                    diff = _activeStack.BoonDuration;
+                    diff = _activeStack.Duration;
                     leftOver = timePassed - diff;
                 }
                 else
@@ -69,7 +69,7 @@ namespace GW2EIParser.EIData
                     }
                 }
                 // that means the stack was not an extension, extend duration to match time passed
-                if (_activeStack.BoonDuration == 0)
+                if (_activeStack.Duration == 0)
                 {
                     _activeStack.Shift(0, -leftOver);
                 }

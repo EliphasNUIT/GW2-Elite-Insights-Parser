@@ -34,12 +34,12 @@ namespace GW2EIParser.EIData
                 _lastSrcRemove = (GeneralHelper.UnknownAgent, false);
                 var toAdd = new BuffSimulationItemQueue(BuffStack);
                 GenerationSimulation.Add(toAdd);
-                long timeDiff = BuffStack[0].BoonDuration - timePassed;
+                long timeDiff = BuffStack[0].Duration - timePassed;
                 long diff;
                 long leftOver = 0;
                 if (timeDiff < 0)
                 {
-                    diff = BuffStack[0].BoonDuration;
+                    diff = BuffStack[0].Duration;
                     leftOver = timePassed - diff;
                 }
                 else
@@ -55,7 +55,7 @@ namespace GW2EIParser.EIData
                 {
                     BuffStack[i].Shift(diff,0);
                 }
-                if (BuffStack[0].BoonDuration == 0)
+                if (BuffStack[0].Duration == 0)
                 {
                     _lastSrcRemove = (BuffStack[0].SeedSrc, BuffStack[0].IsExtension);
                     BuffStack.RemoveAt(0);

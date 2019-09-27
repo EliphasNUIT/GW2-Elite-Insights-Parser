@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
         {
             foreach (BuffStackItem stack in stacks)
             {
-                if (stack.BoonDuration <= 0)
+                if (stack.Duration <= 0)
                 {
                     continue;
                 }
