@@ -199,7 +199,7 @@ namespace GW2EIParser.Parser.ParsedData
             _skillIds = new HashSet<long>(allCombatItems.Select(x => x.SkillID));
             var stackResetAndActives = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.StackActive || x.IsStateChange == ParseEnum.StateChange.StackReset).ToList();
             // To enable for using id based simulation
-            HasStackIDs = stackResetAndActives.Any();
+            HasStackIDs = false;// stackResetAndActives.Any();
             IEnumerable<CombatItem> noStateActiBuffRem = allCombatItems.Where(x => x.IsStateChange == ParseEnum.StateChange.None && x.IsActivation == ParseEnum.Activation.None && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             // movement events
             _movementData = CombatEventFactory.CreateMovementEvents(allCombatItems.Where(x =>
