@@ -9,60 +9,68 @@ namespace GW2EIParser.EIData
 {
     public abstract class AbstractBuffSimulator
     {
-        public class BoonStackItem
+        public class BuffStackItem
         {
             public long Start { get; private set; }
-            public long BoonDuration { get; private set; }
+            public long Duration { get; private set; }
             public AgentItem Src { get; private set; }
             public AgentItem SeedSrc { get; }
-            public bool IsExtension { get; }
+            public bool IsExtension { get; private set; }
 
             public long ID { get; }
 
+            public long StackID { get; protected set; } = 0;
+
             public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, long id, bool isExtension)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, long id, bool isExtension)
             {
                 Start = start;
                 SeedSrc = seedSrc;
-                BoonDuration = boonDuration;
+                Duration = boonDuration;
                 Src = src;
                 IsExtension = isExtension;
                 ID = id;
             }
 
-            public BoonStackItem(long start, long boonDuration, AgentItem src, long id)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, long id)
             {
                 ID = id;
                 Start = start;
                 SeedSrc = src;
-                BoonDuration = boonDuration;
+                Duration = boonDuration;
                 Src = src;
                 IsExtension = false;
             }
 
-            public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
+            public BuffStackItem(long start, long boonDuration, AgentItem src, long id, long stackID)
             {
-                ID = other.ID;
-                Start = other.Start + startShift;
-                BoonDuration = other.BoonDuration - durationShift;
-                Src = other.Src;
-                SeedSrc = other.SeedSrc;
-                Extensions = other.Extensions;
-                IsExtension = other.IsExtension;
-                if (BoonDuration == 0 && Extensions.Count > 0)
+                ID = id;
+                Start = start;
+                SeedSrc = src;
+                Duration = boonDuration;
+                Src = src;
+                IsExtension = false;
+                StackID = stackID;
+            }
+
+            public void Shift(long startShift, long durationShift)
+            {
+                Start += startShift;
+                Duration -= durationShift;
+                if (Duration == 0 && Extensions.Count > 0)
                 {
                     (AgentItem src, long value) = Extensions.First();
                     Extensions.RemoveAt(0);
                     Src = src;
-                    BoonDuration = value;
+                    Duration = value;
                     IsExtension = true;
                 }
             }
 
             public long TotalBoonDuration()
             {
-                long res = BoonDuration;
+                long res = Duration;
                 foreach ((AgentItem src, long value) in Extensions)
                 {
                     res += value;
@@ -76,8 +84,9 @@ namespace GW2EIParser.EIData
             }
         }
 
+        protected long ID { get; set; } = 0;
         // Fields
-        protected List<BoonStackItem> BoonStack { get; }
+        protected List<BuffStackItem> BuffStack { get; set; }
         public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
         public List<BuffOverstackItem> OverstackSimulationResult { get; } = new List<BuffOverstackItem>();
         public List<BuffOverrideItem> OverrideSimulationResult { get; } = new List<BuffOverrideItem>();
@@ -87,14 +96,12 @@ namespace GW2EIParser.EIData
         public List<BuffCreationItem> ExtendedSimulationResult { get; } = new List<BuffCreationItem>();
 
         protected ParsedLog Log { get; }
-        protected int Capacity { get; }
 
         // Constructor
-        protected AbstractBuffSimulator(ParsedLog log, int capacity)
+        protected AbstractBuffSimulator(ParsedLog log)
         {
-            BoonStack = new List<BoonStackItem>();
+            BuffStack = new List<BuffStackItem>();
             Log = log;
-            Capacity = capacity;
         }
 
 
@@ -138,18 +145,18 @@ namespace GW2EIParser.EIData
             }
             Update(fightDuration - timePrev);
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
-            BoonStack.Clear();
+            BuffStack.Clear();
         }
 
         protected abstract void Update(long timePassed);
 
-        public abstract void Add(long boonDuration, AgentItem src, long start, uint id, bool addedActive);
+        public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive, uint overstackDuration);
 
-        public abstract void Remove(AgentItem by, long boonDuration, long start, ParseEnum.BuffRemove removeType, uint id);
+        public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint stackID);
 
-        public abstract void Extend(long extension, long oldValue, AgentItem src, long start, uint id);
+        public abstract void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID);
 
-        public abstract void Activate(uint id);
-        public abstract void Reset(uint id, long toDuration);
+        public abstract void Activate(uint stackID);
+        public abstract void Reset(uint stackID, long toDuration);
     }
 }

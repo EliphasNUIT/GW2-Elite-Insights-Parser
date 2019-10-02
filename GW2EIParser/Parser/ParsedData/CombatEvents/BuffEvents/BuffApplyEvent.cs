@@ -7,6 +7,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public bool Initial { get; }
         public int AppliedDuration { get; }
 
+        private uint _overstackDuration;
+
         public uint BuffInstance { get; }
         private readonly bool _addedActive;
 
@@ -14,23 +16,23 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         {
             Initial = evtcItem.IsStateChange == ParseEnum.StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            By = agentData.GetAgentByInstID(evtcItem.SrcInstid, evtcItem.LogTime);
-            ByMaster = evtcItem.SrcMasterInstid > 0 ? agentData.GetAgentByInstID(evtcItem.SrcMasterInstid, evtcItem.LogTime) : null;
-            To = agentData.GetAgentByInstID(evtcItem.DstInstid, evtcItem.LogTime);
+            By = agentData.GetAgent(evtcItem.SrcAgent);
+            To = agentData.GetAgent(evtcItem.DstAgent);
             BuffInstance = evtcItem.Pad;
             _addedActive = evtcItem.IsShields > 0;
+            _overstackDuration = evtcItem.OverstackValue;
         }
 
-        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool asActive) : base(buffSkill, time)
+        public BuffApplyEvent(AgentItem by, AgentItem to, long time, int duration, SkillItem buffSkill, uint id, bool addedActive) : base(buffSkill, time)
         {
             AppliedDuration = duration;
             By = by;
             To = to;
             BuffInstance = id;
-            _addedActive = asActive;
+            _addedActive = addedActive;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
             return BuffID != ProfHelper.NoBuff;
         }
@@ -41,7 +43,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive);
+            simulator.Add(AppliedDuration, By, Time, BuffInstance, _addedActive, _overstackDuration);
         }
 
         public override int CompareTo(AbstractBuffEvent abe)
@@ -49,10 +51,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             if (abe is BuffApplyEvent && !(abe is BuffExtensionEvent))
             {
                 return 0;
-            }
-            if (abe is AbstractBuffStackEvent)
-            {
-                return 1;
             }
             return -1;
         }

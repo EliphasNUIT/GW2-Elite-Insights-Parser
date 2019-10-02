@@ -134,16 +134,16 @@ namespace GW2EIParser.Logic
             foreach (AgentItem a in aList)
             {
                 bool friendly = friendlies.Contains(a.ID);
-                if (a.MasterAgent != null)
+                if (a.Master != null)
                 {
-                    AgentItem master = a.MasterAgent;
-                    while (master.MasterAgent != null && !ids.Contains(master.ID))
+                    AgentItem master = a.Master;
+                    while (master.Master != null && !ids.Contains(master.ID))
                     {
-                        master = master.MasterAgent;
+                        master = master.Master;
                     }
-                    if (!ids.Contains(a.MasterAgent.ID))
+                    if (!ids.Contains(a.Master.ID))
                     {
-                        var masterNPC = new NPC(a.MasterAgent, friendly);
+                        var masterNPC = new NPC(a.Master, friendly);
                         NPCs.Add(masterNPC);
                     }
                     continue;
@@ -299,7 +299,7 @@ namespace GW2EIParser.Logic
                 {
                     long time = killed.Time;
                     success++;
-                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                    AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
                     if (lastDamageTaken != null)
                     {
                         time = Math.Min(lastDamageTaken.Time, time);
@@ -343,7 +343,7 @@ namespace GW2EIParser.Logic
                 {
                     targetExits.AddRange(combatData.GetExitCombatEvents(t.AgentItem));
                 }
-                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                AbstractDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
                 if (lastDamage != null)
                 {
                     lastTargetDamages.Add(lastDamage);

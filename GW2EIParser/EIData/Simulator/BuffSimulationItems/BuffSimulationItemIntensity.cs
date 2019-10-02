@@ -11,14 +11,18 @@ namespace GW2EIParser.EIData
     {
         private readonly List<BuffSimulationItemDuration> _stacks = new List<BuffSimulationItemDuration>();
 
-        public BuffSimulationItemIntensity(List<BoonStackItem> stacks) : base(stacks[0].Start, 0)
+        public BuffSimulationItemIntensity(List<BuffStackItem> stacks) : base(stacks[0].Start, 0)
         {
-            foreach (BoonStackItem stack in stacks)
+            foreach (BuffStackItem stack in stacks)
             {
+                if (stack.Duration <= 0)
+                {
+                    continue;
+                }
                 var bstack = new BuffSimulationItemDuration(stack);
                 _stacks.Add(bstack);
             }
-            Duration = _stacks.Max(x => x.Duration);
+            Duration = _stacks.Any() ? _stacks.Max(x => x.Duration) : 0;
         }
 
         public override void OverrideEnd(long end)

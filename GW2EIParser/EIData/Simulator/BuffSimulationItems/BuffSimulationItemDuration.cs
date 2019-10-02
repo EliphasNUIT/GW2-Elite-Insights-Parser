@@ -15,7 +15,7 @@ namespace GW2EIParser.EIData
         public bool IsExtension { get; }
         public long ID { get; private set; }
 
-        public BuffSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
+        public BuffSimulationItemDuration(BuffStackItem other) : base(other.Start, other.Duration)
         {
             Src = other.Src;
             SeedSrc = other.SeedSrc;

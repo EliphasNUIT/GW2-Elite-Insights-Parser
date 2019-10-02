@@ -181,7 +181,7 @@ namespace GW2EIParser.Logic
                 }
                 ExitCombatEvent lastPlayerExit = playerExits.Count > 0 ? playerExits.MaxBy(x => x.Time) : null;
                 TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > specialSplitTime);
-                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.MasterFrom)));
+                AbstractDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.Damage > 0) && (playerAgents.Contains(x.From) || playerAgents.Contains(x.From.Master)));
                 if (notAttackableEvent != null && lastDamageTaken != null && lastPlayerExit != null)
                 {
                     fightData.SetSuccess(lastPlayerExit.Time > notAttackableEvent.Time + 1000, fightData.ToLogSpace(lastDamageTaken.Time));
@@ -196,7 +196,7 @@ namespace GW2EIParser.Logic
                 return 0;
             }
             long firstAware = targetable.LogTime;
-            AgentItem targetAgent = agentData.GetAgentByInstID(targetable.SrcInstid, targetable.LogTime);
+            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent);
             if (targetAgent != GeneralHelper.UnknownAgent)
             {
                 try
@@ -236,7 +236,7 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat && x.SrcInstid == target.InstID && x.LogTime <= target.LastAwareLogTime && x.LogTime >= target.FirstAwareLogTime);
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.OverrideStart(enterCombat.LogTime);
@@ -244,7 +244,7 @@ namespace GW2EIParser.Logic
             // Remove deimos despawn events as they are useless and mess with combat replay
             combatData.RemoveAll(x => x.IsStateChange == ParseEnum.StateChange.Despawn && x.SrcAgent == target.Agent);
             // invul correction
-            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstInstid == target.InstID && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762);
+            CombatItem invulApp = combatData.FirstOrDefault(x => x.DstAgent == target.Agent && x.IsBuff != 0 && x.BuffDmg == 0 && x.Value > 0 && x.SkillID == 762 && x.IsStateChange == ParseEnum.StateChange.None) ;
             if (invulApp != null)
             {
                 invulApp.OverrideValue((int)(target.LastAwareLogTime - invulApp.LogTime));

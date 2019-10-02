@@ -33,7 +33,7 @@ namespace GW2EIParser.EIData
                 AbstractSingleActor amp = null;
                 if (Keep(c, log))
                 {
-                    amp = log.FindActor(c.Caster, false);
+                    amp = log.FindActor(c.Caster, false, false);
                 }
                 if (amp != null)
                 {

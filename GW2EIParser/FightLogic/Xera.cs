@@ -120,7 +120,7 @@ namespace GW2EIParser.Logic
                 throw new InvalidOperationException("Main target of the fight not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcInstid == target.InstID && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcAgent == target.Agent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
             if (enterCombat != null)
             {
                 fightData.OverrideStart(enterCombat.LogTime);
@@ -130,7 +130,7 @@ namespace GW2EIParser.Logic
             {
                 if (NPC.ID == 16286)
                 {
-                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcInstid == NPC.InstID && x.LogTime >= NPC.FirstAwareLogTime + 500 && x.LogTime <= NPC.LastAwareLogTime);
+                    CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Position && x.SrcAgent == NPC.Agent && x.LogTime >= NPC.FirstAwareLogTime + 500);
                     if (move != null)
                     {
                         _specialSplitLogTime = move.LogTime;
