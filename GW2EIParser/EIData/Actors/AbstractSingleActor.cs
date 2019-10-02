@@ -282,9 +282,9 @@ namespace GW2EIParser.EIData
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.ValueBasedBoonChart : condiPresenceGraph.ValueBasedBoonChart;
+                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BuffChart : condiPresenceGraph.BuffChart;
                         bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BuffSegment seg in _buffPoints[boonid].ValueBasedBoonChart)
+                        foreach (BuffSegment seg in _buffPoints[boonid].BuffChart)
                         {
                             long start = seg.Start;
                             long end = seg.End;

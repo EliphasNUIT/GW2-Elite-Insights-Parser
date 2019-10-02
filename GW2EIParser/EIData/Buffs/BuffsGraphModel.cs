@@ -8,30 +8,30 @@ namespace GW2EIParser.EIData
 {
     public class BuffsGraphModel
     {
-        public Buff Boon { get; }
-        public List<BuffSegment> ValueBasedBoonChart { get; private set; } = new List<BuffSegment>();
+        public Buff Buff { get; }
+        public List<BuffSegment> BuffChart { get; private set; } = new List<BuffSegment>();
         private readonly AbstractBuffSimulator _simulator;
         public bool IsSourceBased => _simulator != null;
 
         // Constructor
-        public BuffsGraphModel(Buff boon)
+        public BuffsGraphModel(Buff buff)
         {
-            Boon = boon;
+            Buff = buff;
         }
-        public BuffsGraphModel(Buff boon, List<BuffSegment> segments, AbstractBuffSimulator simulator)
+        public BuffsGraphModel(Buff buff, List<BuffSegment> segments, AbstractBuffSimulator simulator)
         {
-            Boon = boon;
+            Buff = buff;
             _simulator = simulator;
-            ValueBasedBoonChart = segments;
+            BuffChart = segments;
             // needed for fast is present, stack and condi/boon graphs
             FuseSegments();
         }
 
         public int GetStackCount(long time)
         {
-            for (int i = ValueBasedBoonChart.Count - 1; i >= 0; i--)
+            for (int i = BuffChart.Count - 1; i >= 0; i--)
             {
-                BuffSegment seg = ValueBasedBoonChart[i];
+                BuffSegment seg = BuffChart[i];
                 if (seg.Start <= time && time <= seg.End)
                 {
                     return seg.Value;
@@ -44,7 +44,7 @@ namespace GW2EIParser.EIData
         public bool IsPresent(long time, long window)
         {
             int count = 0;
-            foreach (BuffSegment seg in ValueBasedBoonChart)
+            foreach (BuffSegment seg in BuffChart)
             {
                 if (seg.Intersect(time - window, time + window))
                 {
@@ -57,7 +57,7 @@ namespace GW2EIParser.EIData
         {
             var newChart = new List<BuffSegment>();
             BuffSegment last = null;
-            foreach (BuffSegment seg in ValueBasedBoonChart)
+            foreach (BuffSegment seg in BuffChart)
             {
                 if (seg.Start == seg.End)
                 {
@@ -81,17 +81,17 @@ namespace GW2EIParser.EIData
                     }
                 }
             }
-            ValueBasedBoonChart = newChart;
+            BuffChart = newChart;
         }
 
         public List<int> GetStatesList()
         {
-            if (ValueBasedBoonChart.Count == 0)
+            if (BuffChart.Count == 0)
             {
                 return null;
             }
             var res = new List<int>();
-            foreach (BuffSegment item in ValueBasedBoonChart)
+            foreach (BuffSegment item in BuffChart)
             {
                 res.Add((int)item.Start);
                 res.Add(item.Value);
@@ -101,7 +101,7 @@ namespace GW2EIParser.EIData
 
         public JsonBuffStackStatus GetStackStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
+            if (BuffChart.Count == 0 || _simulator == null)
             {
                 return null;
             }
@@ -112,7 +112,7 @@ namespace GW2EIParser.EIData
 
         public (List<JsonBuffOverstackItem>, List<JsonBuffOverrideItem>, List<JsonBuffRemoveItem>) GetWasteStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
+            if (BuffChart.Count == 0 || _simulator == null)
             {
                 return (null, null, null);
             }
@@ -139,7 +139,7 @@ namespace GW2EIParser.EIData
 
         public (List<JsonCreationItem>, List<JsonCreationItem>) GetCreationStatusList(ParsedLog log, Dictionary<string, Desc> description)
         {
-            if (ValueBasedBoonChart.Count == 0 || _simulator == null)
+            if (BuffChart.Count == 0 || _simulator == null)
             {
                 return (null, null);
             }
