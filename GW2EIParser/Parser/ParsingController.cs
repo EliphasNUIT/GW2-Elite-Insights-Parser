@@ -417,7 +417,6 @@ namespace GW2EIParser.Parser
             }
             return true;
         }
-
         private static void UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool canSetInstid)
         {
             if (ag.InstID == 0)
@@ -445,7 +444,6 @@ namespace GW2EIParser.Parser
                 }
             }
         }
-
         private void CompleteAgents()
         {
             var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
