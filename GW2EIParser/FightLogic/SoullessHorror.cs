@@ -129,8 +129,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                     }
                     var vortex = cls.Where(x => x.SkillId == 47327).ToList();
                     foreach (AbstractCastEvent c in vortex)
@@ -141,9 +141,9 @@ namespace GW2EIParser.Logic
                         Point3D prev = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (next != null || prev != null)
                         {
-                            replay.Actors.Add(new CircleDecoration(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
-                            replay.Actors.Add(new CircleDecoration(true, end, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
-                            replay.Actors.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                            replay.Decorations.Add(new CircleDecoration(false, 0, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                            replay.Decorations.Add(new CircleDecoration(true, end, 380, (start, end), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
+                            replay.Decorations.Add(new DoughnutDecoration(true, 0, 380, 760, (end, end + 1000), "rgba(255, 150, 0, 0.5)", new InterpolatedPositionConnector(prev, next, start)));
                         }
                     }
                     var deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
@@ -158,7 +158,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 8; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 8), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
@@ -175,7 +175,7 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
@@ -190,20 +190,20 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 4; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, 3500, Point3D.GetRotationFromFacing(facing) + 45 + (i * 360 / 4), 360 / 12, (start, end), "rgba(255,200,0,0.5)", new AgentConnector(npc)));
                         }
 
                     }
                     break;
                 case (ushort)Scythe:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 80, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 80, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
-                    replay.Actors.Add(new CircleDecoration(true, 0, 400, (crEnd, crEnd + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 400, (crEnd, crEnd + 60000), "rgba(255, 0, 0, 0.5)", new PositionConnector(replay.Positions.Last())));
                     break;
                 case (ushort)SurgingSoul:
                     List<Point3D> positions = replay.Positions;
@@ -213,12 +213,12 @@ namespace GW2EIParser.Logic
                     }
                     if (positions[0].X < -12000 || positions[0].X > -9250)
                     {
-                        replay.Actors.Add(new RectangleDecoration(true, 0, 240, 660, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 240, 660, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
                         break;
                     }
                     else if (positions[0].Y < -525 || positions[0].Y > 2275)
                     {
-                        replay.Actors.Add(new RectangleDecoration(true, 0, 645, 238, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new RectangleDecoration(true, 0, 645, 238, (crStart, crEnd), "rgba(255,100,0,0.5)", new AgentConnector(npc)));
                         break;
                     }
                     break;

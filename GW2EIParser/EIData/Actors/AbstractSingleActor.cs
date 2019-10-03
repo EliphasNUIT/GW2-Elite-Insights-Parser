@@ -527,7 +527,7 @@ namespace GW2EIParser.EIData
                 CombatReplay.NoActors = false;
                 InitAdditionalCombatReplayData(log);
             }
-            return CombatReplay.Actors;
+            return CombatReplay.Decorations;
         }
         protected abstract void InitAdditionalCombatReplayData(ParsedLog log);
 

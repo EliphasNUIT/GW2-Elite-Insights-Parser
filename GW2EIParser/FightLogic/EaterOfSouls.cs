@@ -68,8 +68,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, start + c.ExpectedDuration, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 180, 255, 0.3)", new AgentConnector(npc)));
                     }
                     var vomit = cls.Where(x => x.SkillId == 47303).ToList();
                     foreach (AbstractCastEvent c in vomit)
@@ -83,7 +83,7 @@ namespace GW2EIParser.Logic
                         Point3D position = replay.PolledPositions.LastOrDefault(x => x.Time <= start);
                         if (facing != null && position != null)
                         {
-                            replay.Actors.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
+                            replay.Decorations.Add(new PieDecoration(true, start + cascading, radius, facing, 60, (start, end), "rgba(220,255,0,0.5)", new PositionConnector(position)));
                         }
                     }
                     var pseudoDeath = cls.Where(x => x.SkillId == 47440).ToList();
@@ -93,7 +93,7 @@ namespace GW2EIParser.Logic
                         //int duration = 900;
                         int end = start + c.ActualDuration; //duration;
                         //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
-                        replay.Actors.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(npc)));
                     }
                     break;
                 case (ushort)GreenSpirit1:
@@ -103,8 +103,8 @@ namespace GW2EIParser.Logic
                     {
                         int gstart = (int)c.Time + 667;
                         int gend = gstart + 5000;
-                        replay.Actors.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, gend, 240, (gstart, gend), "rgba(0, 255, 0, 0.2)", new AgentConnector(npc)));
                     }
                     break;
                 case (ushort)SpiritHorde1:
@@ -131,8 +131,8 @@ namespace GW2EIParser.Logic
                 {
                     end = (int)removedBuff.Time;
                 }
-                replay.Actors.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, start + duration, 100, (start, end), "rgba(0, 50, 200, 0.5)", new AgentConnector(p)));
             }
         }
 

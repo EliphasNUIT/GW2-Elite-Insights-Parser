@@ -17,7 +17,7 @@ namespace GW2EIParser.EIData
         public (long start, long end) TimeOffsets => (_start, _end);
         // actors
         public bool NoActors { get; set; } = true;
-        public List<GenericDecoration> Actors { get; } = new List<GenericDecoration>();
+        public List<GenericDecoration> Decorations { get; } = new List<GenericDecoration>();
 
         public void Trim(long start, long end)
         {

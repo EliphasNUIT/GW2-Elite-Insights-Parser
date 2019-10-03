@@ -139,14 +139,14 @@ namespace GW2EIParser.Logic
                         int startCast = (int)bomb.Time;
                         int endCast = startCast + bomb.ActualDuration;
                         int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                        replay.Actors.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, expectedEnd, 480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(npc)));
                     }
                     break;
                 case (ushort)RiverOfSouls:
                     if (replay.Rotations.Count > 0)
                     {
-                        replay.Actors.Add(new FacingRectangleDecoration((start, end), new AgentConnector(npc), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
+                        replay.Decorations.Add(new FacingRectangleDecoration((start, end), new AgentConnector(npc), replay.PolledRotations, 160, 390, "rgba(255,100,0,0.5)"));
                     }
                     break;
                 case (ushort)Enervator:

@@ -111,10 +111,10 @@ namespace GW2EIParser.Logic
             switch (npc.ID)
             {
                 case (ushort)BigKillerTornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 420, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 420, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
                     break;
                 case (ushort)SmallKillerTornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(npc)));
                     break;
                 case (ushort)SmallJumpyTornado:
                 case (ushort)ParalyzingWisp:
