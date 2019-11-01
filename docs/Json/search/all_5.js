@@ -7,3 +7,4 @@ var searchData=
   ['flank',['Flank',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#af7b6969e1160b6ab16204aa18244adb4',1,'LuckParser::Builders::JsonModels::JsonDamageDist']]],
   ['flankingrate',['FlankingRate',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#a87e716a51ca84835b360d17191340c93',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]]
 ];
+

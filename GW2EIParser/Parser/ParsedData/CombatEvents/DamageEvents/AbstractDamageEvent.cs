@@ -65,3 +65,4 @@
         public abstract bool IsCondi(ParsedLog log);
     }
 }
+

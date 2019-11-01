@@ -251,3 +251,4 @@ var NAVTREEINDEX0 =
 "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_support.html#ae9ae08233c6b80ae12fb2b4c71e9b7c7":[1,0,0,0,0,13,4,4],
 "class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_support.html#af86994355f0466bd0bb529b5e06d7ca8":[1,0,0,0,0,13,4,8]
 };
+

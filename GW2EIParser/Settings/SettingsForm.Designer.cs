@@ -655,3 +655,4 @@
         private System.Windows.Forms.CheckBox chkAnonymous;
     }
 }
+

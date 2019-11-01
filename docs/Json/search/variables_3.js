@@ -26,3 +26,4 @@ var searchData=
   ['dpstargets',['DpsTargets',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ae9a45f5af7c6f7cc667cbe1551ca029f',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
   ['duration',['Duration',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_consumable.html#a445da09d1138eb37179629411b2b1dc5',1,'LuckParser.Builders.JsonModels.JsonConsumable.Duration()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_log.html#a3fd9a8b63a59c48a267e6c48356b93ca',1,'LuckParser.Builders.JsonModels.JsonLog.Duration()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_rotation_1_1_json_skill.html#ad22bb8ef94fe56a26db10110f89cdb45',1,'LuckParser.Builders.JsonModels.JsonRotation.JsonSkill.Duration()']]]
 ];
+

@@ -22,3 +22,4 @@ If the issue s related to your browser please provide which one you are using
 
 **IMPORTANT: Provide Files**
 Add the EVTC and/or HTML of the log related to this issue
+

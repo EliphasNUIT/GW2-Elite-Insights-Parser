@@ -11,3 +11,4 @@ var searchData=
   ['buffuptimesactive',['BuffUptimesActive',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a7b17a556125d886cb89cb6eaa24789a2',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
   ['byextension',['ByExtension',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buffs_generation_1_1_json_buffs_generation_data.html#a65cb968eb951d503b2dd4acec07ffa32',1,'LuckParser.Builders.JsonModels.JsonBuffsGeneration.JsonBuffsGenerationData.ByExtension()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html#a1206a6957c293e19bf4c7e032f0f1355',1,'LuckParser.Builders.JsonModels.JsonTargetBuffs.JsonTargetBuffsData.ByExtension()']]]
 ];
+

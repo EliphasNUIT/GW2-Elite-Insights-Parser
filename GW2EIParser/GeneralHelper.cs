@@ -555,3 +555,4 @@ namespace GW2EIParser
         }
     }
 }
+

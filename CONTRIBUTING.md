@@ -78,3 +78,4 @@ Implement GetUniqueTargetIDs() that'll return an HashSet of ids that are suppose
 Implement GetFightTargetsIds() that'll return a list of ids to track.
 
 That's it.
+

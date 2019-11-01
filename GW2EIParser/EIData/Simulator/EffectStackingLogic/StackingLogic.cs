@@ -11,3 +11,4 @@ namespace GW2EIParser.EIData
         public abstract void Sort(ParsedLog log, List<BuffStackItem> stacks);
     }
 }
+

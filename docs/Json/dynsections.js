@@ -125,3 +125,4 @@ $(document).ready(function() {
     $(this).powerTip({ placement: 's', smartPlacement: true, mouseOnToPopup: true });
   });
 });
+

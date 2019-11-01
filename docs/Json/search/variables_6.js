@@ -8,3 +8,4 @@ var searchData=
   ['groupbuffs',['GroupBuffs',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#ad2b5e06587eaa4df83a0312f46e1251e',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
   ['groupbuffsactive',['GroupBuffsActive',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a4df5358368cd90bf8bf0dbd8c6f48f4c',1,'LuckParser::Builders::JsonModels::JsonPlayer']]]
 ];
+

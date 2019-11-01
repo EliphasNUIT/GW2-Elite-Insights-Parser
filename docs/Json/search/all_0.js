@@ -16,3 +16,4 @@ var searchData=
   ['avgboons',['AvgBoons',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats_all.html#a1bdfc2b474ea81620628971b1d9be20e',1,'LuckParser.Builders.JsonModels.JsonStatistics.JsonStatsAll.AvgBoons()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html#a45afaafece812b789dedf3611a5ca002',1,'LuckParser.Builders.JsonModels.JsonTarget.AvgBoons()']]],
   ['avgconditions',['AvgConditions',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats_all.html#a7f961bc4627a0dfa6d1ab795a7b11811',1,'LuckParser.Builders.JsonModels.JsonStatistics.JsonStatsAll.AvgConditions()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target.html#aa8bf730bcd8bbb7599b125feeccf6382',1,'LuckParser.Builders.JsonModels.JsonTarget.AvgConditions()']]]
 ];
+

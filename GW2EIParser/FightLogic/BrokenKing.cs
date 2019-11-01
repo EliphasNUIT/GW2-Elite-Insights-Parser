@@ -89,3 +89,4 @@ namespace GW2EIParser.Logic
         }
     }
 }
+

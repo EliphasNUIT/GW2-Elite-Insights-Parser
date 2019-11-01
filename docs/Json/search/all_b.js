@@ -7,3 +7,4 @@ var searchData=
   ['minions',['Minions',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#af2e54a4e93e2318f75bfcb820ff5e961',1,'LuckParser::Builders::JsonModels::JsonActor']]],
   ['missed',['Missed',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#aa95e884d70c68dc1491c1731d9644441',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]]
 ];
+

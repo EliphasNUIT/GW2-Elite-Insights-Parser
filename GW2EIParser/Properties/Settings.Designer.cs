@@ -276,3 +276,4 @@ namespace GW2EIParser.Properties {
         }
     }
 }
+

@@ -28,3 +28,4 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public abstract void AddPoint3D(CombatReplay replay);
     }
 }
+

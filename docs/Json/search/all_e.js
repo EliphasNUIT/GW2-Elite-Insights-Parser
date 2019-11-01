@@ -8,3 +8,4 @@ var searchData=
   ['presence',['Presence',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a2052eeea6604a2f12d1e40b0ea41cb2b',1,'LuckParser.Builders.JsonModels.JsonBuffsUptime.JsonBuffsUptimeData.Presence()'],['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html#ac0ca71eaa13a1787a8d6dd88391616eb',1,'LuckParser.Builders.JsonModels.JsonTargetBuffs.JsonTargetBuffsData.Presence()']]],
   ['profession',['Profession',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#aed695a024da23a2faba72aa75be8f602',1,'LuckParser::Builders::JsonModels::JsonPlayer']]]
 ];
+

@@ -22,3 +22,4 @@ var searchData=
   ['support',['Support',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_player.html#a44b5d18491275d256c2cf021fb63eb81',1,'LuckParser::Builders::JsonModels::JsonPlayer']]],
   ['swapcount',['SwapCount',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats_all.html#ad6ed1ac16db27ed96ec5080674ed7ccf',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStatsAll']]]
 ];
+

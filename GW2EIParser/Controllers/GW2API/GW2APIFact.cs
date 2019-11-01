@@ -34,3 +34,4 @@ namespace GW2EIParser.Controllers.GW2API
         public GW2APIFact Prefix { get; set; }
     }
 }
+

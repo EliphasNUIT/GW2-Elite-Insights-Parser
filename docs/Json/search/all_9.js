@@ -29,3 +29,4 @@ var searchData=
   ['jsontargetbuffs',['JsonTargetBuffs',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs.html',1,'LuckParser::Builders::JsonModels']]],
   ['jsontargetbuffsdata',['JsonTargetBuffsData',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_target_buffs_1_1_json_target_buffs_data.html',1,'LuckParser::Builders::JsonModels::JsonTargetBuffs']]]
 ];
+

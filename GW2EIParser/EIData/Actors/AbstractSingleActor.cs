@@ -534,3 +534,4 @@ namespace GW2EIParser.EIData
         public abstract JsonAbstractSingleActorCombatReplay GetCombatReplayJSON(CombatReplayMap map, ParsedLog log);
     }
 }
+

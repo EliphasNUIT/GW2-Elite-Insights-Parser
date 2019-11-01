@@ -12,3 +12,4 @@ namespace GW2EIParser.EIData
         }
     }
 }
+

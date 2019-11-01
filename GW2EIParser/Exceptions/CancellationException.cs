@@ -17,3 +17,4 @@ namespace GW2EIParser.Exceptions
         }
     }
 }
+

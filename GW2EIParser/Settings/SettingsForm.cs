@@ -277,3 +277,4 @@ namespace GW2EIParser.Setting
         }
     }
 }
+

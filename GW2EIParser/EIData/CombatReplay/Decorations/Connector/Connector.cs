@@ -7,3 +7,4 @@ namespace GW2EIParser.EIData
         public abstract object GetConnectedTo(CombatReplayMap map, ParsedLog log);
     }
 }
+

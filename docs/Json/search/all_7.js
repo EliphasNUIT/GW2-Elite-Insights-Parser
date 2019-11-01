@@ -8,3 +8,4 @@ var searchData=
   ['hitcount',['HitCount',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_buff_damage_modifier_data_1_1_json_buff_damage_modifier_item.html#a6d8348aefad966d476afd5ce64a69abe',1,'LuckParser::Builders::JsonModels::JsonBuffDamageModifierData::JsonBuffDamageModifierItem']]],
   ['hits',['Hits',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_damage_dist.html#a8d4370ae7e69455dece0ae8f6d50a7d9',1,'LuckParser::Builders::JsonModels::JsonDamageDist']]]
 ];
+

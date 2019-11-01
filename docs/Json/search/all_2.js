@@ -16,3 +16,4 @@ var searchData=
   ['criticaldmg',['CriticalDmg',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#a0b48091d06a5fd4167172f7bf3da7d64',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]],
   ['criticalrate',['CriticalRate',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#ab1130358649dc8f7b944e7235cbbbb37',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]]
 ];
+

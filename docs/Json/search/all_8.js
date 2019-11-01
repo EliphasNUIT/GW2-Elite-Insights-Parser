@@ -8,3 +8,4 @@ var searchData=
   ['invulned',['Invulned',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_stats.html#ae5419fb399d9af24ec1dd231fdb35b28',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonStats']]],
   ['invulnedcount',['InvulnedCount',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_statistics_1_1_json_defenses.html#a2186c7742b05098f5ea1f6ee9faf8e64',1,'LuckParser::Builders::JsonModels::JsonStatistics::JsonDefenses']]]
 ];
+

@@ -153,3 +153,4 @@ namespace GW2EIParser
         }
     }
 }
+

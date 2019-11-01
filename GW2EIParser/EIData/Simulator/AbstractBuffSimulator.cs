@@ -160,3 +160,4 @@ namespace GW2EIParser.EIData
         public abstract void Reset(uint stackID, long toDuration);
     }
 }
+

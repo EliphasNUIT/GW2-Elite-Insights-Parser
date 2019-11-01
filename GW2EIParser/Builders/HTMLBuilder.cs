@@ -300,3 +300,4 @@ namespace GW2EIParser.Builders
         }
     }
 }
+

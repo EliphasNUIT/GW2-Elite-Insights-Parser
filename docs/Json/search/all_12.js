@@ -22,3 +22,4 @@ var searchData=
   ['toughness',['Toughness',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_actor.html#ac2e01f7ab2d09408d1cf9b9da93dee7d',1,'LuckParser::Builders::JsonModels::JsonActor']]],
   ['triggerid',['TriggerID',['../class_luck_parser_1_1_builders_1_1_json_models_1_1_json_log.html#aa4715541b75d70b4f4e933d0629d14f8',1,'LuckParser::Builders::JsonModels::JsonLog']]]
 ];
+

@@ -39,3 +39,4 @@ namespace GW2EIParser.Parser
         }
     }
 }
+
