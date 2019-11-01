@@ -24,7 +24,7 @@ namespace GW2EIParser.EIData
             CombatData combatData = log.CombatData;
             foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == SkillId))
             {
-                mechanicLogs[this].Add(new MechanicEvent(log.FightData.ToFightSpace(a.FirstAwareLogTime), this, log.FindActor(a, false)));
+                mechanicLogs[this].Add(new MechanicEvent(log.FightData.ToFightSpace(a.FirstAwareLogTime), this, log.FindActor(a, false, false)));
             }
         }
     }

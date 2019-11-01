@@ -12,10 +12,23 @@ namespace GW2EIParser.EIData
 
         private readonly List<BuffSimulationItemDuration> _queue = new List<BuffSimulationItemDuration>();
 
-        public BuffSimulationItemQueue(List<BoonStackItem> queue) : base(queue.First())
+        public BuffSimulationItemQueue(List<BuffStackItem> queue) : base(queue.First())
         {
             for (int i = 1; i < queue.Count; i++)
             {
+                var stack = new BuffSimulationItemDuration(queue[i]);
+                _queue.Add(stack);
+            }
+        }
+
+        public BuffSimulationItemQueue(List<BuffStackItem> queue, BuffStackItem active) : base(active)
+        {
+            for (int i = 0; i < queue.Count; i++)
+            {
+                if (queue[i] == active ||queue[i].Duration <= 0)
+                {
+                    continue;
+                }
                 var stack = new BuffSimulationItemDuration(queue[i]);
                 _queue.Add(stack);
             }

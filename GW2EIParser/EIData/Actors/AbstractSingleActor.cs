@@ -171,7 +171,7 @@ namespace GW2EIParser.EIData
                     }
                     buffMap.Add(log.Buffs.BuffsByIds[buffId]);
                 }
-                if (!c.IsBoonSimulatorCompliant(log.FightData.FightDuration, log.CombatData.HasStackIDs))
+                if (!c.IsBuffSimulatorCompliant(log.FightData.FightDuration, log.CombatData.HasStackIDs))
                 {
                     continue;
                 }
@@ -184,7 +184,7 @@ namespace GW2EIParser.EIData
             {
                 foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in buffMap)
                 {
-                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), int.MaxValue, int.MaxValue));
+                    pair.Value.Add(new BuffRemoveAllEvent(GeneralHelper.UnknownAgent, AgentItem, dsp.Time, int.MaxValue, log.SkillData.Get(pair.Key), BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
             buffMap.Sort();
@@ -238,7 +238,7 @@ namespace GW2EIParser.EIData
                     {
                         continue;
                     }
-                    BuffSimulator simulator = buff.CreateSimulator(log);
+                    AbstractBuffSimulator simulator = buff.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
                     simulator.Trim(dur);
                     bool updateBoonPresence = boonIds.Contains(boonid);
@@ -282,9 +282,9 @@ namespace GW2EIParser.EIData
                     // Condition/Boon graphs
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.ValueBasedBoonChart : condiPresenceGraph.ValueBasedBoonChart;
+                        List<BuffSegment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BuffChart : condiPresenceGraph.BuffChart;
                         bool firstPass = segmentsToFill.Count == 0;
-                        foreach (BuffSegment seg in _buffPoints[boonid].ValueBasedBoonChart)
+                        foreach (BuffSegment seg in _buffPoints[boonid].BuffChart)
                         {
                             long start = seg.Start;
                             long end = seg.End;
@@ -438,7 +438,7 @@ namespace GW2EIParser.EIData
             if (_minions == null)
             {
                 _minions = new Dictionary<long, Minions>();
-                var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.MasterAgent == AgentItem).ToList();
+                var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master == AgentItem).ToList();
                 var auxMinions = new Dictionary<long, Minions>();
                 foreach (AgentItem agent in combatMinion)
                 {

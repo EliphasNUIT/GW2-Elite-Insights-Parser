@@ -8,7 +8,6 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
         public long BuffID => BuffSkill.ID;
         private long _originalBuffID;
         public AgentItem By { get; protected set; }
-        public AgentItem ByMaster { get; protected set; }
         public AgentItem To { get; protected set; }
 
         public AbstractBuffEvent(CombatItem evtcItem, SkillData skillData, long offset) : base(evtcItem.LogTime, offset)
@@ -34,7 +33,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 
         public abstract void TryFindSrc(ParsedLog log);
 
-        public abstract bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs);
+        public abstract bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs);
 
         public abstract int CompareTo(AbstractBuffEvent abe);
     }

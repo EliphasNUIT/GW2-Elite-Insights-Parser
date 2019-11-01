@@ -4,6 +4,8 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
 {
     public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
     {
+
+        public const int FullRemoval = int.MaxValue;
         public int RemovedStacks { get; }
         private readonly int _lastRemovedDuration;
 
@@ -19,19 +21,24 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             RemovedStacks = removedStacks;
         }
 
-        public override bool IsBoonSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
         {
-            return BuffID != ProfHelper.NoBuff &&
-                !(RemovedDuration <= 50 && RemovedDuration != 0 && _lastRemovedDuration <= 50 && _lastRemovedDuration != 0 && !hasStackIDs) && // low value all stack remove that can mess up with the simulator if server delay
-                 Time <= fightEnd - 50; // don't take into account removal that are close to the end of the fight
+            return BuffID != ProfHelper.NoBuff && 
+                    (hasStackIDs ||
+                        (!(RemovedDuration <= 50 && RemovedDuration != 0 && _lastRemovedDuration <= 50 && _lastRemovedDuration != 0) && // low value all stack remove that can mess up with the simulator if server delay));
+                        Time <= fightEnd - 50)); // don't take into account removal that are close to the end of the fight
         }
 
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
-            simulator.Remove(By, RemovedDuration, Time, ParseEnum.BuffRemove.All, 0);
+            simulator.Remove(By, RemovedDuration, RemovedStacks, Time, ParseEnum.BuffRemove.All, 0);
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {
+            if (abe is AbstractBuffStackEvent)
+            {
+                return -1;
+            }
             if (abe is BuffRemoveAllEvent)
             {
                 return 0;

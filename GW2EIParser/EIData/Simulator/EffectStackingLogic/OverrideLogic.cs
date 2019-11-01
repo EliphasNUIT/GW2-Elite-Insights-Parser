@@ -7,21 +7,21 @@ namespace GW2EIParser.EIData
 {
     public class OverrideLogic : StackingLogic
     {
-        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BuffStackItem> stacks)
         {
             stacks.Sort((x, y) => x.TotalBoonDuration().CompareTo(y.TotalBoonDuration()));
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BuffOverrideItem> overrides)
+        public override bool StackEffect(ParsedLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffOverrideItem> overrides)
         {
             if (stacks.Count == 0)
             {
                 return false;
             }
-            BoonStackItem stack = stacks[0];
+            BuffStackItem stack = stacks[0];
             if (stack.TotalBoonDuration() <= stackItem.TotalBoonDuration() + GeneralHelper.ServerDelayConstant)
             {
-                overrides.Add(new BuffOverrideItem(stack.Src, stackItem.Src, stack.BoonDuration, stack.Start, stack.ID));
+                overrides.Add(new BuffOverrideItem(stack.Src, stackItem.Src, stack.Duration, stack.Start, stack.ID));
                 if (stack.Extensions.Count > 0)
                 {
                     foreach ((AgentItem src, long value) in stack.Extensions)

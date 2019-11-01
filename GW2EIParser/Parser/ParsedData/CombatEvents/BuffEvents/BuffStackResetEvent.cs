@@ -11,13 +11,18 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
             _resetToDuration = evtcItem.Value;
         }
 
+        public override bool IsBuffSimulatorCompliant(long fightEnd, bool hasStackIDs)
+        {
+            return false; // ignore reset event
+        }
+
         public override void UpdateSimulator(AbstractBuffSimulator simulator)
         {
             simulator.Reset(BuffInstance, _resetToDuration);
         }
         public override int CompareTo(AbstractBuffEvent abe)
         {
-            if (abe is BuffStackActiveEvent)
+            if (abe is BuffStackActiveEvent || abe is BuffApplyEvent)
             {
                 return 1;
             }

@@ -15,7 +15,7 @@ namespace GW2EIParser.Parser.ParsedData
         public ulong Agent { get; set; }
         public ushort ID { get; }
         public string UniqueID { get; }
-        public AgentItem MasterAgent { get; set; }
+        public AgentItem Master { get; set; }
         public ushort InstID { get; set; }
         public AgentType Type { get; private set; }
         public long FirstAwareLogTime { get; set; }
@@ -77,7 +77,7 @@ namespace GW2EIParser.Parser.ParsedData
             HitboxWidth = other.HitboxWidth;
             HitboxHeight = other.HitboxHeight;
             InstID = other.InstID;
-            MasterAgent = other.MasterAgent;
+            Master = other.Master;
         }
 
         public AgentItem()
@@ -155,7 +155,7 @@ namespace GW2EIParser.Parser.ParsedData
             {
                 throw new InvalidOperationException("Buff id must be simulated");
             }
-            AbstractSingleActor actor = log.FindActor(this, true);
+            AbstractSingleActor actor = log.FindActor(this, true, true);
             Dictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
             {
