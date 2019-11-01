@@ -391,7 +391,7 @@ namespace GW2EIParser.Parser
 
     }
 
-    static class PhysicalResultExtensions
+    internal static class PhysicalResultExtensions
     {
         public static bool IsHit(this ParseEnum.PhysicalResult result)
         {
@@ -399,7 +399,7 @@ namespace GW2EIParser.Parser
         }
     }
 
-    static class ConditionResultExtensions
+    internal static class ConditionResultExtensions
     {
         public static bool IsHit(this ParseEnum.ConditionResult result)
         {
@@ -407,7 +407,7 @@ namespace GW2EIParser.Parser
         }
     }
 
-    static class SpawnExtensions
+    internal static class SpawnExtensions
     {
         public static bool IsSpawn(this ParseEnum.StateChange state)
         {
@@ -415,7 +415,7 @@ namespace GW2EIParser.Parser
         }
     }
 
-    static class ActivationExtensions
+    internal static class ActivationExtensions
     {
         public static bool StartCasting(this ParseEnum.Activation activation)
         {

@@ -2,7 +2,7 @@
 
 namespace GW2EIParser.Parser
 {
-    static class ParseHelper
+    internal static class ParseHelper
     {
         public static void SafeSkip(Stream stream, long bytesToSkip)
         {

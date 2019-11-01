@@ -6,7 +6,7 @@ using static GW2EIParser.Parser.ParseEnum.NPCIDs;
 
 namespace GW2EIParser.Logic
 {
-    class Freezie : RaidLogic
+    internal class Freezie : RaidLogic
     {
         public Freezie(ushort triggerID) : base(triggerID)
         {

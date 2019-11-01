@@ -4,7 +4,7 @@ using System.IO;
 
 namespace GW2EIParser
 {
-    static class CustomSettingsManager
+    internal static class CustomSettingsManager
     {
         public static void ReadConfig(string filename)
         {

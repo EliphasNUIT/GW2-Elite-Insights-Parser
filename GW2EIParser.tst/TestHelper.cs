@@ -1,12 +1,12 @@
-﻿using GW2EIParser;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using GW2EIParser;
 using GW2EIParser.Builders;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace LuckParser.tst
 {

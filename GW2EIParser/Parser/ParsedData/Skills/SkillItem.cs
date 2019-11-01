@@ -23,8 +23,7 @@ namespace GW2EIParser.Parser.ParsedData
         private const int SecondLandSet = 5;
         private const int FirstWaterSet = 0;
         private const int SecondWaterSet = 1;
-
-        static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
+        private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
         {
             {ResurrectId, "Resurrect"},
             {BandageId, "Bandage" },
@@ -65,8 +64,7 @@ namespace GW2EIParser.Parser.ParsedData
             {56446, "Eat Pylon" },
             {56329, "Big Magma Drop" },
         };
-
-        static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
+        private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
         {
             {ResurrectId, "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png"},
             {BandageId, "https://wiki.guildwars2.com/images/0/0c/Bandage.png"},
@@ -78,7 +76,7 @@ namespace GW2EIParser.Parser.ParsedData
             {49123, "https://wiki.guildwars2.com/images/d/dd/Unstable_Artifact.png"},
             {31686, "https://wiki.guildwars2.com/images/4/4b/Overload_Air.png" },
         };
-        static readonly HashSet<long> NonCritable = new HashSet<long>
+        private static readonly HashSet<long> NonCritable = new HashSet<long>
                     {
                         9292,
                         5492,

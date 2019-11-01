@@ -45,7 +45,7 @@ namespace GW2EIParser
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static int Main(string[] args)
+        private static int Main(string[] args)
         {
             // Migrate previous settings if version changed
             if (Properties.Settings.Default.Outdated)

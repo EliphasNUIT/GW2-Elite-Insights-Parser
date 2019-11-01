@@ -1,13 +1,13 @@
-﻿using GW2EIParser;
-using GW2EIParser.Exceptions;
-using GW2EIParser.Parser;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using GW2EIParser;
+using GW2EIParser.Exceptions;
+using GW2EIParser.Parser;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace LuckParser.tst
 {
