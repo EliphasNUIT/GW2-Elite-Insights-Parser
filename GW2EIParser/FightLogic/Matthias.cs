@@ -140,11 +140,11 @@ namespace GW2EIParser.Logic
                         if (i < humanShieldRemoval.Count)
                         {
                             int removal = humanShieldRemoval[i];
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     var aboShield = cls.Where(x => x.SkillId == 34510).ToList();
@@ -155,11 +155,11 @@ namespace GW2EIParser.Logic
                         if (i < aboShieldRemoval.Count)
                         {
                             int removal = aboShieldRemoval[i];
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                         else
                         {
-                            replay.Actors.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 250, ((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     var rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
@@ -167,8 +167,8 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + c.ActualDuration;
-                        replay.Actors.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     }
                     var hadouken = cls.Where(x => x.SkillId == 34371 || x.SkillId == 34380).ToList();
                     foreach (AbstractCastEvent c in hadouken)
@@ -181,23 +181,23 @@ namespace GW2EIParser.Logic
                         if (facing != null)
                         {
                             int direction = (int)(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI);
-                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(npc)));
-                            replay.Actors.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(npc)));
                         }
                     }
                     break;
                 case (ushort)Storm:
-                    replay.Actors.Add(new CircleDecoration(false, 0, 260, (crStart, crEnd), "rgba(0, 80, 255, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 260, (crStart, crEnd), "rgba(0, 80, 255, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)Spirit:
                 case (ushort)Spirit2:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)IcePatch:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (crStart, crEnd), "rgba(0, 0, 255, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (crStart, crEnd), "rgba(0, 0, 255, 0.5)", new AgentConnector(npc)));
                     break;
                 case (ushort)Tornado:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 default:
                     break;
@@ -220,13 +220,13 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int corruptedMatthiasEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
                     Point3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
                     Point3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
                     if (wellNextPosition != null || wellPrevPosition != null)
                     {
-                        replay.Actors.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
-                        replay.Actors.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
+                        replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
                     }
                 }
             }
@@ -242,13 +242,13 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int wellMatthiasEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleDecoration(false, 0, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleDecoration(true, wellMatthiasStart + 9000, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(false, 0, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, wellMatthiasStart + 9000, 120, (wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
                     Point3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
                     Point3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
                     if (wellNextPosition != null || wellPrevPosition != null)
                     {
-                        replay.Actors.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
                     }
                 }
             }
@@ -264,8 +264,8 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int sacrificeMatthiasEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleDecoration(true, 0, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleDecoration(true, sacrificeMatthiasStart + 10000, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, sacrificeMatthiasStart + 10000, 120, (sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
                 }
             }
             // Bombs
@@ -274,8 +274,8 @@ namespace GW2EIParser.Logic
             {
                 int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
-                replay.Actors.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                replay.Actors.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
             }
         }
 

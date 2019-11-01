@@ -118,7 +118,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             int shieldEnd = (int)c.Time;
-                            replay.Actors.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, (shieldStart, shieldEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(npc)));
                         }
                     }
                     var explosion = cls.Where(x => x.SkillId == 37788).ToList();
@@ -128,8 +128,8 @@ namespace GW2EIParser.Logic
                         int precast = 1350;
                         int duration = 100;
                         int radius = 1200;
-                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast - 10, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(npc)));
                     }
                     break;
                 default:

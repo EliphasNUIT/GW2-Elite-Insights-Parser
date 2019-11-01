@@ -372,11 +372,11 @@ namespace GW2EIParser.Logic
                     {
                         int start = (int)c.Time;
                         int end = start + 5000;
-                        replay.Actors.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
-                        replay.Actors.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(true, end, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
+                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(npc)));
                         if (!log.FightData.IsCM)
                         {
-                            replay.Actors.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(0, 0, 255, 0.3)", new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216))));
                         }
                     }
                     var annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
@@ -393,12 +393,12 @@ namespace GW2EIParser.Logic
                         }
                         for (int i = 0; i < 6; i++)
                         {
-                            replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
-                            replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                             if (i % 5 != 0)
                             {
-                                replay.Actors.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
-                                replay.Actors.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
+                                replay.Decorations.Add(new PieDecoration(true, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)", new AgentConnector(npc)));
+                                replay.Decorations.Add(new PieDecoration(false, 0, 900, (int)Math.Round(Math.Atan2(facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, (start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)", new AgentConnector(npc)));
                             }
                         }
                     }
@@ -414,7 +414,7 @@ namespace GW2EIParser.Logic
                         else
                         {
                             sigEnd = (int)signet.Time;
-                            replay.Actors.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(npc)));
+                            replay.Decorations.Add(new CircleDecoration(true, 0, 120, (sigStart, sigEnd), "rgba(0, 200, 200, 0.5)", new AgentConnector(npc)));
                         }
                     }
                     break;
@@ -430,12 +430,12 @@ namespace GW2EIParser.Logic
                 case (ushort)Tear:
                     break;
                 case (ushort)Hands:
-                    replay.Actors.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (crStart, crEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(npc)));
                     break;
                 case (ushort)Oil:
                     int oilDelay = 3000;
-                    replay.Actors.Add(new CircleDecoration(true, crStart + oilDelay, 200, (crStart, crStart + oilDelay), "rgba(255,100, 0, 0.5)", new AgentConnector(npc)));
-                    replay.Actors.Add(new CircleDecoration(true, 0, 200, (crStart + oilDelay, crEnd), "rgba(0, 0, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, crStart + oilDelay, 200, (crStart, crStart + oilDelay), "rgba(255,100, 0, 0.5)", new AgentConnector(npc)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (crStart + oilDelay, crEnd), "rgba(0, 0, 0, 0.5)", new AgentConnector(npc)));
                     break;
                 default:
                     break;
@@ -457,8 +457,8 @@ namespace GW2EIParser.Logic
                 else
                 {
                     int tpEnd = (int)c.Time;
-                    replay.Actors.Add(new CircleDecoration(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
-                    replay.Actors.Add(new CircleDecoration(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
+                    replay.Decorations.Add(new CircleDecoration(true, tpEnd, 180, (tpStart, tpEnd), "rgba(0, 150, 0, 0.3)", new AgentConnector(p)));
                 }
             }
         }
