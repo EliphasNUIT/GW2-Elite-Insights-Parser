@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GW2EIParser.Parser;
-using static GW2EIParser.Builders.JsonModels.JsonBuffData;
 using static GW2EIParser.Builders.JsonModels.JsonBuffData.JsonBuffStackStatus;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 

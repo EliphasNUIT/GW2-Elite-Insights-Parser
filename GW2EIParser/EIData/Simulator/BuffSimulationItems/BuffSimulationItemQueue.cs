@@ -25,7 +25,7 @@ namespace GW2EIParser.EIData
         {
             for (int i = 0; i < queue.Count; i++)
             {
-                if (queue[i] == active ||queue[i].Duration <= 0)
+                if (queue[i] == active || queue[i].Duration <= 0)
                 {
                     continue;
                 }

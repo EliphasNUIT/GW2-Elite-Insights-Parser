@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using GW2EIParser.Parser;
+﻿using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 
 namespace GW2EIParser.EIData
@@ -50,10 +49,10 @@ namespace GW2EIParser.EIData
                 {
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
-                BuffStack[0].Shift(diff,diff);
+                BuffStack[0].Shift(diff, diff);
                 for (int i = 1; i < BuffStack.Count; i++)
                 {
-                    BuffStack[i].Shift(diff,0);
+                    BuffStack[i].Shift(diff, 0);
                 }
                 if (BuffStack[0].Duration == 0)
                 {

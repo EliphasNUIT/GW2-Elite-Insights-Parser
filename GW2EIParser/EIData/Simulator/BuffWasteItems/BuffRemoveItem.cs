@@ -6,7 +6,7 @@ namespace GW2EIParser.EIData
     {
         public AgentItem By { get; }
 
-        public BuffRemoveItem(AgentItem src, AgentItem by,  long waste, long time, long id) : base(src, waste, time, id)
+        public BuffRemoveItem(AgentItem src, AgentItem by, long waste, long time, long id) : base(src, waste, time, id)
         {
             By = by;
         }

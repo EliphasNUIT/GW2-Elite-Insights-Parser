@@ -82,7 +82,7 @@ namespace GW2EIParser.Controllers
             //Upload Process
             Task<string> DREITask = null;
             Task<string> DRRHTask = null;
-            string[] uploadresult = new string[2] { "", ""};
+            string[] uploadresult = new string[2] { "", "" };
             if (Properties.Settings.Default.UploadToDPSReports)
             {
                 row.BgWorker.UpdateProgress(row, " 40% - Uploading to DPSReports using EI...", 40);

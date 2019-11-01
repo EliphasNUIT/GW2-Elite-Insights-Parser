@@ -57,7 +57,7 @@ namespace GW2EIParser.EIData
                 // Subtract from each
                 for (int i = BuffStack.Count - 1; i >= 0; i--)
                 {
-                    BuffStack[i].Shift(diff,diff);
+                    BuffStack[i].Shift(diff, diff);
                     if (BuffStack[i].Duration == 0)
                     {
                         _lastSrcRemoves.Add((BuffStack[i].SeedSrc, BuffStack[i].IsExtension));

@@ -2,7 +2,6 @@
 using GW2EIParser.Exceptions;
 using GW2EIParser.Parser;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
-using static GW2EIParser.EIData.Player;
+﻿//using static GW2EIParser.Builders.JsonModels.JsonStatistics;
 
 namespace GW2EIParser.EIData
 {
@@ -43,7 +38,7 @@ namespace GW2EIParser.EIData
 
         // All meta Data
 
-        public static readonly DamageModifierMetaData AllAllCommon = new DamageModifierMetaData(DamageType.All, DamageSource.All,ModifierSource.CommonBuff);
+        public static readonly DamageModifierMetaData AllAllCommon = new DamageModifierMetaData(DamageType.All, DamageSource.All, ModifierSource.CommonBuff);
 
     }
 }

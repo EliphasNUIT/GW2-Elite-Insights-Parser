@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -35,7 +33,7 @@ namespace GW2EIParser.EIData
         {
             if (BuffStack.Count > 0 && timePassed > 0)
             {
-                var toAdd = new BuffSimulationItemIntensity(BuffStack); 
+                var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);
                 long diff = Math.Min(BuffStack.Min(x => x.Duration), timePassed);
                 long leftOver = timePassed - diff;

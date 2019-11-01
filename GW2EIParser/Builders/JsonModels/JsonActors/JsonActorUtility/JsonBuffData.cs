@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using GW2EIParser.EIData;
 using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 using Newtonsoft.Json;
 using static GW2EIParser.Builders.JsonModels.JsonLog;
 
 namespace GW2EIParser.Builders.JsonModels
 {
     public class JsonBuffData
-    {    
+    {
         /// <summary>
         /// Represents a stack status item for buffs
         /// </summary>
@@ -95,7 +92,7 @@ namespace GW2EIParser.Builders.JsonModels
                 RemoveSrcID = GetActorID(item.By, log, description);
             }
         }
-       
+
         public class JsonCreationItem
         {
             public string SrcID { get; set; }
@@ -133,7 +130,7 @@ namespace GW2EIParser.Builders.JsonModels
                             writer.WriteValue(state);
                         }
                         writer.WriteEndArray();
-                    }                  
+                    }
                     //Buff Stack States
                     if (jsonBuffData.BuffStackStates != null)
                     {
@@ -166,7 +163,7 @@ namespace GW2EIParser.Builders.JsonModels
                             writer.WriteEndArray();
                         }
                         writer.WriteEndObject();
-                    }             
+                    }
                     // BuffRemoveStatus
                     if (jsonBuffData.BuffRemoveStatus != null)
                     {
@@ -183,7 +180,7 @@ namespace GW2EIParser.Builders.JsonModels
                             //writer.WriteEndArray();
                         }
                         writer.WriteEndArray();
-                    }                
+                    }
                     // BuffOverrideStates
                     if (jsonBuffData.BuffOverrideStates != null)
                     {
@@ -200,7 +197,7 @@ namespace GW2EIParser.Builders.JsonModels
                             //writer.WriteEndArray();
                         }
                         writer.WriteEndArray();
-                    }            
+                    }
                     // BuffOverstackStates
                     if (jsonBuffData.BuffOverstackStates != null)
                     {
@@ -216,7 +213,7 @@ namespace GW2EIParser.Builders.JsonModels
                             //writer.WriteEndArray();
                         }
                         writer.WriteEndArray();
-                    }               
+                    }
                     // BuffAddedStates
                     if (jsonBuffData.BuffAddedStates != null)
                     {
@@ -232,7 +229,7 @@ namespace GW2EIParser.Builders.JsonModels
                             //writer.WriteEndArray();
                         }
                         writer.WriteEndArray();
-                    }             
+                    }
                     // BuffExtendedStates
                     if (jsonBuffData.BuffExtendedStates != null)
                     {
@@ -248,7 +245,7 @@ namespace GW2EIParser.Builders.JsonModels
                             //writer.WriteEndArray();
                         }
                         writer.WriteEndArray();
-                    }                   
+                    }
                 }
                 writer.WriteEndObject();
             }

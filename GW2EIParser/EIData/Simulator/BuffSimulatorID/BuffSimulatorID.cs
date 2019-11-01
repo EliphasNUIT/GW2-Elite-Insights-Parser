@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
 using GW2EIParser.Parser.ParsedData.CombatEvents;
@@ -30,7 +29,8 @@ namespace GW2EIParser.EIData
         public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ParseEnum.BuffRemove removeType, uint stackID)
         {
             BuffStackItem toRemove;
-            switch (removeType) {
+            switch (removeType)
+            {
                 case ParseEnum.BuffRemove.All:
                     // remove all due to despawn event
                     if (removedStacks == BuffRemoveAllEvent.FullRemoval)
@@ -89,7 +89,7 @@ namespace GW2EIParser.EIData
                         OverrideSimulationResult.Add(new BuffOverrideItem(src, candSrc, value, toRemove.Start, toRemove.ID));
                     }
                 }
-            } 
+            }
             // Removed due to a cleanse
             else if (removedDuration > 50 && by != GeneralHelper.UnknownAgent)
             {

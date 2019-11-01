@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -52,7 +50,7 @@ namespace GW2EIParser.EIData
 
         protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool atFirst, bool isExtension)
         {
-            var toAdd = new BuffStackItem(time, duration, src, seedSrc,++ID, isExtension);
+            var toAdd = new BuffStackItem(time, duration, src, seedSrc, ++ID, isExtension);
             bool addToCreationList;
             // Find empty slot
             if (BuffStack.Count < Capacity)

@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
@@ -72,7 +71,7 @@ namespace GW2EIParser.Builders
         {
             //if (!_cr)
             //{
-                return "";
+            return "";
             //}
             /*string scriptContent = Properties.Resources.combatreplay_js;
             if (Properties.Settings.Default.HtmlExternalScripts && path != null)
@@ -156,23 +155,23 @@ namespace GW2EIParser.Builders
         {
             string tmplScript = script;
             var CRtemplates = new Dictionary<string, string>()
-                {
-                    /*{"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
-                    {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
-                    {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
-                    {"${tmplCombatReplayActorBuffStats}", Properties.Resources.tmplCombatReplayActorBuffStats },
-                    {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
-                    {"${tmplCombatReplayPlayerStatus}", Properties.Resources.tmplCombatReplayPlayerStatus },
-                    {"${tmplCombatReplayActorRotation}", Properties.Resources.tmplCombatReplayActorRotation },
-                    {"${tmplCombatReplayTargetStats}", Properties.Resources.tmplCombatReplayTargetStats },
-                    {"${tmplCombatReplayTargetStatus}", Properties.Resources.tmplCombatReplayTargetStatus },
-                    {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
-                    {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
-                    {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
-                    {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
-                    {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
-                    {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },*/
-                };
+            {
+                /*{"${tmplCombatReplayDamageData}", Properties.Resources.tmplCombatReplayDamageData },
+                {"${tmplCombatReplayStatusData}", Properties.Resources.tmplCombatReplayStatusData },
+                {"${tmplCombatReplayDamageTable}", Properties.Resources.tmplCombatReplayDamageTable },
+                {"${tmplCombatReplayActorBuffStats}", Properties.Resources.tmplCombatReplayActorBuffStats },
+                {"${tmplCombatReplayPlayerStats}", Properties.Resources.tmplCombatReplayPlayerStats },
+                {"${tmplCombatReplayPlayerStatus}", Properties.Resources.tmplCombatReplayPlayerStatus },
+                {"${tmplCombatReplayActorRotation}", Properties.Resources.tmplCombatReplayActorRotation },
+                {"${tmplCombatReplayTargetStats}", Properties.Resources.tmplCombatReplayTargetStats },
+                {"${tmplCombatReplayTargetStatus}", Properties.Resources.tmplCombatReplayTargetStatus },
+                {"${tmplCombatReplayTargetsStats}", Properties.Resources.tmplCombatReplayTargetsStats },
+                {"${tmplCombatReplayPlayersStats}", Properties.Resources.tmplCombatReplayPlayersStats },
+                {"${tmplCombatReplayUI}", Properties.Resources.tmplCombatReplayUI },
+                {"${tmplCombatReplayPlayerSelect}", Properties.Resources.tmplCombatReplayPlayerSelect },
+                {"${tmplCombatReplayRangeSelect}", Properties.Resources.tmplCombatReplayRangeSelect },
+                {"${tmplCombatReplayAnimationControl}", Properties.Resources.tmplCombatReplayAnimationControl },*/
+            };
             foreach (KeyValuePair<string, string> entry in CRtemplates)
             {
                 tmplScript = tmplScript.Replace(entry.Key, Regex.Replace(entry.Value, @"\t|\n|\r", ""));
@@ -252,7 +251,7 @@ namespace GW2EIParser.Builders
         {
             //if (!_cr)
             //{
-                return "";
+            return "";
             //}
             /*var orderedScripts = new List<string>()
             {

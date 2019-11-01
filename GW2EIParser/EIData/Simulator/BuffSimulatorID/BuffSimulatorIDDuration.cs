@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using GW2EIParser.Parser;
 using GW2EIParser.Parser.ParsedData;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
 
 namespace GW2EIParser.EIData
 {
@@ -60,7 +57,7 @@ namespace GW2EIParser.EIData
                     toAdd.OverrideEnd(toAdd.Start + diff);
                 }
                 BuffStackItem oldActive = _activeStack;
-                _activeStack.Shift(diff,diff);
+                _activeStack.Shift(diff, diff);
                 for (int i = 0; i < BuffStack.Count; i++)
                 {
                     if (BuffStack[i] != oldActive)
@@ -74,7 +71,7 @@ namespace GW2EIParser.EIData
                     _activeStack.Shift(0, -leftOver);
                 }
                 Update(leftOver);
-            } 
+            }
         }
     }
 }

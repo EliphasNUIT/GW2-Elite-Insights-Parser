@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIParser.Parser;
-using GW2EIParser.Parser.ParsedData.CombatEvents;
-using static GW2EIParser.EIData.DamageModifierUtility;
+﻿using static GW2EIParser.EIData.DamageModifierUtility;
 //using static GW2EIParser.Builders.JsonModels.JsonStatistics;
-using static GW2EIParser.EIData.Player;
 
 namespace GW2EIParser.EIData
 {
@@ -17,7 +12,7 @@ namespace GW2EIParser.EIData
         public string Name { get; protected set; }
         public string Description { get; protected set; }
 
-        public DamageModifier(string name, string description, DamageModifierMetaData metaData, double gain, string icon,ulong minBuild = ulong.MaxValue, ulong maxBuild = ulong.MinValue)
+        public DamageModifier(string name, string description, DamageModifierMetaData metaData, double gain, string icon, ulong minBuild = ulong.MaxValue, ulong maxBuild = ulong.MinValue)
         {
             Description = description;
             Name = name;

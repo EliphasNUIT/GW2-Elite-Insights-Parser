@@ -178,7 +178,7 @@ namespace GW2EIParser.Parser.ParsedData.CombatEvents
                                     res.Add(toAdd);
                                     dict[toAdd.BuffInstance] = toAdd.BuffSkill;
                                     var toRemove = new HashSet<CombatItem>();
-                                    foreach(CombatItem item in stackActivesToRecheck)
+                                    foreach (CombatItem item in stackActivesToRecheck)
                                     {
                                         if (dict.TryGetValue((uint)item.DstAgent, out SkillItem skill))
                                         {

@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml;
+﻿using System.IO;
 using GW2EIParser.Builders.JsonModels;
 using GW2EIParser.Parser;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace GW2EIParser.Builders
 {
