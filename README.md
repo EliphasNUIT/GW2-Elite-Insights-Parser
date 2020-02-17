@@ -1,3 +1,5 @@
+I'm working directly on https://github.com/baaron4/GW2-Elite-Insights-Parser for 2.X . This repository contains a lot of prototypes for 3.0 which most likely never happen with me due to my growing dislike of the state of the game.
+
 ## Contact
 For quick questions, discussions or other conversation that isn't an issue feel free to join an open discord channel: 
 https://discord.gg/dCDEPXx
